@@ -1,10 +1,3 @@
-/**
-* Template Name: Rapid - v2.1.0
-* Template URL: https://bootstrapmade.com/rapid-multipurpose-bootstrap-business-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -30,7 +23,7 @@ p {
   margin: 0 0 30px 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   margin: 0 0 20px 0;
@@ -416,7 +409,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*--------------------------------------------------------------
-# Hero Section
+# Landing Section
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
@@ -524,61 +517,65 @@ h1, h2, h3, h4, h5, h6 {
   background: #f5f8fd;
 }
 
-/* About Us Section
+/*--------------------------------------------------------------
+# About Us
+--------------------------------------------------------------*/
+
+/* Presidents Welcome Section
 --------------------------------*/
-#about {
+#presidents-welcome {
   padding: 80px 0;
 }
 
-#about .about-content {
+#presidents-welcome .president-content {
   padding-top: 40px;
 }
 
-#about .about-content h2 {
+#presidents-welcome .president-content h2 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
 }
 
-#about .about-content h3 {
+#presidents-welcome .president-content h3 {
   color: #696592;
   font-weight: 400;
   font-size: 22px;
   font-style: italic;
 }
 
-#about .about-content ul {
+#presidents-welcome .president-content ul {
   list-style: none;
   padding: 0;
 }
 
-#about .about-content ul li {
+#presidents-welcome .president-content ul li {
   padding-bottom: 10px;
 }
 
-#about .about-content ul li i {
+#presidents-welcome .president-content ul li i {
   font-size: 20px;
   padding-right: 4px;
   color: #1bb1dc;
 }
 
-#about .about-img {
+#presidents-welcome .president-img {
   position: relative;
   margin: 30px 30px 30px 30px;
 }
 
-#about .about-img img {
+#presidents-welcome .president-img img {
   width: 100%;
   border: 8px solid #fff;
   transition: .5s;
 }
 
-#about .about-img img:hover {
+#presidents-welcome .president-img img:hover {
   width: 100%;
   transform: scale(1.03);
 }
 
-#about .about-img::before {
+#presidents-welcome .president-img::before {
   position: absolute;
   left: -31px;
   top: -30px;
@@ -590,7 +587,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: .5s;
 }
 
-#about .about-img::after {
+#presidents-welcome .president-img::after {
   position: absolute;
   right: -31px;
   bottom: -30px;
@@ -601,6 +598,51 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #ebf1fa;
   transition: .5s;
 }
+
+/* Blurb/History Section
+--------------------------------*/
+/* Members Testimonials Section
+--------------------------------*/
+/* PASTA Values Section
+--------------------------------*/
+
+/*--------------------------------------------------------------
+# Rush
+--------------------------------------------------------------*/
+
+/* Apply Section
+--------------------------------*/
+/* Events Section
+--------------------------------*/
+/* FAQs Section
+--------------------------------*/
+
+/*--------------------------------------------------------------
+# Members
+--------------------------------------------------------------*/
+
+/* EBoard Section
+--------------------------------*/
+/* Actives Section
+--------------------------------*/
+/* Alumni Section
+--------------------------------*/
+
+/*--------------------------------------------------------------
+# Contact Us
+--------------------------------------------------------------*/
+
+/* Students Section
+--------------------------------*/
+/* Companies Section
+--------------------------------*/
+
+
+
+
+/*--------------------------------------------------------------
+# Random Sections on Home Page
+--------------------------------------------------------------*/
 
 /* Services Section
 --------------------------------*/
@@ -771,129 +813,6 @@ h1, h2, h3, h4, h5, h6 {
 #features h4 {
   font-weight: 600;
   font-size: 24px;
-}
-
-/* Portfolio Section
---------------------------------*/
-#portfolio {
-  padding: 60px 0;
-}
-
-#portfolio #portfolio-flters {
-  padding: 0;
-  margin: 5px 0 35px 0;
-  list-style: none;
-  text-align: center;
-}
-
-#portfolio #portfolio-flters li {
-  cursor: pointer;
-  margin: 15px 15px 15px 0;
-  display: inline-block;
-  padding: 6px 10px;
-  font-size: 16px;
-  line-height: 20px;
-  color: #413e66;
-  margin-bottom: 5px;
-  transition: all 0.3s ease-in-out;
-}
-
-#portfolio #portfolio-flters li:hover, #portfolio #portfolio-flters li.filter-active {
-  color: #1bb1dc;
-}
-
-#portfolio #portfolio-flters li:last-child {
-  margin-right: 0;
-}
-
-#portfolio .portfolio-item {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 30px;
-}
-
-#portfolio .portfolio-item .portfolio-wrap {
-  overflow: hidden;
-  position: relative;
-  margin: 0;
-}
-
-#portfolio .portfolio-item .portfolio-wrap:hover img {
-  opacity: 0.4;
-  transition: 0.3s;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  opacity: 0;
-  transition: 0.2s linear;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info h4 {
-  font-size: 22px;
-  line-height: 1px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  padding-bottom: 0;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info h4 a {
-  color: #fff;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info h4 a:hover {
-  color: #1bb1dc;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info p {
-  padding: 0;
-  margin: 0;
-  color: #f8fcff;
-  font-weight: 500;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-preview, #portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-details {
-  display: inline-block;
-  line-height: 1;
-  text-align: center;
-  width: 36px;
-  height: 36px;
-  background: #1bb1dc;
-  border-radius: 50%;
-  margin: 10px 4px 0 4px;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-preview i, #portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-details i {
-  padding-top: 6px;
-  font-size: 22px;
-  color: #fff;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-preview:hover, #portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-details:hover {
-  background: #42c3e8;
-}
-
-#portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-preview:hover i, #portfolio .portfolio-item .portfolio-wrap .portfolio-info .link-details:hover i {
-  color: #fff;
-}
-
-#portfolio .portfolio-item .portfolio-wrap:hover {
-  background: #282646;
-}
-
-#portfolio .portfolio-item .portfolio-wrap:hover .portfolio-info {
-  opacity: 1;
 }
 
 /* Testimonials Section
@@ -1295,93 +1214,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 10px;
   color: #555186;
   content: "/";
-}
-
-/*--------------------------------------------------------------
-# Portfolio Details
---------------------------------------------------------------*/
-.portfolio-details {
-  padding-top: 40px;
-}
-
-.portfolio-details .portfolio-details-container {
-  position: relative;
-}
-
-.portfolio-details .portfolio-details-carousel {
-  position: relative;
-  z-index: 1;
-}
-
-.portfolio-details .portfolio-details-carousel .owl-nav, .portfolio-details .portfolio-details-carousel .owl-dots {
-  margin-top: 5px;
-  text-align: left;
-}
-
-.portfolio-details .portfolio-details-carousel .owl-dot {
-  display: inline-block;
-  margin: 0 10px 0 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ddd !important;
-}
-
-.portfolio-details .portfolio-details-carousel .owl-dot.active {
-  background-color: #1bb1dc !important;
-}
-
-.portfolio-details .portfolio-info {
-  padding: 30px;
-  position: absolute;
-  right: 0;
-  bottom: -70px;
-  background: #fff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-}
-
-.portfolio-details .portfolio-info h3 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.portfolio-details .portfolio-info ul {
-  list-style: none;
-  padding: 0;
-  font-size: 15px;
-}
-
-.portfolio-details .portfolio-info ul li + li {
-  margin-top: 10px;
-}
-
-.portfolio-details .portfolio-description {
-  padding-top: 50px;
-}
-
-.portfolio-details .portfolio-description h2 {
-  width: 50%;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.portfolio-details .portfolio-description p {
-  padding: 0 0 0 0;
-}
-
-@media (max-width: 992px) {
-  .portfolio-details .portfolio-description h3 {
-    width: 100%;
-  }
-  .portfolio-details .portfolio-info {
-    position: static;
-    margin-top: 30px;
-  }
 }
 
 /*--------------------------------------------------------------
