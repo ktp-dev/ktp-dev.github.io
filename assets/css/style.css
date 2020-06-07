@@ -1467,3 +1467,85 @@ h1, h2, h3, h4 {
 #footer .credits a:hover {
   color: #0a98c0;
 }
+
+/*--------------------------------------------------------------
+# About Us
+--------------------------------------------------------------*/
+
+/* Presidents Welcome Section
+--------------------------------*/
+#contact-us {
+  padding: 80px 0;
+}
+
+#contact-us .contact-us-content {
+  padding-top: 40px;
+}
+
+#contact-us-welcome .contact-us-content h2 {
+  color: #413e66;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+#contact-us-welcome .contact-us-content h3 {
+  color: #696592;
+  font-weight: 400;
+  font-size: 22px;
+  font-style: italic;
+}
+
+#contact-us-welcome .contact-us-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+#contact-us-welcome .contact-us-content ul li {
+  padding-bottom: 10px;
+}
+
+#contact-us-welcome .contact-us-content ul li i {
+  font-size: 20px;
+  padding-right: 4px;
+  color: #1bb1dc;
+}
+
+#contact-us-welcome .contact-us-img {
+  position: relative;
+  margin: 30px 30px 30px 30px;
+}
+
+#contact-us-welcome .contact-us-img img {
+  width: 100%;
+  border: 8px solid #fff;
+  transition: .5s;
+}
+
+#contact-us-welcome .contact-us-img img:hover {
+  width: 100%;
+  transform: scale(1.03);
+}
+
+#contact-us-welcome .contact-us-img::before {
+  position: absolute;
+  left: -31px;
+  top: -30px;
+  width: 90%;
+  height: 92%;
+  z-index: -1;
+  content: '';
+  background-color: #ebf1fa;
+  transition: .5s;
+}
+
+#contact-us-welcome .contact-us-img::after {
+  position: absolute;
+  right: -31px;
+  bottom: -30px;
+  width: 90%;
+  height: 92%;
+  z-index: -1;
+  content: '';
+  background-color: #ebf1fa;
+  transition: .5s;
+}
