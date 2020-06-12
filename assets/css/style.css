@@ -937,6 +937,17 @@ h1, h2, h3, h4 {
   margin-left: 235px;
 }
 
+#alumni h3 {
+  color: #413e66;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+#alumni ul {
+  text-align: left;
+  list-style-type: none;
+}
+
 /*--------------------------------------------------------------
 # Contact Us
 --------------------------------------------------------------*/
