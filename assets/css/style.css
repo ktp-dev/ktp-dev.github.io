@@ -841,7 +841,9 @@ h1, h2, h3, h4 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  margin-left: 235px;
+  margin-left: 140px;
+  padding-top: 25px;
+  border-bottom: 1px solid #413e66;
 }
 
 #eboard .eboard-img {
@@ -880,18 +882,24 @@ h1, h2, h3, h4 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  margin-left: 235px;
+  margin-left: 140px;
+  padding-top: 25px;
+  border-bottom: 1px solid #413e66;
 }
 
-#actives .active-img {
+#actives .active-img figure{
   position: relative;
   margin: 30px 30px 30px 30px;
 }
 
-#actives .active-img img {
+#actives .active-img figure img {
   width: 100%;
   border: 8px solid #fff;
   transition: .5s;
+}
+
+#actives .active-img figure figcaption {
+  text-align: center;
 }
 /* Alumni Section
 --------------------------------*/
@@ -903,7 +911,9 @@ h1, h2, h3, h4 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  margin-left: 235px;
+  margin-left: 140px;
+  padding-top: 25px;
+  border-bottom: 1px solid #413e66;
 }
 
 #alumni h2 {
