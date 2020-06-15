@@ -819,6 +819,35 @@ h1, h2, h3, h4 {
 /*--------------------------------------------------------------
 # Rush
 --------------------------------------------------------------*/
+#apply {
+  padding: 80px 0;
+}
+
+#apply .apply-content {
+  padding-top: 40px;
+}
+
+#apply .apply-content h2 {
+  color: #413e66;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+}
+
+#apply .apply-content h3 {
+  color: #696592;
+  font-weight: 400;
+  font-size: 22px;
+  font-style: italic;
+}
+
+#apply .apply-content p {
+  padding: 0px;
+
+
+}
+
+
 
 /* Apply Section
 --------------------------------*/
