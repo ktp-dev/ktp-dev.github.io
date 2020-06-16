@@ -494,6 +494,7 @@ h1, h2, h3, h4 {
   font-weight: 700;
   position: relative;
   font-family: "Montserrat", sans-serif;
+  padding-bottom: 20px;
 }
 
 .section-header p {
@@ -544,21 +545,6 @@ h1, h2, h3, h4 {
   font-style: italic;
 }
 
-#presidents-welcome .president-content ul {
-  list-style: none;
-  padding: 0;
-}
-
-#presidents-welcome .president-content ul li {
-  padding-bottom: 10px;
-}
-
-#presidents-welcome .president-content ul li i {
-  font-size: 20px;
-  padding-right: 4px;
-  color: #1bb1dc;
-}
-
 #presidents-welcome .president-img {
   position: relative;
   margin: 30px 30px 30px 30px;
@@ -602,16 +588,17 @@ h1, h2, h3, h4 {
 /* Blurb/History Section
 --------------------------------*/
 #history {
-  padding: 80px 0;
+  padding: 40px 0;
 }
 
 #history .history-content {
-  padding-top: 40px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #history .history-content h2 {
   color: #413e66;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat";
   font-weight: 700;
 }
 
@@ -620,21 +607,6 @@ h1, h2, h3, h4 {
   font-weight: 400;
   font-size: 22px;
   font-style: italic;
-}
-
-#history .history-content ul {
-  list-style: none;
-  padding: 0;
-}
-
-#history .history-content ul li {
-  padding-bottom: 10px;
-}
-
-#history .history-content ul li i {
-  font-size: 20px;
-  padding-right: 4px;
-  color: #1bb1dc;
 }
 
 #history .president-img {
@@ -681,6 +653,7 @@ h1, h2, h3, h4 {
 --------------------------------*/
 #testimonials {
   padding: 60px 0;
+  background-color: #fff;
 }
 
 #testimonials .section-header {
@@ -804,9 +777,6 @@ h1, h2, h3, h4 {
   color: #111;
 }
 
-#values .box:hover .title a {
-  color: #1bb1dc;
-}
 
 #values .description {
   font-size: 14px;
