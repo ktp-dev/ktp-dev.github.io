@@ -980,6 +980,46 @@ h1, h2, h3, h4 {
 #actives .active-img figure figcaption {
   text-align: center;
 }
+
+#actives .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: .3s ease;
+  background-color: var(--primary-dark);
+}
+
+#actives .active-item:hover .overlay {
+  opacity: 0.6;
+}
+
+#actives .icon {
+  color: white;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#actives p {
+  font-family: var(--font-title);
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 /* Alumni Section
 --------------------------------*/
 #alumni {
