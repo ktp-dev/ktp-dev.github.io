@@ -1008,7 +1008,7 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
-#actives p {
+#actives .text {
   font-family: var(--font-title);
   color: white;
   font-size: 20px;
