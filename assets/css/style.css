@@ -196,8 +196,8 @@ h1, h2, h3, h4 {
 
 #header .logo img {
   padding: 0;
-  margin: 7px 0;
-  max-height: 26px;
+  margin: 3px 0;
+  max-height: 35px;
 }
 
 .main-pages {
@@ -902,7 +902,6 @@ h1, h2, h3, h4 {
   font-weight: 700;
   margin-left: 140px;
   padding-top: 25px;
-  border-bottom: 1px solid #413e66;
 }
 
 #eboard .eboard-img {
@@ -949,7 +948,6 @@ h1, h2, h3, h4 {
   font-weight: 700;
   margin-left: 140px;
   padding-top: 25px;
-  border-bottom: 1px solid #413e66;
 }
 
 #actives .active-img figure{
@@ -984,9 +982,8 @@ h1, h2, h3, h4 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  margin-left: 140px;
+  margin-left: 0px;
   padding-top: 25px;
-  border-bottom: 1px solid #413e66;
 }
 
 #alumni h2 {
