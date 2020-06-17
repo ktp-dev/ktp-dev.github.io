@@ -1005,7 +1005,7 @@ h1, h2, h3, h4 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
-  margin-left: 30px;
+  margin-left: 15px;
 }
 
 #alumni ul {
@@ -1244,7 +1244,7 @@ h1, h2, h3, h4 {
 
 #clients img {
   max-width: 80%;
-  opacity: 0.5;
+  opacity: 0.8;
   transition: 0.3s;
   padding: 15px 0;
 }
