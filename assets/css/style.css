@@ -962,6 +962,10 @@ h1, h2, h3, h4 {
   position: relative;
 }
 
+#actives .member-img {
+  position: relative;
+}
+
 #actives .active-item{
   width: 20%;
   padding-left: 0.5rem;
@@ -974,7 +978,6 @@ h1, h2, h3, h4 {
   margin: 0 auto;
   width: 100%;
   height: auto;
-  margin-bottom: 5px;
 }
 
 #actives .active-img figure figcaption {
@@ -995,7 +998,7 @@ h1, h2, h3, h4 {
 }
 
 #actives .active-item:hover .overlay {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 #actives .icon {
