@@ -814,20 +814,13 @@ h1, h2, h3, h4 {
   padding-top: 40px;
 }
 
-#apply .apply-content h2 {
-  color: #413e66;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 40px;
-  padding-bottom: 10px;
-}
-
 #apply .apply-content h3 {
   color: #696592;
   font-weight: 400;
   font-size: 22px;
   font-style: italic;
   padding-bottom: 25px;
+  padding-top: 100px;
 }
 
 #apply .apply-content p {
@@ -837,8 +830,6 @@ h1, h2, h3, h4 {
 #apply .row{
   padding-bottom: 50px;
 }
-
-
 
 /* Frequently Asked Questions Section
 --------------------------------*/
@@ -1012,6 +1003,7 @@ h1, h2, h3, h4 {
   color: #413e66;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
+  margin-left: 30px;
 }
 
 #alumni ul {
