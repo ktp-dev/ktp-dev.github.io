@@ -904,6 +904,16 @@ h1, h2, h3, h4 {
   padding: 80px 0;
 }
 
+#eboard .container {
+  width: auto;
+}
+
+#eboard .row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
 #eboard h1 {
   color: var(--primary-dark);
   font-family: var(--font-title);
@@ -914,7 +924,7 @@ h1, h2, h3, h4 {
 
 #eboard .eboard-img {
   position: relative;
-  margin: 30px 30px 30px 30px;
+  margin: 20px 20px 20px 20px;
 }
 
 #eboard .eboard-img img {
@@ -925,6 +935,7 @@ h1, h2, h3, h4 {
 
 #eboard .eboard-content {
   padding-top: 40px;
+  width: auto;
 }
 
 #eboard .eboard-content h2 {
