@@ -1576,6 +1576,7 @@ h1, h2, h3, h4 {
   padding-top: 30px;
   color: var(--secondary-dark);
   font-size: 15px;
+  font-family: var(--font-body);
 }
 
 #footer .credits {
