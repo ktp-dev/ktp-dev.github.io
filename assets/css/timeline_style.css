@@ -1056,7 +1056,6 @@ svg {
 body {
 	font-size: 1em;
 	font-size: var(--text-base-size, 1em);
-	font-family: 'Open Sans';
 	font-family: var(--font-primary, sans-serif);
 	color: hsl(240, 4%, 20%);
 	color: var(--color-contrast-high, #313135)
@@ -3550,8 +3549,8 @@ mark {
 	--cd-color-6-s: 85%;
 	--cd-color-6-l: 61%;
 	--cd-header-height: 200px;
-	--font-primary: 'Open Sans', serif;
-	--font-secondary: 'Open Sans', sans-serif
+	--font-primary: 'Lato', serif;
+	--font-secondary: 'Futura', sans-serif
 }
 
 @supports (--css: variables) {
