@@ -505,7 +505,7 @@ h1, h2, h3, h4 {
 /* Sections Header
 --------------------------------*/
 .section-header h3 {
-  font-size: 36px;
+  font-size: 32px;
   color: var(--primary-dark);
   text-align: center;
   font-weight: 700;
@@ -747,7 +747,6 @@ h1, h2, h3, h4 {
   color: #111;
 }
 
-
 #values .description {
   font-size: 14px;
   line-height: 28px;
@@ -769,17 +768,27 @@ h1, h2, h3, h4 {
   padding-top: 40px;
 }
 
-#apply .apply-content h3 {
-  color: #696592;
+.apply-content h3 {
+  color: var(--primary-dark);
   font-weight: 400;
   font-size: 22px;
-  font-style: italic;
-  padding-bottom: 25px;
-  padding-top: 100px;
+  padding-bottom: 30px;
 }
 
-#apply .apply-content p {
-  padding: 0px;
+.apply-content h4{
+  font-size: 20px;
+}
+
+.apply-content a {
+  color: var(--primary-dark);
+  transition: 0.5s;
+  font-size: 32px;
+}
+
+.apply-content a:hover, a:active, a:focus {
+  color: var(--secondary-medium);
+  outline: none;
+  text-decoration: none;
 }
 
 #apply .row{
@@ -804,8 +813,6 @@ h1, h2, h3, h4 {
   height: 100%;
 }
 
-
-
 /* Frequently Asked Questions Section
 --------------------------------*/
 #faq {
@@ -829,7 +836,6 @@ h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-size: 20px;
   line-height: 1;
-  padding-right: 20px;
 }
 
 #faq #faq-list i {
@@ -854,14 +860,9 @@ h1, h2, h3, h4 {
   }
 }
 
-#faq #faq-list a.collapse {
-  color: var(--primary-medium);
-}
-
 #faq #faq-list a.collapsed {
   color: #000;
   font-family: var(--font-body);
-
 }
 
 #faq #faq-list a.collapsed i::before {
