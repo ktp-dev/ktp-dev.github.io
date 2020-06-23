@@ -551,26 +551,17 @@ h1, h2, h3, h4 {
   padding: 80px 0;
 }
 
-#presidents-welcome .president-content {
-  padding-top: 40px;
-}
-
 #presidents-welcome .president-content h2 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
-}
-
-#presidents-welcome .president-content h3 {
-  color: #696592;
-  font-weight: 400;
-  font-size: 22px;
-  font-style: italic;
+  padding-top: 30px;
+  padding-bottom: 10px;
 }
 
 #presidents-welcome .president-img {
   position: relative;
-  margin: 30px 30px 30px 30px;
+  margin: 50px 30px 30px 30px;
 }
 
 #presidents-welcome .president-img img {
@@ -614,62 +605,11 @@ h1, h2, h3, h4 {
   padding: 40px 0;
 }
 
-#history .history-content {
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
 #history .history-content h2 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
-}
-
-#history .history-content h3 {
-  color: #696592;
-  font-weight: 400;
-  font-size: 22px;
-  font-style: italic;
-}
-
-#history .president-img {
-  position: relative;
-  margin: 30px 30px 30px 30px;
-}
-
-#history .president-img img {
-  width: 100%;
-  border: 8px solid var(--white);
-  transition: .5s;
-}
-
-#history .president-img img:hover {
-  width: 100%;
-  transform: scale(1.03);
-}
-
-#history .president-img::before {
-  position: absolute;
-  left: -31px;
-  top: -30px;
-  width: 90%;
-  height: 92%;
-  z-index: -1;
-  content: '';
-  background-color: #ebf1fa;
-  transition: .5s;
-}
-
-#history .president-img::after {
-  position: absolute;
-  right: -31px;
-  bottom: -30px;
-  width: 90%;
-  height: 92%;
-  z-index: -1;
-  content: '';
-  background-color: #ebf1fa;
-  transition: .5s;
+  text-align: center;
 }
 
 #history .history-img img {
@@ -684,39 +624,11 @@ h1, h2, h3, h4 {
   transform: scale(1.03);
 }
 
-#history .history-img::before {
-  position: absolute;
-  left: -31px;
-  top: -30px;
-  width: 90%;
-  height: 92%;
-  z-index: -1;
-  content: '';
-  background-color: #ebf1fa;
-  transition: .5s;
-}
-
-#history .history-img::after {
-  position: absolute;
-  right: -31px;
-  bottom: -30px;
-  width: 90%;
-  height: 92%;
-  z-index: -1;
-  content: '';
-  background-color: #ebf1fa;
-  transition: .5s;
-}
-
 /* Members Testimonials Section
 --------------------------------*/
 #testimonials {
   padding: 60px 0;
   background-color: var(--white);
-}
-
-#testimonials .section-header {
-  margin-bottom: 40px;
 }
 
 @media (max-width: 767px) {
@@ -741,7 +653,6 @@ h1, h2, h3, h4 {
 
 #testimonials .testimonial-item h3 {
   font-size: 20px;
-  font-weight: bold;
   margin: 10px 0 5px 0;
   color: #111;
   margin-left: 140px;
