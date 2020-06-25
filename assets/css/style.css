@@ -1017,10 +1017,8 @@ h1, h2, h3, h4 {
   padding: 80px 0;
 }
 
-#actives .row{
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
+#actives .memberContainer {
+  width: auto;
 }
 
 #actives h1 {
