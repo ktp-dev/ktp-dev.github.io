@@ -776,6 +776,8 @@ h1, h2, h3, h4 {
 
 .apply-content h4{
   font-size: 20px;
+  font-family: var(--font-body);
+  font-weight: 800;
 }
 
 .apply-content a {
@@ -785,7 +787,7 @@ h1, h2, h3, h4 {
 }
 
 .apply-content a:hover, a:active, a:focus {
-  color: var(--secondary-medium);
+  color: var(--primary-medium);
   outline: none;
   text-decoration: none;
 }
@@ -832,9 +834,14 @@ h1, h2, h3, h4 {
   padding: 22px 0;
   display: block;
   position: relative;
-  font-family: var(--font-title);
+  font-family: var(--font-body);
   font-size: 20px;
+  font-weight: 500;
   line-height: 1;
+}
+
+.faq-list a:hover, a:active, a:focus {
+  color: var(--primary-medium);
 }
 
 #faq #faq-list i {
@@ -846,7 +853,7 @@ h1, h2, h3, h4 {
 
 #faq #faq-list p {
   margin-bottom: 20px;
-  font-size: 16px;
+  font-size: 18px;
   font-family: var(--font-body);
 }
 
