@@ -9,6 +9,23 @@
 	font: inherit
 }
 
+:root {
+	--primary-light: #8bb9ff;
+	--primary-medium: #458fff;
+	--primary-dark: #234c8b;
+	--secondary-light: #baebba;
+	--secondary-medium: #8ddd8d;
+	--secondary-dark: #538a53;
+	--tertiary-light: #8fdaea;
+	--tertiary-medium: #69b6c6;
+	--tertiary-dark: #206463;
+	--white: #fff;
+	--gray: #9a9a9a;
+	--black: #2d2d2d;
+	--font-body: "Lato", sans-serif;
+	--font-title: "Futura", sans-serif;
+  }
+
 html,
 body,
 div,
@@ -3589,12 +3606,6 @@ mark {
 	font-family: var(--font-primary)
 }
 
-.cd-timeline h2 {
-	font-family: 'Open Sans', sans-serif;
-	font-family: var(--font-secondary);
-	font-weight: 700
-}
-
 .cd-timeline__container {
 	position: relative;
 	padding: 1.25em 0;
@@ -3722,7 +3733,8 @@ mark {
 
 .cd-timeline__content h2 {
 	color: hsl(206, 21%, 24%);
-	color: var(--cd-color-1)
+    color: var(--cd-color-1);
+	font-size: 22px;
 }
 
 @media (min-width: 64rem) {
