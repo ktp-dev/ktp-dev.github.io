@@ -987,6 +987,7 @@ h1, h2, h3, h4 {
   background-color: var(--primary-dark);
 }
 
+
 #actives .active-item:hover .overlay {
   opacity: 0.8;
 }
@@ -994,10 +995,10 @@ h1, h2, h3, h4 {
 #actives .icon {
   color: white;
   position: absolute;
-  bottom: 40%;
+  bottom: 20%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -30%);
+  -ms-transform: translate(-50%, -30%);
   text-align: center;
 }
 
