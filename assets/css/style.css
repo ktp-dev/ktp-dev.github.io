@@ -899,8 +899,7 @@ h1, h2, h3, h4 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
-  margin-left: 140px;
-  padding-top: 25px;
+  padding-top: 30px;
 }
 
 #eboard .eboard-img {
@@ -944,8 +943,7 @@ h1, h2, h3, h4 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
-  margin-left: 140px;
-  padding-top: 25px;
+  padding-top: 30px;
 }
 
 #actives .active-img figure{
@@ -1016,7 +1014,7 @@ h1, h2, h3, h4 {
 /* Alumni Section
 --------------------------------*/
 #alumni {
-  padding: 20px 0;
+  padding: 0px 0;
 }
 
 #intro-alumni h1{
@@ -1040,6 +1038,13 @@ h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-weight: 700;
   margin-left: 235px;
+}
+
+#actives h2 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding-top: 30px;
 }
 
 #alumni h3 {
