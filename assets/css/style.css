@@ -882,7 +882,7 @@ h1, h2, h3, h4 {
 /* EBoard Section
 --------------------------------*/
 #eboard {
-  padding: 80px 0;
+  padding: 80px 20px;
 }
 
 #eboard .container {
@@ -933,7 +933,7 @@ h1, h2, h3, h4 {
 /* Actives Section
 --------------------------------*/
 #actives {
-  padding: 80px 0;
+  padding: 40px 0;
 }
 
 #actives .memberContainer {
@@ -1016,7 +1016,7 @@ h1, h2, h3, h4 {
 /* Alumni Section
 --------------------------------*/
 #alumni {
-  padding: 80px 0;
+  padding: 20px 0;
 }
 
 #intro-alumni h1{
@@ -1053,6 +1053,51 @@ h1, h2, h3, h4 {
   text-align: left;
   list-style-type: none;
 }
+
+
+/* Where We Are Section
+--------------------------------*/
+#clients {
+  padding: 40px 0;
+}
+
+#clients h1 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  margin-left: 0px;
+  padding-top: 25px;
+}
+
+#clients img {
+  max-width: 80%;
+  opacity: 0.8;
+  transition: 0.3s;
+  padding: 15px 0;
+}
+
+#clients img:hover {
+  opacity: 1;
+}
+
+#clients .owl-nav, #clients .owl-dots {
+  margin-top: 5px;
+  text-align: center;
+}
+
+#clients .owl-dot {
+  display: inline-block;
+  margin: 0 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+#clients .owl-dot.active {
+  background-color: var(--primary-medium);
+}
+
 
 /*--------------------------------------------------------------
 # Contact Us
@@ -1187,49 +1232,6 @@ h1, h2, h3, h4 {
 #team .member .social i {
   font-size: 18px;
   margin: 0 2px;
-}
-
-/* Clients Section
---------------------------------*/
-#clients {
-  padding: 60px 0;
-}
-
-#clients h1 {
-  color: var(--primary-dark);
-  font-family: var(--font-title);
-  font-weight: 700;
-  margin-left: 0px;
-  padding-top: 25px;
-}
-
-#clients img {
-  max-width: 80%;
-  opacity: 0.8;
-  transition: 0.3s;
-  padding: 15px 0;
-}
-
-#clients img:hover {
-  opacity: 1;
-}
-
-#clients .owl-nav, #clients .owl-dots {
-  margin-top: 5px;
-  text-align: center;
-}
-
-#clients .owl-dot {
-  display: inline-block;
-  margin: 0 5px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ddd;
-}
-
-#clients .owl-dot.active {
-  background-color: var(--primary-medium);
 }
 
 /*--------------------------------------------------------------
