@@ -882,17 +882,11 @@ h1, h2, h3, h4 {
 /* EBoard Section
 --------------------------------*/
 #eboard {
-  padding: 80px 20px;
+  padding-top: 80px;
 }
 
-#eboard .container {
+#eboard .memberContainer {
   width: auto;
-}
-
-#eboard .row {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
 }
 
 #eboard h1 {
@@ -900,35 +894,183 @@ h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-weight: 700;
   padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
 }
 
-#eboard .eboard-img {
-  position: relative;
-  margin: 20px 20px 20px 20px;
-}
-
-#eboard .eboard-img img {
-  width: 100%;
-  border: 8px solid var(--white);
-  transition: .5s;
-}
-
-#eboard .eboard-content {
-  padding-top: 40px;
-  width: auto;
-}
-
-#eboard .eboard-content h2 {
-  color: var(--primary-dark);
-  font-family: var(--font-title);
-  font-weight: 700;
-}
-
-#eboard .eboard-content h3 {
+#eboard h4 {
   color: #696592;
-  font-weight: 400;
-  font-size: 22px;
+  font-family: var(--font-body);
+  font-weight: bold;
+  padding-top: 5px;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 0px;
 }
+
+#eboard p {
+  font-family: var(--font-body);
+  text-align: center;
+  font-size: 16px;
+}
+
+#eboard .eboard-img figure{
+  position: relative;
+}
+
+#eboard .member-img {
+  position: relative;
+}
+
+#eboard .eboard-item{
+  width: 20%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
+/*  padding-bottom: 0.5rem;*/
+}
+
+#eboard .eboard-img figure img {
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+}
+
+#eboard .eboard-img figure figcaption {
+  text-align: center;
+
+}
+
+#eboard .pic-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: .3s ease;
+  background-color: var(--primary-dark);
+}
+
+#eboard .eboard-item:hover .pic-overlay {
+  opacity: 0.8;
+}
+
+#eboard .icon {
+  color: white;
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#eboard .text {
+  font-family: var(--font-title);
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#eboard .button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#eboard .fa-external-link {
+  color: white;
+}
+
+#eboard .fa-external-link:hover {
+  color: var(--gray);
+}
+
+#eboard .overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+#eboard .overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+#eboard .popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+  top: 20%;
+}
+
+#eboard .popup h1 {
+  color: var(--primary-dark);
+  font-family: var(--font-body);
+  font-size: 28px;
+  padding-bottom: 0;
+  padding-top: 10px;
+}
+
+#eboard .popup h2 {
+  color: var(--tertiary-dark);
+  font-family: var(--font-body);
+  font-size: 22px;
+  text-align: center;
+  margin-top: 0px;
+}
+
+#eboard .popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+#eboard .popup .close:hover {
+  color: var(--primary-medium);
+}
+#eboard .popup .content {
+  max-height: 30%;
+  overflow: auto;
+  text-align: center;
+}
+
+#eboard @media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
 /* Actives Section
 --------------------------------*/
 #actives {
