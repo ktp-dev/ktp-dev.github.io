@@ -1060,6 +1060,7 @@ h1, h2, h3, h4 {
   max-height: 30%;
   overflow: auto;
   text-align: center;
+  padding-bottom: 10px;
 }
 
 #eboard @media screen and (max-width: 700px){
