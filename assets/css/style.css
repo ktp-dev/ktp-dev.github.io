@@ -1260,38 +1260,31 @@ h1, h2, h3, h4 {
   font-size: 24px;
 }
 
-
-/*--------------------------------------------------------------
-# Random Sections on Home Page
---------------------------------------------------------------*/
-
-/* Call To Action Section
---------------------------------*/
-#call-to-action {
+#mailing-list {
   background: var(--primary-dark);
   background-size: cover;
   padding: 40px 0;
 }
 
-#call-to-action .cta-title {
+#mailing-list .cta-title {
   color: var(--white);
   font-size: 28px;
   font-weight: 700;
 }
 
-#call-to-action .cta-text {
+#mailing-list .cta-text {
   color: var(--white);
 }
 
 @media (min-width: 991px) {
-  #call-to-action .cta-btn-container {
+  #mailing-list .cta-btn-container {
     display: flex;
     align-items: center;
     justify-content: flex-end;
   }
 }
 
-#call-to-action .cta-btn {
+#mailing-list .cta-btn {
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 16px;
@@ -1305,10 +1298,18 @@ h1, h2, h3, h4 {
   color: var(--white);
 }
 
-#call-to-action .cta-btn:hover {
+#mailing-list .cta-btn:hover {
   background: var(--primary-medium);
   border: 3px solid var(--primary-medium);
 }
+
+
+/*--------------------------------------------------------------
+# Random Sections on Home Page
+--------------------------------------------------------------*/
+
+/* Call To Action Section
+--------------------------------*/
 
 
 /* Team Section
