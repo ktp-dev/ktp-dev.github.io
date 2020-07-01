@@ -1260,6 +1260,13 @@ h1, h2, h3, h4 {
   font-size: 24px;
 }
 
+#contact-us h2 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding-top: 30px;
+}
+
 #mailing-list {
   background: var(--primary-dark);
   background-size: cover;
