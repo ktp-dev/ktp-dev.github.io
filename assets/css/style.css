@@ -333,7 +333,6 @@ h1, h2, h3, h4 {
   left: -260px;
   width: 260px;
   padding-top: 18px;
-  background: rgba(69, 143, 255, 0.8);
   transition: 0.4s;
 }
 
@@ -422,7 +421,7 @@ h1, h2, h3, h4 {
 }
 
 .mobile-nav-active .mobile-nav-toggle i {
-  color: var(--white);
+  color: var(--black);
 }
 
 /*--------------------------------------------------------------
