@@ -1131,13 +1131,13 @@ h1, h2, h3, h4 {
   transform: translate(-50%, -30%);
   -ms-transform: translate(-50%, -30%);
   text-align: center;
-  font-size: 32px;
+  font-size: 3vw;
 }
 
 #actives .text {
   font-family: var(--font-body);
   color: white;
-  font-size: 20px;
+  font-size: 1.5vw;
   position: absolute;
   top: 40%;
   left: 50%;
@@ -1148,7 +1148,7 @@ h1, h2, h3, h4 {
 }
 
 @media screen and (max-width: 400px){
-  .text{
+  #actives .text{
     font-size: 12px;
   }
   ion-icon {
