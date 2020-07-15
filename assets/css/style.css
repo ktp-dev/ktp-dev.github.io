@@ -1137,7 +1137,7 @@ h1, h2, h3, h4 {
 #actives .text {
   font-family: var(--font-body);
   color: white;
-  font-size: 1.5vw;
+  font-size: 1.2vw;
   position: absolute;
   top: 40%;
   left: 50%;
@@ -1233,7 +1233,6 @@ h1, h2, h3, h4 {
   margin-top: 5px;
   text-align: center;
 }
-
 #clients .owl-dot {
   display: inline-block;
   margin: 0 5px;
