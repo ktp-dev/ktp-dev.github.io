@@ -550,7 +550,7 @@ h1, h2, h3, h4 {
   padding: 80px 0;
 }
 
-#presidents-welcome .president-content h2 {
+#presidents-welcome .president-content h3 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
@@ -879,6 +879,13 @@ h1, h2, h3, h4 {
   width: auto;
 }
 
+#eboard h3 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding-top: 30px;
+}
+
 #eboard h1 {
   color: var(--primary-dark);
   font-family: var(--font-title);
@@ -1072,13 +1079,6 @@ h1, h2, h3, h4 {
   width: auto;
 }
 
-#actives h1 {
-  color: var(--primary-dark);
-  font-family: var(--font-title);
-  font-weight: 700;
-  padding-top: 30px;
-}
-
 #actives .active-img figure{
   position: relative;
 }
@@ -1161,6 +1161,13 @@ h1, h2, h3, h4 {
   padding: 0px 0;
 }
 
+#alumni h3 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding-top: 30px;
+}
+
 #intro-alumni h1{
   color: var(--primary-dark);
   font-family: var(--font-title);
@@ -1189,13 +1196,6 @@ h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-weight: 700;
   padding-top: 30px;
-}
-
-#alumni h3 {
-  color: var(--primary-dark);
-  font-family: var(--font-title);
-  font-weight: 700;
-  margin-left: 15px;
 }
 
 #alumni ul {
