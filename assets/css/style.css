@@ -1069,6 +1069,13 @@ h1, h2, h3, h4 {
   }
 }
 
+.col-sm-5ths {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
 /* Actives Section
 --------------------------------*/
 #actives {
@@ -1131,13 +1138,13 @@ h1, h2, h3, h4 {
   transform: translate(-50%, -30%);
   -ms-transform: translate(-50%, -30%);
   text-align: center;
-  font-size: 3vw;
+  font-size: 36px;
 }
 
 #actives .text {
   font-family: var(--font-body);
   color: white;
-  font-size: 1.2vw;
+  font-size: 16px;
   position: absolute;
   top: 40%;
   left: 50%;
@@ -1147,12 +1154,13 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
-@media screen and (max-width: 400px){
+@media screen and (max-width: 600px){
   #actives .text{
     font-size: 12px;
   }
-  ion-icon {
-    font-size: 8px;
+  #actives ion-icon {
+    font-size: 24px;
+    bottom: 20%;
   }
 }
 /* Alumni Section
