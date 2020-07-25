@@ -1486,6 +1486,7 @@ h1, h2, h3, h4 {
   transition: 0.3s;
 }
 
+
 #footer .footer-top .social-links a:hover {
   background: var(--secondary-medium);
   color: var(--white);
@@ -1669,6 +1670,17 @@ h1, h2, h3, h4 {
   color: var(--secondary-dark);
   font-size: 15px;
   font-family: var(--font-body);
+}
+
+#footer .social-media{
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+
+}
+
+#footer.social-media.fa{
+  margin: 20px 20px;
 }
 
 #footer .credits {
