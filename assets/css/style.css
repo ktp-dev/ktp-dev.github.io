@@ -351,7 +351,7 @@ h1, h2, h3, h4 {
 }
 
 .mobile-nav a:hover, .mobile-nav .active > a, .mobile-nav li:hover > a {
-  color: var(--primary-dark);
+  color: var(--primary-medium);
   text-decoration: none;
 }
 
@@ -407,7 +407,7 @@ h1, h2, h3, h4 {
   top: 0;
   left: 0;
   position: fixed;
-  background: rgba(69, 143, 255, 0.8);
+  background: var(--primary-dark);
   overflow: hidden;
   display: none;
 }
