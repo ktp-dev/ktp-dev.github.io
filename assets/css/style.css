@@ -763,33 +763,17 @@ h1, h2, h3, h4 {
   padding: 80px 0;
 }
 
-#apply .apply-content {
-  padding-top: 40px;
-}
-
-.apply-content h3 {
+#apply .apply-content h3 {
   color: var(--primary-dark);
-  font-weight: 400;
-  font-size: 22px;
-  padding-bottom: 30px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding-top: 30px;
 }
 
 .apply-content h4{
   font-size: 20px;
   font-family: var(--font-body);
   font-weight: 800;
-}
-
-.apply-content a {
-  color: var(--primary-dark);
-  transition: 0.5s;
-  font-size: 32px;
-}
-
-.apply-content a:hover, a:active, a:focus {
-  color: var(--primary-medium);
-  outline: none;
-  text-decoration: none;
 }
 
 #apply .row{
