@@ -1666,7 +1666,7 @@ h1, h2, h3, h4 {
 #footer .copyright {
   text-align: center;
   padding-top: 30px;
-  color: var(--secondary-dark);
+  color: var(--primary-dark);
   font-size: 15px;
   font-family: var(--font-body);
 }
@@ -1675,7 +1675,10 @@ h1, h2, h3, h4 {
     text-align: center;
     padding: 10px;
     font-size: 20px;
+}
 
+#footer .social-media a {
+  padding-right: 10px;
 }
 
 #footer.social-media.fa{
@@ -1690,7 +1693,7 @@ h1, h2, h3, h4 {
 }
 
 #footer .credits a {
-  color: var(--primary-medium);
+  color: var(--primary-dark);
 }
 
 #footer .credits a:hover {
