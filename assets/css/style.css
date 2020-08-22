@@ -468,13 +468,17 @@ h1, h2, h3, h4 {
 
 #hero .intro-info h2 {
   color: var(--primary-dark);
-  margin-top: 25%;
-  margin-bottom: 40px;
+  margin-top: 10%;
+  margin-bottom: 10px;
   font-size: 48px;
   font-weight: 700;
 }
 
 #hero .intro-info h2 span {
+  color: var(--primary-medium);
+}
+
+.intro-info h3{
   color: var(--primary-medium);
 }
 
@@ -486,6 +490,7 @@ h1, h2, h3, h4 {
 }
 
 #hero .intro-info .btn-get-started, #hero .intro-info .btn-services {
+  margin-top: 5px;
   font-family: var(--font-title);
   font-size: 13px;
   font-weight: 600;
@@ -496,12 +501,12 @@ h1, h2, h3, h4 {
   border-radius: 4px;
   transition: 0.5s;
   color: var(--white);
-  background: var(--primary-medium);
+  background: var(--secondary-medium);
   color: var(--white);
 }
 
 #hero .intro-info .btn-get-started:hover, #hero .intro-info .btn-services:hover {
-  background: var(--secondary-medium);
+  background: var(--secondary-dark);
 }
 
 /*--------------------------------------------------------------
@@ -1666,7 +1671,7 @@ h1, h2, h3, h4 {
 #footer .copyright {
   text-align: center;
   padding-top: 30px;
-  color: var(--secondary-dark);
+  color: var(--primary-dark);
   font-size: 15px;
   font-family: var(--font-body);
 }
@@ -1675,7 +1680,10 @@ h1, h2, h3, h4 {
     text-align: center;
     padding: 10px;
     font-size: 20px;
+}
 
+#footer .social-media a {
+  padding-right: 10px;
 }
 
 #footer.social-media.fa{
@@ -1690,7 +1698,7 @@ h1, h2, h3, h4 {
 }
 
 #footer .credits a {
-  color: var(--primary-medium);
+  color: var(--primary-dark);
 }
 
 #footer .credits a:hover {
