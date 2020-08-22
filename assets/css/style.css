@@ -431,8 +431,6 @@ h1, h2, h3, h4 {
   width: 100%;
   height: 100vh;
   position: relative;
-  background: #f5f8fd url("../img/home/landing.png") center top no-repeat;
-  background-size: cover;
 }
 
 @media (max-width: 767px) {
@@ -445,6 +443,13 @@ h1, h2, h3, h4 {
   }
   #hero .intro-img {
     width: 80%;
+  }
+}
+
+@media (min-width: 767px) {
+  #hero {
+    background: #f5f8fd url("../img/home/landing.png") center top no-repeat;
+    background-size: cover;
   }
 }
 
