@@ -439,7 +439,7 @@
                     var memberGradYear = cols[7];
                     var memberLinkedIn = cols[8];
 
-                    document.getElementById("memberRow").innerHTML += "<div class=\"active-item col-4 col-sm-3 col-md-2\"> <div class=\"active-img\"> <figure> <div class=\"member-img\"> <img src=" + memberImage + "> <div class=\"overlay\"> <a href= \"" + memberLinkedIn + "\"class=\"icon\" title=\"LinkedIn\"> <ion-icon name=\"logo-linkedin\"></ion-icon> </a> <div title=\" " + memberPledgeClass + " \" class=\"text\">&" + memberPledgeClass + "; | "  + memberGradYear + "</div> </div> </div> <figcaption> " + memberName + "</figcaption> </figure> </div> </div>";
+                    document.getElementById("memberRow").innerHTML += "<div class=\"active-item col-4 col-sm-3 col-md-2\"> <div class=\"active-img\"> <figure> <div class=\"member-img\"> <img src=" + memberImage + "> <div class=\"overlay\"> <a href= \"" + memberLinkedIn + "\"class=\"icon\" title=\"LinkedIn\" target=\"_blank\"> <ion-icon name=\"logo-linkedin\"></ion-icon> </a> <div title=\" " + memberPledgeClass + " \" class=\"text\">&" + memberPledgeClass + "; | "  + memberGradYear + "</div> </div> </div> <figcaption> " + memberName + "</figcaption> </figure> </div> </div>";
                 }
             </script>
         </div>
@@ -691,17 +691,17 @@
 
             <!-- ======= Footer ======= -->
             <footer id="footer" class="section-bg">
-                <div class="container">
-                    <div class="copyright">
-                        © 2020 Kappa Theta Pi Alpha Chapter. All Rights Reserved.
-                    </div>
-                    <div class= "social-media">
-                      <a href="https://www.facebook.com/KTPalpha/" class="fa fa-facebook"></a>
-                      <a href="https://twitter.com/KTPAlpha" class="fa fa-twitter"></a>
-                      <a href="https://www.instagram.com/ktpumich/?hl=en" class="fa fa-instagram"></a>
-                      <a href="https://www.linkedin.com/company/kappa-theta-pi/" class="fa fa-linkedin"></a>
-                    </div>
+              <div class="container">
+                <div class="copyright">
+                  © 2020 Kappa Theta Pi Alpha Chapter. All Rights Reserved.
                 </div>
+                <div class= "social-media">
+                  <a href="https://www.facebook.com/KTPalpha/" class="fa fa-facebook" target="_blank"></a>
+                  <a href="https://twitter.com/KTPAlpha" class="fa fa-twitter" target="_blank"></a>
+                  <a href="https://www.instagram.com/ktpumich/?hl=en" class="fa fa-instagram" target="_blank"></a>
+                  <a href="https://www.linkedin.com/company/kappa-theta-pi/" class="fa fa-linkedin" target="_blank"></a>
+                </div>
+              </div>
             </footer><!-- End Footer -->
             <!-- Vendor JS Files -->
             <script src="assets/vendor/jquery/jquery.min.js"></script>
