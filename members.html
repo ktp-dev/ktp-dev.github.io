@@ -422,7 +422,7 @@
                 for (var i = 1; i < rows.length -1; i++) {
                     //split by separator (,) and get the columns
                     cols = rows[i].split(',');
-
+                    
                     //start of row
                     if(i % 5 == 1) {
                       document.getElementById("memberContainer").innerHTML += "<div class=\"row\" id=\"memberRow\">";
@@ -431,14 +431,15 @@
                     if(i % 5 == 0) {
                       document.getElementById("memberContainer").innerHTML += "</div>";
                     }
-
+                    
                     var memberName = cols[0] + " " + cols[1];
-                    var memberImage = cols[5];
-                    var memberPledgeClass = cols[6];
-                    var memberGradYear = cols[7];
-                    var memberLinkedIn = cols[8];
+                    console.log(memberName);
+                    var memberImage = cols[2];
+                    var memberPledgeClass = cols[3];
+                    var memberGradYear = cols[4];
+                    var memberLinkedIn = cols[5];
 
-                    document.getElementById("memberRow").innerHTML += "<div class=\"active-item col-4 col-sm-3 col-md-2\"> <div class=\"active-img\"> <figure> <div class=\"member-img\"> <img src=" + memberImage + "> <div class=\"overlay\"> <a href= \"" + memberLinkedIn + "\"class=\"icon\" title=\"LinkedIn\" target=\"_blank\"> <ion-icon name=\"logo-linkedin\"></ion-icon> </a> <div title=\" " + memberPledgeClass + " \" class=\"text\">&" + memberPledgeClass + "; | "  + memberGradYear + "</div> </div> </div> <figcaption> " + memberName + "</figcaption> </figure> </div> </div>";
+                    document.getElementById("memberRow").innerHTML += "<div class=\"active-item col-4 col-sm-3 col-md-2\"> <div class=\"active-img\"> <figure> <div class=\"member-img\"> <img src=" + memberImage + " onerror=\"this.onerror=null; this.src=\'Filler.jpg\'\"> <div class=\"overlay\"> <a href= \"" + memberLinkedIn + "\"class=\"icon\" title=\"LinkedIn\" target=\"_blank\"> <ion-icon name=\"logo-linkedin\"></ion-icon> </a> <div title=\" " + memberPledgeClass + " \" class=\"text\">&" + memberPledgeClass + "; | "  + memberGradYear + "</div> </div> </div> <figcaption> " + memberName + "</figcaption> </figure> </div> </div>";
                 }
             </script>
         </div>
@@ -624,7 +625,7 @@
                     <div class="col-lg-2 col-md-6">
                         <p>
                             Aliya Khan<br>Angel Tsai<br>
-                            Ankita Avadhani<br>Benjamin Zeffer<br>Dania Abdulhamid<br>David Nguyen
+                            Ankita Avadhani<br>Benjamin Zeffer<br>Dania Abdulhamid<br>David Nguyen<br>Jessica Borin
                             <br>Linda Sun<br>Mary Douglass Baum<br>Paige Mittenthal<br>
                             Pranav Ajith<br>Rachel Sartori<br>Ricky Diaz Gomez<br>Sadie Staudacher<br>
                             Taylor Wynn
@@ -667,9 +668,10 @@
 
                     <div class="col-lg-2 col-md-6">
                         <p>
-                            Andrew Bunt<br>Anjali Justice<br>Bhumika Jain<br>
-                            Damian Tenuta<br>Fernando Carretero<br>Jaroslaw Kawa<br>
-                            Matthew Chen<br>Mike Trame<br>Rana Makki<br>Rosemary Wilson
+                            Alec Brandel<br>Andrew Bunt<br>Anjali Justice<br>Bhumika Jain<br>
+                            Damian Tenuta<br>Fernando Carretero<br>Jaroslaw Kawa<br>Juliet Levesque<br>
+                            Matthew Chen<br>Mike Trame<br>Rana Makki<br>Rosemary Wilson<br>
+                            Simrun Buttar<br>Svetha Subbiah<br>Wesley Toma
                         </p>
                     </div>
 
@@ -679,11 +681,30 @@
 
                     <div class="col-lg-2 col-md-6">
                         <p>
-                            Annika Zdon<br>Eli Masjedi<br>Izzy Williams<br>Kyle Johnson<br>
-                            Natalie Cieslak<br>Tyler Jackson
+                            Annika Zdon<br>Eli Masjedi<br>Flannery O'Donnell<br>Izzy Williams<br>Kyle Johnson<br>
+                            Louis Gouirand<br>Maya Khanna<br>Natalie Cieslak<br>Sahil Patel<br>Tyler Jackson
                         </p>
                     </div>
 
+                    <div class="col-lg-2 col-md-6">
+                      <h3> Omicron </h3>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <p>
+                            Aashia Mehta<br>Eldon Tsoi<br>Junho Park<br>Kelley Sweitzer<br>Michael Barsky<br>Michael Flanagan<br>Samast Varma<br>Taylor Denby
+                        </p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                      <h3> Pi </h3>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <p>
+                            Alice Ying<br>Rea Parocaran
+                        </p>
+                    </div>
                 </div>
             </div>
             </div>
