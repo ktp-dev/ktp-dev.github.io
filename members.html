@@ -261,10 +261,10 @@
                 <h2>President</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Maya is a junior from Rochester, Michigan studying Computer Science. 
-                    She joined KTP in Fall 2019 as a part of Pi class. She oversees large 
-                    scale changes in KTP and runs the executive board. Her primary goal as 
-                    president is to ensure that all KTP members have an enjoyable and 
+                    Maya is a junior from Rochester, Michigan studying Computer Science.
+                    She joined KTP in Fall 2019 as a part of Pi class. She oversees large
+                    scale changes in KTP and runs the executive board. Her primary goal as
+                    president is to ensure that all KTP members have an enjoyable and
                     impactful experience in the fraternity.
                 </div>
               </div>
@@ -276,10 +276,10 @@
                 <h2>Vice President</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Kyle is a junior from Montgomery, New Jersey, studying computer science 
-                    with a minor in business. He is a member of the Pi pledge class and joined 
-                    in the fall of 2019. As Vice President, Kyle is responsible for the senior 
-                    experience, feedback, and nationals which he hopes to coordinate and bring 
+                    Kyle is a junior from Montgomery, New Jersey, studying computer science
+                    with a minor in business. He is a member of the Pi pledge class and joined
+                    in the fall of 2019. As Vice President, Kyle is responsible for the senior
+                    experience, feedback, and nationals which he hopes to coordinate and bring
                     together in his time as VP.
                 </div>
               </div>
@@ -306,9 +306,9 @@
                 <h2>Treasurer</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Harvey is a junior from Beverly Hills, Michigan majoring in Computer 
-                    Science and minoring in Math. He joined KTP in Fall 2019 as a part of 
-                    the Pi pledge class. As the Treasurer, his role includes budgeting and 
+                    Harvey is a junior from Beverly Hills, Michigan majoring in Computer
+                    Science and minoring in Math. He joined KTP in Fall 2019 as a part of
+                    the Pi pledge class. As the Treasurer, his role includes budgeting and
                     planning various events, facilitating corporate sponsorships and fundraising.
                 </div>
               </div>
@@ -320,10 +320,10 @@
                 <h2>Director of Enrichment and Technical Development</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Chinmay is a sophomore from Robbinsville, New Jersey studying Computer 
-                    Science and Cognitive Science. He rushed as a freshman in Fall 2019, as 
-                    part of the Pi pledge class. As Director of Enrichment, his responsibilities 
-                    include overseeing committees, planning technical workshops and hackathon, and 
+                    Chinmay is a sophomore from Robbinsville, New Jersey studying Computer
+                    Science and Cognitive Science. He rushed as a freshman in Fall 2019, as
+                    part of the Pi pledge class. As Director of Enrichment, his responsibilities
+                    include overseeing committees, planning technical workshops and hackathon, and
                     supporting members in their academic and professional careers.
                 </div>
               </div>
@@ -335,11 +335,11 @@
                 <h2>Director of Membership</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Claire is a sophomore from Metuchen, New Jersey studying Computer 
-                    Science in the College of Literature, Science, and the Arts. She 
-                    is part of the Pi pledge class, and joined in the Fall 2019. Her 
-                    focus as Director of Membership is to expand rush to make it more 
-                    inclusive and expanding the pledge process to help new members form 
+                    Claire is a sophomore from Metuchen, New Jersey studying Computer
+                    Science in the College of Literature, Science, and the Arts. She
+                    is part of the Pi pledge class, and joined in the Fall 2019. Her
+                    focus as Director of Membership is to expand rush to make it more
+                    inclusive and expanding the pledge process to help new members form
                     even stronger relationships.
                 </div>
               </div>
@@ -351,9 +351,9 @@
                 <h2>Director of Marketing</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Courtney is a junior from Milford, Michigan studying UX Design with minors 
-                    in Business and Digital Studies. She joined in Winter 2020 as part of the 
-                    Rho class. Her role includes establishing consistent branding, developing 
+                    Courtney is a junior from Milford, Michigan studying UX Design with minors
+                    in Business and Digital Studies. She joined in Winter 2020 as part of the
+                    Rho class. Her role includes establishing consistent branding, developing
                     marketing strategies, and promoting KTP on campus.
                 </div>
               </div>
@@ -365,10 +365,10 @@
                 <h2>Director of Engagement</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Rithik is a junior from Birmingham, Michigan pursuing a dual degree 
-                    in Business Administration and Computer Science. He joined KTP as a 
-                    part of Rho class in the Winter ‘20 semester. As Director of Engagement, 
-                    Rithik’s primary responsibilities include planning a variety of brotherhood 
+                    Rithik is a junior from Birmingham, Michigan pursuing a dual degree
+                    in Business Administration and Computer Science. He joined KTP as a
+                    part of Rho class in the Winter ‘20 semester. As Director of Engagement,
+                    Rithik’s primary responsibilities include planning a variety of brotherhood
                     events to engage active members while following COVID-19 guidelines.
                 </div>
               </div>
@@ -380,10 +380,10 @@
                 <h2>Director of Professional Development</h2>
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    Advay is a sophomore from Novi, Michigan majoring in Computer Science 
-                    and minoring in Mathematics. He joined KTP in Winter 2020 as a member 
-                    of the Rho pledge class. His role includes facilitating educational 
-                    workshops, providing resources, and giving guidance to help members 
+                    Advay is a sophomore from Novi, Michigan majoring in Computer Science
+                    and minoring in Mathematics. He joined KTP in Winter 2020 as a member
+                    of the Rho pledge class. His role includes facilitating educational
+                    workshops, providing resources, and giving guidance to help members
                     achieve their professional career goals.
                 </div>
               </div>
@@ -422,7 +422,7 @@
                 for (var i = 1; i < rows.length -1; i++) {
                     //split by separator (,) and get the columns
                     cols = rows[i].split(',');
-                    
+
                     //start of row
                     if(i % 5 == 1) {
                       document.getElementById("memberContainer").innerHTML += "<div class=\"row\" id=\"memberRow\">";
@@ -431,7 +431,7 @@
                     if(i % 5 == 0) {
                       document.getElementById("memberContainer").innerHTML += "</div>";
                     }
-                    
+
                     var memberName = cols[0] + " " + cols[1];
                     console.log(memberName);
                     var memberImage = cols[2];
@@ -466,19 +466,9 @@
         <!-- ======= Clients Section ======= -->
           <section id="clients" class="clients wow fadeInUp">
               <div class="container">
-
-                  <div class="owl-carousel clients-carousel">
-                      <img src="assets/img/companies/microsoft.png" alt="">
-                      <img src="assets/img/companies/cisco.png" alt="">
-                      <img src="assets/img/companies/ford.png" alt="">
-                      <img src="assets/img/companies/google.png" alt="">
-                      <img src="assets/img/companies/facebook.png" alt="">
-                      <img src="assets/img/companies/salesforce.png" alt="">
-                      <img src="assets/img/companies/jpmorgan.png" alt="">
-                      <img src="assets/img/companies/llamasoft.png" alt="">
-                      <img src="assets/img/companies/convoy.png" alt="">
-                      <img src="assets/img/companies/apple.png" alt="">
-                  </div>
+                <div class="company_wheel-img">
+                  <p style= "text-align: center"> <img src="assets/img/companies/company.jpg" alt=""></p>
+                </div>
 
               </div>
           </section><!-- End Clients Section -->
