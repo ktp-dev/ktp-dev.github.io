@@ -561,7 +561,7 @@ h1, h2, h3, h4 {
 /* Presidents Welcome Section
 --------------------------------*/
 #presidents-welcome {
-  padding: 80px 0;
+  padding: 80px ;
 }
 
 #presidents-welcome .president-content h3 {
@@ -577,14 +577,14 @@ h1, h2, h3, h4 {
 }
 
 #presidents-welcome .president-img img {
-  width: 100%;
+  width: 85%;
   border: 8px solid var(--white);
   transition: .5s;
 }
 
 #presidents-welcome .president-img img:hover {
-  width: 100%;
-  transform: scale(1.03);
+  width: 90%;
+  transform: scale(1.04);
 }
 
 #presidents-welcome .president-img::before {
@@ -601,7 +601,7 @@ h1, h2, h3, h4 {
 
 #presidents-welcome .president-img::after {
   position: absolute;
-  right: -31px;
+  right: 10px;
   bottom: -30px;
   width: 90%;
   height: 92%;
