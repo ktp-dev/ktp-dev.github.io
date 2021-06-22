@@ -1012,6 +1012,7 @@ h1, h2, h3, h4 {
   transition: opacity 500ms;
   visibility: hidden;
   opacity: 0;
+  z-index: 1;
 }
 #eboard .overlay:target {
   visibility: visible;
@@ -1027,6 +1028,7 @@ h1, h2, h3, h4 {
   position: relative;
   transition: all 5s ease-in-out;
   top: 20%;
+  z-index: 1;
 }
 
 #eboard .popup h1 {
@@ -1064,6 +1066,7 @@ h1, h2, h3, h4 {
   overflow: auto;
   text-align: center;
   padding-bottom: 10px;
+  z-index: 99;
 }
 
 #eboard @media screen and (max-width: 700px){
