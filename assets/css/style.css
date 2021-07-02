@@ -642,6 +642,8 @@ h1, h2, h3, h4 {
 --------------------------------*/
 #dei {
   padding: 70px 0;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 #dei .dei-content h2 {
@@ -649,6 +651,9 @@ h1, h2, h3, h4 {
   font-family: var(--font-title);
   font-weight: 700;
   text-align: center;
+  margin-top: 0px;
+
+
 }
 
 /* Members Testimonials Section
@@ -676,6 +681,7 @@ h1, h2, h3, h4 {
     float: none;
     margin: auto;
   }
+
 }
 
 #testimonials .testimonial-item h3 {
