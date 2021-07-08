@@ -262,7 +262,6 @@ h1, h2, h3, h4 {
 .main-nav .drop-down ul {
   display: block;
   position: absolute;
-  left: 0;
   top: calc(100% - 30px);
   z-index: 99;
   opacity: 0;
@@ -277,6 +276,7 @@ h1, h2, h3, h4 {
   opacity: 1;
   top: 100%;
   visibility: visible;
+
 }
 
 .main-nav .drop-down li {
@@ -284,9 +284,10 @@ h1, h2, h3, h4 {
   position: relative;
 }
 
-.main-nav .drop-down ul a {
-  padding: 10px 20px;
-  font-size: 14px;
+.main-nav .drop-down li a {
+
+  padding: 10px 15px;
+  font-size:14px;
   font-weight: 500;
   text-transform: none;
   color: #065e77;
@@ -561,7 +562,7 @@ h1, h2, h3, h4 {
 /* Presidents Welcome Section
 --------------------------------*/
 #presidents-welcome {
-  padding: 80px 0;
+  padding: 80px ;
 }
 
 #presidents-welcome .president-content h3 {
@@ -577,14 +578,14 @@ h1, h2, h3, h4 {
 }
 
 #presidents-welcome .president-img img {
-  width: 100%;
+  width: 85%;
   border: 8px solid var(--white);
   transition: .5s;
 }
 
 #presidents-welcome .president-img img:hover {
-  width: 100%;
-  transform: scale(1.03);
+  width: 90%;
+  transform: scale(1.04);
 }
 
 #presidents-welcome .president-img::before {
@@ -601,7 +602,7 @@ h1, h2, h3, h4 {
 
 #presidents-welcome .president-img::after {
   position: absolute;
-  right: -31px;
+  right: 10px;
   bottom: -30px;
   width: 90%;
   height: 92%;
@@ -636,6 +637,24 @@ h1, h2, h3, h4 {
   transform: scale(1.03);
 }
 
+/* DEI Section
+--------------------------------*/
+#dei {
+  padding: 70px 0;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+#dei .dei-content h2 {
+  color: var(--primary-dark);
+  font-family: var(--font-title);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 0px;
+
+
+}
+
 /* Members Testimonials Section
 --------------------------------*/
 #testimonials {
@@ -661,6 +680,7 @@ h1, h2, h3, h4 {
     float: none;
     margin: auto;
   }
+
 }
 
 #testimonials .testimonial-item h3 {
@@ -1012,6 +1032,7 @@ h1, h2, h3, h4 {
   transition: opacity 500ms;
   visibility: hidden;
   opacity: 0;
+  z-index: 1;
 }
 #eboard .overlay:target {
   visibility: visible;
@@ -1027,6 +1048,7 @@ h1, h2, h3, h4 {
   position: relative;
   transition: all 5s ease-in-out;
   top: 20%;
+  z-index: 1;
 }
 
 #eboard .popup h1 {
@@ -1064,14 +1086,16 @@ h1, h2, h3, h4 {
   overflow: auto;
   text-align: center;
   padding-bottom: 10px;
+  z-index: 99;
 }
 
-#eboard @media screen and (max-width: 700px){
-  .box{
-    width: 70%;
+#eboard @media screen and (max-width: 500px){
+
+   .box{
+    width: 100%;
   }
-  .popup{
-    width: 70%;
+   .popup{
+    width: 90%;
   }
 }
 
