@@ -1521,6 +1521,7 @@
         </li>
       </ul>
     </div>
+    <button class="button" id="expandButton" value="expand">Expand All</button>
   </body>
 </html>
 <script>
@@ -1532,4 +1533,25 @@
         this.parentElement.querySelector(".nested").classList.toggle("active");
       });
     }
+
+    document.getElementById("expandButton").addEventListener("click", function() {
+      var hidden = document.getElementsByClassName("nested");
+      btn = document.getElementById("expandButton")
+      console.log(hidden);
+      for (var i = 0; i < hidden.length; i++) {
+        if (btn.value == "expand") {
+          hidden[i].classList.add("active");
+        } else if (btn.value == "collapse") {
+          hidden[i].classList.remove("active");
+        }
+      }
+      // Change name
+      if (btn.value == "expand") {
+         btn.value = "collapse";
+         btn.innerText = "Collapse All";
+      } else {
+         btn.value = "expand";
+         btn.innerText = "Expand All";
+      }
+    });
 </script>
