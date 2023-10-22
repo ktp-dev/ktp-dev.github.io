@@ -456,6 +456,80 @@ h1, h2, h3, h4 {
   }
 }
 
+#app_section {
+    background-color: #F7F7F7;
+    text-align: center;
+}
+
+.scroll {
+  position: relative;
+  width: 100vw;
+  background-color: $boxify-bg-light-dark;
+  overflow: hidden;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.m-scroll {
+  overflow: hidden;
+  height: 100%;
+  white-space: nowrap;
+  margin: 0;
+  font-size: 0;
+  display: flex;
+  justify-content: space-between;
+  width: fit-content;
+}
+
+.m-scroll-front {
+  animation: scrollText 150s infinite linear;
+}
+
+.m-scroll-back {
+  animation: scrollText 150s reverse infinite linear;
+}
+
+.m-scroll > span {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+.m-scroll > span > img {
+  width: 8vw;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  border-radius: 20%;
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+#app-title {
+    margin-top: 60px;
+  font-size: 36px;
+    font-family: "SF Pro Display";
+    color: #315CA9;
+   line-height:47px;
+}
+
+#app-bold {
+  font-weight: 700;
+}
+
+#app-img {
+    width: 25vw;
+    margin-bottom: 60px;
+}
+
 @media (min-width: 1065px) {
   #hero .intro-info {
     padding-top: 80px;
