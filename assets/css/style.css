@@ -1175,7 +1175,7 @@ h1, h2, h3, h4 {
   padding: 40px 0;
 }
 
-#actives .memContainer {
+#actives .memContainerEboard, .memContainerDirectors {
   width: auto;
 }
 
@@ -1257,11 +1257,11 @@ h1, h2, h3, h4 {
 }
 /* Alumni Section
 --------------------------------*/
-#alumni {
+#alumni, #founders {
   padding: 0px 0;
 }
 
-#alumni h3 {
+#alumni h3, #founders h3 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
@@ -1276,7 +1276,7 @@ h1, h2, h3, h4 {
   padding-top: 25px;
 }
 
-#alumni h1 {
+#alumni h1, #founders h1 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
@@ -1284,7 +1284,7 @@ h1, h2, h3, h4 {
   padding-top: 25px;
 }
 
-#alumni h2 {
+#alumni h2, #founders h2 {
   color: var(--primary-dark);
   font-family: var(--font-title);
   font-weight: 700;
@@ -1298,7 +1298,7 @@ h1, h2, h3, h4 {
   padding-top: 30px;
 }
 
-#alumni ul {
+#alumni ul, #founders ul {
   text-align: left;
   list-style-type: none;
 }
