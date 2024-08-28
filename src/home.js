@@ -17,20 +17,28 @@ function Home() {
 
   return (
     <div className='homepage-grid'>
-      <div className='glowing-circle z-2'></div>
-      <div className='glowing-circle-2 z-1'></div>
+      {/* <div className='glowing-circle z-2'></div>
+      <div className='glowing-circle-2 z-1'></div> */}
 
       <Header></Header>
       <ScrollToTop />
 
       {/* Main content */}
       <div className='flex flex-row justify-between mb-12 md:mb-20 lg:mb-42'>
+        <div className="absolute inset-0 blob-c z-0 hidden lg:block">
+            <div className="shape-blob ten"></div>
+            <div className="shape-blob eleven"></div>
+        </div>
         <div className='flex-1 flex flex-col items-end'>
           <img src={`${process.env.PUBLIC_URL}/melgrace.jpg`} className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px' }} />
           <img src={`${process.env.PUBLIC_URL}/rock.JPEG`} className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px' }} />
         </div>
 
         <div className='flex flex-col flex-none p-4'>
+          <div className="absolute inset-0 blob-c z-0 block md:hidden">
+              <div className="shape-blob twelve"></div>
+              <div className="shape-blob thirteen"></div>
+          </div>
           <div className='flex flex-col items-center justify-center z-10'>
             <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
               We’re the University of Michigan’s premier technology fraternity
