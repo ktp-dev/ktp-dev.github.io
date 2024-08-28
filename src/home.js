@@ -7,6 +7,20 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ScrollToTop from './ScrollToTop';
 
+// Images
+import BlondeAppIcon from './img/alt_app_icons/blonde.jpg';
+import BrownAppIcon from './img/alt_app_icons/brown.jpg'
+import CrossoverAppIcon from './img/alt_app_icons/crossover.jpg'
+import DefaultAppIcon from './img/alt_app_icons/default.jpg'
+import PokemonAppIcon from './img/alt_app_icons/pokemon.jpg'
+import RetrotechAppIcon from './img/alt_app_icons/retrotech.jpg'
+import SmileyAppIcon from './img/alt_app_icons/smiley.jpg'
+import SquiggleAppIcon from './img/alt_app_icons/squiggle.jpg'
+import StickerAppIcon from './img/alt_app_icons/sticker.jpg'
+import WhiteAppIcon from './img/alt_app_icons/white.jpg'
+import YearbookAppIcon from './img/alt_app_icons/yearbook.jpg'
+import YellowAppIcon from './img/alt_app_icons/yellow.jpg'
+
 function Home() {
   useEffect(() => {
     AOS.init({
@@ -174,6 +188,26 @@ function Home() {
               <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
                 <img src={`${process.env.PUBLIC_URL}/google_play.svg`} alt="Image" className='h-10 md:h-12 lg:h-14' />
               </a>
+            </div>
+
+            {/* Alternate App Icons */}
+            <div className="flex flex-col items-start">
+              <div className="flex flex-wrap justify-start w-full mt-6">
+                <img src={BlondeAppIcon} alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={BrownAppIcon} alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={CrossoverAppIcon} alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={DefaultAppIcon} alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={PokemonAppIcon} alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={RetrotechAppIcon} alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+              </div>
+              <div className="flex flex-wrap justify-start w-full mt-2">
+                <img src={SmileyAppIcon} alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={YellowAppIcon} alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={StickerAppIcon} alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={SquiggleAppIcon} alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={WhiteAppIcon} alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src={YearbookAppIcon} alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+              </div>
             </div>
           </div>
 
