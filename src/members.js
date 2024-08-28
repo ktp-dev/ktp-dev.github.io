@@ -239,35 +239,39 @@ function Members() {
       <Header></Header>
 
       <div className="px-4 sm:px-8 md:px-16 lg:px-20">
+        
+        {/* Blob Container */}
+        <div className="inset-0 blob-c z-0">
+          <div className="shape-blob eight"></div>
+          <div className="shape-blob nine"></div>
+        </div>
 
         {/* Page content */}
-        <div className="relative z-10">
-          <div className="relative bg-white w-full">
-            {/* Blob Container */}
-            <div className="absolute inset-0 blob-c z-0">
-              <div className="shape-blob eight"></div>
-              <div className="shape-blob nine"></div>
-            </div>
+        <div className="relative w-full z-10">
+          {/* Page Content */}
+          <div className="relative mt-16 md:mt-32 mb-8 z-10">
+            <div className="flex flex-col text-center">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+                We Are A Team of <br className="lg:hidden"/>
+                <span className="inline">
+                  <ReactTyped
+                    strings={['Developers', 'Leaders', 'Designers', 'Engineers', 'Innovators', 'Problem Solvers']}
+                    typeSpeed={60}
+                    backSpeed={50}
+                    backDelay={1500}
+                    loop
+                  />
+                </span>
+              </h1>
 
-            {/* Page Content */}
-            <div className="relative py-32 z-10">
-              <div className="flex flex-col text-center">
-              <h1 className="text-3xl sm:text-5xl font-black">We Are A Team of <ReactTyped
-                strings={['Developers', 'Leaders', 'Designers', 'Engineers', 'Innovators', 'Problem Solvers']}
-                typeSpeed={60}
-                backSpeed={50}
-                backDelay={1500}
-                loop
-              /></h1>
-                <p className="text-base text-gray-600 sm:text-xl mt-4 mb-8 font-medium max-w-xs sm:max-w-lg mx-auto " style={{ color: 'grey' }}>
-                  What makes our community strong is our shared passion for technology and our unique backgrounds meshing together as one.
-                </p>
-              </div>
+              <p className="text-base text-gray-600 text-sm sm:text-base mt-4 md:mb-8 mx-auto w-[350px] sm:w-[500px] lg:w-[725px]" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+                What makes our community strong is our shared passion for technology and our unique backgrounds meshing together as one.
+              </p>
             </div>
           </div>
 
           {/* Category filter buttons */}
-          <div className="relative mb-16 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
+          <div className="relative mb-8 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
             <div className="flex justify-center text-center space-x-4 sm:space-x-8 md:space-x-16 lg:space-x-32 border-b-2 border-gray-300">
               {categories.map((category, index) => (
                 <button
@@ -282,7 +286,6 @@ function Members() {
             </div>
             <div className="underline absolute bottom-0 inset-x-0 h-0.5 bg-black transition-all duration-300"></div>
           </div>
-
 
           {/* Greek letter navigation */}
           {selectedCategory === 'Alumni' && (
@@ -306,27 +309,6 @@ function Members() {
               </div>
             </div>
           )}
-
-          {/* Company logos image */}
-          {/* {selectedCategory === 'Alumni' && (
-            <div className="hidden lg:flex justify-center items-center">
-              <div className="relative logo-container" onMouseMove={handleMouseMove} style={{ width: '50%', height: 'auto', position: 'relative' }}>
-                <img src={LogoImages} alt="Company logos" className="w-1/2 h-1/2 logo-image grayscale mx-auto" />
-                <div
-                  className="logo-overlay"
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: `radial-gradient(circle at ${cursorPosition.x}px ${cursorPosition.y}px, transparent 60px, rgba(255, 255, 255, 0.8) 101px)`,
-                    pointerEvents: 'none',
-                  }}
-                ></div>
-              </div>
-            </div>
-          )} */}
 
           {/* Members grid */}
           {selectedCategory === 'E-Board' ? (

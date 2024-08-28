@@ -16,9 +16,6 @@ function Home() {
 
   return (
     <div className='homepage-grid'>
-      <div className='glowing-circle z-2'></div>
-      <div className='glowing-circle-2 z-1'></div>
-
       <Header></Header>
 
       {/* Main content */}
@@ -38,9 +35,11 @@ function Home() {
               <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology</div>
             </div>
 
-            <div className='contact-us text-blue-700 font-semibold text-lg mt-8 flex flex-row items-center justify-center' style={{ fontFamily: 'Inter, sans-serif' }}>
-              <Link to="/rush">Rush</Link>
-            </div>
+            <Link to="/rush">
+              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center' style={{ fontFamily: 'Inter, sans-serif' }}>
+                Rush
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -49,7 +48,7 @@ function Home() {
 
           <div className='flex flex-row'>
             <img src={`${process.env.PUBLIC_URL}/retreat.JPEG`} className='hidden lg:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
-            <img src={`${process.env.PUBLIC_URL}/cross.JPEG`} className='hidden lg:block' style={{ width: '200px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src={`${process.env.PUBLIC_URL}/cross.JPEG`} className='hidden lg:block' style={{ width: '250px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
           </div>
         </div>
       </div>
@@ -66,7 +65,7 @@ function Home() {
 					<div className='flex flex-col justify-center items-center lg:ml-16'>
 						<div>
 							<p className='text-[#888888] text-sm md:text-base mb-4 mt-8 lg:mt-0' style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
-                Founded in 2012, we are
+                Established in 2012, we are
               </p>
 							<p className='font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:w-[400px] mb-4 md:mb-8' style={{ fontFamily: 'Inter, sans-serif', fontWeight: '900', letterSpacing: '-0.02em' }}>
 								The first technology fraternity in the nation.
