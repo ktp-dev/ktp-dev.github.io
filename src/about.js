@@ -39,6 +39,7 @@ function About() {
   return (
     <div>
       <Header></Header>
+
       <ScrollToTop />
       
       <div className="relative bg-white w-full">
@@ -48,11 +49,18 @@ function About() {
           <div className="shape-blob nine"></div>
         </div>
 
+      {/* Blob Container */}
+      <div className="inset-0 blob-c z-0">
+        <div className="shape-blob eight"></div>
+        <div className="shape-blob nine"></div>
+      </div>
+
+      <div className="relative w-full">
         {/* Page Content */}
-        <div className="relative py-32 z-10">
+        <div className="relative mt-16 md:mt-32 z-10">
           <div className="flex flex-col text-center">
           <h1 className="text-3xl sm:text-5xl font-black">About Us</h1>
-            <p className="text-base sm:text-xl mt-4 mb-8 font-medium text-gray-600" style={{ color: 'grey' }}>
+            <p className="text-base text-gray-600 text-sm sm:text-base mt-4 mb-16" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
             Learn more about who we are at Kappa Theta Pi!
             </p>
           </div>
@@ -60,7 +68,7 @@ function About() {
       </div>
 
       {/* Scrolling Menu */}
-      <div className="relative mb-16 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
+      <div className="relative mb-4 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
         <div className="flex justify-center text-center space-x-4 sm:space-x-8 md:space-x-16 lg:space-x-32 border-b-2 border-gray-300">
           {categories.map((category, index) => (
             <ScrollLink
@@ -81,7 +89,6 @@ function About() {
 
       {/* Main content */}
       <div className="flex flex-col space-y-12">
-        
         {/* President's Welcome */}
         <div className="bg-white w-full">
           <div className="px-6 sm:px-12 md:px-24 lg:px-32 py-8 sm:py-12 md:py-16" id="president's welcome-section">
