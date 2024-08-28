@@ -48,6 +48,7 @@ function About() {
           <div className="shape-blob eight"></div>
           <div className="shape-blob nine"></div>
         </div>
+      </div>
 
       {/* Blob Container */}
       <div className="inset-0 blob-c z-0">
@@ -226,7 +227,7 @@ function About() {
 
       </div>
 
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 }
