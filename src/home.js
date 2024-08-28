@@ -58,7 +58,7 @@ function Home() {
 				{/* Description */}
 				<div className='flex flex-col lg:flex-row mb-8 md:mb-12 ml-4 md:ml-8 lg:ml-16'>
 					<div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
-						<img src={`${process.env.PUBLIC_URL}/agnes.JPG`} alt="Agnes" class='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+						<img src={`${process.env.PUBLIC_URL}/agnescaro.jpg`} alt="Agnes" class='h-48 md:h-64' style={{ borderRadius: '10px' }} />
 						<img src={`${process.env.PUBLIC_URL}/chi2.jpeg`} alt="Crossover" class='h-48 md:h-64' style={{ borderRadius: '10px' }} />
             <img src={`${process.env.PUBLIC_URL}/lucas.jpg`} alt="Lucas" class='h-48 md:h-64 lg:hidden' style={{ borderRadius: '10px' }} />
 					</div>
