@@ -5,6 +5,7 @@ import { parseCsv } from './parseCsv'; // Import the parseCsv function
 import memberListCsv from './memberList.csv'; // Adjust the path based on the actual location of the CSV file
 import Header from './Header.js';
 import Footer from './Footer.js';
+import ScrollToTop from './ScrollToTop';
 
 // Import images
 import LogoImages from './img/LogosHover.png';
@@ -237,6 +238,7 @@ function Members() {
   return (
     <div>
       <Header></Header>
+      <ScrollToTop />
 
       <div className="px-4 sm:px-8 md:px-16 lg:px-20">
 
