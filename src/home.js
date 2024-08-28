@@ -5,6 +5,7 @@ import Footer from './Footer.js';
 import Header from './Header.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import ScrollToTop from './ScrollToTop';
 
 function Home() {
   useEffect(() => {
@@ -20,6 +21,7 @@ function Home() {
       <div className='glowing-circle-2 z-1'></div>
 
       <Header></Header>
+      <ScrollToTop />
 
       {/* Main content */}
       <div className='flex flex-row justify-between mb-12 md:mb-20 lg:mb-42'>
