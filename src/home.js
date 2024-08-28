@@ -34,8 +34,8 @@ function Home() {
           <img src={`${process.env.PUBLIC_URL}/rock.JPEG`} className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px' }} />
         </div>
 
-        <div className='flex flex-col flex-none p-4'>
-          <div className="absolute inset-0 blob-c z-0 block md:hidden">
+        <div className='flex flex-col flex-none'>
+          <div className="absolute inset-0 blob-c z-0 block md:hidden overflow-hidden">
               <div className="shape-blob twelve"></div>
               <div className="shape-blob thirteen"></div>
           </div>
@@ -178,7 +178,7 @@ function Home() {
           </div>
 
           {/* Phones */}
-          <div className='flex flex-row mt-12 md:mt-0 mb-8'>
+          <div className='hidden md:flex flex-row mt-12 md:mt-0 mb-8'>
             <img src={`${process.env.PUBLIC_URL}/phone_frame_3.svg`} alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] mr-4 md:mr-8 lg:mt-24' />
             <img src={`${process.env.PUBLIC_URL}/phone_frame_4.svg`} alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] lg:mt-12' />
           </div>

@@ -179,7 +179,7 @@ html {
 .shape-blob.twelve {
   background: #a8d4ff;
   height: 175px;
-  width: 250px;
+  width: 300px;
   left: 10%;
   overflow: hidden;
   transform: rotate(-180deg);
@@ -189,11 +189,12 @@ html {
 .shape-blob.thirteen {
   background: #9ceb9c;
   height: 175px;
-  width: 150px;
+  width: 300px;
   top: 2%;
+  left: 5%;
   overflow: hidden;
   transform: rotate(-180deg);
-  animation: blob-movement-two 15s ease-in-out infinite both;
+  /* animation: blob-movement-two 15s ease-in-out infinite both; */
 }
 
 /* Larger screens */
