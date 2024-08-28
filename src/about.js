@@ -10,6 +10,7 @@ import { MdOutlineWork } from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { PiGlobeBold } from "react-icons/pi";
 import { HiAcademicCap } from "react-icons/hi2";
+import ScrollToTop from './ScrollToTop';
 
 const categories = ['President\'s Welcome', 'Our Pillars', 'History', 'DEI Commitment'];
 
@@ -38,6 +39,15 @@ function About() {
   return (
     <div>
       <Header></Header>
+
+      <ScrollToTop />
+      
+      <div className="relative bg-white w-full">
+        {/* Blob Container */}
+        <div className="absolute inset-0 blob-c z-0">
+          <div className="shape-blob eight"></div>
+          <div className="shape-blob nine"></div>
+        </div>
 
       {/* Blob Container */}
       <div className="inset-0 blob-c z-0">

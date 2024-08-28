@@ -4,6 +4,7 @@ import CalendarIcon from './CalendarIcon';
 import PinIcon from './PinIcon';
 import Footer from './Footer.js';
 import Header from './Header.js';
+import ScrollToTop from './ScrollToTop';
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
   <div className="border-b border-gray-300 py-4 cursor-pointer" onClick={onClick}>
@@ -34,6 +35,7 @@ function Rush() {
   return (
     <div className="h-screen flex flex-col">
       <Header></Header>
+      <ScrollToTop />
       
       <div className="px-6 sm:px-12 md:px-32">
         {/* Page content */}

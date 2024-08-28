@@ -36,8 +36,8 @@ const HamburgerHeader = () => {
             {/* Logo */}
             <div className='flex'>
                 <a href='/'>
-                    <img src={`${process.env.PUBLIC_URL}/ktp_logo.svg`} alt="Logo" className="w-20 h-auto mb-2" />
-                    <img src={`${process.env.PUBLIC_URL}/ktp_alpha_chapter.svg`} alt="Logo" className="w-20 h-auto" />
+                    <img src={`${process.env.PUBLIC_URL}/ktp_logo_letters.png`} alt="Logo" className="w-20 h-auto" />
+                    {/* <img src={`${process.env.PUBLIC_URL}/ktp_alpha_chapter.svg`} alt="Logo" className="w-20 h-auto" /> */}
                 </a>
             </div>
 

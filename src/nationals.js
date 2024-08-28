@@ -5,6 +5,7 @@ import Footer from './Footer.js';
 import Header from './Header.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faUserGroup, faNetworkWired, faPencil } from '@fortawesome/free-solid-svg-icons';
+import ScrollToTop from './ScrollToTop';
 
 // Import images (replace with actual paths to your logo images)
 import MichiganLogo from './img/universities/michigan.png';
@@ -39,6 +40,7 @@ function Nationals() {
   return (
     <div className="h-screen flex flex-col">
       <Header></Header>
+      <ScrollToTop />
 
       {/* Main content */}
       <div className="flex-grow flex flex-col md:flex-row items-center justify-center px-4 md:px-8 py-8 md:py-16">
