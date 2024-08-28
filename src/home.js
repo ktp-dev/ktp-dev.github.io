@@ -27,7 +27,7 @@ function Home() {
 
         <div className='flex flex-col flex-none p-4'>
           <div className='flex flex-col items-center justify-center z-10'>
-            <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+            <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '900', letterSpacing: '-0.02em' }}>
               We’re the University of Michigan’s premier technology fraternity
             </div>
 
