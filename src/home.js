@@ -42,8 +42,8 @@ function Home() {
             <div className="shape-blob eleven"></div>
         </div>
         <div className='flex-1 flex flex-col items-end'>
-          <img src={`${process.env.PUBLIC_URL}/melgrace.jpg`} className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px' }} />
-          <img src={`${process.env.PUBLIC_URL}/rock.JPEG`} className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px' }} />
+          <img src={`${process.env.PUBLIC_URL}/melgrace.jpg`} className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '50px' }} />
+          <img src={`${process.env.PUBLIC_URL}/rock.JPEG`} className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
         </div>
 
         <div className='flex flex-col flex-none'>
@@ -191,7 +191,7 @@ function Home() {
             </div>
   
             {/* Alternate App Icons */}
-            <div className="flex flex-col items-start">
+            <div className="hidden lg:flex flex-col items-start">
               <div className="flex flex-wrap justify-start w-full mt-6">
                 <img src={BlondeAppIcon} alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
                 <img src={BrownAppIcon} alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
