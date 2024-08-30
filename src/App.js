@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './tailwind.css';
 import Home from './home'
 import Rush from './rush';
