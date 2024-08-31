@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="We’re the University of Michigan’s premier technology fraternity. Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.png" />
     <!--
@@ -25,6 +25,11 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Kappa Theta Pi</title>
+    <script>
+      if (window.location.pathname === "/index.html") {
+        window.location.replace("/");
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -41,3 +46,5 @@
     -->
   </body>
 </html>
+
+
