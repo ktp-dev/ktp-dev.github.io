@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0;url=/rush" />
+    <script>
+        if (window.location.pathname === "/rush.html") {
+          window.location.replace("/rush");
+        }
+      </script>
 </head>
 <body>
     <!-- If meta redirect fails, provide a link -->

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0;url=/about" />
+    <script>
+        if (window.location.pathname === "/about.html") {
+          window.location.replace("/about");
+        }
+      </script>
 </head>
 <body>
     <!-- If meta redirect fails, provide a link -->
