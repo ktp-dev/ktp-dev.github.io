@@ -134,7 +134,13 @@ function Rush() {
                   <CalendarIcon/><p className="ml-1 mr-3">Wednesday, September 4th, 6:00-8:00PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Virtual (Zoom)</p></div>
                 </p>
                 <p className="text-gray-600 flex items-center">At this event, we'll offer some tips for crafting a strong resume, then we'll hop into breakout rooms 
-                to offer you some help on your KTP Rush Applications!</p>
+                to offer you some help on your KTP Rush Applications!<br></br>
+                </p>
+                <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
+                  <button className="px-3 sm:px-4 py-2 bg-blue-500 mt-2 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
+                     Zoom
+                  </button>
+                </a>
               </div>
             </div>
 
