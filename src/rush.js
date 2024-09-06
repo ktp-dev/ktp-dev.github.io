@@ -186,7 +186,7 @@ function Rush() {
             <div className="relative z-10 h-64">
               <iframe 
                 className="rounded-xl w-full h-full"
-                src="https://www.youtube.com/embed/WuihbLVE6Zo?si=7lMqZdXYe162kOob" 
+                src="https://www.youtube.com/embed/pktKW6XDJKk?si=7lMqZdXYe162kOob" 
                 title="YouTube video player" 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
