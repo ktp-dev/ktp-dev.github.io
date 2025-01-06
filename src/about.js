@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import PresidentHeadshot from './img/members/Liang_Helen.jpg';
+import PresidentHeadshot from './img/members/Liang_Helen.JPG';
 import History from './img/History.jpg';
 import Header from './Header.js';
 import Footer from './Footer.js';

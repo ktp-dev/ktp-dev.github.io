@@ -45,7 +45,7 @@ const hardcodedAlumni = [
 
 // Eboard and Directors
 const hardcodedMembers = [
-  { name: 'Helen Liang', imageUrl: require('./img/members/Liang_Helen.jpg'), category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensure that all KTP members have an enjoyable and impactful experience in the fraternity.' },
+  { name: 'Helen Liang', imageUrl: require('./img/members/Liang_Helen.JPG'), category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensure that all KTP members have an enjoyable and impactful experience in the fraternity.' },
   { name: 'Dhruv Dighrasker', imageUrl: require('./img/members/Dighrasker_Dhruv.jpg'), category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keep alumni up to date on the fraternity, and give them opportunities to be a part of it.' },
   { name: 'Carolina Mondragon-Tadiotto', imageUrl: require('./img/members/Mondragon-Tadiotto_Carolina.jpg'), category: 'E-Board', role: 'VP of Internal Affairs', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
   { name: 'Himanish Kolli', imageUrl: require('./img/members/Kolli_Himanish.jpg'), category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
