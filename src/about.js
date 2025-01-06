@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import PresidentHeadshot from './img/members/Medway_Lily.jpg';
+import PresidentHeadshot from './img/members/Liang_Helen.jpg';
 import History from './img/History.jpg';
 import Header from './Header.js';
 import Footer from './Footer.js';
@@ -112,8 +112,8 @@ function About() {
                   <br/><br/>Kappa Theta Pi offers brothers the support  to be extraordinary during their time at Michigan with resources centered around five pillars: professional development, alumni connections, social growth, technological advancement, and academic support. From project teams and study groups to professional development workshops and hackathons / design jams, we foster a culture of growth encouraging members to pursue their tech passions. Our chapter values diversity, with brothers contributing unique experiences and excelling as student leaders. We celebrate our diverse brotherhood, welcoming all united by a passion for technology.
                   <br/><br/>Reflecting on my time at Michigan, KTP has been the most impactful part of my college experience. I have witnessed the growth of some of Michigan’s most brilliant and ambitious professionals, seeing first-hand the incredible things they do. More importantly, I have been introduced to lifelong friends and connections who serve as a constant source of inspiration and always support me to be my full and best self. I invite you to explore our website and learn more about our brotherhood.​
                   <br/><br/>With love,
-                  <br />Lily Medway
-                  <br />President, 2024
+                  <br />Helen Liang
+                  <br />President, 2025
                 </p>
               </div>
             </div>

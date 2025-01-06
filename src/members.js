@@ -45,15 +45,15 @@ const hardcodedAlumni = [
 
 // Eboard and Directors
 const hardcodedMembers = [
-  { name: 'Lily Medway', imageUrl: require('./img/members/Medway_Lily.jpg'), category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensure that all KTP members have an enjoyable and impactful experience in the fraternity.' },
-  { name: 'Thomas Joppich', imageUrl: require('./img/members/Joppich_Thomas.jpg'), category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keep alumni up to date on the fraternity, and give them opportunities to be a part of it.' },
-  { name: 'Agnes Mar', imageUrl: require('./img/members/Mar_Agnes.jpg'), category: 'E-Board', role: 'VP of Internal Affairs', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
-  { name: 'Shrey Pandya', imageUrl: require('./img/members/Pandya_Shrey.jpg'), category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
-  { name: 'Ronith Ganjigunta', imageUrl: require('./img/members/Ganjigunta_Ronith.jpg'), category: 'E-Board', role: 'VP of Technical Development', description: 'Oversees committees, plans technical workshops and hackathon, and supports members in their academic and professional careers.' },
-  { name: 'Archana Chandran', imageUrl: require('./img/members/Chandran_Archana.JPG'), category: 'E-Board', role: 'VP of Membership', description: 'Focuses on supporting new members socially and professionally to successfully integrate them as brothers within KTP.' },
-  { name: 'Sujay Mehta', imageUrl: require('./img/members/Mehta_Sujay.jpg'), category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and responsible for promoting KTP on campus.' },
-  { name: 'Qayf Rasul', imageUrl: require('./img/members/Rasul_Qayf.jpg'), category: 'E-Board', role: 'VP of Engagement', description: 'Plans variety of brotherhood events to engage active members.' },
-  { name: 'Kelly Zhang', imageUrl: require('./img/members/Zhang_Kelly.jpg'), category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
+  { name: 'Helen Liang', imageUrl: require('./img/members/Liang_Helen.jpg'), category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensure that all KTP members have an enjoyable and impactful experience in the fraternity.' },
+  { name: 'Dhruv Dighrasker', imageUrl: require('./img/members/Dighrasker_Dhruv.jpg'), category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keep alumni up to date on the fraternity, and give them opportunities to be a part of it.' },
+  { name: 'Carolina Mondragon-Tadiotto', imageUrl: require('./img/members/Mondragon-Tadiotto_Carolina.jpg'), category: 'E-Board', role: 'VP of Internal Affairs', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
+  { name: 'Himanish Kolli', imageUrl: require('./img/members/Kolli_Himanish.jpg'), category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
+  { name: 'In Lorthongpanich', imageUrl: require('./img/members/Lorthongpanich_In.jpg'), category: 'E-Board', role: 'VP of Technical Development', description: 'Oversees committees, plans technical workshops and hackathon, and supports members in their academic and professional careers.' },
+  { name: 'Ava Tikekar', imageUrl: require('./img/members/Tikekar_Ava.jpg'), category: 'E-Board', role: 'VP of Membership', description: 'Focuses on supporting new members socially and professionally to successfully integrate them as brothers within KTP.' },
+  { name: 'Ashley Glabicki', imageUrl: require('./img/members/Glabicki_Ashley.jpg'), category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and responsible for promoting KTP on campus.' },
+  { name: 'Arinjoy Das', imageUrl: require('./img/members/Das_Arinjoy.JPG'), category: 'E-Board', role: 'VP of Engagement', description: 'Plans variety of brotherhood events to engage active members.' },
+  { name: 'Aarnav Unadkat', imageUrl: require('./img/members/Unadkat_Aarnav.jpg'), category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
   { name: 'Christopher Shang', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
   { name: 'Jenny Ni', imageUrl: require('./img/members/Ni_Jenny.jpg'), category: 'Directors', role: 'Director of Digital Strategy & Social Media', description: 'Manages digital strategy and social media presence. Design and create content for KTP\'s social media accounts.' },
   { name: 'Jill Uy', imageUrl: require('./img/members/Uy_Jill.JPG'), category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
@@ -148,7 +148,8 @@ function Members() {
         const role = member['Pledge Class'] || 'Member';
         const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
 
-        const isAlumni = member['Grad Year'] && member['Grad Year'] <= currentYear;
+        // change to 2025 once seniors graduate
+        const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2024; 
 
         return {
           name: `${firstName} ${lastName}`,

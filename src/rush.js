@@ -49,22 +49,22 @@ function Rush() {
             {/* Blob Container */}
             <h1 className="text-3xl sm:text-5xl font-black">Learn about joining KTP!</h1>
             <p className="text-base sm:text-xl mt-4 mb-8 font-medium text-gray-600" style={{ color: 'grey' }}>
-            Welcome to Kappa Theta Pi's Fall 2024 Rush! <br></br>Here's our rush schedule, applications are due September 5, 2024
+            Welcome to Kappa Theta Pi's Winter 2025 Rush! <br></br>Here's our rush schedule, applications are due January 19, 2025
             </p>
             <div className="flex space-x-4">
-            <a href="https://tinyurl.com/ktp-f24-rush-interest" target="_blank" rel="noopener noreferrer">
+            <a href="https://forms.gle/f7zDBnuXUo2ak5v27" target="_blank" rel="noopener noreferrer">
               <button className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
                 Interest Form
               </button>
             </a>
-            <a href="https://tinyurl.com/ktp-f24-rush-app" target="_blank" rel="noopener noreferrer">
+            <a href="https://forms.gle/cextBZwuvS8CN5Nq5" target="_blank" rel="noopener noreferrer">
               <button className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
                 Application Link
               </button>
             </a>
             </div>
             <p className="text-sm sm:text-lg mt-4 mb-16 font-medium text-gray-600" style={{ color: 'grey' }}>
-            You can also join our <a href='https://calendar.google.com/calendar/u/0?cid=Y18zMDQ0YWFjYmE3MDE1YmQyYjZmNDkwNTJhMWE3NWMwYzc4MDVlMmFiYTIyY2Q5MDRjMjk1NmVmZTcyMGZiZGQ4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20' target="_blank" className="text-blue-600 hover:text-blue-800">F24 Rush Google Calendar</a> for dates/times/locations for all of our Open Rush events.
+            You can also join our <a href='https://calendar.google.com/calendar/u/0?cid=Y19iNjNjMDJlNDNkODg4Nzc1ODY1MGQ4Y2VkOTJmMTRiOTVjNDBhNWQzZDhkOTYxYmQwMzMxOGFmMzRiNmEwOWYyQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20' target="_blank" className="text-blue-600 hover:text-blue-800">W25 Rush Google Calendar</a> for dates/times/locations for all of our Open Rush events.
             </p>
           </div>
         </div>
@@ -75,7 +75,7 @@ function Rush() {
           <div className="relative flex-1 mr-0 md:mr-8">
             <div className="border-l-2 border-dotted border-gray-400 absolute h-full left-4 top-0 transform -translate-x-1/2"></div>
 
-            {/* Open House #2*/}
+            {/* Open House #1*/}
             <div className="mb-10 flex items-center relative">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
                 <div className="w-4 h-4 rounded-full bg-blue-700 z-10"></div>
@@ -83,14 +83,14 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Open House #1</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Sunday, September 1st, 7:00-9:00PM</p> <span className="hidden sm:inline">•</span>  <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Kuenzel Room (Michigan Union)</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Tuesday, January 14th, 7:00-8:00PM</p> <span className="hidden sm:inline">•</span>  <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">EQ1405 (East Quad)</p></div>
                 </p>
                 <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
                 Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p>
               </div>
             </div>
 
-            {/* Open House #1*/}
+            {/* Open House #2*/}
             <div className="mb-10 flex items-center relative">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
                 <div className="w-4 h-4 rounded-full bg-blue-700 z-10"></div>
@@ -98,7 +98,7 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Open House #2</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Monday, September 2nd, 7:30-9:30PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Henderson Room (Michigan League)</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Wednesday, January 15th, 4:00-5:00PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Union Anderson ABCD (Michigan Union)</p></div>
                 </p>
                 {/* <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
                 Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p> */}
@@ -115,7 +115,7 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">DEI Panel</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Tuesday, September 3rd, 6:30-8:00 PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">NQ 2435</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Friday, January 17th, 6:30-8:00 PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">NQ 2435</p></div>
                 </p>
                 <p className="text-gray-600 flex items-center">In KTP, we love to celebrate our members' diversity and share honest conversations about how the DEI climate can be 
                 improved in KTP, on campus, and beyond. At our DEI Panel, you will have the opportunity to hear brothers' experiences as underrepresented minorities in tech. 
@@ -131,16 +131,16 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Virtual Resume and Application Office Hours</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Wednesday, September 4th, 6:00-8:00PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Virtual (Zoom)</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Friday, January 17th, 8:00-9:30PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Virtual (Zoom)</p></div>
                 </p>
                 <p className="text-gray-600 flex items-center">At this event, we'll offer some tips for crafting a strong resume, then we'll hop into breakout rooms 
                 to offer you some help on your KTP Rush Applications!<br></br>
                 </p>
-                <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
+                {/* <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
                   <button className="px-3 sm:px-4 py-2 bg-blue-500 mt-2 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
                      Zoom
                   </button>
-                </a>
+                </a> */}
               </div>
             </div>
 
@@ -152,9 +152,9 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Application Deadline</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Thursday, September 5th, 11:59pm</p> 
+                  <CalendarIcon/><p className="ml-1 mr-3">Sunday, January 19th, 11:59pm</p> 
                 </p>
-                <a href="https://tinyurl.com/ktp-f24-rush-app" target="_blank" rel="noopener noreferrer">
+                <a href="https://forms.gle/cextBZwuvS8CN5Nq5" target="_blank" rel="noopener noreferrer">
                   <button className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
                     Apply Here
                   </button>
@@ -170,7 +170,7 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Closed Rush</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Monday, September 9th - Thursday, September 19th</p> 
+                  <CalendarIcon/><p className="ml-1 mr-3">Wednesday, January 22nd - Wednesday, February 5th</p> 
                 </p>
                 <p className="text-gray-600 flex items-center">Our Closed Rush is invite-only. KTP's closed rush process consists of 1:1 coffee chats, three events for us to get to know each other, and a final round of interviews.</p>
               </div>
