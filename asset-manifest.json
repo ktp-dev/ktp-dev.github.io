@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.3d03898f.css",
-    "main.js": "/static/js/main.78f48fd3.js",
+    "main.js": "/static/js/main.84f7fd87.js",
     "static/js/453.c02ff2e2.chunk.js": "/static/js/453.c02ff2e2.chunk.js",
     "static/media/Dighrasker_Dhruv.jpg": "/static/media/Dighrasker_Dhruv.555ff18c7fac8acb8ddb.jpg",
     "static/media/History.jpg": "/static/media/History.0bafd56cf8e9f7e416d7.jpg",
@@ -27,6 +27,7 @@
     "static/media/Frydenborg_Josefia.jpg": "/static/media/Frydenborg_Josefia.0d2e6952149c193c5daf.jpg",
     "static/media/Li_Andrew.jpg": "/static/media/Li_Andrew.491a23a77d21e9b1f46c.jpg",
     "static/media/Howarth_Melanie.jpg": "/static/media/Howarth_Melanie.20dce783a401c5c633c5.jpg",
+    "static/media/Tikekar_Ava.jpg": "/static/media/Tikekar_Ava.4554c971d6d666dd9b61.jpg",
     "static/media/Shang_Christopher.jpg": "/static/media/Shang_Christopher.1b61198a001518ac5af9.jpg",
     "static/media/Zichi_Laura.jpg": "/static/media/Zichi_Laura.d7634c62607fe153a8dc.jpg",
     "static/media/Reddy_Nishanth.jpg": "/static/media/Reddy_Nishanth.ffee36ac275d5a07646e.jpg",
@@ -227,11 +228,11 @@
     "static/media/Narayan_Kavya.jpg": "/static/media/Narayan_Kavya.621c957f96bbf28f1efa.jpg",
     "index.html": "/index.html",
     "main.3d03898f.css.map": "/static/css/main.3d03898f.css.map",
-    "main.78f48fd3.js.map": "/static/js/main.78f48fd3.js.map",
+    "main.84f7fd87.js.map": "/static/js/main.84f7fd87.js.map",
     "453.c02ff2e2.chunk.js.map": "/static/js/453.c02ff2e2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3d03898f.css",
-    "static/js/main.78f48fd3.js"
+    "static/js/main.84f7fd87.js"
   ]
 }
