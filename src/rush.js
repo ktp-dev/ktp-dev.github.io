@@ -83,7 +83,7 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Open House #1</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Tuesday, January 14th, 7:00-8:00PM</p> <span className="hidden sm:inline">•</span>  <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">EQ1405 (East Quad)</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Tuesday, January 14th, 5:30-7:30PM</p> <span className="hidden sm:inline">•</span>  <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">EQ1405 (East Quad)</p></div>
                 </p>
                 <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
                 Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p>
@@ -98,7 +98,7 @@ function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Open House #2</h2>
                 <p className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><p className="ml-1 mr-3">Wednesday, January 15th, 4:00-5:00PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">Union Anderson ABCD (Michigan Union)</p></div>
+                  <CalendarIcon/><p className="ml-1 mr-3">Thursday, January 16th, 8:00-10:00PM</p> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><p className="ml-1">EQ1405 (East Quad)</p></div>
                 </p>
                 {/* <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
                 Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p> */}
