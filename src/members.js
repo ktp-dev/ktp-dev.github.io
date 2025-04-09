@@ -54,16 +54,18 @@ const hardcodedMembers = [
   { name: 'Ashley Glabicki', imageUrl: require('./img/members/Glabicki_Ashley.jpg'), category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and responsible for promoting KTP on campus.' },
   { name: 'Arinjoy Das', imageUrl: require('./img/members/Das_Arinjoy.JPG'), category: 'E-Board', role: 'VP of Engagement', description: 'Plans variety of brotherhood events to engage active members.' },
   { name: 'Aarnav Unadkat', imageUrl: require('./img/members/Unadkat_Aarnav.jpg'), category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
-  { name: 'Christopher Shang', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Christopher Shang', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Jenny Ni', imageUrl: require('./img/members/Ni_Jenny.jpg'), category: 'Directors', role: 'Director of Digital Strategy & Social Media', description: 'Manages digital strategy and social media presence. Design and create content for KTP\'s social media accounts.' },
-  { name: 'Jill Uy', imageUrl: require('./img/members/Uy_Jill.JPG'), category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Krupa Shanware', imageUrl: require('./img/members/Shanware_Krupa.jpg'), category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
   { name: 'Sydney Abam', imageUrl: require('./img/members/Abam_Sydney.jpg'), category: 'Directors', role: 'Co-Director of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
   { name: 'Ayan Nair', imageUrl: require('./img/members/Nair_Ayan.jpg'), category: 'Directors', role: 'Co-Director of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
+  { name: 'Christopher Shang', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Career Development', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Angad Singh', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Chrissi Zachariades', imageUrl: require('./img/members/Shang_Christopher.jpg'), category: 'Directors', role: 'Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Mia Goldstein', imageUrl: require('./img/members/Ni_Jenny.jpg'), category: 'Directors', role: 'Director of Digital Strategy & Social Media', description: 'Manages digital strategy and social media presence. Design and create content for KTP\'s social media accounts.' },
+  { name: 'Jill Uy', imageUrl: require('./img/members/Uy_Jill.JPG'), category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Krupa Shanware', imageUrl: require('./img/members/Shanware_Krupa.jpg'), category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
   { name: 'Arinjoy Das', imageUrl: require('./img/members/Das_Arinjoy.JPG'), category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Flynn Lyon', imageUrl: require('./img/members/Lyon_Flynn.jpg'), category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Carolina Mondragon-Tadiotto', imageUrl: require('./img/members/Mondragon-Tadiotto_Carolina.jpg'), category: 'Directors', role: 'Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Sarah Klemmer', imageUrl: require('./img/members/Lyon_Flynn.jpg'), category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
+  { name: 'Pranav Joshi', imageUrl: require('./img/members/Mondragon-Tadiotto_Carolina.jpg'), category: 'Directors', role: 'Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Neelufar Jaberi', imageUrl: require('./img/members/Mondragon-Tadiotto_Carolina.jpg'), category: 'Directors', role: 'Director of DEI', description: 'Assist VP Internal in executing DEI events, manage the DEI event funding form, and facilitate collaboration with other student organizations for joint events.'},
 ];
 
 
@@ -151,7 +153,7 @@ function Members() {
         const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
 
         // change to 2025 once seniors graduate
-        const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2024; 
+        const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2025; 
 
         return {
           name: `${firstName} ${lastName}`,
