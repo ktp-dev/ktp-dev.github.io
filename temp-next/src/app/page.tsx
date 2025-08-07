@@ -2,25 +2,12 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-// Images
-import BlondeAppIcon from '../img/alt_app_icons/blonde.jpg';
-import BrownAppIcon from '../img/alt_app_icons/brown.jpg';
-import CrossoverAppIcon from '../img/alt_app_icons/crossover.jpg';
-import DefaultAppIcon from '../img/alt_app_icons/default.jpg';
-import PokemonAppIcon from '../img/alt_app_icons/pokemon.jpg';
-import RetrotechAppIcon from '../img/alt_app_icons/retrotech.jpg';
-import SmileyAppIcon from '../img/alt_app_icons/smiley.jpg';
-import SquiggleAppIcon from '../img/alt_app_icons/squiggle.jpg';
-import StickerAppIcon from '../img/alt_app_icons/sticker.jpg';
-import WhiteAppIcon from '../img/alt_app_icons/white.jpg';
-import YearbookAppIcon from '../img/alt_app_icons/yearbook.jpg';
-import YellowAppIcon from '../img/alt_app_icons/yellow.jpg';
+// Images - using public folder paths
 
 export default function Home() {
   useEffect(() => {
@@ -192,20 +179,20 @@ export default function Home() {
             {/* Alternate App Icons */}
             <div className="hidden lg:flex flex-col items-start">
               <div className="flex flex-wrap justify-start w-full mt-6">
-                <Image src={BlondeAppIcon} alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={BrownAppIcon} alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={CrossoverAppIcon} alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={DefaultAppIcon} alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={PokemonAppIcon} alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={RetrotechAppIcon} alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/blonde.jpg" alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/brown.jpg" alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/crossover.jpg" alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/default.jpg" alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/pokemon.jpg" alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/retrotech.jpg" alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
               </div>
               <div className="flex flex-wrap justify-start w-full mt-2">
-                <Image src={SmileyAppIcon} alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={YellowAppIcon} alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={StickerAppIcon} alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={SquiggleAppIcon} alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={WhiteAppIcon} alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <Image src={YearbookAppIcon} alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/smiley.jpg" alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/yellow.jpg" alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/sticker.jpg" alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/squiggle.jpg" alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/white.jpg" alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <img src="/img/alt_app_icons/yearbook.jpg" alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
               </div>
             </div>
           </div>
