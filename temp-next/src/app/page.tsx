@@ -28,8 +28,8 @@ export default function Home() {
             <div className="shape-blob eleven"></div>
         </div>
         <div className='flex-1 flex flex-col items-end'>
-          <img src="/melgrace.jpg" className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '50px' }} />
-          <img src="/rock.JPEG" className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
+          <img src="/images/home/melgrace.jpg" className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '50px' }} />
+          <img src="/images/home/rock.JPEG" className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
         </div>
 
         <div className='flex flex-col flex-none'>
@@ -55,11 +55,11 @@ export default function Home() {
         </div>
 
         <div className='flex-1 flex flex-col items-start'>
-          <img src="/paddle.jpg" className='hidden lg:block' style={{ width: '200px', position: 'relative', left: '150px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+          <img src="/images/home/paddle.jpg" className='hidden lg:block' style={{ width: '200px', position: 'relative', left: '150px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
 
           <div className='flex flex-row'>
-            <img src="/retreat.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
-            <img src="/cross.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src="/images/home/retreat.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src="/images/home/cross.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
           </div>
         </div>
       </div>
@@ -68,9 +68,9 @@ export default function Home() {
         {/* Description */}
         <div className='flex flex-col lg:flex-row mb-8 md:mb-12 ml-4 md:ml-8 lg:ml-16'>
           <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
-            <img src="/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/lucas.jpg" alt="Lucas" className='h-48 md:h-64 lg:hidden' style={{ borderRadius: '10px' }} />
+            <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+            <img src="/images/home/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+            <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 lg:hidden' style={{ borderRadius: '10px' }} />
           </div>
 
           <div className='flex flex-col justify-center items-center lg:ml-16'>
@@ -95,11 +95,11 @@ export default function Home() {
         </div>
 
         <div className='hidden md:flex flex-row gap-4 justify-center'>
-          <img src="/ab.JPG" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/yummers.jpeg" alt="Ava and Bella" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/ab.jpg" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/yummers.jpeg" alt="Ava and Bella" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
         </div>
       </div>
 
@@ -168,39 +168,39 @@ export default function Home() {
             </div>
             <div className='flex flex-row justify-center md:justify-start mt-8'>
               <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-4'>
-                <img src="/app_store.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
+                <img src="/logos/app_store.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
               </a>
 
               <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
-                <img src="/google_play.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
+                <img src="/logos/google_play.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
               </a>
             </div>
   
             {/* Alternate App Icons */}
             <div className="hidden lg:flex flex-col items-start">
               <div className="flex flex-wrap justify-start w-full mt-6">
-                <img src="/img/alt_app_icons/blonde.jpg" alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/brown.jpg" alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/crossover.jpg" alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/default.jpg" alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/pokemon.jpg" alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/retrotech.jpg" alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                            <img src="/images/app_icons/blonde.jpg" alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/brown.jpg" alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/crossover.jpg" alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/default.jpg" alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/pokemon.jpg" alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/retrotech.jpg" alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
               </div>
               <div className="flex flex-wrap justify-start w-full mt-2">
-                <img src="/img/alt_app_icons/smiley.jpg" alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/yellow.jpg" alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/sticker.jpg" alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/squiggle.jpg" alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/white.jpg" alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
-                <img src="/img/alt_app_icons/yearbook.jpg" alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                            <img src="/images/app_icons/smiley.jpg" alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/yellow.jpg" alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/sticker.jpg" alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/squiggle.jpg" alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/white.jpg" alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+            <img src="/images/app_icons/yearbook.jpg" alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
               </div>
             </div>
           </div>
 
           {/* Phones */}
           <div className='hidden md:flex flex-row mt-12 md:mt-0 mb-8'>
-            <img src="/phone_frame_3.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] mr-4 md:mr-8 lg:mt-24' />
-            <img src="/phone_frame_4.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] lg:mt-12' />
+            <img src="/images/home/phone_frame_3.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] mr-4 md:mr-8 lg:mt-24' />
+            <img src="/images/home/phone_frame_4.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] lg:mt-12' />
           </div>
         </div>
       </div>

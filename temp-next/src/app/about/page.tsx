@@ -104,7 +104,7 @@ export default function About() {
                   <div className="shape-blob nine absolute"></div>
                 </div>
                 <img 
-                  src="/Liang_Helen.JPG" 
+                  src="/images/about/Liang_Helen.jpg" 
                   alt="President's Headshot" 
                   className="relative z-10 w-3/4 h-auto rounded-full border-8"
                   style={{ borderLeftColor: '#d1fae5', borderRightColor: '#d1fae5', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }}
@@ -211,7 +211,7 @@ export default function About() {
                   <div className="shape-blob eight"></div>
                   <div className="shape-blob nine"></div>
                 </div>
-                <img src="/History.jpg" alt="KTP Founders" className="relative z-10 w-3/4 h-auto rounded-full border-8" style={{ borderLeftColor: '#bae6fd', borderRightColor: '#bae6fd', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }} />
+                <img src="/images/about/History.jpg" alt="KTP Founders" className="relative z-10 w-3/4 h-auto rounded-full border-8" style={{ borderLeftColor: '#bae6fd', borderRightColor: '#bae6fd', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }} />
               </div>
             </div>
           </div>

@@ -68,24 +68,24 @@ export default function Footer() {
                     <div className='flex justify-center align-center mb-6'>
                         <div className='flex flex-row'>
                             <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-2'>
-                                <img src="/app_store.svg" alt="App Store" style={{ width: '130px' }} />
+                                <img src="/logos/app_store.svg" alt="App Store" style={{ width: '130px' }} />
                             </a>
 
                             <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
-                                <img src="/google_play.svg" alt="Google Play" style={{ width: '130px' }} />
+                                <img src="/logos/google_play.svg" alt="Google Play" style={{ width: '130px' }} />
                             </a>
                         </div>
                     </div>
 
                     {/* cout */}
                     <div className='flex align-center justify-center mb-8 md:mb-0' style={{ transform: 'rotate(-4deg)' }}>
-                        <img src="/cout_ktp.svg" alt="Image" style={{ width: '175px' }} />
+                        <img src="/logos/cout_ktp.svg" alt="Image" style={{ width: '175px' }} />
                     </div>
                 </div>
             </div>
 
             <div className='flex justify-center items-center mt-6 font-inter'>
-                © Kappa Theta Pi 2024. All rights reserved.
+                © Kappa Theta Pi 2025. All rights reserved.
             </div>
         </div>
     );

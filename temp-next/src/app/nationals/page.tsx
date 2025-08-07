@@ -6,18 +6,18 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 // Import images
-import MichiganLogo from '../../../public/img/universities/michigan.png';
-import NorthwesternLogo from '../../../public/img/universities/northwestern.png';
-import UChicagoLogo from '../../../public/img/universities/uchicago.png';
-import RutgersLogo from '../../../public/img/universities/rutgers.png';
-import BULogo from '../../../public/img/universities/bu.png';
-import USCLogo from '../../../public/img/universities/usc.png';
-import SyracuseLogo from '../../../public/img/universities/syracuse.png';
-import PittLogo from '../../../public/img/universities/pitt.png';
-import UNCLogo from '../../../public/img/universities/unc.png';
-import MarylandLogo from '../../../public/img/universities/maryland.png';
-import TexasLogo from '../../../public/img/universities/texas.png';
-import ColoradoLogo from '../../../public/img/universities/colorado.png';
+import MichiganLogo from '../../../public/images/universities/michigan.png';
+import NorthwesternLogo from '../../../public/images/universities/northwestern.png';
+import UChicagoLogo from '../../../public/images/universities/uchicago.png';
+import RutgersLogo from '../../../public/images/universities/rutgers.png';
+import BULogo from '../../../public/images/universities/bu.png';
+import USCLogo from '../../../public/images/universities/usc.png';
+import SyracuseLogo from '../../../public/images/universities/syracuse.png';
+import PittLogo from '../../../public/images/universities/pitt.png';
+import UNCLogo from '../../../public/images/universities/unc.png';
+import MarylandLogo from '../../../public/images/universities/maryland.png';
+import TexasLogo from '../../../public/images/universities/texas.png';
+import ColoradoLogo from '../../../public/images/universities/colorado.png';
 
 const logos = [
   { src: MichiganLogo, alt: 'University of Michigan' },

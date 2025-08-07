@@ -38,7 +38,7 @@ export default function HamburgerHeader() {
             {/* Logo */}
             <div className='flex'>
                 <a href='/'>
-                    <img src="/ktp_logo_letters.png" alt="Logo" className="w-20 h-auto" />
+                    <img src="/logos/ktp_logo_letters.png" alt="Logo" className="w-20 h-auto" />
                     {/* <img src="/ktp_alpha_chapter.svg" alt="Logo" className="w-20 h-auto" /> */}
                 </a>
             </div>
