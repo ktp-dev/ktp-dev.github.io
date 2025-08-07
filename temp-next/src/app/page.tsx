@@ -1,103 +1,224 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+// Images
+import BlondeAppIcon from '../img/alt_app_icons/blonde.jpg';
+import BrownAppIcon from '../img/alt_app_icons/brown.jpg';
+import CrossoverAppIcon from '../img/alt_app_icons/crossover.jpg';
+import DefaultAppIcon from '../img/alt_app_icons/default.jpg';
+import PokemonAppIcon from '../img/alt_app_icons/pokemon.jpg';
+import RetrotechAppIcon from '../img/alt_app_icons/retrotech.jpg';
+import SmileyAppIcon from '../img/alt_app_icons/smiley.jpg';
+import SquiggleAppIcon from '../img/alt_app_icons/squiggle.jpg';
+import StickerAppIcon from '../img/alt_app_icons/sticker.jpg';
+import WhiteAppIcon from '../img/alt_app_icons/white.jpg';
+import YearbookAppIcon from '../img/alt_app_icons/yearbook.jpg';
+import YellowAppIcon from '../img/alt_app_icons/yellow.jpg';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  useEffect(() => {
+    AOS.init({
+      duration: 2000,
+      once: true,
+    });
+  }, []);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className='homepage-grid'>
+      <Header />
+      
+      {/* Main content */}
+      <div className='flex flex-row justify-between mb-12 md:mb-20 lg:mb-32'>
+        <div className="absolute inset-0 blob-c z-0 hidden lg:block">
+            <div className="shape-blob ten"></div>
+            <div className="shape-blob eleven"></div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className='flex-1 flex flex-col items-end'>
+          <img src="/melgrace.jpg" className='hidden lg:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '50px' }} />
+          <img src="/rock.JPEG" className='hidden lg:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
+        </div>
+
+        <div className='flex flex-col flex-none'>
+          <div className="absolute inset-0 blob-c z-0 block md:hidden overflow-hidden">
+              <div className="shape-blob twelve"></div>
+              <div className="shape-blob thirteen"></div>
+          </div>
+          <div className='flex flex-col items-center justify-center z-10'>
+            <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36 font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
+              We're the University of Michigan's premier technology fraternity
+            </div>
+
+            <div className='text-[#707070] text-[16px] text-center mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-sm sm:text-md lg:text-base'>
+              <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology</div>
+            </div>
+
+            <Link href="/rush">
+              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter'>
+                Rush
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <div className='flex-1 flex flex-col items-start'>
+          <img src="/paddle.jpg" className='hidden lg:block' style={{ width: '200px', position: 'relative', left: '150px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+
+          <div className='flex flex-row'>
+            <img src="/retreat.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src="/cross.JPEG" className='hidden lg:block' style={{ width: '250px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+          </div>
+        </div>
+      </div>
+
+      <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32'>
+        {/* Description */}
+        <div className='flex flex-col lg:flex-row mb-8 md:mb-12 ml-4 md:ml-8 lg:ml-16'>
+          <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
+            <img src="/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+            <img src="/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+            <img src="/lucas.jpg" alt="Lucas" className='h-48 md:h-64 lg:hidden' style={{ borderRadius: '10px' }} />
+          </div>
+
+          <div className='flex flex-col justify-center items-center lg:ml-16'>
+            <div>
+              <p className='text-[#888888] text-sm md:text-base mb-4 mt-8 lg:mt-0 font-inter' style={{ letterSpacing: '-0.02em' }}>
+                Established in 2012, we are
+              </p>
+              <p className='font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:w-[400px] mb-4 md:mb-8 font-inter' style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
+                The first technology fraternity in the nation.
+              </p>
+              {/* More about us button */}
+              <div className='more-about-us text-sm flex flex-row items-center justify-center font-inter'>
+                <Link className="hover:text-blue-700 font-bold" href="/about">
+                  More About Us
+                  <svg className="ml-1 w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='hidden md:flex flex-row gap-4 justify-center'>
+          <img src="/ab.JPG" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/yummers.jpeg" alt="Ava and Bella" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+        </div>
+      </div>
+
+      {/* Network */}
+      <div>
+        <div className='flex justify-center text-3xl lg:text-4xl font-bold mb-12'>Our Network</div>
+        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32' data-aos="fade-up" data-aos-delay="100">
+          <img src="/network/google.png" alt='Google' className='h-6 lg:h-8' />
+          <img src="/network/microsoft.png" alt='Microsoft' className='h-6 lg:h-8' />
+          <img src="/network/deloitte.png" alt='Deloitte' className='h-6 lg:h-8' />
+          <img src="/network/jpmorgan.png" alt='JP Morgan' className='h-6 lg:h-8' />
+          <img src="/network/meta.png" alt='Meta' className='h-6 lg:h-8' />
+          <img src="/network/citadel.png" alt='Citadel' className='h-6 lg:h-8' />
+          <img src="/network/capital_one.png" alt='Capital One' className='h-6 lg:h-8' />
+          <img src="/network/spotify.png" alt='Spotify' className='h-6 lg:h-8' />
+          <img src="/network/bloomberg.png" alt='Bloomberg' className='h-6 lg:h-8' />
+          <img src="/network/doordash.png" alt='Doordash' className='h-6 lg:h-8' />
+          <img src="/network/hudson_river_trading.png" alt='Hudson River Trading' className='h-6 lg:h-8' />
+          <img src="/network/amazon.png" alt='Amazon' className='h-6 lg:h-8' />
+          <img src="/network/apple.png" alt='Apple' className='h-6 lg:h-8' />
+          <img src="/network/tiktok.png" alt='Tiktok' className='h-6 lg:h-8' />
+          <img src="/network/nvidia.png" alt='Nvidia' className='h-6 lg:h-8' />
+          <img src="/network/duolingo.png" alt='Duolingo' className='h-6 lg:h-8' />
+          <img src="/network/jane_street.png" alt='Jane Street' className='h-6 lg:h-8' />
+          <img src="/network/pwc.png" alt='PWC' className='h-6 lg:h-8' />
+          <img src="/network/ey.png" alt='EY' className='h-6 lg:h-8' />
+          <img src="/network/accenture.png" alt='Accenture' className='h-6 lg:h-8' />
+          <img src="/network/linkedin.png" alt='LinkedIn' className='h-6 lg:h-8' />
+          <img src="/network/tesla.png" alt='Tesla' className='h-6 lg:h-8' />
+          <img src="/network/ibm.png" alt='IBM' className='h-6 lg:h-8' />
+          <img src="/network/cisco.png" alt='Cisco' className='h-6 lg:h-8' />
+          <img src="/network/asana.png" alt='Asana' className='h-6 lg:h-8' />
+          <img src="/network/slack.png" alt='Slack' className='h-6 lg:h-8' />
+          <img src="/network/figma.png" alt='Figma' className='h-6 lg:h-8' />
+          <img src="/network/bleacher_report.png" alt='Bleacher Report' className='h-6 lg:h-8' />
+          <img src="/network/stripe.png" alt='Stripe' className='h-6 lg:h-8' />
+          <img src="/network/pnc.png" alt='PNC' className='h-6 lg:h-8' />
+          <img src="/network/boeing.png" alt='Boeing' className='h-6 lg:h-8' />
+          <img src="/network/salesforce.png" alt='Salesforce' className='h-6 lg:h-8' />
+          <img src="/network/mongo_db.png" alt='MongoDB' className='h-6 lg:h-8' />
+          <img src="/network/vmware.png" alt='VMware' className='h-6 lg:h-8' />
+          <img src="/network/nike.png" alt='Nike' className='h-6 lg:h-8' />
+          <img src="/network/uber.png" alt='Uber' className='h-6 lg:h-8' />
+          <img src="/network/netskope.png" alt='Netskope' className='h-6 lg:h-8' />
+          <img src="/network/att.png" alt='AT&T' className='h-6 lg:h-8' />
+          <img src="/network/ford.png" alt='Ford' className='h-6 lg:h-8' />
+          <img src="/network/modern_treasury.png" alt='Modern Treasury' className='h-6 lg:h-8' />
+          <img src="/network/indeed.png" alt='Indeed' className='h-6 lg:h-8' />
+          <img src="/network/bank_of_america.png" alt='Bank of America' className='h-6 lg:h-8' />
+          <img src="/network/workday.png" alt='Workday' className='h-6 lg:h-8' />
+          <img src="/network/caterpillar.png" alt='Caterpillar' className='h-6 lg:h-8' />
+          <img src="/network/p&g.png" alt='P&G' className='h-6 lg:h-8' />
+          <img src="/network/viget.png" alt='Viget' className='h-6 lg:h-8' />
+          <img src="/network/united.png" alt='United' className='h-6 lg:h-8' />
+        </div>
+      </div>
+
+      {/* Life App */}
+      <div id='life-app' className='mb-12'>
+        {/* Text */}
+        <div className='flex flex-col md:flex-row justify-center items-center mt-12'>
+          <div className="text-3xl mt-8 md:text-4xl font-bold z-10 md:mr-24 text-center md:text-left font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
+            Kappa Theta Pi Life
+            <div className='mt-4 font-normal text-[#707070] text-[16px] mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-xs sm:text-sm lg:text-base'>
+            The KTP Life App is your one-stop shop for everything KTP! View upcoming events and details personalized to you, never miss important announcements, connect with brothers, learn more about our organization, and so much more!
+            </div>
+            <div className='flex flex-row justify-center md:justify-start mt-8'>
+              <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-4'>
+                <img src="/app_store.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
+              </a>
+
+              <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
+                <img src="/google_play.svg" alt="Image" className='h-10 md:h-12 lg:h-14' />
+              </a>
+            </div>
+  
+            {/* Alternate App Icons */}
+            <div className="hidden lg:flex flex-col items-start">
+              <div className="flex flex-wrap justify-start w-full mt-6">
+                <Image src={BlondeAppIcon} alt="Blonde KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={BrownAppIcon} alt="Brown KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={CrossoverAppIcon} alt="Crossover KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={DefaultAppIcon} alt="Default KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={PokemonAppIcon} alt="Pokemon KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={RetrotechAppIcon} alt="Retrotech KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+              </div>
+              <div className="flex flex-wrap justify-start w-full mt-2">
+                <Image src={SmileyAppIcon} alt="Smiley KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={YellowAppIcon} alt="Yellow KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={StickerAppIcon} alt="Sticker KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={SquiggleAppIcon} alt="Squiggle KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={WhiteAppIcon} alt="White KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+                <Image src={YearbookAppIcon} alt="Yearbook KTP App Icon" className="w-14 h-14 rounded-xl mt-2 mb-2 mr-4" />
+              </div>
+            </div>
+          </div>
+
+          {/* Phones */}
+          <div className='hidden md:flex flex-row mt-12 md:mt-0 mb-8'>
+            <img src="/phone_frame_3.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] mr-4 md:mr-8 lg:mt-24' />
+            <img src="/phone_frame_4.svg" alt="Image" className='h-56 md:h-72 lg:h-80 xl:h-96 2xl:h-[32rem] lg:mt-12' />
+          </div>
+        </div>
+      </div>
+
+      <Footer />
     </div>
   );
 }
