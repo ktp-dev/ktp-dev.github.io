@@ -732,3 +732,38 @@ html {
 button:hover .close-icon path {
   stroke: #8ddd88;
 }
+
+/* Nationals page styles */
+.logo-container-2{
+    width: 72px;
+    /* Set the width */
+    height: 72px;
+    /* Set the height */
+    background: white;
+    /* Set the background color */
+    border-radius: 8px;
+    /* Adjust the border-radius for rounded corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Optional: add a shadow */
+}
+
+.logo-container-2 .logo-image {
+    border-radius: 8px;
+    /* Ensure all logo images have rounded corners */
+}
+
+.logos-grid{
+    max-width: 800px;
+}
+
+.icon-bar {
+    justify-content: flex-start;
+    /* Aligns icons to the start of the flex container */
+    margin-top: 32px;
+    padding-left: 4px;
+    margin-bottom: 10px;
+    /* Adjust this value based on your actual layout needs to match the text start */
+}

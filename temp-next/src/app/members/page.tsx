@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ReactTyped } from 'react-typed';
+import { parseCsv } from '../../parseCsv';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -66,15 +67,44 @@ const hardcodedMembers = [
 
 const greekLetters = ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ'];
 
+// Pledge class mapping
+const pledgeClassMapping = {
+  Alpha: 'Α',
+  Beta: 'Β',
+  Gamma: 'Γ',
+  Delta: 'Δ',
+  Epsilon: 'Ε',
+  Zeta: 'Ζ',
+  Eta: 'Η',
+  Theta: 'Θ',
+  Iota: 'Ι',
+  Kappa: 'Κ',
+  Lambda: 'Λ',
+  Mu: 'Μ',
+  Nu: 'Ν',
+  Xi: 'Ξ',
+  Omicron: 'Ο',
+  Pi: 'Π',
+  Rho: 'Ρ',
+  Sigma: 'Σ',
+  Tau: 'Τ',
+  Upsilon: 'Υ',
+  Phi: 'Φ',
+  Chi: 'Χ',
+  Psi: 'Ψ',
+  Omega: 'Ω',
+  AB: 'ΑΒ'
+};
+
 export default function Members() {
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
   const [selectedCategory, setSelectedCategory] = useState('Actives');
-  const [selectedGreekLetter, setSelectedGreekLetter] = useState(null);
-  const [activeMembers, setActiveMembers] = useState([]);
-  const [eBoardMembers, setEBoardMembers] = useState([]);
-  const [directors, setDirectors] = useState([]);
-  const [alumni, setAlumni] = useState([]);
-  const categoryRefs = useRef([]);
+  const [selectedGreekLetter, setSelectedGreekLetter] = useState<string | null>(null);
+  const [activeMembers, setActiveMembers] = useState<any[]>([]);
+  const [eBoardMembers, setEBoardMembers] = useState<any[]>([]);
+  const [directors, setDirectors] = useState<any[]>([]);
+  const [alumni, setAlumni] = useState<{pledgeClass: string; names: string[]}[]>([]);
+  const categoryRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -96,33 +126,86 @@ export default function Members() {
     }
   }, [selectedCategory]);
 
-  const pledgeClassMapping = {
-    Alpha: 'Α',
-    Beta: 'Β',
-    Gamma: 'Γ',
-    Delta: 'Δ',
-    Epsilon: 'Ε',
-    Zeta: 'Ζ',
-    Eta: 'Η',
-    Theta: 'Θ',
-    Iota: 'Ι',
-    Kappa: 'Κ',
-    Lambda: 'Λ',
-    Mu: 'Μ',
-    Nu: 'Ν',
-    Xi: 'Ξ',
-    Omicron: 'Ο',
-    Pi: 'Π',
-    Rho: 'Ρ',
-    Sigma: 'Σ',
-    Tau: 'Τ',
-    Upsilon: 'Υ',
-    Phi: 'Φ',
-    Chi: 'Χ',
-    Psi: 'Ψ',
-    Omega: 'Ω',
-    AB: 'ΑΒ'
-  };
+  // Load CSV data
+  useEffect(() => {
+    const loadMembersData = async () => {
+      try {
+        const response = await fetch('/memberList.csv');
+        const csvText = await response.text();
+        
+        parseCsv(csvText, (data: any[]) => {
+          console.log('Parsed Data:', data);
+          const currentYear = new Date().getFullYear();
+
+          const filteredData = data.filter((member: any) => member.First && member.Last);
+
+          const parsedMembers = filteredData.map((member: any) => {
+            const filename = `${member.Last || 'unknown'}_${member.First || 'unknown'}`;
+            const imagePath = `/img/members/${filename}.jpg`;
+
+            const firstName = member.First || 'First Name';
+            const lastName = member.Last || 'Last Name';
+            const category = member.Category || 'Actives';
+            const role = member['Pledge Class'] || 'Member';
+            const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
+
+            // change to 2025 once seniors graduate
+            const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2024;
+
+            return {
+              name: `${firstName} ${lastName}`,
+              imageUrl: imagePath,
+              category: category,
+              role: role,
+              description: description,
+              pledgeClass: pledgeClassMapping[member['Pledge Class'] as keyof typeof pledgeClassMapping] || 'Unknown',
+              gradYear: member['Grad Year'] || currentYear + 1,
+              isAlumni,
+              linkedin: member.Linkedin || '#'
+            };
+          });
+
+          const actives = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'Actives');
+          const eBoard = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'E-Board');
+          const directors = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'Directors');
+          const alumniFromCsv = parsedMembers.filter((member: any) => member.isAlumni && member.pledgeClass !== 'Unknown');
+
+          const alumniMap: { [key: string]: string[] } = {};
+          alumniFromCsv.forEach((member: any) => {
+            if (!alumniMap[member.pledgeClass]) {
+              alumniMap[member.pledgeClass] = [];
+            }
+            alumniMap[member.pledgeClass].push(member.name);
+          });
+
+          const combinedAlumni = [...hardcodedAlumni];
+          Object.keys(alumniMap).forEach(pledgeClass => {
+            const existingAlumni = combinedAlumni.find(alumni => alumni.pledgeClass === pledgeClass);
+            if (existingAlumni) {
+              existingAlumni.names.push(...alumniMap[pledgeClass]);
+            } else {
+              combinedAlumni.push({ pledgeClass, names: alumniMap[pledgeClass] });
+            }
+          });
+
+          setActiveMembers(actives);
+          setEBoardMembers(eBoard);
+          setDirectors(directors);
+          setAlumni(combinedAlumni);
+
+          setTimeout(() => {
+            document.querySelectorAll('.active-member').forEach(el => el.classList.add('visible'));
+            document.querySelectorAll('.e-board-member').forEach(el => el.classList.add('visible'));
+            document.querySelectorAll('.director-member').forEach(el => el.classList.add('visible'));
+          }, 100);
+        });
+      } catch (error) {
+        console.error('Error loading CSV data:', error);
+      }
+    };
+
+    loadMembersData();
+  }, []);
 
   useEffect(() => {
     // Set the alumni data directly from hardcoded data
@@ -180,7 +263,7 @@ export default function Members() {
       <Header />
       <ScrollToTop />
 
-      <div className="px-4 sm:px-8 md:px-16 lg:px-20">
+      <div className="px-6 sm:px-8 md:px-16 lg:px-20">
         
         {/* Blob Container */}
         <div className="inset-0 blob-c z-0">
@@ -220,7 +303,9 @@ export default function Members() {
                   key={category}
                   className={`relative px-2 sm:px-4 py-1 sm:py-2 ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'}`}
                   onClick={() => handleCategoryClick(category)}
-                  ref={(el: any) => categoryRefs.current[index] = el}
+                  ref={(el) => {
+                    categoryRefs.current[index] = el;
+                  }}
                 >
                   {category}
                 </button>
@@ -231,23 +316,23 @@ export default function Members() {
 
           {/* Greek letter navigation */}
           {selectedCategory === 'Alumni' && (
-            <div className="relative mb-8 hidden lg:block">
-              <div className="flex justify-center space-x-4 border-b-2 border-gray-300 pb-2">
-                <button
-                  className={`px-2 py-1 text-gray-700 hover:text-black ${selectedGreekLetter === null ? 'font-bold text-black' : ''}`}
-                  onClick={() => handleGreekLetterClick(null)}
-                >
-                  All
-                </button>
-                {greekLetters.map((letter) => (
-                  <button
-                    key={letter}
-                    className={`px-2 py-1 text-gray-700 hover:text-black ${selectedGreekLetter === letter ? 'font-bold text-black' : ''}`}
-                    onClick={() => handleGreekLetterClick(letter)}
+            <div className="relative mb-8">
+              <div className="flex justify-start sm:justify-center space-x-2 sm:space-x-4 border-b-2 border-gray-300 pb-2 overflow-x-auto px-4 sm:px-0">
+                                  <button
+                    className={`px-1 sm:px-2 py-1 text-gray-700 hover:text-black whitespace-nowrap text-sm sm:text-base ${selectedGreekLetter === null ? 'font-bold text-black' : ''}`}
+                    onClick={() => handleGreekLetterClick(null)}
                   >
-                    {letter}
+                    All
                   </button>
-                ))}
+                  {greekLetters.map((letter) => (
+                    <button
+                      key={letter}
+                      className={`px-1 sm:px-2 py-1 text-gray-700 hover:text-black whitespace-nowrap text-sm sm:text-base ${selectedGreekLetter === letter ? 'font-bold text-black' : ''}`}
+                      onClick={() => handleGreekLetterClick(letter)}
+                    >
+                      {letter}
+                    </button>
+                  ))}
               </div>
             </div>
           )}
@@ -259,7 +344,15 @@ export default function Members() {
                 .filter((member) => member.category === 'E-Board')
                 .map((member) => (
                   <div key={`${member.name}-${member.category}`} className="flex flex-col md:flex-row items-center p-4 e-board-member">
-                    <img src={member.imageUrl} alt={member.name} className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4" />
+                    <img 
+                      src={member.imageUrl} 
+                      alt={member.name} 
+                      className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4 rounded-lg shadow-md" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/img/default.jpg';
+                      }}
+                    />
                     <div className="text-center md:text-left">
                       <p className="text-base md:text-lg font-semibold">{member.name}</p>
                       <p className="text-blue-600 text-sm md:text-base">{member.role}</p>
@@ -274,7 +367,15 @@ export default function Members() {
                 .filter((member) => member.category === 'Directors')
                 .map((member) => (
                   <div key={`${member.name}-${member.category}`} className="flex flex-col md:flex-row items-center p-4 director-member">
-                    <img src={member.imageUrl} alt={member.name} className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4" />
+                    <img 
+                      src={member.imageUrl} 
+                      alt={member.name} 
+                      className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4 rounded-lg shadow-md" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/img/default.jpg';
+                      }}
+                    />
                     <div className="text-center md:text-left">
                       <p className="text-base md:text-lg font-semibold">{member.name}</p>
                       <p className="text-blue-600 text-sm md:text-base">{member.role}</p>
@@ -284,30 +385,83 @@ export default function Members() {
                 ))}
             </div>
           ) : selectedCategory === 'Alumni' ? (
-            <div>
-              <div className="grid grid-cols-1 mb-12 gap-2 sm:gap-4">
-                {filteredAlumni.map((group, index) => (
-                  <div key={index} id={`pledgeClass-${group.pledgeClass}`} className="alumni-section mb-12">
-                    <div className="flex items-start">
-                      <div className="alumni-letter text-lg sm:text-xl font-semibold w-32 flex-shrink-0 mr-8">{group.pledgeClass}</div>
-                      <div className="grid grid-cols-3 gap-x-8 gap-y-1 flex-1">
-                        {group.names.map((name, nameIndex) => (
-                          <p key={nameIndex} className="text-sm md:text-base">{name}</p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+                              {filteredAlumni.map((group, index) => {
+                  const names = group.names;
+                  const totalNames = names.length;
+                  
+                  // For mobile: single column, for desktop: 3 columns
+                  const column1: string[] = [];
+                  const column2: string[] = [];
+                  const column3: string[] = [];
+                  
+                  names.forEach((name, i) => {
+                    if (i % 3 === 0) {
+                      column1.push(name);
+                    } else if (i % 3 === 1) {
+                      column2.push(name);
+                    } else {
+                      column3.push(name);
+                    }
+                  });
+                
+                                 return (
+                   <div key={index} id={`pledgeClass-${group.pledgeClass}`} className="mb-8">
+                     <div className="flex flex-col sm:flex-row items-start">
+                       <div className="w-32 font-bold text-lg sm:text-xl mb-4 sm:mb-0 sm:mr-24">{group.pledgeClass}</div>
+                       <div className="flex-1 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 sm:pl-8">
+                         {/* Desktop: show in columns */}
+                         <div className="hidden sm:block">
+                           {column1.map((name, nameIndex) => (
+                             <div key={nameIndex} className="text-base md:text-lg mb-1">{name}</div>
+                           ))}
+                         </div>
+                         <div className="hidden sm:block">
+                           {column2.map((name, nameIndex) => (
+                             <div key={nameIndex} className="text-base md:text-lg mb-1">{name}</div>
+                           ))}
+                         </div>
+                         <div className="hidden lg:block">
+                           {column3.map((name, nameIndex) => (
+                             <div key={nameIndex} className="text-base md:text-lg mb-1">{name}</div>
+                           ))}
+                         </div>
+                         {/* Mobile: show all names in single column in correct order */}
+                         <div className="sm:hidden">
+                           {names.map((name, nameIndex) => (
+                             <div key={nameIndex} className="text-base md:text-lg mb-1">{name}</div>
+                           ))}
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                );
+              })}
             </div>
           ) : (
             <div className="grid grid-cols-3 mb-12 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
               {activeMembers.map((member, index) => (
                 <div key={index} className="text-center p-2 sm:p-4 lg:p-2 active-member">
                   <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto aspect-w-1 aspect-h-1">
-                    <img src={member.imageUrl} alt={member.name} className="absolute inset-0 object-cover w-full h-full" />
+                    <img 
+                      src={member.imageUrl} 
+                      alt={member.name} 
+                      className="absolute inset-0 object-cover w-full h-full rounded-lg shadow-md" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/img/default.jpg';
+                      }}
+                    />
                     <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="linkedin-logo-container">
-                      <img src="/img/linkedin.jpg" alt="LinkedIn" className="w-8 h-8 sm:w-10 sm:h-10" />
+                      <img 
+                        src="/img/linkedin.jpg" 
+                        alt="LinkedIn" 
+                        className="w-8 h-8 sm:w-10 sm:h-10" 
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
                     </a>
                     <div className="pledge-class bottom-4 right-2">{member.pledgeClass}</div>
                   </div>
