@@ -140,8 +140,8 @@ export default function Members() {
           const filteredData = data.filter((member: any) => member.First && member.Last);
 
           const parsedMembers = filteredData.map((member: any) => {
-            const filename = `${member.Last || 'unknown'}_${member.First || 'unknown'}`;
-            const imagePath = `/images/members/${filename}.jpg`;
+            // Use the Headshot column from CSV if available, otherwise generate path
+            const imagePath = member.Headshot || `/images/members/${member.Last || 'unknown'}_${member.First || 'unknown'}.jpg`;
 
             const firstName = member.First || 'First Name';
             const lastName = member.Last || 'Last Name';
@@ -150,7 +150,7 @@ export default function Members() {
             const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
 
             // change to 2025 once seniors graduate
-            const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2024;
+            const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2025;
 
             return {
               name: `${firstName} ${lastName}`,
@@ -377,7 +377,12 @@ export default function Members() {
           ) : selectedCategory === 'Alumni' ? (
             <div className="mb-12">
                               {filteredAlumni.map((group, index) => {
-                  const names = group.names;
+                  const names = group.names.sort((a, b) => {
+                    // Split names and get last names
+                    const lastNameA = a.split(' ').pop() || '';
+                    const lastNameB = b.split(' ').pop() || '';
+                    return lastNameA.localeCompare(lastNameB);
+                  });
                   const totalNames = names.length;
                   
                   // For mobile: single column, for desktop: 3 columns
