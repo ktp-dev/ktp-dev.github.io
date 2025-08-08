@@ -12,8 +12,9 @@ import 'aos/dist/aos.css';
 export default function Home() {
   useEffect(() => {
     AOS.init({
-      duration: 2000,
+      duration: 1000,
       once: true,
+      easing: 'ease-out-cubic',
     });
   }, []);
 
@@ -47,7 +48,7 @@ export default function Home() {
             </div>
 
             <Link href="/rush">
-              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter'>
+              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 cursor-pointer'>
                 Rush
               </div>
             </Link>
@@ -106,7 +107,7 @@ export default function Home() {
       {/* Network */}
       <div>
         <div className='flex justify-center text-3xl lg:text-4xl font-bold mb-12'>Our Network</div>
-        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32' data-aos="fade-up" data-aos-delay="100">
+        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32'>
           <img src="/network/google.png" alt='Google' className='h-6 lg:h-8' />
           <img src="/network/microsoft.png" alt='Microsoft' className='h-6 lg:h-8' />
           <img src="/network/deloitte.png" alt='Deloitte' className='h-6 lg:h-8' />

@@ -62,10 +62,10 @@ export default function About() {
 
       <div className="relative w-full">
         {/* Page Content */}
-        <div className="relative mt-16 md:mt-32 z-10">
+        <div className="relative pt-12 sm:pt-16 z-10">
           <div className="flex flex-col text-center">
-            <h1 className="text-3xl sm:text-5xl font-black">About Us</h1>
-            <p className="text-base text-gray-600 text-sm sm:text-base mt-4 mb-16 font-inter" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="text-3xl sm:text-5xl font-black mb-0">About Us</h1>
+            <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 h-16" style={{ color: 'grey' }}>
               Learn more about who we are at Kappa Theta Pi!
             </p>
           </div>
@@ -74,11 +74,11 @@ export default function About() {
 
       {/* Scrolling Menu */}
       <div className="relative mb-4 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
-        <div className="flex justify-center text-center space-x-4 sm:space-x-8 md:space-x-16 lg:space-x-32 border-b-2 border-gray-300">
+        <div className="flex justify-center text-center border-b-2 border-gray-300 w-full">
           {categories.map((category, index) => (
             <ScrollLink
               key={category}
-              className={`relative px-2 sm:px-3 md:px-4 py-2 ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'} cursor-pointer`}
+              className={`relative px-2 sm:px-4 py-1 sm:py-2 whitespace-nowrap ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'} cursor-pointer ${index < categories.length - 1 ? 'mr-4 sm:mr-8 md:mr-16 lg:mr-32' : ''}`}
               onClick={() => handleCategoryClick(category, index)}
               to={`${category.toLowerCase().replace(/\s+/g, '-')}-section`}
               smooth={true}
@@ -134,7 +134,7 @@ export default function About() {
 
             <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Professional Development */}
-              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-650 ease-in-out hover:scale-110 hover:shadow-xl">
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl">
                 <div className="flex justify-center items-center mb-4">
                   <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
                     <MdOutlineWork className="text-pink-500 text-2xl" />
@@ -145,7 +145,7 @@ export default function About() {
               </div>
 
               {/* Alumni Connections */}
-              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-650 ease-in-out hover:scale-110 hover:shadow-xl">
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl">
                 <div className="flex justify-center items-center mb-4">
                   <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
                     <PiGlobeBold className="text-orange-500 text-2xl" />
@@ -156,7 +156,7 @@ export default function About() {
               </div>
 
               {/* Social Growth */}
-              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-650 ease-in-out hover:scale-110 hover:shadow-xl">
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl">
                 <div className="flex justify-center items-center mb-4">
                   <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
                     <FaPeopleGroup className="text-teal-500 text-2xl" />
@@ -170,7 +170,7 @@ export default function About() {
             {/* Bottom Row */}
             <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 justify-center">
               {/* Technical Advancement */}
-              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-650 ease-in-out hover:scale-110 hover:shadow-xl">
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl">
                 <div className="flex justify-center items-center mb-4">
                   <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center">
                     <IoIosSpeedometer className="text-green-500 text-2xl" />
@@ -181,7 +181,7 @@ export default function About() {
               </div>
 
               {/* Academic Support */}
-              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-650 ease-in-out hover:scale-110 hover:shadow-xl">
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl">
                 <div className="flex justify-center items-center mb-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <HiAcademicCap className="text-blue-500 text-2xl" />

@@ -266,9 +266,9 @@ export default function Members() {
         {/* Page content */}
         <div className="relative w-full z-10">
           {/* Page Content */}
-          <div className="relative mt-16 md:mt-32 mb-8 z-10">
+          <div className="relative pt-12 sm:pt-16 z-10">
             <div className="flex flex-col text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 We Are A Team of <br className="lg:hidden"/>
                 <span className="inline">
                   <ReactTyped
@@ -281,19 +281,20 @@ export default function Members() {
                 </span>
               </h1>
 
-              <p className="text-base text-gray-600 text-sm sm:text-base mt-4 md:mb-8 mx-auto w-[350px] sm:w-[500px] lg:w-[725px]" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
-                What makes our community strong is our shared passion for technology and our unique backgrounds meshing together as one.
+              <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 h-16" style={{ color: 'grey' }}>
+                What makes our community strong is our shared passion for technology<br />
+                and our unique backgrounds meshing together as one.
               </p>
             </div>
           </div>
 
           {/* Category filter buttons */}
-          <div className="relative mb-8 ml-4 mr-4 sm:ml-8 sm:mr-8 md:ml-16 md:mr-16 lg:ml-32 lg:mr-32">
-            <div className="flex justify-center text-center space-x-4 sm:space-x-8 md:space-x-16 lg:space-x-32 border-b-2 border-gray-300">
+          <div className="relative mb-8 mx-2 sm:mx-4 md:mx-8 lg:mx-12">
+            <div className="flex justify-center text-center border-b-2 border-gray-300 w-full">
               {categories.map((category, index) => (
                 <button
                   key={category}
-                  className={`relative px-2 sm:px-4 py-1 sm:py-2 ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'}`}
+                  className={`relative px-2 sm:px-4 py-1 sm:py-2 ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'} ${index < categories.length - 1 ? 'mr-4 sm:mr-8 md:mr-16 lg:mr-32' : ''}`}
                   onClick={() => handleCategoryClick(category)}
                   ref={(el) => {
                     categoryRefs.current[index] = el;

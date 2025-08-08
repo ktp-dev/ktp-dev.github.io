@@ -569,18 +569,17 @@ html {
 .pledge-class {
   position: absolute;
   bottom: 15px;
-  /* Adjusted to ensure it stays within bounds */
   right: 20px;
-  /* Adjusted to ensure it stays within bounds */
   color: white;
   font-size: 16px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 10;
 }
 
 .active-member:hover .pledge-class {
   opacity: 1;
+  transform: translateY(-10px);
 }
 
 .contact-us {

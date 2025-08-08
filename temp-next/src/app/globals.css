@@ -584,18 +584,17 @@ html {
 .pledge-class {
   position: absolute;
   bottom: 15px;
-  /* Adjusted to ensure it stays within bounds */
   right: 20px;
-  /* Adjusted to ensure it stays within bounds */
   color: white;
   font-size: 16px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 10;
 }
 
 .active-member:hover .pledge-class {
   opacity: 1;
+  transform: translateY(-10px);
 }
 
 .contact-us {
@@ -719,6 +718,37 @@ html {
 
 .text-ktp-dark-blue {
   color: var(--ktp-dark-blue);
+}
+
+/* FAQ Animations */
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.faq-item-enter {
+  animation: slideInFromBottom 0.5s ease-out;
+}
+
+.faq-content-expand {
+  animation: fadeInScale 0.3s ease-out;
 }
 
 .bg-light-blue {
