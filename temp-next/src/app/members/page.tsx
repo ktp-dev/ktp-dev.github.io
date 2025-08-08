@@ -93,7 +93,9 @@ const pledgeClassMapping = {
   Chi: 'Χ',
   Psi: 'Ψ',
   Omega: 'Ω',
-  AB: 'ΑΒ'
+  AB: 'ΑΒ',
+  AG: 'ΑΓ',
+  AD: 'ΑΔ'
 };
 
 export default function Members() {
