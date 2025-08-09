@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faUserGroup, faNetworkWired, faPencil } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import dynamic from 'next/dynamic';
+
+const KTPUSMap = dynamic(() => import('./KTPUSMap'), { ssr: false });
 
 // Import images
 import MichiganLogo from '../../../public/images/universities/michigan.png';
@@ -34,7 +37,26 @@ const logos = [
   { src: ColoradoLogo, alt: 'University of Colorado Boulder' },
 ];
 
+// University coordinates for map markers
+const universities = [
+  { name: 'University of Michigan', coordinates: [-83.7312, 42.2808], logo: MichiganLogo },
+  { name: 'University of Pittsburgh', coordinates: [-79.9959, 40.4406], logo: PittLogo },
+  { name: 'Syracuse University', coordinates: [-76.1474, 43.0481], logo: SyracuseLogo },
+  { name: 'Rutgers University', coordinates: [-74.4274, 40.5008], logo: RutgersLogo },
+  { name: 'Boston University', coordinates: [-71.0995, 42.3505], logo: BULogo },
+  { name: 'University of Southern California', coordinates: [-118.285, 34.0224], logo: USCLogo },
+  { name: 'Northwestern University', coordinates: [-87.6753, 42.0564], logo: NorthwesternLogo },
+  { name: 'University of Chicago', coordinates: [-87.5987, 41.7886], logo: UChicagoLogo },
+  { name: 'University of North Carolina', coordinates: [-79.0193, 35.9049], logo: UNCLogo },
+  { name: 'University of Maryland', coordinates: [-76.9378, 38.9869], logo: MarylandLogo },
+  { name: 'University of Texas at Austin', coordinates: [-97.7331, 30.2849], logo: TexasLogo },
+  { name: 'University of Colorado Boulder', coordinates: [-105.2705, 40.0076], logo: ColoradoLogo },
+];
+
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json";
+
 export default function Nationals() {
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -51,13 +73,13 @@ export default function Nationals() {
       <div className="relative w-full z-10 flex-grow flex flex-col justify-center">
         <div className="relative pt-12 sm:pt-16 lg:pt-0 z-10">
           <div className="flex flex-col lg:flex-row items-center justify-center px-6 sm:px-8 md:px-12 lg:px-20">
-            <div className="relative text-center lg:text-left mb-12 lg:mb-0 w-full lg:w-1/2 max-w-xl lg:max-w-none lg:mr-16">
+            <div className="relative text-center lg:text-left mb-12 lg:mb-0 w-full md:w-3/4 lg:w-1/3">
           
           <h1 className="relative text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter z-10" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
             KTP Nationals
           </h1>
           <p className="relative text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 leading-relaxed z-10" style={{ color: 'grey' }}>
-            With over 15+ chapters across the nation, <br />KTP grows by day.
+            With over 15+ chapters across the nation, KTP grows by day.
           </p>
           
           {/* Icon Bar Integration */}
@@ -100,8 +122,14 @@ export default function Nationals() {
           </a>
         </div>
         
-        <div className="w-full lg:w-1/2 flex justify-center px-6 mb-16 lg:mb-0">
-          <div className="logos-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12 w-full max-w-4xl justify-items-center">
+        <div className="w-full lg:w-2/3 flex justify-center lg:justify-end mb-16 lg:mb-0">
+          {/* Interactive Map for Desktop */}
+          <div className="hidden lg:block w-3/4 h-[500px]">
+            <KTPUSMap />
+          </div>
+
+          {/* Grid for Mobile/Tablet */}
+          <div className="lg:hidden logos-grid grid grid-cols-3 sm:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl justify-items-center">
             {logos.map((logo, index) => (
               <div key={index} className="logo-container-2">
                 <img 
