@@ -797,3 +797,24 @@ button:hover .close-icon path {
     margin-bottom: 10px;
     /* Adjust this value based on your actual layout needs to match the text start */
 }
+
+/* Network logos simple animation */
+@keyframes simple-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.network-logo-simple {
+  animation: simple-fade-in 0.5s ease-out;
+  transition: transform 0.2s ease;
+}
+
+.network-logo-simple:hover {
+  transform: scale(1.05);
+}

@@ -18,6 +18,57 @@ export default function Home() {
     });
   }, []);
 
+  // Network company data
+  const networkCompanies = [
+    { src: '/network/google.png', alt: 'Google' },
+    { src: '/network/microsoft.png', alt: 'Microsoft' },
+    { src: '/network/deloitte.png', alt: 'Deloitte' },
+    { src: '/network/jpmorgan.png', alt: 'JP Morgan' },
+    { src: '/network/meta.png', alt: 'Meta' },
+    { src: '/network/citadel.png', alt: 'Citadel' },
+    { src: '/network/capital_one.png', alt: 'Capital One' },
+    { src: '/network/spotify.png', alt: 'Spotify' },
+    { src: '/network/bloomberg.png', alt: 'Bloomberg' },
+    { src: '/network/doordash.png', alt: 'Doordash' },
+    { src: '/network/hudson_river_trading.png', alt: 'Hudson River Trading' },
+    { src: '/network/amazon.png', alt: 'Amazon' },
+    { src: '/network/apple.png', alt: 'Apple' },
+    { src: '/network/tiktok.png', alt: 'Tiktok' },
+    { src: '/network/nvidia.png', alt: 'Nvidia' },
+    { src: '/network/duolingo.png', alt: 'Duolingo' },
+    { src: '/network/jane_street.png', alt: 'Jane Street' },
+    { src: '/network/pwc.png', alt: 'PWC' },
+    { src: '/network/ey.png', alt: 'EY' },
+    { src: '/network/accenture.png', alt: 'Accenture' },
+    { src: '/network/linkedin.png', alt: 'LinkedIn' },
+    { src: '/network/tesla.png', alt: 'Tesla' },
+    { src: '/network/ibm.png', alt: 'IBM' },
+    { src: '/network/cisco.png', alt: 'Cisco' },
+    { src: '/network/asana.png', alt: 'Asana' },
+    { src: '/network/slack.png', alt: 'Slack' },
+    { src: '/network/figma.png', alt: 'Figma' },
+    { src: '/network/bleacher_report.png', alt: 'Bleacher Report' },
+    { src: '/network/stripe.png', alt: 'Stripe' },
+    { src: '/network/pnc.png', alt: 'PNC' },
+    { src: '/network/boeing.png', alt: 'Boeing' },
+    { src: '/network/salesforce.png', alt: 'Salesforce' },
+    { src: '/network/mongo_db.png', alt: 'MongoDB' },
+    { src: '/network/vmware.png', alt: 'VMware' },
+    { src: '/network/nike.png', alt: 'Nike' },
+    { src: '/network/uber.png', alt: 'Uber' },
+    { src: '/network/netskope.png', alt: 'Netskope' },
+    { src: '/network/att.png', alt: 'AT&T' },
+    { src: '/network/ford.png', alt: 'Ford' },
+    { src: '/network/modern_treasury.png', alt: 'Modern Treasury' },
+    { src: '/network/indeed.png', alt: 'Indeed' },
+    { src: '/network/bank_of_america.png', alt: 'Bank of America' },
+    { src: '/network/workday.png', alt: 'Workday' },
+    { src: '/network/caterpillar.png', alt: 'Caterpillar' },
+    { src: '/network/p&g.png', alt: 'P&G' },
+    { src: '/network/viget.png', alt: 'Viget' },
+    { src: '/network/united.png', alt: 'United' },
+  ];
+
   return (
     <div className='homepage-grid'>
       <Header />
@@ -106,55 +157,25 @@ export default function Home() {
 
       {/* Network */}
       <div>
-        <div className='flex justify-center text-3xl lg:text-4xl font-bold mb-12'>Our Network</div>
+        <div 
+          className='flex justify-center text-3xl lg:text-4xl font-bold mb-12 font-inter' 
+          style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
+        >
+          Our Network
+        </div>
         <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32'>
-          <img src="/network/google.png" alt='Google' className='h-6 lg:h-8' />
-          <img src="/network/microsoft.png" alt='Microsoft' className='h-6 lg:h-8' />
-          <img src="/network/deloitte.png" alt='Deloitte' className='h-6 lg:h-8' />
-          <img src="/network/jpmorgan.png" alt='JP Morgan' className='h-6 lg:h-8' />
-          <img src="/network/meta.png" alt='Meta' className='h-6 lg:h-8' />
-          <img src="/network/citadel.png" alt='Citadel' className='h-6 lg:h-8' />
-          <img src="/network/capital_one.png" alt='Capital One' className='h-6 lg:h-8' />
-          <img src="/network/spotify.png" alt='Spotify' className='h-6 lg:h-8' />
-          <img src="/network/bloomberg.png" alt='Bloomberg' className='h-6 lg:h-8' />
-          <img src="/network/doordash.png" alt='Doordash' className='h-6 lg:h-8' />
-          <img src="/network/hudson_river_trading.png" alt='Hudson River Trading' className='h-6 lg:h-8' />
-          <img src="/network/amazon.png" alt='Amazon' className='h-6 lg:h-8' />
-          <img src="/network/apple.png" alt='Apple' className='h-6 lg:h-8' />
-          <img src="/network/tiktok.png" alt='Tiktok' className='h-6 lg:h-8' />
-          <img src="/network/nvidia.png" alt='Nvidia' className='h-6 lg:h-8' />
-          <img src="/network/duolingo.png" alt='Duolingo' className='h-6 lg:h-8' />
-          <img src="/network/jane_street.png" alt='Jane Street' className='h-6 lg:h-8' />
-          <img src="/network/pwc.png" alt='PWC' className='h-6 lg:h-8' />
-          <img src="/network/ey.png" alt='EY' className='h-6 lg:h-8' />
-          <img src="/network/accenture.png" alt='Accenture' className='h-6 lg:h-8' />
-          <img src="/network/linkedin.png" alt='LinkedIn' className='h-6 lg:h-8' />
-          <img src="/network/tesla.png" alt='Tesla' className='h-6 lg:h-8' />
-          <img src="/network/ibm.png" alt='IBM' className='h-6 lg:h-8' />
-          <img src="/network/cisco.png" alt='Cisco' className='h-6 lg:h-8' />
-          <img src="/network/asana.png" alt='Asana' className='h-6 lg:h-8' />
-          <img src="/network/slack.png" alt='Slack' className='h-6 lg:h-8' />
-          <img src="/network/figma.png" alt='Figma' className='h-6 lg:h-8' />
-          <img src="/network/bleacher_report.png" alt='Bleacher Report' className='h-6 lg:h-8' />
-          <img src="/network/stripe.png" alt='Stripe' className='h-6 lg:h-8' />
-          <img src="/network/pnc.png" alt='PNC' className='h-6 lg:h-8' />
-          <img src="/network/boeing.png" alt='Boeing' className='h-6 lg:h-8' />
-          <img src="/network/salesforce.png" alt='Salesforce' className='h-6 lg:h-8' />
-          <img src="/network/mongo_db.png" alt='MongoDB' className='h-6 lg:h-8' />
-          <img src="/network/vmware.png" alt='VMware' className='h-6 lg:h-8' />
-          <img src="/network/nike.png" alt='Nike' className='h-6 lg:h-8' />
-          <img src="/network/uber.png" alt='Uber' className='h-6 lg:h-8' />
-          <img src="/network/netskope.png" alt='Netskope' className='h-6 lg:h-8' />
-          <img src="/network/att.png" alt='AT&T' className='h-6 lg:h-8' />
-          <img src="/network/ford.png" alt='Ford' className='h-6 lg:h-8' />
-          <img src="/network/modern_treasury.png" alt='Modern Treasury' className='h-6 lg:h-8' />
-          <img src="/network/indeed.png" alt='Indeed' className='h-6 lg:h-8' />
-          <img src="/network/bank_of_america.png" alt='Bank of America' className='h-6 lg:h-8' />
-          <img src="/network/workday.png" alt='Workday' className='h-6 lg:h-8' />
-          <img src="/network/caterpillar.png" alt='Caterpillar' className='h-6 lg:h-8' />
-          <img src="/network/p&g.png" alt='P&G' className='h-6 lg:h-8' />
-          <img src="/network/viget.png" alt='Viget' className='h-6 lg:h-8' />
-          <img src="/network/united.png" alt='United' className='h-6 lg:h-8' />
+          {networkCompanies.map((company, index) => (
+            <img
+              key={company.alt}
+              src={company.src}
+              alt={company.alt}
+              className='h-6 lg:h-8 network-logo-simple opacity-0'
+              style={{
+                animationDelay: `${index * 50}ms`,
+                animationFillMode: 'forwards'
+              }}
+            />
+          ))}
         </div>
       </div>
 
@@ -164,7 +185,7 @@ export default function Home() {
         <div className='flex flex-col md:flex-row justify-center items-center mt-12'>
           <div className="text-3xl mt-8 md:text-4xl font-bold z-10 md:mr-24 text-center md:text-left font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
             Kappa Theta Pi Life
-            <div className='mt-4 font-normal text-[#707070] text-[16px] mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-xs sm:text-sm lg:text-base'>
+            <div className='mt-4 font-normal text-[#707070] text-[16px] w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-xs sm:text-sm lg:text-base'>
             The KTP Life App is your one-stop shop for everything KTP! View upcoming events and details personalized to you, never miss important announcements, connect with brothers, learn more about our organization, and so much more!
             </div>
             <div className='flex flex-row justify-center md:justify-start mt-8'>
