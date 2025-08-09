@@ -163,7 +163,7 @@ export default function Home() {
         >
           Our Network
         </div>
-        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32'>
+        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32 min-h-[160px] lg:min-h-[180px]'>
           {networkCompanies.map((company, index) => (
             <img
               key={company.alt}

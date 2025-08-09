@@ -74,7 +74,15 @@ export default function HamburgerHeader() {
             </div>
 
             {/* Overlay */}
-            {isMenuOpen && <div onClick={closeMenu} className="fixed inset-0 bg-black bg-opacity-70 backdrop-filter backdrop-blur z-40"></div>}
+            {isMenuOpen && (
+                <div 
+                    onClick={closeMenu} 
+                    className="fixed inset-0 z-40 bg-white/10 backdrop-blur-md"
+                    style={{
+                        WebkitBackdropFilter: 'blur(8px)'
+                    }}
+                />
+            )}
         </div>
     );
 }

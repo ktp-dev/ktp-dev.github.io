@@ -9,13 +9,17 @@ export default function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            setIsScrolled(scrollTop > 0);
+        };
+
+        // Set initial state based on current scroll position
         const scrollTop = window.scrollY;
         setIsScrolled(scrollTop > 0);
-        };
 
         window.addEventListener('scroll', handleScroll);
         return () => {
-        window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 

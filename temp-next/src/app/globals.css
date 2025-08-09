@@ -802,17 +802,27 @@ button:hover .close-icon path {
 @keyframes simple-fade-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .network-logo-simple {
   animation: simple-fade-in 0.5s ease-out;
   transition: transform 0.2s ease;
+  display: inline-block;
+  object-fit: contain;
+  width: auto;
+  min-width: 40px;
+  max-width: 120px;
+}
+
+@media (min-width: 1024px) {
+  .network-logo-simple {
+    min-width: 50px;
+    max-width: 150px;
+  }
 }
 
 .network-logo-simple:hover {
