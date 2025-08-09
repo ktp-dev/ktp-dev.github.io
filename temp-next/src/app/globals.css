@@ -563,6 +563,16 @@ html {
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
+/* Subtle blue shadow for active members */
+.active-member .blue-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(49, 92, 169, 0.3) !important;
+}
+
+/* Test with more visible blue first */
+img.blue-shadow {
+  box-shadow: 0 6px 12px rgba(49, 92, 169, 0.4), 0 3px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
 .active-member:hover .linkedin-logo-container {
   opacity: 1;
 }
@@ -832,4 +842,17 @@ button:hover .close-icon path {
 
 .network-logo-simple:hover {
   transform: scale(1.05);
+}
+
+/* FINAL OVERRIDE - Blue shadow for active members */
+.active-member img.blue-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Blue shadow on hover with transform */
+.active-member:hover img.blue-shadow {
+  transform: translateY(-10px) !important;
+  filter: brightness(0.6) drop-shadow(0 4px 10px rgba(132, 177, 222, 0.9)) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }

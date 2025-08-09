@@ -444,7 +444,7 @@ export default function Members() {
                     <img 
                       src={member.imageUrl} 
                       alt={member.name} 
-                      className="absolute inset-0 object-cover w-full h-full rounded-lg shadow-md" 
+                      className="absolute inset-0 object-cover w-full h-full rounded-lg blue-shadow" 
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/images/default.jpg';
