@@ -522,10 +522,14 @@ html {
 .e-board-member,
 .director-member {
   position: relative;
-  overflow: hidden;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity .75s ease-in-out, transform .75s ease-in-out;
+}
+
+.e-board-member,
+.director-member {
+  overflow: hidden;
 }
 
 .active-member.visible,
@@ -554,6 +558,7 @@ html {
   z-index: 2;
 }
 
+/* Transition for active member images */
 .active-member img {
   transition: transform 0.3s ease, filter 0.3s ease;
 }

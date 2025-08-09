@@ -439,7 +439,7 @@ export default function Members() {
           ) : (
             <div className="grid grid-cols-3 mb-12 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
               {activeMembers.map((member, index) => (
-                <div key={index} className="text-center p-2 sm:p-4 lg:p-2 active-member">
+                <div key={index} className="text-center p-4 sm:p-6 lg:p-4 active-member">
                   <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto aspect-w-1 aspect-h-1">
                     <img 
                       src={member.imageUrl} 
@@ -463,7 +463,7 @@ export default function Members() {
                     </a>
                     <div className="pledge-class bottom-4 right-2">{member.pledgeClass}</div>
                   </div>
-                  <p className="mt-2 text-center text-sm sm:text-base md:text-md lg:text-md whitespace-normal">{member.name}</p>
+                  <p className="mt-4 text-center text-sm sm:text-base md:text-md lg:text-md whitespace-normal font-semibold">{member.name}</p>
                 </div>
               ))}
             </div>

@@ -75,7 +75,7 @@ export default function Rush() {
           {/* Header */}
           <div className="flex flex-col items-center text-center">
             {/* Blob Container */}
-            <h1 className="text-3xl sm:text-5xl font-black">Learn about joining KTP!</h1>
+            <h1 className="text-3xl sm:text-5xl font-black">Learn About Joining KTP!</h1>
             <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600" style={{ color: 'grey' }}>
               Welcome to Kappa Theta Pi's Fall 2025 Rush! <br></br>Here's our rush schedule, applications are due September 6, 2025
             </p>
