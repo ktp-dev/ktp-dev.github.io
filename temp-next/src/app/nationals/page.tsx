@@ -63,9 +63,9 @@ export default function Nationals() {
 
       {/* Blob Container */}
       <div className="absolute inset-0 blob-c z-0">
-        <div className="shape-blob eight lg:hidden" style={{ left: '40%', top: '-10%' }}></div>
+        <div className="shape-blob eight lg:hidden"></div>
         <div className="shape-blob eight hidden lg:block" style={{ left: '10%', top: '15%' }}></div>
-        <div className="shape-blob nine lg:hidden" style={{ left: '30%', top: '20%' }}></div>
+        <div className="shape-blob nine lg:hidden"></div>
         <div className="shape-blob nine hidden lg:block" style={{ left: '10%', top: '30%' }}></div>
       </div>
 
@@ -110,7 +110,7 @@ export default function Nationals() {
             </div>
           </div>
           
-          <a href="mailto:ktp-board@umich.edu" className="relative contact-us text-white font-semibold text-sm sm:text-base mt-12 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-blue-500/15 cursor-pointer w-[620px] h-16 mx-auto lg:mx-0 z-10 whitespace-nowrap px-12">
+          <a href="mailto:ktp-board@umich.edu" className="relative contact-us text-white font-semibold text-sm sm:text-base mt-12 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-blue-500/15 cursor-pointer w-[620px] h-16 mx-auto lg:mx-0 z-10 whitespace-nowrap px-12" style={{ boxShadow: '0 4px 12px rgba(0,59,114,0.3)' }}>
             <div className="relative flex items-center mr-4">
               <div className="relative flex items-center" style={{ width: '54px', height: '24px' }}>
                 <img src={UChicagoLogo.src} alt="University of Chicago" className="absolute w-6 h-6 rounded-md" style={{ left: 0, zIndex: 1 }} />
@@ -129,7 +129,7 @@ export default function Nationals() {
           </div>
 
           {/* Grid for Mobile/Tablet */}
-          <div className="lg:hidden logos-grid grid grid-cols-3 sm:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl justify-items-center">
+          <div className="lg:hidden logos-grid grid grid-cols-3 sm:grid-cols-4 gap-6 sm:gap-8 w-full max-w-4xl justify-items-center px-8 sm:px-12">
             {logos.map((logo, index) => (
               <div key={index} className="logo-container-2">
                 <img 
