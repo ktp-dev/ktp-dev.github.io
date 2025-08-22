@@ -139,8 +139,7 @@ export default function Rush() {
                 <div className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
                   <CalendarIcon/><span className="ml-1 mr-3">Wednesday, September 3rd, 7:00-9:00 PM</span> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><span className="ml-1">CCCB 3460</span></div>
                 </div>
-                {/* <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
-                Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p> */}
+                <p className="text-gray-600 flex items-center">The same information will be presented at both Open Houses. Feel free to come to just one Open House or both!</p>
               </div>
             </div>
 
@@ -168,9 +167,9 @@ export default function Rush() {
               <div className="ml-12 pl-4">
                 <h2 className="text-lg sm:text-xl font-bold mb-1">Application Office Hours</h2>
                 <div className="text-gray-600 flex flex-col sm:flex-row sm:items-center mb-4">
-                  <CalendarIcon/><span className="ml-1 mr-3">Thursday, September 4th, Time TBD</span> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><span className="ml-1">Virtual (Zoom)</span></div>
+                  <CalendarIcon/><span className="ml-1 mr-3">Thursday, September 4th, 8:00-9:00 PM</span> <span className="hidden sm:inline">•</span> <div className="flex ml-0 sm:ml-3"><PinIcon /><span className="ml-1">Virtual (Zoom)</span></div>
                 </div>
-                <p className="text-gray-600 mb-4 flex items-center">At this event, we'll share tips for crafting a strong resume, then break out into smaller groups to help you with your KTP Rush applications!<br></br>
+                <p className="text-gray-600 mb-4 flex items-center">At this event, we'll share tips for crafting a strong resume, then move into both high-level discussions and 1:1 support to help you with your KTP Rush applications!<br></br>
                 </p>
                 {/* <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
                   <button className="px-3 sm:px-4 py-2 bg-blue-500 mt-2 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
