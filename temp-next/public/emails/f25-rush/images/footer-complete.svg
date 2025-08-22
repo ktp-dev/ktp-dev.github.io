@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="250" viewBox="0 0 600 250">
+  <rect width="600" height="250" fill="#224C8B"/>
+  
+  <!-- Left Column -->
+  <!-- KTP Logo placeholder -->
+  <rect x="40" y="30" width="80" height="40" fill="#ffffff" opacity="0.1"/>
+  <text x="80" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ffffff">KTP Logo</text>
+  
+  <!-- Email -->
+  <text x="40" y="90" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">ktp-board@umich.edu</text>
+  
+  <!-- Social icons placeholder -->
+  <circle cx="50" cy="120" r="10" fill="#ffffff"/>
+  <circle cx="80" cy="120" r="10" fill="#ffffff"/>
+  
+  <!-- Right Column -->
+  <!-- KTP Life App Text -->
+  <text x="340" y="55" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">KTP Life App</text>
+  
+  <!-- App store badges placeholder -->
+  <rect x="340" y="70" width="80" height="25" fill="#ffffff" opacity="0.1"/>
+  <rect x="430" y="70" width="80" height="25" fill="#ffffff" opacity="0.1"/>
+  
+  <!-- Web badge placeholder -->
+  <rect x="340" y="105" width="168" height="30" fill="#ffffff" opacity="0.1"/>
+  
+  <!-- Cout KTP placeholder -->
+  <rect x="340" y="145" width="160" height="40" fill="#ffffff" opacity="0.1"/>
+  
+  <!-- Divider line -->
+  <line x1="40" y1="200" x2="560" y2="200" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Copyright -->
+  <text x="300" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#ffffff">© Kappa Theta Pi 2025. All rights reserved.</text>
+</svg>
+
+
