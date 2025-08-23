@@ -207,8 +207,6 @@ export default function Members() {
 
           setTimeout(() => {
             document.querySelectorAll('.active-member').forEach(el => el.classList.add('visible'));
-            document.querySelectorAll('.e-board-member').forEach(el => el.classList.add('visible'));
-            document.querySelectorAll('.director-member').forEach(el => el.classList.add('visible'));
           }, 100);
         });
       } catch (error) {
@@ -225,14 +223,6 @@ export default function Members() {
     if (selectedCategory === 'Actives') {
       setTimeout(() => {
         document.querySelectorAll('.active-member').forEach(el => el.classList.add('visible'));
-      }, 100);
-    } else if (selectedCategory === 'E-Board') {
-      setTimeout(() => {
-        document.querySelectorAll('.e-board-member').forEach(el => el.classList.add('visible'));
-      }, 100);
-    } else if (selectedCategory === 'Directors') {
-      setTimeout(() => {
-        document.querySelectorAll('.director-member').forEach(el => el.classList.add('visible'));
       }, 100);
     }
   }, [selectedCategory]);
@@ -286,15 +276,14 @@ export default function Members() {
                 </span>
               </h1>
 
-              <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 h-16" style={{ color: 'grey' }}>
-                What makes our community strong is our shared passion for technology<br />
-                and our unique backgrounds meshing together as one.
+              <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto" style={{ color: 'grey' }}>
+                What makes our community strong is our shared passion for technology and our unique backgrounds meshing together as one.
               </p>
             </div>
           </div>
 
           {/* Category filter buttons */}
-          <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+          <div className="relative sm:mt-0 mb-8 sm:mb-12 lg:mb-16 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8">
               {categories.map((category, index) => (
                 <button
@@ -313,7 +302,7 @@ export default function Members() {
 
           {/* Greek letter navigation */}
           {selectedCategory === 'Alumni' && (
-            <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+            <div className="relative mb-8 sm:mb-12 lg:mb-16 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
               <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 py-2">
                 <div className="flex gap-2 sm:gap-3 md:gap-4 min-w-max mx-auto">
                   <button
@@ -487,7 +476,7 @@ export default function Members() {
               })}
             </div>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 mb-12 gap-6 lg:gap-8">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 mb-12 gap-10 lg:gap-12">
               {activeMembers.map((member, index) => (
                 <div key={index} className="text-center active-member">
                   <div className="relative w-full aspect-square mx-auto">
@@ -513,7 +502,7 @@ export default function Members() {
                     </a>
                     <div className="pledge-class bottom-1 right-1 text-xs">{member.pledgeClass}</div>
                   </div>
-                  <p className="mt-2 text-center text-xs sm:text-sm font-semibold">{member.name}</p>
+                  <p className="mt-4 text-center text-xs sm:text-sm font-semibold">{member.name}</p>
                 </div>
               ))}
             </div>

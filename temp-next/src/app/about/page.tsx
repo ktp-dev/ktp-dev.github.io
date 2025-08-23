@@ -48,16 +48,18 @@ export default function About() {
         {/* Page Content */}
         <div className="relative pt-12 sm:pt-16 z-10">
           <div className="flex flex-col text-center">
-            <h1 className="text-3xl sm:text-5xl font-black mb-0">About Us</h1>
-            <p className="text-base sm:text-xl mt-8 mb-4 sm:mb-8 font-medium text-gray-600 h-16" style={{ color: 'grey' }}>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              About Us
+            </h1>
+            <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto" style={{ color: 'grey' }}>
               Learn more about who we are at Kappa Theta Pi!
             </p>
           </div>
         </div>
       </div>
 
-      {/* Navigation Menu */}
-      <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+      {/* Category filter buttons */}
+      <div className="relative sm:mt-0 mb-8 sm:mb-12 lg:mb-16 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
         <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8">
           {categories.map((category, index) => (
             <ScrollLink
