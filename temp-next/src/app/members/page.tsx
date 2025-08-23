@@ -224,6 +224,14 @@ export default function Members() {
       setTimeout(() => {
         document.querySelectorAll('.active-member').forEach(el => el.classList.add('visible'));
       }, 100);
+    } else if (selectedCategory === 'E-Board') {
+      setTimeout(() => {
+        document.querySelectorAll('.e-board-member').forEach(el => el.classList.add('visible'));
+      }, 100);
+    } else if (selectedCategory === 'Directors') {
+      setTimeout(() => {
+        document.querySelectorAll('.director-member').forEach(el => el.classList.add('visible'));
+      }, 100);
     }
   }, [selectedCategory]);
 
@@ -330,8 +338,8 @@ export default function Members() {
             <div className="grid grid-cols-1 mb-12 gap-6 lg:gap-8 xl:grid-cols-2">
               {hardcodedMembers
                 .filter((member) => member.category === 'E-Board')
-                .map((member) => (
-                  <div key={`${member.name}-${member.category}`} className="group rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
+                .map((member, index) => (
+                  <div key={`${member.name}-${member.category}`} className="e-board-member group rounded-xl shadow-md transform transition-transform duration-650 ease-in-out hover:-translate-y-2 hover:shadow-xl border border-gray-100 overflow-hidden w-full min-w-0" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="flex flex-col md:flex-row items-center md:items-start p-6 h-full">
                       <div className="relative mb-4 md:mb-0 md:mr-6 flex justify-center flex-shrink-0 self-center">
                         <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg">
@@ -379,7 +387,7 @@ export default function Members() {
                     return 0;
                   })
                   .map(([role, members]) => (
-                  <div key={role} className={`group rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
+                  <div key={role} className={`director-member group rounded-xl shadow-md transform transition-transform duration-650 ease-in-out hover:-translate-y-2 hover:shadow-xl border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="p-6">
                       <div className="text-center mb-6">
                         <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
