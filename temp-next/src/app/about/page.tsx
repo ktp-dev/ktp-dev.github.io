@@ -56,24 +56,22 @@ export default function About() {
         </div>
       </div>
 
-      {/* Scrolling Menu */}
-      <div className="relative mb-8">
-        <div className="flex overflow-x-auto scrollbar-hide gap-4 sm:gap-6 md:gap-8 py-2 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
-          <div className="flex gap-4 sm:gap-6 md:gap-8 min-w-max mx-auto">
-            {categories.map((category, index) => (
-              <ScrollLink
-                key={category}
-                className={`px-4 py-2 rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap flex-shrink-0 ${selectedCategory === category ? 'bg-[#315CA9] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                onClick={() => handleCategoryClick(category, index)}
-                to={`${category.toLowerCase().replace(/\s+/g, '-')}-section`}
-                smooth={true}
-                duration={200}
-                ref={(el: any) => { categoryRefs.current[index] = el; }}
-              >
-                {category}
-              </ScrollLink>
-            ))}
-          </div>
+      {/* Navigation Menu */}
+      <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8">
+          {categories.map((category, index) => (
+            <ScrollLink
+              key={category}
+              className={`px-3 sm:px-4 py-2 rounded-[40px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap text-center ${selectedCategory === category ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'}`}
+              onClick={() => handleCategoryClick(category, index)}
+              to={`${category.toLowerCase().replace(/\s+/g, '-')}-section`}
+              smooth={true}
+              duration={200}
+              ref={(el: any) => { categoryRefs.current[index] = el; }}
+            >
+              {category}
+            </ScrollLink>
+          ))}
         </div>
       </div>
 
@@ -190,8 +188,8 @@ export default function About() {
         {/* History */}
         <div className="bg-white w-full">
           <div className="px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-8 sm:py-12 md:py-16" id="history-section">
-            <div className="relative flex flex-col items-center md:flex-row md:items-start space-y-8 md:space-y-0 md:space-x-12 pb-20">
-              <div className="w-full md:w-3/5 text-left">
+            <div className="relative flex flex-col items-center lg:flex-row lg:items-start space-y-12 lg:space-y-0 lg:space-x-12 pb-20">
+              <div className="w-full lg:w-3/5 text-left relative z-10">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold pb-4 sm:pb-6 text-left" style={{ color: '#234c8b' }}>History</h2>
                 <div className="text-base sm:text-lg leading-relaxed space-y-4">
                   <p>
@@ -208,12 +206,12 @@ export default function About() {
                   </p>
                 </div>
               </div>
-              <div className="relative w-full md:w-2/5 flex justify-center">
+              <div className="relative w-full lg:w-2/5 flex justify-center">
                 <div className="absolute blob-c z-0">
                   <div className="shape-blob eight"></div>
                   <div className="shape-blob nine"></div>
                 </div>
-                <img src="/images/about/History.jpg" alt="KTP Founders" className="relative z-10 w-3/4 h-auto rounded-full border-8" style={{ borderLeftColor: '#bae6fd', borderRightColor: '#bae6fd', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }} />
+                <img src="/images/about/History.jpg" alt="KTP Founders" className="relative z-10 w-3/4 h-auto rounded-full border-8 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg" style={{ borderLeftColor: '#bae6fd', borderRightColor: '#bae6fd', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }} />
               </div>
             </div>
           </div>

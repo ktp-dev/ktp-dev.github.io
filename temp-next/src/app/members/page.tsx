@@ -54,8 +54,8 @@ const hardcodedMembers = [
   { name: 'Sujay Mehta', imageUrl: '/images/members/Mehta_Sujay.jpg', category: 'E-Board', role: 'VP of Membership', description: 'Focuses on supporting new members socially and professionally to successfully integrate them as brothers within KTP.' },
   { name: 'Arinjoy Das', imageUrl: '/images/members/Das_Arinjoy.jpg', category: 'E-Board', role: 'VP of Engagement', description: 'Plans a variety of brotherhood events to engage active members.' },
   { name: 'Aarnav Unadkat', imageUrl: '/images/members/Unadkat_Aarnav.jpg', category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
-  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events each semester to support philanthropic efforts.' },
-  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events each semester to support philanthropic efforts.' },
+  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events to support philanthropic efforts.' },
+  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events to support philanthropic efforts.' },
   { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
   { name: 'Agnes Mar', imageUrl: '/images/members/Mar_Agnes.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
   { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
@@ -294,12 +294,12 @@ export default function Members() {
           </div>
 
           {/* Category filter buttons */}
-          <div className="relative mb-8 mx-2 sm:mx-4 md:mx-8 lg:mx-12">
-            <div className="flex justify-center text-center border-b-2 border-gray-300 w-full">
+          <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8">
               {categories.map((category, index) => (
                 <button
                   key={category}
-                  className={`relative px-2 sm:px-4 py-1 sm:py-2 ${selectedCategory === category ? 'text-black font-bold' : 'text-gray-400'} ${index < categories.length - 1 ? 'mr-4 sm:mr-8 md:mr-16 lg:mr-32' : ''}`}
+                  className={`px-3 sm:px-4 py-2 rounded-[40px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap text-center ${selectedCategory === category ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'}`}
                   onClick={() => handleCategoryClick(category)}
                   ref={(el) => {
                     categoryRefs.current[index] = el;
@@ -309,15 +309,15 @@ export default function Members() {
                 </button>
               ))}
             </div>
-            <div className="underline absolute bottom-0 inset-x-0 h-0.5 bg-black transition-all duration-300"></div>
           </div>
 
           {/* Greek letter navigation */}
           {selectedCategory === 'Alumni' && (
-            <div className="relative mb-8">
-              <div className="flex justify-start sm:justify-center space-x-2 sm:space-x-4 border-b-2 border-gray-300 pb-2 overflow-x-auto px-4 sm:px-0">
-                                  <button
-                    className={`px-1 sm:px-2 py-1 text-gray-700 hover:text-black whitespace-nowrap text-sm sm:text-base ${selectedGreekLetter === null ? 'font-bold text-black' : ''}`}
+            <div className="relative mb-8 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+              <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 py-2">
+                <div className="flex gap-2 sm:gap-3 md:gap-4 min-w-max mx-auto">
+                  <button
+                    className={`px-3 sm:px-4 py-2 rounded-[40px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap text-center flex-shrink-0 ${selectedGreekLetter === null ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'}`}
                     onClick={() => handleGreekLetterClick(null)}
                   >
                     All
@@ -325,12 +325,13 @@ export default function Members() {
                   {greekLetters.map((letter) => (
                     <button
                       key={letter}
-                      className={`px-1 sm:px-2 py-1 text-gray-700 hover:text-black whitespace-nowrap text-sm sm:text-base ${selectedGreekLetter === letter ? 'font-bold text-black' : ''}`}
+                      className={`px-3 sm:px-4 py-2 rounded-[40px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap text-center flex-shrink-0 ${selectedGreekLetter === letter ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'}`}
                       onClick={() => handleGreekLetterClick(letter)}
                     >
                       {letter}
                     </button>
                   ))}
+                </div>
               </div>
             </div>
           )}
@@ -341,7 +342,7 @@ export default function Members() {
               {hardcodedMembers
                 .filter((member) => member.category === 'E-Board')
                 .map((member) => (
-                  <div key={`${member.name}-${member.category}`} className="group bg-white rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0">
+                  <div key={`${member.name}-${member.category}`} className="group rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="flex flex-col md:flex-row items-center md:items-start p-6 h-full">
                       <div className="relative mb-4 md:mb-0 md:mr-6 flex justify-center flex-shrink-0 self-center">
                         <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg">
@@ -389,7 +390,7 @@ export default function Members() {
                     return 0;
                   })
                   .map(([role, members]) => (
-                  <div key={role} className={`group bg-white rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`}>
+                  <div key={role} className={`group rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="p-6">
                       <div className="text-center mb-6">
                         <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
@@ -486,14 +487,14 @@ export default function Members() {
               })}
             </div>
           ) : (
-            <div className="grid grid-cols-3 mb-12 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 mb-12 gap-6 lg:gap-8">
               {activeMembers.map((member, index) => (
-                <div key={index} className="text-center p-4 sm:p-6 lg:p-4 active-member">
-                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto aspect-w-1 aspect-h-1">
+                <div key={index} className="text-center active-member">
+                  <div className="relative w-full aspect-square mx-auto">
                     <img 
                       src={member.imageUrl} 
                       alt={member.name} 
-                      className="absolute inset-0 object-cover w-full h-full rounded-lg blue-shadow" 
+                      className="w-full h-full object-cover rounded-lg blue-shadow" 
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/images/default.jpg';
@@ -503,16 +504,16 @@ export default function Members() {
                       <img 
                         src="/images/linkedin.jpg" 
                         alt="LinkedIn" 
-                        className="w-8 h-8 sm:w-10 sm:h-10" 
+                        className="w-5 h-5 sm:w-6 sm:h-6" 
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                         }}
                       />
                     </a>
-                    <div className="pledge-class bottom-4 right-2">{member.pledgeClass}</div>
+                    <div className="pledge-class bottom-1 right-1 text-xs">{member.pledgeClass}</div>
                   </div>
-                  <p className="mt-4 text-center text-sm sm:text-base md:text-md lg:text-md whitespace-normal font-semibold">{member.name}</p>
+                  <p className="mt-2 text-center text-xs sm:text-sm font-semibold">{member.name}</p>
                 </div>
               ))}
             </div>
