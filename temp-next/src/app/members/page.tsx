@@ -47,27 +47,27 @@ const hardcodedAlumni = [
 const hardcodedMembers = [
   { name: 'Helen Liang', imageUrl: '/images/members/Liang_Helen.jpg', category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensures that all KTP members have an enjoyable and impactful experience in the fraternity.' },
   { name: 'Dhruv Dighrasker', imageUrl: '/images/members/Dighrasker_Dhruv.jpg', category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keeps alumni up to date on the fraternity, and gives them opportunities to be a part of it.' },
-  { name: 'Carolina Mondragon-Tadiotto', imageUrl: '/images/members/Mondragon-Tadiotto_Carolina.jpg', category: 'E-Board', role: 'VP of Internal Affairs', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
+  { name: 'Carolina Mondragon-Tadiotto', imageUrl: '/images/members/Mondragon-Tadiotto_Carolina.jpg', category: 'E-Board', role: 'VP of Internal Operations', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
   { name: 'Himanish Kolli', imageUrl: '/images/members/Kolli_Himanish.jpg', category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
   { name: 'In Lorthongpanich', imageUrl: '/images/members/Lorthongpanich_In.jpg', category: 'E-Board', role: 'VP of Technical Development', description: 'Oversees committees, plans technical workshops and hackathon, and supports members in their academic and professional careers.' },
   { name: 'Ashley Glabicki', imageUrl: '/images/members/Glabicki_Ashley.jpg', category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and is responsible for promoting KTP on campus.' },
   { name: 'Sujay Mehta', imageUrl: '/images/members/Mehta_Sujay.jpg', category: 'E-Board', role: 'VP of Membership', description: 'Focuses on supporting new members socially and professionally to successfully integrate them as brothers within KTP.' },
   { name: 'Arinjoy Das', imageUrl: '/images/members/Das_Arinjoy.jpg', category: 'E-Board', role: 'VP of Engagement', description: 'Plans a variety of brotherhood events to engage active members.' },
   { name: 'Aarnav Unadkat', imageUrl: '/images/members/Unadkat_Aarnav.jpg', category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
-  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Agnes Mar', imageUrl: '/images/members/Mar_Agnes.jpg', category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Nick Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Elan Hong', imageUrl: '/images/members/Hong_Elan.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Naman Jain', imageUrl: '/images/members/Jain_Naman.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Agnes Mar', imageUrl: '/images/members/Mar_Agnes.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Nick Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Elan Hong', imageUrl: '/images/members/Hong_Elan.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Naman Jain', imageUrl: '/images/members/Jain_Naman.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
   { name: 'Diya Kini', imageUrl: '/images/members/Kini_Diya.jpg', category: 'Directors', role: 'Director of Career Development', description: 'Facilitates career development opportunities and professional growth for members.' },
-  { name: 'Amy Liu', imageUrl: '/images/members/Liu_Amy.jpg', category: 'Directors', role: 'Director of Design & Digital Strategy', description: 'Manages digital strategy and social media presence. Design and create content for KTP\'s social media accounts.' },
-  { name: 'Jonathan Abulu', imageUrl: '/images/members/Abulu_Jonathan.jpg', category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Sarah Klemmer', imageUrl: '/images/members/Klemmer_Sarah.jpg', category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Teagan Hollman', imageUrl: '/images/members/Hollman_Teagan.jpg', category: 'Directors', role: 'Co-Director of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
-  { name: 'Sabrina Xue', imageUrl: '/images/members/Xue_Sabrina.jpg', category: 'Directors', role: 'Co-Director of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
+  { name: 'Amy Liu', imageUrl: '/images/members/Liu_Amy.jpg', category: 'Directors', role: 'Director of Design & Digital Strategy', description: 'Oversees digital strategy and designs content for KTP\'s social media platforms.' },
+  { name: 'Jonathan Abulu', imageUrl: '/images/members/Abulu_Jonathan.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
+  { name: 'Sarah Klemmer', imageUrl: '/images/members/Klemmer_Sarah.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
+  { name: 'Teagan Hollman', imageUrl: '/images/members/Hollman_Teagan.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
+  { name: 'Sabrina Xue', imageUrl: '/images/members/Xue_Sabrina.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
 ];
 
 const greekLetters = ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ'];
@@ -341,9 +341,9 @@ export default function Members() {
               {hardcodedMembers
                 .filter((member) => member.category === 'E-Board')
                 .map((member) => (
-                  <div key={`${member.name}-${member.category}`} className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-700 ease-out transform hover:-translate-y-2 border border-gray-100 overflow-hidden e-board-member w-full min-w-0">
-                    <div className="flex flex-row items-start p-6 h-full">
-                      <div className="relative mr-4 lg:mr-6 flex justify-center flex-shrink-0 self-center">
+                  <div key={`${member.name}-${member.category}`} className="group bg-white rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0">
+                    <div className="flex flex-col md:flex-row items-center md:items-start p-6 h-full">
+                      <div className="relative mb-4 md:mb-0 md:mr-6 flex justify-center flex-shrink-0 self-center">
                         <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg">
                           <img 
                             src={member.imageUrl} 
@@ -356,7 +356,7 @@ export default function Members() {
                           />
                         </div>
                       </div>
-                      <div className="text-left flex-1 self-start break-normal">
+                      <div className="text-center md:text-left flex-1 md:self-start break-normal">
                         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#315CA9] transition-colors duration-700 ease-in-out">{member.name}</h3>
                         <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
                           {member.role}
@@ -368,27 +368,63 @@ export default function Members() {
                 ))}
             </div>
           ) : selectedCategory === 'Directors' ? (
-            <div className="grid grid-cols-1 mb-12 lg:grid-cols-2 gap-4">
-              {hardcodedMembers
-                .filter((member) => member.category === 'Directors')
-                .map((member) => (
-                  <div key={`${member.name}-${member.category}`} className="flex flex-col md:flex-row items-center p-4 director-member">
-                    <img 
-                      src={member.imageUrl} 
-                      alt={member.name} 
-                      className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4 rounded-lg shadow-md" 
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/images/default.jpg';
-                      }}
-                    />
-                    <div className="text-center md:text-left">
-                      <p className="text-base md:text-lg font-semibold">{member.name}</p>
-                      <p className="text-blue-600 text-sm md:text-base">{member.role}</p>
-                      <p className="text-sm md:text-base">{member.description}</p>
+            <div className="grid grid-cols-1 mb-12 gap-6 lg:gap-8 xl:grid-cols-3">
+              {(() => {
+                // Group directors by role
+                const directorsByRole = hardcodedMembers
+                  .filter((member) => member.category === 'Directors')
+                  .reduce((acc, member) => {
+                    if (!acc[member.role]) {
+                      acc[member.role] = [];
+                    }
+                    acc[member.role].push(member);
+                    return acc;
+                  }, {} as { [key: string]: typeof hardcodedMembers });
+
+                return Object.entries(directorsByRole)
+                  .sort(([roleA], [roleB]) => {
+                    // Move Social Engagement to the end
+                    if (roleA.includes('Social Engagement')) return 1;
+                    if (roleB.includes('Social Engagement')) return -1;
+                    return 0;
+                  })
+                  .map(([role, members]) => (
+                  <div key={role} className={`group bg-white rounded-xl shadow-md transition-all duration-300 ease transform hover:-translate-y-2 hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`}>
+                    <div className="p-6">
+                      <div className="text-center mb-6">
+                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
+                          {role}
+                        </div>
+                        <div className="min-h-[3rem] flex items-center justify-center">
+                          <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{members[0].description}</p>
+                        </div>
+                      </div>
+                      <div className={`grid gap-2 justify-items-center ${role.includes('Social Engagement') ? 'grid-cols-4 max-w-4xl mx-auto' : members.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-2 max-w-md mx-auto'}`}>
+                        {members.map((member) => (
+                          <div key={member.name} className="flex flex-col items-center space-y-2 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 w-full max-w-48">
+                            <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg flex-shrink-0">
+                              <img 
+                                src={member.imageUrl} 
+                                alt={member.name} 
+                                className="w-full h-full object-cover" 
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = '/images/default.jpg';
+                                }}
+                              />
+                            </div>
+                            <div className="text-center">
+                              <h4 className="text-base font-semibold text-gray-900 group-hover:text-[#315CA9] transition-colors duration-300">
+                                {member.name}
+                              </h4>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                ))}
+                ));
+              })()}
             </div>
           ) : selectedCategory === 'Alumni' ? (
             <div className="mb-12">
