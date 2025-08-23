@@ -36,7 +36,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => (
 );
 
 export default function Rush() {
-  const [openQuestion, setOpenQuestion] = useState<number | null>(null);
+  const [openQuestions, setOpenQuestions] = useState<number[]>([]);
   const [faqVisible, setFaqVisible] = useState(false);
 
   // Trigger FAQ animations after component mounts
@@ -58,11 +58,15 @@ export default function Rush() {
   ];
 
   const toggleQuestion = (index: number) => {
-    setOpenQuestion(openQuestion === index ? null : index);
+    setOpenQuestions(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen">
       <Header />
       
       <div className="px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
@@ -71,7 +75,7 @@ export default function Rush() {
           <div className="shape-blob eight"></div>
           <div className="shape-blob nine"></div>
         </div>
-        <div className="relative py-12 sm:py-16 z-10">
+        <div className="relative py-12 sm:py-16 z-1">
           {/* Header */}
           <div className="flex flex-col items-center text-center">
             {/* Blob Container */}
@@ -219,7 +223,7 @@ export default function Rush() {
               <div className="shape-blob rush-static-green"></div>
               <div className="shape-blob rush-static-blue"></div>
             </div>
-            <div className="relative z-10 h-64">
+            <div className="relative z-1 h-64">
               <iframe 
                 className="rounded-xl w-full h-full"
                 src="https://www.youtube.com/embed/pktKW6XDJKk?si=7lMqZdXYe162kOob" 
@@ -234,7 +238,7 @@ export default function Rush() {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16 mb-16 relative z-10">
+        <div className="mt-16 mb-16 relative z-1">
           <h2 className={`text-center text-2xl sm:text-4xl font-black mb-10 transition-all duration-700 ${
             faqVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-8'
           }`}>
@@ -254,7 +258,7 @@ export default function Rush() {
                 <FAQItem 
                   question={faq.question}
                   answer={faq.answer}
-                  isOpen={openQuestion === index}
+                  isOpen={openQuestions.includes(index)}
                   onClick={() => toggleQuestion(index)}
                 />
               </div>

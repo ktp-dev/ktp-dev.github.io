@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function WideHeader() {
     return (
-        <div className='sticky top-0 z-100'>
+        <div className='w-full'>
             <div className="relative flex items-center justify-between w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-4 z-10">
                 {/* Logo */}
                 <div className='flex justify-start'>
