@@ -246,11 +246,11 @@ export default function Members() {
   const filteredAlumni = selectedGreekLetter ? alumni.filter(group => group.pledgeClass === selectedGreekLetter) : alumni;
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Header />
       <ScrollToTop />
 
-      <div className="px-6 sm:px-8 md:px-16 lg:px-20">
+      <div className="flex-1 px-6 sm:px-8 md:px-16 lg:px-20">
         
         {/* Blob Container */}
         <div className="inset-0 blob-c z-0">
@@ -303,8 +303,8 @@ export default function Members() {
           {/* Greek letter navigation */}
           {selectedCategory === 'Alumni' && (
             <div className="relative mb-8 sm:mb-12 lg:mb-16 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
-              <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 py-2">
-                <div className="flex gap-2 sm:gap-3 md:gap-4 min-w-max mx-auto">
+              <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 py-4">
+                <div className="flex gap-2 sm:gap-3 md:gap-4 min-w-max mx-auto px-2">
                   <button
                     className={`px-3 sm:px-4 py-2 rounded-[40px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer whitespace-nowrap text-center flex-shrink-0 ${selectedGreekLetter === null ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'}`}
                     onClick={() => handleGreekLetterClick(null)}
