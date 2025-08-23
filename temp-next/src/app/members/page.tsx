@@ -45,22 +45,23 @@ const hardcodedAlumni = [
 
 // Eboard and Directors
 const hardcodedMembers = [
-  { name: 'Helen Liang', imageUrl: '/images/members/Liang_Helen.jpg', category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensure that all KTP members have an enjoyable and impactful experience in the fraternity.' },
-  { name: 'Dhruv Dighrasker', imageUrl: '/images/members/Dighrasker_Dhruv.jpg', category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keep alumni up to date on the fraternity, and give them opportunities to be a part of it.' },
+  { name: 'Helen Liang', imageUrl: '/images/members/Liang_Helen.jpg', category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensures that all KTP members have an enjoyable and impactful experience in the fraternity.' },
+  { name: 'Dhruv Dighrasker', imageUrl: '/images/members/Dighrasker_Dhruv.jpg', category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keeps alumni up to date on the fraternity, and gives them opportunities to be a part of it.' },
   { name: 'Carolina Mondragon-Tadiotto', imageUrl: '/images/members/Mondragon-Tadiotto_Carolina.jpg', category: 'E-Board', role: 'VP of Internal Affairs', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
   { name: 'Himanish Kolli', imageUrl: '/images/members/Kolli_Himanish.jpg', category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
   { name: 'In Lorthongpanich', imageUrl: '/images/members/Lorthongpanich_In.jpg', category: 'E-Board', role: 'VP of Technical Development', description: 'Oversees committees, plans technical workshops and hackathon, and supports members in their academic and professional careers.' },
-  { name: 'Ashley Glabicki', imageUrl: '/images/members/Glabicki_Ashley.jpg', category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and responsible for promoting KTP on campus.' },
+  { name: 'Ashley Glabicki', imageUrl: '/images/members/Glabicki_Ashley.jpg', category: 'E-Board', role: 'VP of Marketing', description: 'Establishes consistent branding, develops marketing strategies, and is responsible for promoting KTP on campus.' },
   { name: 'Sujay Mehta', imageUrl: '/images/members/Mehta_Sujay.jpg', category: 'E-Board', role: 'VP of Membership', description: 'Focuses on supporting new members socially and professionally to successfully integrate them as brothers within KTP.' },
-  { name: 'Arinjoy Das', imageUrl: '/images/members/Das_Arinjoy.jpg', category: 'E-Board', role: 'VP of Engagement', description: 'Plans variety of brotherhood events to engage active members.' },
+  { name: 'Arinjoy Das', imageUrl: '/images/members/Das_Arinjoy.jpg', category: 'E-Board', role: 'VP of Engagement', description: 'Plans a variety of brotherhood events to engage active members.' },
   { name: 'Aarnav Unadkat', imageUrl: '/images/members/Unadkat_Aarnav.jpg', category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
-  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plan community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
-  { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Nick Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Elan Hong', imageUrl: '/images/members/Hong_Elan.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Naman Jain', imageUrl: '/images/members/Jain_Naman.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Work with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Director of Community Service & Philanthropy', description: 'Plans community service events throughout the semester for brothers to contribute to philanthropic efforts.' },
+  { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Agnes Mar', imageUrl: '/images/members/Mar_Agnes.jpg', category: 'Directors', role: 'Co-Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Nick Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Elan Hong', imageUrl: '/images/members/Hong_Elan.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Naman Jain', imageUrl: '/images/members/Jain_Naman.jpg', category: 'Directors', role: 'Co-Director of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
   { name: 'Diya Kini', imageUrl: '/images/members/Kini_Diya.jpg', category: 'Directors', role: 'Director of Career Development', description: 'Facilitates career development opportunities and professional growth for members.' },
   { name: 'Amy Liu', imageUrl: '/images/members/Liu_Amy.jpg', category: 'Directors', role: 'Director of Design & Digital Strategy', description: 'Manages digital strategy and social media presence. Design and create content for KTP\'s social media accounts.' },
   { name: 'Jonathan Abulu', imageUrl: '/images/members/Abulu_Jonathan.jpg', category: 'Directors', role: 'Co-Director of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
@@ -336,24 +337,32 @@ export default function Members() {
 
           {/* Members grid */}
           {selectedCategory === 'E-Board' ? (
-            <div className="grid grid-cols-1 mb-12 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 mb-12 gap-6 lg:gap-8 xl:grid-cols-2">
               {hardcodedMembers
                 .filter((member) => member.category === 'E-Board')
                 .map((member) => (
-                  <div key={`${member.name}-${member.category}`} className="flex flex-col md:flex-row items-center p-4 e-board-member">
-                    <img 
-                      src={member.imageUrl} 
-                      alt={member.name} 
-                      className="w-32 h-32 md:w-40 md:h-40 object-cover mb-4 md:mb-0 md:mr-4 rounded-lg shadow-md" 
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/images/default.jpg';
-                      }}
-                    />
-                    <div className="text-center md:text-left">
-                      <p className="text-base md:text-lg font-semibold">{member.name}</p>
-                      <p className="text-blue-600 text-sm md:text-base">{member.role}</p>
-                      <p className="text-sm md:text-base">{member.description}</p>
+                  <div key={`${member.name}-${member.category}`} className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-700 ease-out transform hover:-translate-y-2 border border-gray-100 overflow-hidden e-board-member w-full min-w-0">
+                    <div className="flex flex-row items-start p-6 h-full">
+                      <div className="relative mr-4 lg:mr-6 flex justify-center flex-shrink-0 self-center">
+                        <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg">
+                          <img 
+                            src={member.imageUrl} 
+                            alt={member.name} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" 
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/images/default.jpg';
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="text-left flex-1 self-start break-normal">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#315CA9] transition-colors duration-700 ease-in-out">{member.name}</h3>
+                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
+                          {member.role}
+                        </div>
+                        <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{member.description}</p>
+                      </div>
                     </div>
                   </div>
                 ))}

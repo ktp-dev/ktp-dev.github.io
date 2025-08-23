@@ -74,7 +74,7 @@ export default function Home() {
       <Header />
       
       {/* Main content */}
-      <div className='flex flex-row justify-between mb-12 md:mb-20 lg:mb-32'>
+      <div className='flex flex-row justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
         <div className="absolute inset-0 blob-c z-0 hidden lg:block">
             <div className="shape-blob ten"></div>
             <div className="shape-blob eleven"></div>
@@ -116,9 +116,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32'>
+      <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
         {/* Description */}
-        <div className='flex flex-col lg:flex-row mb-8 md:mb-12 ml-4 md:ml-8 lg:ml-16'>
+        <div className='flex flex-col lg:flex-row mb-8 md:mb-12'>
           <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
             <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
             <img src="/images/home/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
@@ -146,7 +146,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className='hidden md:flex flex-row gap-4 justify-center'>
+        <div className='hidden md:flex flex-row gap-4 justify-center px-6 sm:px-8 md:px-12 lg:px-20'>
           <img src="/images/home/ab.jpg" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
           <img src="/images/home/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
           <img src="/images/home/yummers.jpeg" alt="Ava and Bella" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
@@ -156,14 +156,14 @@ export default function Home() {
       </div>
 
       {/* Network */}
-      <div>
+      <div className='px-6 sm:px-8 md:px-12 lg:px-20'>
         <div 
           className='flex justify-center text-3xl lg:text-4xl font-bold mb-12 font-inter' 
           style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
         >
           Our Network
         </div>
-        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 px-8 mb-8 sm:px-16 md:px-16 lg:px-32 min-h-[160px] lg:min-h-[180px]'>
+        <div className='flex flex-wrap justify-center items-center gap-4 lg:gap-8 mb-8 min-h-[160px] lg:min-h-[180px]'>
           {networkCompanies.map((company, index) => (
             <img
               key={company.alt}
@@ -180,7 +180,7 @@ export default function Home() {
       </div>
 
       {/* Life App */}
-      <div id='life-app' className='mb-12'>
+      <div id='life-app' className='mb-12 px-6 sm:px-8 md:px-12 lg:px-20'>
         {/* Text */}
         <div className='flex flex-col md:flex-row justify-center items-center mt-12'>
           <div className="text-3xl mt-8 md:text-4xl font-bold z-10 md:mr-24 text-center md:text-left font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
