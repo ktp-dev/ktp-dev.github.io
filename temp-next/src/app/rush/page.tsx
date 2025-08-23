@@ -65,7 +65,7 @@ export default function Rush() {
     <div className="h-screen flex flex-col">
       <Header />
       
-      <div className="px-6 sm:px-12 md:px-32">
+      <div className="px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
         {/* Page content */}
         <div className="absolute inset-0 blob-c z-0">
           <div className="shape-blob eight"></div>
