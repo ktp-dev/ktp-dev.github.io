@@ -8,10 +8,10 @@ export default function WideHeader() {
             <div className="relative flex items-center justify-between w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-4 z-10">
                 {/* Logo */}
                 <div className='flex justify-start'>
-                    <a href='/'>
+                    <Link href='/'>
                         <img src="/logos/ktp_logo_letters.png" alt="Logo" className="w-20 h-auto" />
                         {/* <img src="/ktp_alpha_chapter.svg" alt="Logo" className="w-20 h-auto" /> */}
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Nav */}
@@ -24,10 +24,10 @@ export default function WideHeader() {
 
                 {/* Life App */}
                 <div className='flex flex-row justify-end'>
-                    <a href='/life/' className='flex flex-row justify-center items-center'>
+                    <Link href='/life/' className='flex flex-row justify-center items-center'>
                         <img src="/logos/ktp_life_app.svg" alt='Life App' className="w-8 h-auto mr-2" />
                         <p className="font-inter" style={{ color: '#215EB1', fontWeight: '500' }}>KTP Life App</p>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

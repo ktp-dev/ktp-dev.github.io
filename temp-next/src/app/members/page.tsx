@@ -8,6 +8,19 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import ScrollToTop from '../../components/ScrollToTop';
 
+// Define Member type
+interface Member {
+  name: string;
+  imageUrl: string;
+  category: string;
+  role: string;
+  description: string;
+  pledgeClass: string;
+  gradYear: number;
+  isAlumni: boolean;
+  linkedin: string;
+}
+
 // Import images
 import LogoImages from '../../../public/images/LogosHover.png';
 import defaultImage from '../../../public/images/default.jpg';
@@ -107,9 +120,9 @@ export default function Members() {
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
   const [selectedCategory, setSelectedCategory] = useState('Actives');
   const [selectedGreekLetter, setSelectedGreekLetter] = useState<string | null>(null);
-  const [activeMembers, setActiveMembers] = useState<any[]>([]);
-  const [eBoardMembers, setEBoardMembers] = useState<any[]>([]);
-  const [directors, setDirectors] = useState<any[]>([]);
+  const [activeMembers, setActiveMembers] = useState<Member[]>([]);
+  const [eBoardMembers, setEBoardMembers] = useState<Member[]>([]);
+  const [directors, setDirectors] = useState<Member[]>([]);
   const [alumni, setAlumni] = useState<{pledgeClass: string; names: string[]}[]>([]);
   const categoryRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -140,13 +153,13 @@ export default function Members() {
         const response = await fetch('/memberList.csv');
         const csvText = await response.text();
         
-        parseCsv(csvText, (data: any[]) => {
+        parseCsv(csvText, (data: Record<string, string>[]) => {
           console.log('Parsed Data:', data);
           const currentYear = new Date().getFullYear();
 
-          const filteredData = data.filter((member: any) => member.First && member.Last);
+          const filteredData = data.filter((member: Record<string, string>) => member.First && member.Last);
 
-          const parsedMembers = filteredData.map((member: any) => {
+                      const parsedMembers = filteredData.map((member: Record<string, string>) => {
             // Use the Headshot column from CSV if available, otherwise generate path
             const imagePath = member.Headshot || `/images/members/${member.Last || 'unknown'}_${member.First || 'unknown'}.jpg`;
 
@@ -157,7 +170,7 @@ export default function Members() {
             const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
 
             // change to 2025 once seniors graduate
-            const isAlumni = member['Grad Year'] && member['Grad Year'] <= 2025;
+            const isAlumni = member['Grad Year'] && parseInt(member['Grad Year']) <= 2025;
 
             return {
               name: `${firstName} ${lastName}`,
@@ -166,19 +179,19 @@ export default function Members() {
               role: role,
               description: description,
               pledgeClass: pledgeClassMapping[member['Pledge Class'] as keyof typeof pledgeClassMapping] || 'Unknown',
-              gradYear: member['Grad Year'] || currentYear + 1,
-              isAlumni,
+              gradYear: parseInt(member['Grad Year']) || currentYear + 1,
+              isAlumni: Boolean(isAlumni),
               linkedin: member.Linkedin || '#'
             };
           });
 
-          const actives = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'Actives');
-          const eBoard = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'E-Board');
-          const directors = parsedMembers.filter((member: any) => !member.isAlumni && member.category === 'Directors');
-          const alumniFromCsv = parsedMembers.filter((member: any) => member.isAlumni && member.pledgeClass !== 'Unknown');
+          const actives = parsedMembers.filter((member: Member) => !member.isAlumni && member.category === 'Actives');
+          const eBoard = parsedMembers.filter((member: Member) => !member.isAlumni && member.category === 'E-Board');
+          const directors = parsedMembers.filter((member: Member) => !member.isAlumni && member.category === 'Directors');
+          const alumniFromCsv = parsedMembers.filter((member: Member) => member.isAlumni && member.pledgeClass !== 'Unknown');
 
           const alumniMap: { [key: string]: string[] } = {};
-          alumniFromCsv.forEach((member: any) => {
+          alumniFromCsv.forEach((member: Member) => {
             if (!alumniMap[member.pledgeClass]) {
               alumniMap[member.pledgeClass] = [];
             }

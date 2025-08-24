@@ -91,11 +91,11 @@ export default function Home() {
           </div>
           <div className='flex flex-col items-center justify-center z-10'>
             <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36 font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
-            We're the University of Michigan's Premier Technology Fraternity
+            We&apos;re the University of Michigan&apos;s Premier Technology Fraternity
             </div>
 
             <div className='text-[#707070] text-[16px] text-center mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-sm sm:text-md lg:text-base font-medium'>
-              <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology.</div>
+              <div>Founded as the first KTP chapter, we&apos;re dedicated to uniting students across the nation for the love of technology.</div>
             </div>
 
             <Link href="/rush">

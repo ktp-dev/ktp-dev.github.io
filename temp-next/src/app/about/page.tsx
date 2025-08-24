@@ -69,7 +69,7 @@ export default function About() {
               to={`${category.toLowerCase().replace(/\s+/g, '-')}-section`}
               smooth={true}
               duration={200}
-              ref={(el: any) => { categoryRefs.current[index] = el; }}
+              ref={(el: unknown) => { categoryRefs.current[index] = el as HTMLDivElement | null; }}
             >
               {category}
             </ScrollLink>
@@ -96,16 +96,16 @@ export default function About() {
                 />
               </div>
               <div className="w-full lg:w-3/5 text-left relative z-10">
-                <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">President's Welcome</h2>
+                <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">President&apos;s Welcome</h2>
                 <div className="text-base sm:text-lg leading-relaxed space-y-4">
                   <p>
-                    Welcome to the Alpha Chapter of Kappa Theta Pi, Michigan's premier professional technology fraternity. On behalf of our chapter, I am excited to welcome you to our fraternity's website, where you can catch a glimpse of the passion and excellence that our chapter celebrates.
+                    Welcome to the Alpha Chapter of Kappa Theta Pi, Michigan&apos;s premier professional technology fraternity. On behalf of our chapter, I am excited to welcome you to our fraternity&apos;s website, where you can catch a glimpse of the passion and excellence that our chapter celebrates.
                   </p>
                   <p>
                     Kappa Theta Pi offers brothers the support to be extraordinary during their time at Michigan with resources centered around five pillars: professional development, alumni connections, social growth, technological advancement, and academic support. From project teams and study groups to professional development workshops and hackathons / design jams, we foster a culture of growth encouraging members to pursue their tech passions. Our chapter values diversity, with brothers contributing unique experiences and excelling as student leaders. We celebrate our diverse brotherhood, welcoming all united by a passion for technology.
                   </p>
                   <p>
-                    Reflecting on my time at Michigan, KTP has been the most impactful part of my college experience. I have witnessed the growth of some of Michigan's most brilliant and ambitious professionals, seeing first-hand the incredible things they do. More importantly, I have been introduced to lifelong friends and connections who serve as a constant source of inspiration and always support me to be my full and best self. I invite you to explore our website and learn more about our brotherhood.​
+                    Reflecting on my time at Michigan, KTP has been the most impactful part of my college experience. I have witnessed the growth of some of Michigan&apos;s most brilliant and ambitious professionals, seeing first-hand the incredible things they do. More importantly, I have been introduced to lifelong friends and connections who serve as a constant source of inspiration and always support me to be my full and best self. I invite you to explore our website and learn more about our brotherhood.​
                   </p>
                   <p>
                     With love,<br />
@@ -204,7 +204,7 @@ export default function About() {
                     Our members come from all around campus. We are designers, analysts, computer scientists, engineers, artists, entrepreneurs, economists, philosophers, psychologists, and more. What makes the KTP community strong is our shared passion for technology and our unique backgrounds meshing together as one.
                   </p>
                   <p>
-                    Our alumni are part of an extensive and tight-knit network that stretches across the country. They can be found from Seattle to New York, from Silicon Valley to Detroit, in both startup companies and larger businesses. Our alumni provide valuable insight for our members' professional development.
+                    Our alumni are part of an extensive and tight-knit network that stretches across the country. They can be found from Seattle to New York, from Silicon Valley to Detroit, in both startup companies and larger businesses. Our alumni provide valuable insight for our members&apos; professional development.
                   </p>
                 </div>
               </div>
@@ -225,9 +225,9 @@ export default function About() {
             <div className="flex flex-col items-center pb-10 md:pb-16 lg:pb-20">
               <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">DEI Commitment</h2>
               <div className="text-base sm:text-lg leading-relaxed space-y-4">
-                <p>
-                  The world of technology is unique, diverse, and multi-faceted. We believe that our brothers should be too. In Kappa Theta Pi, we're passionate about cultivating an inclusive community that promotes and values diversity. Our dedication to diversity, equity, and inclusion is unwavering; these values are central to our mission and to our impact. We know that having heterogeneous perspectives helps generate better ideas to solve the nuanced problems of a changing — and increasingly diverse — world.
-                </p>
+                                  <p>
+                    The world of technology is unique, diverse, and multi-faceted. We believe that our brothers should be too. In Kappa Theta Pi, we&apos;re passionate about cultivating an inclusive community that promotes and values diversity. Our dedication to diversity, equity, and inclusion is unwavering; these values are central to our mission and to our impact. We know that having heterogeneous perspectives helps generate better ideas to solve the nuanced problems of a changing — and increasingly diverse — world.
+                  </p>
                 <p>
                   In KTP, we have a responsibility to address structural inequality in our communities as well as the social and cultural dimensions of technology. We are committed to harnessing the best of KTP — our people, platform, and technical innovation — to make lasting change inside and outside of our organization.
                 </p>

@@ -37,10 +37,10 @@ export default function HamburgerHeader() {
         <div className='relative flex flex-row w-full items-center justify-between px-8 py-4 pt-4'>
             {/* Logo */}
             <div className='flex'>
-                <a href='/'>
+                <Link href='/'>
                     <img src="/logos/ktp_logo_letters.png" alt="Logo" className="w-20 h-auto" />
                     {/* <img src="/ktp_alpha_chapter.svg" alt="Logo" className="w-20 h-auto" /> */}
-                </a>
+                </Link>
             </div>
 
             {/* Hamburger Menu */}

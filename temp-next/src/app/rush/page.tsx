@@ -84,7 +84,7 @@ export default function Rush() {
             <div className="flex flex-col text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0">Learn About Joining KTP!</h1>
               <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto" style={{ color: 'grey' }}>
-                Welcome to Kappa Theta Pi's Fall 2025 Rush! <br></br>Here's our rush schedule. Applications are due September 6, 2025
+                Welcome to Kappa Theta Pi&apos;s Fall 2025 Rush! <br></br>Here&apos;s our rush schedule. Applications are due September 6, 2025
               </p>
               <div className="flex justify-center space-x-4 mb-8">
                 <a href="https://forms.gle/oXMx7Ewo6uPP1Spm9" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
@@ -126,7 +126,7 @@ export default function Rush() {
                     <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Ingalls Mall, Table E066</span>
                   </div>
                 </div>
-                <p className="text-gray-600 flex items-center">Stop by our table to meet our brothers, hear about our professional development and social events, and learn how you can get involved this semester. Whether you're curious about the rush process or just want to see what KTP is all about, we'd love to talk to you!
+                <p className="text-gray-600 flex items-center">Stop by our table to meet our brothers, hear about our professional development and social events, and learn how you can get involved this semester. Whether you&apos;re curious about the rush process or just want to see what KTP is all about, we&apos;d love to talk to you!
                 </p>
               </div>
             </div>
@@ -148,8 +148,8 @@ export default function Rush() {
                     <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">CCCB 3460</span>
                   </div>
                 </div>
-                <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
-                Then, we'll break out into open discussion and you'll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p>
+                <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we&apos;ll give a presentation about what it means to be a brother in KTP. 
+                Then, we&apos;ll break out into open discussion and you&apos;ll have a chance to ask our brothers any questions related to rush, Kappa Theta Pi, or anything else you may be wondering!</p>
               </div>
             </div>
 
@@ -191,9 +191,9 @@ export default function Rush() {
                     <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">League - Michigan Room (Second Floor)</span>
                   </div>
                 </div>
-                <p className="text-gray-600 flex items-center">In KTP, we love to celebrate our members' diversity and share honest conversations about how the DEI climate can be 
-                improved in KTP, on campus, and beyond. At our DEI Panel, you will have the opportunity to hear brothers' experiences as underrepresented minorities in tech. 
-                After the panel, we'll break out into open discussion. Come learn about the many people and communities that make up KTP!</p>
+                                <p className="text-gray-600 flex items-center">In KTP, we love to celebrate our members&apos; diversity and share honest conversations about how the DEI climate can be
+                improved in KTP, on campus, and beyond. At our DEI Panel, you will have the opportunity to hear brothers&apos; experiences as underrepresented minorities in tech.
+                After the panel, we&apos;ll break out into open discussion. Come learn about the many people and communities that make up KTP!</p>
               </div>
             </div>
 
@@ -214,7 +214,7 @@ export default function Rush() {
                     <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Virtual (Zoom)</span>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4 flex items-center">At this event, we'll share tips for crafting a strong resume, then move into both high-level discussions and 1:1 support to help you with your KTP Rush applications!<br></br>
+                <p className="text-gray-600 mb-4 flex items-center">At this event, we&apos;ll share tips for crafting a strong resume, then move into both high-level discussions and 1:1 support to help you with your KTP Rush applications!<br></br>
                 </p>
                 {/* <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
                   <button className="px-3 sm:px-4 py-2 bg-blue-500 mt-2 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
@@ -259,7 +259,7 @@ export default function Rush() {
                     <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">From Monday, September 8 onward</span>
                   </div>
                 </div>
-                <p className="text-gray-600 flex items-center">KTP's closed rush process consists of events for us to get to know each other, including 1:1 coffee chats and a final round of interviews.</p>
+                <p className="text-gray-600 flex items-center">KTP&apos;s closed rush process consists of events for us to get to know each other, including 1:1 coffee chats and a final round of interviews.</p>
               </div>
             </div>
           </div>
