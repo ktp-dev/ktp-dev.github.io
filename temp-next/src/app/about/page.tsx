@@ -46,7 +46,7 @@ export default function About() {
 
       <div className="relative w-full">
         {/* Page Content */}
-        <div className="relative pt-12 sm:pt-16 z-10">
+        <div className="relative pt-12 sm:pt-16 z-10 px-6 sm:px-8 md:px-16 lg:px-20">
           <div className="flex flex-col text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
               About Us

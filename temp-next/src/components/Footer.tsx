@@ -66,13 +66,19 @@ export default function Footer() {
                     {/* Download icons */}
                     <p className='flex justify-center md:justify-start mb-4 font-extrabold'>Kappa Theta Pi Life App</p>
                     <div className='flex justify-center align-center mb-6'>
-                        <div className='flex flex-row'>
-                            <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-2'>
-                                <img src="/logos/app_store.svg" alt="App Store" style={{ width: '130px' }} />
-                            </a>
+                        <div className='flex flex-col items-center'>
+                            <div className='flex flex-row mb-4'>
+                                <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-2'>
+                                    <img src="/logos/app_store.svg" alt="App Store" style={{ width: '130px' }} />
+                                </a>
 
-                            <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
-                                <img src="/logos/google_play.svg" alt="Google Play" style={{ width: '130px' }} />
+                                <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
+                                    <img src="/logos/google_play.svg" alt="Google Play" style={{ width: '130px' }} />
+                                </a>
+                            </div>
+
+                            <a href='/life/' target="_blank" rel="noopener noreferrer">
+                                <img src="/logos/web_badge.svg" alt="Web App" style={{ width: 'calc(2 * 130px + 8px)' }} />
                             </a>
                         </div>
                     </div>

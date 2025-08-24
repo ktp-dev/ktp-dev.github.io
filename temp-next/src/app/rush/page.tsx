@@ -265,8 +265,8 @@ export default function Rush() {
           </div>
 
           {/* Rush Video */}
-          <div className="relative w-full lg:w-1/3 p-2 mb-10">
-            <div className="absolute inset-0 blob-c">
+          <div className="relative w-full lg:w-1/3 p-2 mb-10 overflow-hidden">
+            <div className="absolute blob-c overflow-hidden">
               <div className="shape-blob rush-static-green"></div>
               <div className="shape-blob rush-static-blue"></div>
             </div>

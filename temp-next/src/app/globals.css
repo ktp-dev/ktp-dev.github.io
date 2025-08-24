@@ -524,7 +524,7 @@ html {
   position: relative;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity .75s ease-in-out, transform .75s ease-in-out;
+  transition: opacity .3s ease-in-out, transform .3s ease-in-out;
 }
 
 .e-board-member,
@@ -537,6 +537,14 @@ html {
 .director-member.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Simple hover animations for E-Board and Directors - like the category buttons */
+.e-board-member:hover,
+.director-member:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
 .e-board-member .info,
@@ -857,6 +865,13 @@ button:hover .close-icon path {
   transform: translateY(-10px) !important;
   filter: brightness(0.6) drop-shadow(0 4px 10px rgba(132, 177, 222, 0.9)) !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Simple hover effects for E-Board and Directors */
+.e-board-member,
+.director-member {
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 /* Leaflet Map Styling */

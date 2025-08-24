@@ -95,7 +95,7 @@ export default function Home() {
             </div>
 
             <div className='text-[#707070] text-[16px] text-center mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-sm sm:text-md lg:text-base'>
-              <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology</div>
+              <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology.</div>
             </div>
 
             <Link href="/rush">
@@ -188,13 +188,19 @@ export default function Home() {
             <div className='mt-4 font-normal text-[#707070] text-sm sm:text-base lg:text-lg max-w-full'>
             The KTP Life App is your one-stop shop for everything KTP! View upcoming events and details personalized to you, never miss important announcements, connect with brothers, learn more about our organization, and so much more!
             </div>
-            <div className='flex flex-row justify-center lg:justify-start mt-8'>
-              <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-4'>
-                <img src="/logos/app_store.svg" alt="App Store" className='h-8 sm:h-10 lg:h-12' />
-              </a>
+            <div className='flex flex-col items-center lg:items-start mt-8 mb-8'>
+              <div className='flex flex-row justify-center lg:justify-start mb-4'>
+                <a href='https://apps.apple.com/us/app/kappa-theta-pi-life/id1641588942' target="_blank" rel="noopener noreferrer" className='mr-4'>
+                  <img src="/logos/app_store.svg" alt="App Store" className='h-12 sm:h-14 lg:h-16' style={{ width: 'clamp(120px, 15vw, 180px)' }} />
+                </a>
 
-              <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
-                <img src="/logos/google_play.svg" alt="Google Play" className='h-8 sm:h-10 lg:h-12' />
+                <a href='https://play.google.com/store/apps/details?id=com.ktpumich.ktp_rush&pli=1' target="_blank" rel="noopener noreferrer">
+                  <img src="/logos/google_play.svg" alt="Google Play" className='h-12 sm:h-14 lg:h-16' style={{ width: 'clamp(120px, 15vw, 180px)' }} />
+                </a>
+              </div>
+
+              <a href='/life/' target="_blank" rel="noopener noreferrer" className='w-full flex justify-center lg:justify-start'>
+                <img src="/logos/web_badge.svg" alt="Web App" className='h-12 sm:h-14 lg:h-16' style={{ width: 'calc(2 * clamp(120px, 15vw, 180px) + 16px)' }} />
               </a>
             </div>
   

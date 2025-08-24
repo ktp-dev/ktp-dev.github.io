@@ -291,7 +291,7 @@ export default function Members() {
           </div>
 
           {/* Category filter buttons */}
-          <div className="relative sm:mt-0 mb-8 sm:mb-12 lg:mb-16 px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+          <div className="relative sm:mt-0 mb-8 sm:mb-12 lg:mb-16">
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8">
               {categories.map((category, index) => (
                 <button
@@ -339,14 +339,14 @@ export default function Members() {
               {hardcodedMembers
                 .filter((member) => member.category === 'E-Board')
                 .map((member, index) => (
-                  <div key={`${member.name}-${member.category}`} className="e-board-member group rounded-xl shadow-md transform transition-transform duration-650 ease-in-out hover:-translate-y-2 hover:shadow-xl border border-gray-100 overflow-hidden w-full min-w-0" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
+                  <div key={`${member.name}-${member.category}`} className="e-board-member group rounded-xl shadow-md hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 transform transition-all duration-300 ease-in-out" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="flex flex-col md:flex-row items-center md:items-start p-6 h-full">
                       <div className="relative mb-4 md:mb-0 md:mr-6 flex justify-center flex-shrink-0 self-center">
-                        <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg">
+                        <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300 ease-in-out shadow-lg">
                           <img 
                             src={member.imageUrl} 
                             alt={member.name} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out" 
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = '/images/default.jpg';
@@ -355,11 +355,11 @@ export default function Members() {
                         </div>
                       </div>
                       <div className="text-center md:text-left flex-1 md:self-start break-normal">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#315CA9] transition-colors duration-700 ease-in-out">{member.name}</h3>
-                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#315CA9] transition-colors duration-300 ease-in-out">{member.name}</h3>
+                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md transition-all duration-300 ease-in-out">
                           {member.role}
                         </div>
-                        <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{member.description}</p>
+                        <p className="text-gray-600 text-sm lg:text-base leading-relaxed transition-colors duration-300 ease-in-out">{member.description}</p>
                       </div>
                     </div>
                   </div>
@@ -387,24 +387,24 @@ export default function Members() {
                     return 0;
                   })
                   .map(([role, members]) => (
-                  <div key={role} className={`director-member group rounded-xl shadow-md transform transition-transform duration-650 ease-in-out hover:-translate-y-2 hover:shadow-xl border border-gray-100 overflow-hidden w-full min-w-0 ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
+                  <div key={role} className={`director-member group rounded-xl shadow-md hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 transform transition-all duration-300 ease-in-out ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="p-6">
                       <div className="text-center mb-6">
-                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md">
+                        <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md transition-all duration-300 ease-in-out">
                           {role}
                         </div>
                         <div className="lg:min-h-[4rem] flex items-start justify-center">
-                          <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{members[0].description}</p>
+                          <p className="text-gray-600 text-sm lg:text-base leading-relaxed transition-colors duration-300 ease-in-out">{members[0].description}</p>
                         </div>
                       </div>
                       <div className={`grid gap-2 justify-items-center ${role.includes('Social Engagement') ? 'grid-cols-2 lg:grid-cols-4 max-w-md lg:max-w-4xl mx-auto' : members.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-2 max-w-md mx-auto'}`}>
                         {members.map((member) => (
-                          <div key={member.name} className="flex flex-col items-center space-y-2 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 w-full max-w-48">
-                            <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-700 ease-in-out shadow-lg flex-shrink-0">
+                          <div key={member.name} className="flex flex-col items-center space-y-2 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 ease-in-out w-full max-w-48">
+                            <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300 ease-in-out shadow-lg flex-shrink-0">
                               <img 
                                 src={member.imageUrl} 
                                 alt={member.name} 
-                                className="w-full h-full object-cover" 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out" 
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
                                   target.src = '/images/default.jpg';
@@ -412,7 +412,7 @@ export default function Members() {
                               />
                             </div>
                             <div className="text-center">
-                              <h4 className="text-base font-semibold text-gray-900 group-hover:text-[#315CA9] transition-colors duration-300">
+                              <h4 className="text-base font-semibold text-gray-900 group-hover:text-[#315CA9] transition-colors duration-300 ease-in-out">
                                 {member.name}
                               </h4>
                             </div>
