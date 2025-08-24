@@ -16,10 +16,10 @@ export default function WideHeader() {
 
                 {/* Nav */}
                 <div className='flex justify-center space-x-8 sm:space-x-12 md:space-x-16 lg:space-x-20'>
-                    <Link className="hover:text-blue-700 font-medium" href="/about">About Us</Link>
-                    <Link className="hover:text-blue-700 font-medium" href="/rush">Rush</Link>
-                    <Link className="hover:text-blue-700 font-medium" href="/members">Members</Link>
-                    <Link className="hover:text-blue-700 font-medium" href="/nationals">Nationals</Link>
+                    <Link className="hover:text-[#315CA9] font-medium" href="/about">About Us</Link>
+                    <Link className="hover:text-[#315CA9] font-medium" href="/rush">Rush</Link>
+                    <Link className="hover:text-[#315CA9] font-medium" href="/members">Members</Link>
+                    <Link className="hover:text-[#315CA9] font-medium" href="/nationals">Nationals</Link>
                 </div>
 
                 {/* Life App */}
