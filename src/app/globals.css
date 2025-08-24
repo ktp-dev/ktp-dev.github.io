@@ -32,6 +32,18 @@ body {
   overflow-y: auto;
 }
 
+/* Improve SVG rendering quality */
+img[src*=".svg"] {
+  image-rendering: crisp-edges;
+}
+
+/* Specific styling for phone frame images to improve quality */
+img[src*="phone_frame"] {
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

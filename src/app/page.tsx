@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AOS from 'aos';
@@ -227,8 +228,28 @@ export default function Home() {
 
           {/* Phones */}
           <div className='flex flex-row justify-center lg:justify-end'>
-            <img src="/images/home/phone_frame_3.svg" alt="Phone Frame 1" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mr-2 sm:mr-4 mt-12 sm:mt-24 md:mt-24 lg:mt-24' />
-            <img src="/images/home/phone_frame_4.svg" alt="Phone Frame 2" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mt-6 sm:mt-12 md:mt-12 lg:mt-12' />
+            <div className='relative mr-2 sm:mr-4 mt-12 sm:mt-24 md:mt-24 lg:mt-24'>
+              <Image 
+                src="/images/home/phone_frame_3.svg" 
+                alt="Phone Frame 1" 
+                width={277}
+                height={572}
+                className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] w-auto'
+                priority
+                unoptimized
+              />
+            </div>
+            <div className='relative mt-6 sm:mt-12 md:mt-12 lg:mt-12'>
+              <Image 
+                src="/images/home/phone_frame_4.svg" 
+                alt="Phone Frame 2" 
+                width={277}
+                height={572}
+                className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] w-auto'
+                priority
+                unoptimized
+              />
+            </div>
           </div>
         </div>
       </div>
