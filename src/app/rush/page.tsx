@@ -84,7 +84,7 @@ export default function Rush() {
             <div className="flex flex-col text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0">Learn About Joining KTP!</h1>
               <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto" style={{ color: 'grey' }}>
-                Welcome to Kappa Theta Pi&apos;s Fall 2025 Rush! <br></br>Here&apos;s our rush schedule. Applications are due September 6, 2025
+                Welcome to Kappa Theta Pi&apos;s Fall 2025 Rush! <br></br>Here&apos;s our rush schedule. Applications are due September 6, 2025.
               </p>
               <div className="flex justify-center space-x-4 mb-8">
                 <a href="https://forms.gle/oXMx7Ewo6uPP1Spm9" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
