@@ -94,7 +94,7 @@ export default function Home() {
             We're the University of Michigan's Premier Technology Fraternity
             </div>
 
-            <div className='text-[#707070] text-[16px] text-center mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-sm sm:text-md lg:text-base'>
+            <div className='text-[#707070] text-[16px] text-center mt-8 w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px] text-sm sm:text-md lg:text-base font-medium'>
               <div>Founded as the first KTP chapter, we're dedicated to uniting students across the nation for the love of technology.</div>
             </div>
 
@@ -227,8 +227,8 @@ export default function Home() {
 
           {/* Phones */}
           <div className='flex flex-row justify-center lg:justify-end'>
-            <img src="/images/home/phone_frame_3.svg" alt="Phone Frame 1" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mr-2 sm:mr-4 mt-24 sm:mt-24 md:mt-24 lg:mt-24' />
-            <img src="/images/home/phone_frame_4.svg" alt="Phone Frame 2" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mt-12 sm:mt-12 md:mt-12 lg:mt-12' />
+            <img src="/images/home/phone_frame_3.svg" alt="Phone Frame 1" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mr-2 sm:mr-4 mt-12 sm:mt-24 md:mt-24 lg:mt-24' />
+            <img src="/images/home/phone_frame_4.svg" alt="Phone Frame 2" className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] mt-6 sm:mt-12 md:mt-12 lg:mt-12' />
           </div>
         </div>
       </div>

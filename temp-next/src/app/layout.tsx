@@ -21,6 +21,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Kappa Theta Pi - University of Michigan",
   description: "The University of Michigan's premier technology fraternity",
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

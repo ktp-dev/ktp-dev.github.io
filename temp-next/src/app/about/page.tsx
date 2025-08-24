@@ -96,7 +96,7 @@ export default function About() {
                 />
               </div>
               <div className="w-full lg:w-3/5 text-left relative z-10">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold pb-4 sm:pb-6 text-center" style={{ color: '#234c8b' }}>President's Welcome</h2>
+                <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">President's Welcome</h2>
                 <div className="text-base sm:text-lg leading-relaxed space-y-4">
                   <p>
                     Welcome to the Alpha Chapter of Kappa Theta Pi, Michigan's premier professional technology fraternity. On behalf of our chapter, I am excited to welcome you to our fraternity's website, where you can catch a glimpse of the passion and excellence that our chapter celebrates.
@@ -122,7 +122,7 @@ export default function About() {
         <div className="w-full" style={{ backgroundColor: '#F6FBFF' }}>
           <div className="px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-8 sm:py-12 md:py-16" id="our-pillars-section">
             <div className="text-center">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold pb-4 sm:pb-6 text-center" style={{ color: '#234c8b' }}>Our Pillars</h2>
+              <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">Our Pillars</h2>
             </div>
 
             <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -192,7 +192,7 @@ export default function About() {
           <div className="px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-8 sm:py-12 md:py-16" id="history-section">
             <div className="relative flex flex-col items-center lg:flex-row lg:items-start space-y-12 lg:space-y-0 lg:space-x-12 pb-20">
               <div className="w-full lg:w-3/5 text-left relative z-10">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold pb-4 sm:pb-6 text-center" style={{ color: '#234c8b' }}>History</h2>
+                <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">History</h2>
                 <div className="text-base sm:text-lg leading-relaxed space-y-4">
                   <p>
                     Kappa Theta Pi takes pride in being the first professional technology fraternity in the country. Our members learn a plethora of skills needed to stay knowledgeable about the tech industry, as well as a strong sense of professional development for future job positions.
@@ -223,7 +223,7 @@ export default function About() {
         <div className="w-full" style={{ backgroundColor: '#F6FBFF' }}>
           <div className="px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-8 sm:py-12 md:py-16" id="dei-commitment-section">
             <div className="flex flex-col items-center pb-10 md:pb-16 lg:pb-20">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold pb-4 sm:pb-6 text-center" style={{ color: '#234c8b' }}>DEI Commitment</h2>
+              <h2 className="text-center text-2xl sm:text-4xl font-black mb-10">DEI Commitment</h2>
               <div className="text-base sm:text-lg leading-relaxed space-y-4">
                 <p>
                   The world of technology is unique, diverse, and multi-faceted. We believe that our brothers should be too. In Kappa Theta Pi, we're passionate about cultivating an inclusive community that promotes and values diversity. Our dedication to diversity, equity, and inclusion is unwavering; these values are central to our mission and to our impact. We know that having heterogeneous perspectives helps generate better ideas to solve the nuanced problems of a changing — and increasingly diverse — world.

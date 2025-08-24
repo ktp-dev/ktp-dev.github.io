@@ -84,7 +84,7 @@ export default function Rush() {
             <div className="flex flex-col text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-0">Learn About Joining KTP!</h1>
               <p className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto" style={{ color: 'grey' }}>
-                Welcome to Kappa Theta Pi's Fall 2025 Rush! <br></br>Here's our rush schedule, applications are due September 6, 2025
+                Welcome to Kappa Theta Pi's Fall 2025 Rush! <br></br>Here's our rush schedule. Applications are due September 6, 2025
               </p>
               <div className="flex justify-center space-x-4 mb-8">
                 <a href="https://forms.gle/oXMx7Ewo6uPP1Spm9" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
@@ -95,7 +95,7 @@ export default function Rush() {
                 </a>
               </div>
               <p className="text-sm sm:text-lg mb-16 font-medium text-gray-600" style={{ color: 'grey' }}>
-                You can also join our <a href='https://calendar.google.com/calendar/u/0?cid=Y185MTA0MjdiZjlkMzlkMzk3YWFlZTExNTZmZDg0ZDUxY2MxYmE3NzdmNGZjOWZmZDQwMjMxOGRhMjA2ZTk4ZjUxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20' target="_blank" className="text-[#315CA9] hover:text-[#234c8b]">F25 Rush Google Calendar</a> for dates/times/locations for all of our Open Rush events.
+                You can also join our <a href='https://calendar.google.com/calendar/u/0?cid=Y185MTA0MjdiZjlkMzlkMzk3YWFlZTExNTZmZDg0ZDUxY2MxYmE3NzdmNGZjOWZmZDQwMjMxOGRhMjA2ZTk4ZjUxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20' target="_blank" className="text-[#315CA9] hover:text-[#234c8b]">F25 Rush Google Calendar</a> to see the dates, times, and locations of all Open Rush events.
               </p>
             </div>
           </div>
@@ -119,11 +119,11 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Wednesday, August 27, 4:30-6:00 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Wednesday, August 27, 4:30-6:00 PM</span>
                   </div>
                   <div className="flex items-center">
                     <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Ingalls Mall, Table E066</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Ingalls Mall, Table E066</span>
                   </div>
                 </div>
                 <p className="text-gray-600 flex items-center">Stop by our table to meet our brothers, hear about our professional development and social events, and learn how you can get involved this semester. Whether you're curious about the rush process or just want to see what KTP is all about, we'd love to talk to you!
@@ -141,11 +141,11 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Tuesday, September 2, 8:00-10:00 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Tuesday, September 2, 8:00-10:00 PM</span>
                   </div>
                   <div className="flex items-center">
                     <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">CCCB 3460</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">CCCB 3460</span>
                   </div>
                 </div>
                 <p className="text-gray-600 flex items-center">Join us for one of our Open Houses! First, we'll give a presentation about what it means to be a brother in KTP. 
@@ -163,11 +163,11 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Wednesday, September 3, 7:00-9:00 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Wednesday, September 3, 7:00-9:00 PM</span>
                   </div>
                   <div className="flex items-center">
                     <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">CCCB 3460</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">CCCB 3460</span>
                   </div>
                 </div>
                 <p className="text-gray-600 flex items-center">The same information will be presented at both Open Houses. Feel free to come to just one Open House or both!</p>
@@ -184,11 +184,11 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Thursday, September 4, 6:30-8:00 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Thursday, September 4, 6:30-8:00 PM</span>
                   </div>
                   <div className="flex items-center">
                     <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">League - Michigan Room (Second Floor)</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">League - Michigan Room (Second Floor)</span>
                   </div>
                 </div>
                 <p className="text-gray-600 flex items-center">In KTP, we love to celebrate our members' diversity and share honest conversations about how the DEI climate can be 
@@ -207,11 +207,11 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Thursday, September 4, 8:00-9:00 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Thursday, September 4, 8:00-9:00 PM</span>
                   </div>
                   <div className="flex items-center">
                     <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Virtual (Zoom)</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Virtual (Zoom)</span>
                   </div>
                 </div>
                 <p className="text-gray-600 mb-4 flex items-center">At this event, we'll share tips for crafting a strong resume, then move into both high-level discussions and 1:1 support to help you with your KTP Rush applications!<br></br>
@@ -237,7 +237,7 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">Saturday, September 6, 11:59 PM</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">Saturday, September 6, 11:59 PM</span>
                   </div>
                 </div>
                 <a href="https://forms.gle/nhgTGks5KmpTFz1j6" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
@@ -256,7 +256,7 @@ export default function Rush() {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon/>
-                    <span className="ml-1 font-semibold text-black text-sm sm:text-base">From Monday, September 8 onward</span>
+                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">From Monday, September 8 onward</span>
                   </div>
                 </div>
                 <p className="text-gray-600 flex items-center">KTP's closed rush process consists of events for us to get to know each other, including 1:1 coffee chats and a final round of interviews.</p>
@@ -265,8 +265,8 @@ export default function Rush() {
           </div>
 
           {/* Rush Video */}
-          <div className="relative w-full lg:w-1/3 p-2 mb-10 overflow-hidden">
-            <div className="absolute blob-c overflow-hidden">
+          <div className="relative w-full lg:w-1/3 p-2 mb-10">
+            <div className="absolute blob-c">
               <div className="shape-blob rush-static-green"></div>
               <div className="shape-blob rush-static-blue"></div>
             </div>

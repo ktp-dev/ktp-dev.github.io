@@ -242,13 +242,6 @@ export default function Members() {
 
   const handleGreekLetterClick = (letter: string | null) => {
     setSelectedGreekLetter(letter);
-    setTimeout(() => {
-      const targetId = letter ? `pledgeClass-${letter}` : 'pledgeClass-Founders';
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100); // Adjust the delay as needed
   };
 
   const filteredAlumni = selectedGreekLetter ? alumni.filter(group => group.pledgeClass === selectedGreekLetter) : alumni;
