@@ -150,7 +150,7 @@ export default function Home() {
         <div className='hidden md:flex flex-row gap-4 justify-center px-6 sm:px-8 md:px-12 lg:px-20'>
           <img src="/images/home/ab.jpg" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
           <img src="/images/home/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/yummers.jpeg" alt="Ava and Bella" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src="/images/home/tailgater.jpg" alt="In and Chris" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
           <img src="/images/home/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
           <img src="/images/home/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
         </div>
