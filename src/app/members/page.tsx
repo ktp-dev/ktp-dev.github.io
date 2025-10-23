@@ -352,7 +352,7 @@ export default function Members() {
                           <img 
                             src={member.imageUrl} 
                             alt={member.name} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out" 
+                            className="w-full h-full object-cover" 
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = '/images/default.jpg';
@@ -410,7 +410,7 @@ export default function Members() {
                               <img 
                                 src={member.imageUrl} 
                                 alt={member.name} 
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out" 
+                                className="w-full h-full object-cover" 
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
                                   target.src = '/images/default.jpg';
