@@ -18,6 +18,8 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+//hello world
+
 export const metadata: Metadata = {
   title: "Kappa Theta Pi - University of Michigan",
   description: "The University of Michigan's premier technology fraternity",
