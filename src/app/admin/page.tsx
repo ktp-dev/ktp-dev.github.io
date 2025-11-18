@@ -5,7 +5,7 @@ import Header from '@/components/Header'
 export default async function AdminPage() {
   const user = await checkIsAdmin()
 
-  // If not an admin, redirect to login
+  // If not an admin, redirect to login. test
   if (!user) {
     redirect('/login')
   }
