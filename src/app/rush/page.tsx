@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import CalendarIcon from "../../components/CalendarIcon";
-import PinIcon from "../../components/PinIcon";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import RushEvent from "../../components/RushEvent";
+import { createClient } from "../../lib/supabase/client";
 
 interface FAQItemProps {
   question: string;
@@ -39,12 +39,51 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => (
   </div>
 );
 
+interface RushEventData {
+  id: string;
+  title: string;
+  datetime: string;
+  location: string;
+  description: string | null;
+  button_label: string | null;
+  button_url: string | null;
+  order_index: number;
+}
+
 export default function Rush() {
   const [openQuestions, setOpenQuestions] = useState<number[]>([]);
   const [faqVisible, setFaqVisible] = useState(false);
+  const [rushEvents, setRushEvents] = useState<RushEventData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  // Fetch rush events from Supabase
+  useEffect(() => {
+    async function fetchRushEvents() {
+      try {
+        const { data, error } = await supabase
+          .from('rush_events')
+          .select('*')
+          .order('order_index', { ascending: true });
+
+        if (error) {
+          console.error('Error fetching rush events:', error);
+        } else {
+          setRushEvents(data || []);
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchRushEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Trigger FAQ animations after component mounts
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setFaqVisible(true);
     }, 500); // Delay to let page load first
@@ -162,229 +201,27 @@ export default function Rush() {
           <div className="relative flex-1 mr-0 md:mr-8">
             <div className="border-l-2 border-dotted border-gray-400 absolute h-full left-4 top-0 transform -translate-x-1/2"></div>
 
-            {/* Festifall*/}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
+            {loading ? (
+              <div className="ml-8 pl-4 py-8">
+                <p className="text-gray-600">Loading rush events...</p>
               </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">Festifall</h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Wednesday, August 27, 4:30-6:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Ingalls Mall, Table E066
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 flex items-center">
-                  Stop by our table to meet our brothers, hear about our
-                  professional development and social events, and learn how you
-                  can get involved this semester. Whether you&apos;re curious
-                  about the rush process or just want to see what KTP is all
-                  about, we&apos;d love to talk to you!
-                </p>
+            ) : rushEvents.length === 0 ? (
+              <div className="ml-8 pl-4 py-8">
+                <p className="text-gray-600">No rush events scheduled yet.</p>
               </div>
-            </div>
-
-            {/* Open House #1*/}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">
-                  Open House #1
-                </h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Tuesday, September 2, 8:00-10:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      CCCB 3460
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 flex items-center">
-                  Join us for one of our Open Houses! First, we&apos;ll give a
-                  presentation about what it means to be a brother in KTP. Then,
-                  we&apos;ll break out into open discussion and you&apos;ll have
-                  a chance to ask our brothers any questions related to rush,
-                  Kappa Theta Pi, or anything else you may be wondering!
-                </p>
-              </div>
-            </div>
-
-            {/* Open House #2*/}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">
-                  Open House #2
-                </h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Wednesday, September 3, 7:00-9:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      CCCB 3460
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 flex items-center">
-                  The same information will be presented at both Open Houses.
-                  Feel free to come to just one Open House or both!
-                </p>
-              </div>
-            </div>
-
-            {/*DEI Panel*/}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">DEI Panel</h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Thursday, September 4, 6:30-8:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      League - Michigan Room (Second Floor)
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 flex items-center">
-                  In KTP, we love to celebrate our members&apos; diversity and
-                  share honest conversations about how the DEI climate can be
-                  improved in KTP, on campus, and beyond. At our DEI Panel, you
-                  will have the opportunity to hear brothers&apos; experiences
-                  as underrepresented minorities in tech. After the panel,
-                  we&apos;ll break out into open discussion. Come learn about
-                  the many people and communities that make up KTP!
-                </p>
-              </div>
-            </div>
-
-            {/*Resume and Application Office Hours*/}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">
-                  Application Office Hours
-                </h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Thursday, September 4, 8:00-9:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <PinIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Virtual (Zoom)
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4 flex items-center">
-                  At this event, we&apos;ll share tips for crafting a strong
-                  resume, then move into both high-level discussions and 1:1
-                  support to help you with your KTP Rush applications!<br></br>
-                </p>
-                {/* <a href="http://tinyurl.com/ktp-f24-rush-overview" target="_blank" rel="noopener noreferrer">
-                  <button className="px-3 sm:px-4 py-2 bg-blue-500 mt-2 text-white rounded-lg transform transition-all duration-200 hover:scale-105 hover:bg-blue-700 text-sm sm:text-base">
-                     Zoom
-                  </button>
-                </a> */}
-                <a
-                  href="https://umich.zoom.us/j/92338618781?jst=2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
-                >
-                  Join Zoom Meeting
-                </a>
-              </div>
-            </div>
-
-            {/* Application Deadline */}
-            <div className="mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">
-                  Application Deadline
-                </h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      Saturday, September 6, 11:59 PM
-                    </span>
-                  </div>
-                </div>
-                <a
-                  href="https://forms.gle/nhgTGks5KmpTFz1j6"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
-                >
-                  Apply Here
-                </a>
-              </div>
-            </div>
-
-            {/* Closed Rush */}
-            <div className="relative mb-10 flex items-center relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-[#315CA9] z-10"></div>
-              </div>
-              <div className="ml-8 pl-4">
-                <h2 className="text-lg sm:text-xl font-bold mb-3">
-                  Closed Rush
-                </h2>
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon />
-                    <span className="ml-1 font-semibold text-black text-[13px] sm:text-base">
-                      From Monday, September 8 onward
-                    </span>
-                  </div>
-                </div>
-                <p className="text-gray-600 flex items-center">
-                  KTP&apos;s closed rush process consists of events for us to
-                  get to know each other, including 1:1 coffee chats and a final
-                  round of interviews.
-                </p>
-              </div>
-            </div>
+            ) : (
+              rushEvents.map((event) => (
+                <RushEvent
+                  key={event.id}
+                  title={event.title}
+                  datetime={event.datetime}
+                  location={event.location}
+                  description={event.description}
+                  buttonLabel={event.button_label}
+                  buttonUrl={event.button_url}
+                />
+              ))
+            )}
           </div>
 
           {/* Rush Video */}
