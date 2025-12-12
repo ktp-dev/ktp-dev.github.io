@@ -1,4 +1,10 @@
 import { redirect } from 'next/navigation'
+import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
+import Header from '@/components/Header'
+import RushScheduleManager from '@/components/RushScheduleManager'
+import Unauthorized from '@/components/Unauthorized'
+
+export default async function AdminPage() {
   // First check if user is authenticated
   const currentUser = await getCurrentUser()
   
@@ -29,7 +35,7 @@ import { redirect } from 'next/navigation'
               
               <div className="bg-white rounded-lg shadow-md p-6 mb-8">
                 <p className="text-gray-600 mb-4">
-                  Welcome, <span className="font-semibold">{user.email}</span>!
+                  Welcome, <span className="font-semibold">{adminUser.email}</span>!
                 </p>
                 <p className="text-gray-500 text-sm">
                   Admin portal features will be available here.
@@ -39,10 +45,7 @@ import { redirect } from 'next/navigation'
               {/* Placeholder for future widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-xl font-bold mb-4 font-inter">Rush Schedule</h2>
-                  <p className="text-gray-600 text-sm">
-                    Manage rush events and schedule. Coming soon...
-                  </p>
+                  <RushScheduleManager />
                 </div>
                 
                 <div className="bg-white rounded-lg shadow-md p-6">

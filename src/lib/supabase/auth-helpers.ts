@@ -39,10 +39,10 @@ export async function checkIsAdmin() {
     .single()
 
   if (adminError) {
-    console.error('Error checking admin status:', adminError)
-    // If it's a "not found" error, that's expected for non-admins
+    // If it's a "not found" error (PGRST116), that's expected for non-admins
+    // Only log unexpected errors
     if (adminError.code !== 'PGRST116') {
-      console.error('Unexpected error:', adminError)
+      console.error('Unexpected error checking admin status:', adminError)
     }
     return null
   }
