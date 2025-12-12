@@ -1,12 +1,23 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { createClient } from '../../lib/supabase/client';
 import Header from '../../components/Header';
 
 export default function Login() {
-  const supabase = createClient();
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Only create client on client side after mount
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      setSupabase(createClient());
+    }
+  }, []);
 
   const handleGoogleLogin = async () => {
+    if (!supabase) return;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -44,7 +55,8 @@ export default function Login() {
               
               <button
                 onClick={handleGoogleLogin}
-                className="px-6 py-3 bg-[#315CA9] text-white rounded-[40px] text-base sm:text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer flex items-center justify-center gap-3 font-inter mx-auto"
+                disabled={!supabase}
+                className="px-6 py-3 bg-[#315CA9] text-white rounded-[40px] text-base sm:text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer flex items-center justify-center gap-3 font-inter mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ minWidth: '280px' }}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full">
