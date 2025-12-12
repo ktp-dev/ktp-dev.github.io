@@ -1,13 +1,18 @@
 import { redirect } from 'next/navigation'
-import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
-import Header from '@/components/Header'
-
-export default async function AdminPage() {
-  const user = await checkIsAdmin()
-
-  // If not an admin, redirect to login. test. test2
-  if (!user) {
+  // First check if user is authenticated
+  const currentUser = await getCurrentUser()
+  
+  // If no user at all, redirect to login
+  if (!currentUser) {
     redirect('/login')
+  }
+
+  // If user exists, check if they're an admin
+  const adminUser = await checkIsAdmin()
+
+  // If user is authenticated but not an admin, show unauthorized page
+  if (!adminUser) {
+    return <Unauthorized />
   }
 
   return (
