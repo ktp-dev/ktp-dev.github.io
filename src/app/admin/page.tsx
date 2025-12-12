@@ -5,18 +5,11 @@ import RushScheduleManager from '@/components/RushScheduleManager'
 import Unauthorized from '@/components/Unauthorized'
 
 export default async function AdminPage() {
-<<<<<<< Updated upstream
-  const user = await checkIsAdmin()
-
-  // If not an admin, redirect to login. test
-  if (!user) {
-=======
   // First check if user is authenticated
   const currentUser = await getCurrentUser()
   
   // If no user at all, redirect to login
   if (!currentUser) {
->>>>>>> Stashed changes
     redirect('/login')
   }
 
