@@ -1,13 +1,31 @@
 import { redirect } from 'next/navigation'
-import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
+import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
+import RushScheduleManager from '@/components/RushScheduleManager'
+import Unauthorized from '@/components/Unauthorized'
 
 export default async function AdminPage() {
+<<<<<<< Updated upstream
   const user = await checkIsAdmin()
 
   // If not an admin, redirect to login. test
   if (!user) {
+=======
+  // First check if user is authenticated
+  const currentUser = await getCurrentUser()
+  
+  // If no user at all, redirect to login
+  if (!currentUser) {
+>>>>>>> Stashed changes
     redirect('/login')
+  }
+
+  // If user exists, check if they're an admin
+  const adminUser = await checkIsAdmin()
+
+  // If user is authenticated but not an admin, show unauthorized page
+  if (!adminUser) {
+    return <Unauthorized />
   }
 
   return (
@@ -24,7 +42,7 @@ export default async function AdminPage() {
               
               <div className="bg-white rounded-lg shadow-md p-6 mb-8">
                 <p className="text-gray-600 mb-4">
-                  Welcome, <span className="font-semibold">{user.email}</span>!
+                  Welcome, <span className="font-semibold">{adminUser.email}</span>!
                 </p>
                 <p className="text-gray-500 text-sm">
                   Admin portal features will be available here.
@@ -34,10 +52,7 @@ export default async function AdminPage() {
               {/* Placeholder for future widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-xl font-bold mb-4 font-inter">Rush Schedule</h2>
-                  <p className="text-gray-600 text-sm">
-                    Manage rush events and schedule. Coming soon...
-                  </p>
+                  <RushScheduleManager />
                 </div>
                 
                 <div className="bg-white rounded-lg shadow-md p-6">
