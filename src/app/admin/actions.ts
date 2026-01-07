@@ -117,4 +117,67 @@ export async function deleteRushEvent(eventId: string) {
   return { data: null, error: null }
 }
 
+export async function updateRushEvent(eventId: string, event: RushEventInput) {
+  // Check if user is admin
+  const user = await checkIsAdmin()
+  if (!user) {
+    return { error: 'Unauthorized: Admin access required' }
+  }
+
+  // Validate required fields
+  if (!event.title || !event.datetime || !event.location) {
+    return { error: 'Title, datetime, and location are required' }
+  }
+
+  const supabase = await createClient()
+
+  // Update the rush event
+  const { data, error } = await supabase
+    .from('rush_events')
+    .update({
+      title: event.title,
+      datetime: event.datetime,
+      location: event.location,
+      description: event.description || null,
+      button_label: event.button_label || null,
+      button_url: event.button_url || null,
+      order_index: event.order_index,
+    })
+    .eq('id', eventId)
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error updating rush event:', error)
+    return { error: error.message }
+  }
+
+  return { data, error: null }
+}
+
+export async function updateRushEventOrder(orderUpdates: Array<{ id: string; order_index: number }>) {
+  // Check if user is admin
+  const user = await checkIsAdmin()
+  if (!user) {
+    return { error: 'Unauthorized: Admin access required' }
+  }
+
+  const supabase = await createClient()
+
+  // Update all events' order_index in a batch
+  for (const update of orderUpdates) {
+    const { error } = await supabase
+      .from('rush_events')
+      .update({ order_index: update.order_index })
+      .eq('id', update.id)
+
+    if (error) {
+      console.error('Error updating order_index:', error)
+      return { error: error.message }
+    }
+  }
+
+  return { data: null, error: null }
+}
+
 
