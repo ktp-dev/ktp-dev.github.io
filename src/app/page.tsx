@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+// Hello
 // Images - using public folder paths
 
 export default function Home() {
