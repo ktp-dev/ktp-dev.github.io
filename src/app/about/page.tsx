@@ -89,7 +89,7 @@ export default function About() {
                   <div className="shape-blob nine absolute"></div>
                 </div>
                 <img 
-                  src="/images/about/Liang_Helen.jpg" 
+                  src="/images/members/Kolli_Himanish.jpg" 
                   alt="President's Headshot" 
                   className="relative z-10 w-3/4 h-auto rounded-full border-8 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
                   style={{ borderLeftColor: '#d1fae5', borderRightColor: '#d1fae5', borderTopColor: '#e5e7eb', borderBottomColor: '#e5e7eb' }}
@@ -109,8 +109,8 @@ export default function About() {
                   </p>
                   <p>
                     With love,<br />
-                    Helen Liang<br />
-                    President, 2025
+                    Himanish Kolli<br />
+                    President, 2026
                   </p>
                 </div>
               </div>
