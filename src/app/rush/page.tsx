@@ -120,7 +120,7 @@ export default function Rush() {
     {
       question: "How much of a time commitment is pledging?",
       answer:
-        "As with all campus organizations, what you get out of the organization depends on what you put into it. We believe that our pledging process isn't strenuous and could be accommodated by most schedules.\nIf you have any further questions or want to learn more about KTP before rush, feel free to send us an email at ktp-board@umich.edu or stop by our booths at Festifall and Northfest.",
+        "As with all campus organizations, what you get out of the organization depends on what you put into it. We believe that our pledging process isn't strenuous and could be accommodated by most schedules.\nIf you have any further questions or want to learn more about KTP before rush, feel free to send us an email at ktp-board@umich.edu or stop by our booth at Winterfest.",
     },
   ];
 
@@ -150,16 +150,15 @@ export default function Rush() {
                 Learn About Joining KTP!
               </h1>
               <p
-                className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-2xl mx-auto"
+                className="text-base sm:text-xl mt-8 mb-8 font-medium text-gray-600 max-w-3xl mx-auto"
                 style={{ color: "grey" }}
               >
-                Welcome to Kappa Theta Pi&apos;s Fall 2025 Rush! <br></br>
-                Here&apos;s our rush schedule. Applications are due September 6,
-                2025.
+                Welcome to Kappa Theta Pi&apos;s Winter 2026 Rush! <br></br>
+                Here&apos;s our rush schedule. Applications are due Saturday, January 17, 2026.
               </p>
               <div className="flex justify-center space-x-4 mb-8">
                 <a
-                  href="https://forms.gle/oXMx7Ewo6uPP1Spm9"
+                  href="https://forms.gle/or4rGyotsRRLzvfz5"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
@@ -167,7 +166,7 @@ export default function Rush() {
                   Interest Form
                 </a>
                 <a
-                  href="https://forms.gle/dXfoiTwUGpmrs88W6"
+                  href="https://forms.gle/DzouVtUQfhFEMGo16"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
@@ -181,11 +180,11 @@ export default function Rush() {
               >
                 You can also join our{" "}
                 <a
-                  href="https://calendar.google.com/calendar/u/0?cid=Y185MTA0MjdiZjlkMzlkMzk3YWFlZTExNTZmZDg0ZDUxY2MxYmE3NzdmNGZjOWZmZDQwMjMxOGRhMjA2ZTk4ZjUxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+                  href="https://calendar.google.com/calendar/u/0?cid=Y185ODc2N2QxZDFmMmE1MzdlMGNhM2ZkNzlkN2ZhNjIyYWE0MmMzODZlZjkyNTM4MDgwMWFkOGY2NDdlYzI5NWJiQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
                   target="_blank"
                   className="text-[#315CA9] hover:text-[#234c8b]"
                 >
-                  F25 Rush Google Calendar
+                  W26 Rush Google Calendar
                 </a>{" "}
                 to see the dates, times, and locations of all Open Rush events.
               </p>
@@ -233,7 +232,7 @@ export default function Rush() {
             <div className="relative z-1 h-64 lg:h-80">
               <iframe
                 className="rounded-xl w-full h-full"
-                src="https://www.youtube.com/embed/6ut6hsXvgAE?si=x8iRkhV23Ls5-RlQ"
+                src="https://www.youtube.com/embed/4wKA80PV2GI"
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
