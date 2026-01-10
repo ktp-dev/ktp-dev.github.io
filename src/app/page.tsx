@@ -82,8 +82,9 @@ export default function Home() {
             <div className="shape-blob eleven"></div>
         </div>
         <div className='flex-1 flex flex-col items-end'>
-          <img src="/images/home/melgrace.jpg" className='hidden xl:block' style={{ width: '175px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '50px' }} />
+          <img src="/images/home/ae_lighthouse.jpg" className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
           <img src="/images/home/rock.JPEG" className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
+          <img src="/images/home/agoats.jpeg" className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
         </div>
 
         <div className='flex flex-col flex-none'>
@@ -109,11 +110,11 @@ export default function Home() {
         </div>
 
         <div className='flex-1 flex flex-col items-start'>
-          <img src="/images/home/paddle.jpg" className='hidden xl:block' style={{ width: '200px', position: 'relative', left: '150px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+          <img src="/images/home/alpha_delta_lq.jpeg" className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
 
           <div className='flex flex-row'>
-            <img src="/images/home/retreat.JPEG" className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
-            <img src="/images/home/cross.JPEG" className='hidden xl:block' style={{ width: '250px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src="/images/home/ae_crossover.jpg" className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src="/images/home/omega_dp.jpeg" className='hidden xl:block' style={{ width: '350px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px', marginTop: '20px' }} />
           </div>
         </div>
       </div>
@@ -121,11 +122,11 @@ export default function Home() {
       <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
         {/* Description */}
         <div className='flex flex-col 2xl:flex-row mb-8 md:mb-12'>
-          <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
+          {/* <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
             <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
             <img src="/images/home/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
             <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 2xl:hidden' style={{ borderRadius: '10px' }} />
-          </div>
+          </div> */}
 
           <div className='flex flex-col justify-center items-center 2xl:ml-16'>
             <div>
