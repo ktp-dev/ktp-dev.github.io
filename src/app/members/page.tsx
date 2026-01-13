@@ -113,7 +113,8 @@ const pledgeClassMapping = {
   Omega: 'Ω',
   AB: 'ΑΒ',
   AG: 'ΑΓ',
-  AD: 'ΑΔ'
+  AD: 'ΑΔ',
+  AE:'ΑE'
 };
 
 export default function Members() {
