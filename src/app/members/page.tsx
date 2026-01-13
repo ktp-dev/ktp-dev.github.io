@@ -69,18 +69,15 @@ const hardcodedMembers = [
   { name: 'Sydney Abam', imageUrl: '/images/members/Abam_Sydney.jpg', category: 'E-Board', role: 'VP of Professional Development', description: 'Responsible for facilitating educational workshops, providing resources, and giving guidance to help members achieve their professional career goals.' },
   { name: 'Maya Menon', imageUrl: '/images/members/Menon_Maya.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events to support philanthropic efforts.' },
   { name: 'Emma Wyatt', imageUrl: '/images/members/Wyatt_Emma.jpg', category: 'Directors', role: 'Co-Directors of Community Service & Philanthropy', description: 'Plans community service events to support philanthropic efforts.' },
-  { name: 'Josefia Frydenborg', imageUrl: '/images/members/Frydenborg_Josefia.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Agnes Mar', imageUrl: '/images/members/Mar_Agnes.jpg', category: 'Directors', role: 'Co-Directors of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
-  { name: 'Hannah Black', imageUrl: '/images/members/Black_Hannah.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Nick Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Elan Hong', imageUrl: '/images/members/Hong_Elan.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Naman Jain', imageUrl: '/images/members/Jain_Naman.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
-  { name: 'Diya Kini', imageUrl: '/images/members/Kini_Diya.jpg', category: 'Directors', role: 'Director of Career Development', description: 'Facilitates career development opportunities and professional growth.' },
-  { name: 'Amy Liu', imageUrl: '/images/members/Liu_Amy.jpg', category: 'Directors', role: 'Director of Design & Digital Strategy', description: 'Oversees digital strategy and designs content for KTP\'s social media platforms.' },
-  { name: 'Jonathan Abulu', imageUrl: '/images/members/Abulu_Jonathan.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Sarah Klemmer', imageUrl: '/images/members/Klemmer_Sarah.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
-  { name: 'Teagan Hollman', imageUrl: '/images/members/Hollman_Teagan.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
-  { name: 'Sabrina Xue', imageUrl: '/images/members/Xue_Sabrina.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
+  { name: 'Pramiti Dubey', imageUrl: '/images/members/Dubey_Pramiti.jpg', category: 'Directors', role: 'Director of Women\'s Empowerment', description: 'Empowers women through various initiatives and events.' },
+  { name: 'Aarya Upadhyay', imageUrl: '/images/members/Upadhyay_Aarya.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Evan Meranchik', imageUrl: '/images/members/Meranchik_Evan.jpg', category: 'Directors', role: 'Co-Directors of Social Engagement', description: 'Works with VP Engagement in planning and organizing social events and activities.' },
+  { name: 'Mariam Mandwee', imageUrl: '/images/members/Mandwee_Mariam.jpg', category: 'Directors', role: 'Director of Career Development', description: 'Facilitates career development opportunities and professional growth.' },
+  { name: 'Jilliann Divozzo', imageUrl: '/images/members/Divozzo_Jilliann.jpg', category: 'Directors', role: 'Director of Design & Digital Strategy', description: 'Oversees digital strategy and designs content for KTP\'s social media platforms.' },
+  { name: 'Lalin Ozcan', imageUrl: '/images/members/Ozcan_Lalin.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
+  { name: 'Arav Kulkarni', imageUrl: '/images/members/Kulkarni_Arav.jpg', category: 'Directors', role: 'Co-Directors of App Development', description: 'Maintains and updates the Kappa Theta Pi Life App.' },
+  { name: 'In Lorthongpanich', imageUrl: '/images/members/Lorthongpanich_In.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
+  { name: 'Teyj Krishnan', imageUrl: '/images/members/Krishnan_Teyj.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
 ];
 
 const greekLetters = ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ'];
@@ -394,7 +391,7 @@ export default function Members() {
                     return 0;
                   })
                   .map(([role, members]) => (
-                  <div key={role} className={`director-member group rounded-xl shadow-md hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 transform transition-all duration-300 ease-in-out ${role.includes('Social Engagement') ? 'lg:col-span-2 xl:col-span-3 xl:max-w-4xl xl:mx-auto' : ''}`} style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
+                  <div key={role} className="director-member group rounded-xl shadow-md hover:shadow-lg border border-gray-100 overflow-hidden w-full min-w-0 transform transition-all duration-300 ease-in-out mx-auto" style={{ backgroundColor: 'rgba(249, 250, 251, 0.95)' }}>
                     <div className="p-6">
                       <div className="text-center mb-6">
                         <div className="inline-block bg-[#315CA9] text-white px-3 py-1.5 rounded-full text-sm font-semibold mb-3 shadow-md transition-all duration-300 ease-in-out">
@@ -404,7 +401,7 @@ export default function Members() {
                           <p className="text-gray-600 text-sm lg:text-base leading-relaxed transition-colors duration-300 ease-in-out">{members[0].description}</p>
                         </div>
                       </div>
-                      <div className={`grid gap-2 justify-items-center ${role.includes('Social Engagement') ? 'grid-cols-2 lg:grid-cols-4 max-w-md lg:max-w-4xl mx-auto' : members.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-2 max-w-md mx-auto'}`}>
+                      <div className={`grid gap-2 justify-items-center ${role.includes('Social Engagement') ? 'grid-cols-2 lg:grid-cols-2 max-w-md lg:max-w-4xl mx-auto' : members.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-2 max-w-md mx-auto'}`}>
                         {members.map((member) => (
                           <div key={member.name} className="flex flex-col items-center space-y-2 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 ease-in-out w-full max-w-48">
                             <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300 ease-in-out shadow-lg flex-shrink-0">
