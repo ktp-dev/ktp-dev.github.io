@@ -193,6 +193,94 @@ body.fade-out {
   margin-bottom: 24px; /* ← gap between paragraphs, increase for more space */
 }
 
+/* Mobile-only element — hidden on desktop */
+.mobile-event-details {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --scale: 1.0;
+  }
+
+  /* Home page */
+  .ktp-title {
+    font-size: 48px;
+    top: 24px;
+    left: 20px;
+  }
+
+  .hackathon-subtitle {
+    font-size: 20px;
+    top: 72px;
+    left: 24px;
+  }
+
+  .pi-hacks-title {
+    font-size: 64px;
+    bottom: 24px;
+    left: 20px;
+  }
+
+  .partnership-text {
+    font-size: 16px;
+    bottom: 100px;
+    left: 20px;
+  }
+
+  /* Hide event details on home — moved to about page on mobile */
+  .event-details {
+    display: none;
+  }
+
+  .side-nav {
+    top: 24px;
+    right: 20px;
+    gap: 10px;
+  }
+
+  .nav-link {
+    font-size: 16px;
+  }
+
+  /* About page — hide stars, full width text */
+  .about-star,
+  .about-star-lb,
+  .about-star-lp,
+  .about-star-lu,
+  .about-can,
+  .about-figma {
+    display: none;
+  }
+
+  /* About page title — push below the nav links */
+  .about-page .ktp-title {
+    top: 120px;
+  }
+
+  .about-body {
+    top: 180px;
+    left: 20px;
+    right: 20px;
+    font-size: 16px;
+  }
+
+  /* Event details at bottom of about page on mobile */
+  .mobile-event-details {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    right: 20px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    color: white;
+    gap: 6px;
+    pointer-events: none;
+  }
+}
+
 /* About page stars */
 .about-star {
   position: fixed;
