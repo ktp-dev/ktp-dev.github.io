@@ -1,16 +1,19 @@
 (function () {
 
   const starDefs = [
-    { selector: '.about-star-b', baseSpeed: 10, dir:  1 },
-    { selector: '.about-star-p', baseSpeed:  7, dir: -1 },
-    { selector: '.about-star-u', baseSpeed: 13, dir:  1 },
+    { selector: '.about-star-b',  baseSpeed: 10, dir:  1, angle:   0 },
+    { selector: '.about-star-lb', baseSpeed: 10, dir:  1, angle:   0 },
+    { selector: '.about-star-p',  baseSpeed:  7, dir: -1, angle: 120 },
+    { selector: '.about-star-lp', baseSpeed:  7, dir: -1, angle: 120 },
+    { selector: '.about-star-u',  baseSpeed: 13, dir:  1, angle: 240 },
+    { selector: '.about-star-lu', baseSpeed: 13, dir:  1, angle: 240 },
   ];
 
   const stars = starDefs.map(def => ({
     el:           document.querySelector(def.selector),
     baseSpeed:    def.baseSpeed,
     dir:          def.dir,
-    angle:        0,
+    angle:        def.angle,
     fling:        0,
     dragVelocity: 0,
     ctx:          null,
@@ -134,10 +137,17 @@
   window.addEventListener('touchmove',  onPointerMove, { passive: false });
   window.addEventListener('touchend',   onPointerUp);
 
-  // --- Anchor logos to star centers ---
+  // --- Anchor logos to star centers (translate(-50%,-50%) centering) ---
   const anchoredLogos = [
     { logo: document.querySelector('.about-can'),   star: document.querySelector('.about-star-b'), ox: 0, oy: 0 },
     { logo: document.querySelector('.about-figma'), star: document.querySelector('.about-star-p'), ox: 5, oy: 8 },
+  ];
+
+  // --- Anchor L stars to base star centers (top-left corner centering) ---
+  const anchoredStars = [
+    { small: document.querySelector('.about-star-lb'), base: document.querySelector('.about-star-b') },
+    { small: document.querySelector('.about-star-lp'), base: document.querySelector('.about-star-p') },
+    { small: document.querySelector('.about-star-lu'), base: document.querySelector('.about-star-u') },
   ];
 
   function updateLogoPositions() {
@@ -147,6 +157,16 @@
       const cy = r.top  + r.height / 2;
       logo.style.left = (cx + ox) + 'px';
       logo.style.top  = (cy + oy) + 'px';
+    });
+
+    anchoredStars.forEach(({ small, base }) => {
+      const r  = base.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      // Use offsetWidth/offsetHeight (pre-transform layout size) so the
+      // position doesn't drift as the star rotates
+      small.style.left = (cx - small.offsetWidth  / 2) + 'px';
+      small.style.top  = (cy - small.offsetHeight / 2) + 'px';
     });
   }
 

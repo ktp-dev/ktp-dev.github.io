@@ -1,5 +1,11 @@
 :root {
-  --scale: 1.4; /* ← change this to scale stars + can together */
+  --scale: 1.4;             /* ← scales home page stars + can */
+  --about-star-size: 480px; /* ← change this to resize all about page stars */
+}
+
+/* Remove this class to re-enable sponsors */
+.sponsors-hidden {
+  display: none;
 }
 
 * {
@@ -187,11 +193,11 @@ body.fade-out {
   margin-bottom: 24px; /* ← gap between paragraphs, increase for more space */
 }
 
-/* About page — three independently rotatable stars on the right */
+/* About page stars */
 .about-star {
   position: fixed;
-  width: 420px;
-  height: 420px;
+  width: var(--about-star-size);
+  height: var(--about-star-size);
   object-fit: contain;
   transform-origin: center center;
   cursor: grab;
@@ -203,19 +209,28 @@ body.fade-out {
   cursor: grabbing;
 }
 
+/* Base star positions — move these to reposition */
 .about-star-b {
-  top: -5%;
-  right: 23%;
+  top: 0%;
+  right: 22%;
 }
 
 .about-star-p {
-  top: 20%;
-  right: 1%;
+  top: 23%;
+  right: 0%;
 }
 
 .about-star-u {
-  top: 40%;
-  right: 23%;
+  top: 43%;
+  right: 22%;
+}
+
+/* L stars — 2/3 size, position controlled by JS (anchored to base star center) */
+.about-star-lb,
+.about-star-lp,
+.about-star-lu {
+  width: calc(var(--about-star-size) * 2 / 3);
+  height: calc(var(--about-star-size) * 2 / 3);
 }
 
 .redbull-can {
