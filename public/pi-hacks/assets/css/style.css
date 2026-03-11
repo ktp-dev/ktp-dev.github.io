@@ -243,6 +243,11 @@ body.fade-out {
     font-size: 16px;
   }
 
+  /* Hide Red Bull section on about page */
+  .rb-section {
+    display: none;
+  }
+
   /* About page — hide stars, full width text */
   .about-star,
   .about-star-lb,
