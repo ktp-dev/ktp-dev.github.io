@@ -1,0 +1,265 @@
+:root {
+  --scale: 1.4;             /* ← scales home page stars + can */
+  --about-star-size: 480px; /* ← change this to resize all about page stars */
+}
+
+/* Remove this class to re-enable sponsors */
+.sponsors-hidden {
+  display: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-image: url('../images/Background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Stars stacked on top of each other, centered on screen */
+.stars-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--scale));
+  width: 800px;
+  height: 800px;
+}
+
+.star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.star:active {
+  cursor: grabbing;
+}
+
+/* Page transitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body {
+  animation: fadeIn 0.3s ease;
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* rotation handled by spin.js */
+
+.ktp-title {
+  position: fixed;
+  top: 50px;
+  left: 48px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 80px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.hackathon-subtitle {
+  position: fixed;
+  top: 120px;
+  left: 52px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.partnership-text {
+  position: fixed;
+  bottom: 164px;
+  left: 57px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  pointer-events: none;
+}
+
+.pi-hacks-title {
+  position: fixed;
+  bottom: 40px;
+  left: 48px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 120px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.side-nav {
+  position: fixed;
+  top: 40px;
+  right: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  z-index: 100;
+}
+
+.nav-link {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.4;
+}
+
+.nav-link.active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.event-details {
+  position: fixed;
+  bottom: 40px;
+  right: 48px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: normal;
+  color: white;
+  text-align: right;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-body {
+  position: fixed;
+  top: 200px;
+  left: 50px;
+  right: 800px; /* leaves space for the nav */
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  color: white;
+  line-height: 1.7;
+}
+
+.sponsors-title {
+  position: fixed;
+  bottom: 40px;
+  right: 48px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 80px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.about-body p {
+  margin-bottom: 24px; /* ← gap between paragraphs, increase for more space */
+}
+
+/* About page stars */
+.about-star {
+  position: fixed;
+  width: var(--about-star-size);
+  height: var(--about-star-size);
+  object-fit: contain;
+  transform-origin: center center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.about-star:active {
+  cursor: grabbing;
+}
+
+/* Base star positions — move these to reposition */
+.about-star-b {
+  top: 0%;
+  right: 22%;
+}
+
+.about-star-p {
+  top: 23%;
+  right: 0%;
+}
+
+.about-star-u {
+  top: 43%;
+  right: 22%;
+}
+
+/* L stars — 2/3 size, position controlled by JS (anchored to base star center) */
+.about-star-lb,
+.about-star-lp,
+.about-star-lu {
+  width: calc(var(--about-star-size) * 2 / 3);
+  height: calc(var(--about-star-size) * 2 / 3);
+}
+
+.redbull-can {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 450px; /* ← change size here */
+  height: auto;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  cursor: pointer;
+}
+
+/* About page can — position set by JS relative to blue star */
+.about-can {
+  position: fixed;
+  width: 250px; /* ← change size here */
+  height: auto;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  cursor: pointer;
+}
+
+/* Figma logo — position set by JS relative to purple star */
+.about-figma {
+  position: fixed;
+  width: 130px; /* ← change size here */
+  height: auto;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  cursor: pointer;
+}
