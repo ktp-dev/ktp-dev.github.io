@@ -20,7 +20,7 @@ export default function WideHeader() {
                     <Link className="hover:text-[#315CA9] font-medium" href="/rush">Rush</Link>
                     <Link className="hover:text-[#315CA9] font-medium" href="/members">Members</Link>
                     <Link className="hover:text-[#315CA9] font-medium" href="/nationals">Nationals</Link>
-                    <Link className="hover:text-[#315CA9] font-medium" href="/hackathon">Hackathon</Link>
+                    <Link className="font-bold text-[#315CA9]" href="/hackathon">Hackathon</Link>
                 </div>
 
                 {/* Life App */}
