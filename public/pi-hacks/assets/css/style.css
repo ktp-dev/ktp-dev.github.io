@@ -318,11 +318,12 @@ body.fade-out {
   right: 22%;
 }
 
-/* L stars — hidden */
+/* L stars — 2/3 size, position controlled by JS (anchored to base star center) */
 .about-star-lb,
 .about-star-lp,
 .about-star-lu {
-  display: none;
+  width: calc(var(--about-star-size) * 2 / 3);
+  height: calc(var(--about-star-size) * 2 / 3);
 }
 
 .redbull-can {
