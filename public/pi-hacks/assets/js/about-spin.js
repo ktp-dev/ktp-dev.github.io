@@ -2,11 +2,11 @@
 
   const starDefs = [
     { selector: '.about-star-b',  baseSpeed: 10, dir:  1, angle:   0 },
-    { selector: '.about-star-lb', baseSpeed: 10, dir:  1, angle:  15 },
+    { selector: '.about-star-lb', baseSpeed: 10, dir:  1, angle:  17 },
     { selector: '.about-star-p',  baseSpeed:  7, dir: -1, angle: 120 },
-    { selector: '.about-star-lp', baseSpeed:  7, dir: -1, angle: 135 },
+    { selector: '.about-star-lp', baseSpeed:  7, dir: -1, angle: 137 },
     { selector: '.about-star-u',  baseSpeed: 13, dir:  1, angle: 240 },
-    { selector: '.about-star-lu', baseSpeed: 13, dir:  1, angle: 255 },
+    { selector: '.about-star-lu', baseSpeed: 13, dir:  1, angle: 257 },
   ];
 
   const stars = starDefs.map(def => ({
