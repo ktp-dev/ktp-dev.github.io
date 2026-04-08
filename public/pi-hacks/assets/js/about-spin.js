@@ -2,11 +2,11 @@
 
   const starDefs = [
     { selector: '.about-star-b',  baseSpeed: 10, dir:  1, angle:   0 },
-    { selector: '.about-star-lb', baseSpeed: 10, dir:  1, angle:   0 },
+    { selector: '.about-star-lb', baseSpeed: 10, dir:  1, angle:  19 },
     { selector: '.about-star-p',  baseSpeed:  7, dir: -1, angle: 120 },
-    { selector: '.about-star-lp', baseSpeed:  7, dir: -1, angle: 120 },
+    { selector: '.about-star-lp', baseSpeed:  7, dir: -1, angle: 139 },
     { selector: '.about-star-u',  baseSpeed: 13, dir:  1, angle: 240 },
-    { selector: '.about-star-lu', baseSpeed: 13, dir:  1, angle: 240 },
+    { selector: '.about-star-lu', baseSpeed: 13, dir:  1, angle: 259 },
   ];
 
   const stars = starDefs.map(def => ({
@@ -141,6 +141,7 @@
   const anchoredLogos = [
     { logo: document.querySelector('.about-can'),   star: document.querySelector('.about-star-b'), ox: 0, oy: 0 },
     { logo: document.querySelector('.about-figma'), star: document.querySelector('.about-star-p'), ox: 5, oy: 8 },
+    { logo: document.querySelector('.about-esg'),   star: document.querySelector('.about-star-u'), ox: 0, oy: 0 },
   ];
 
   // --- Anchor L stars to base star centers (top-left corner centering) ---
@@ -321,5 +322,67 @@
   });
 
   setTilt(1); // start opposite to the can
+  scheduleNext();
+})();
+// --- ESG tilt ---
+(function () {
+  const el      = document.querySelector('.about-esg');
+  const angles  = [-15, 15];
+  const interval = 1500;
+
+  let state = 0;
+  let timer = null;
+
+  let ctx = null;
+  function buildCanvas() {
+    const canvas = document.createElement('canvas');
+    canvas.width  = el.naturalWidth;
+    canvas.height = el.naturalHeight;
+    const c = canvas.getContext('2d');
+    c.drawImage(el, 0, 0);
+    ctx = c;
+  }
+  if (el.complete && el.naturalWidth) buildCanvas();
+  else el.addEventListener('load', buildCanvas);
+
+  function setTilt(s) {
+    state = s;
+    el.style.transform = `translate(-50%, -50%) rotate(${angles[state]}deg)`;
+  }
+
+  function scheduleNext() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      setTilt((state + 1) % 2);
+      scheduleNext();
+    }, interval);
+  }
+
+  function hitTest(clientX, clientY) {
+    if (!ctx) return true;
+    const rect = el.getBoundingClientRect();
+    const cx   = rect.left + rect.width  / 2;
+    const cy   = rect.top  + rect.height / 2;
+    const dx   = clientX - cx;
+    const dy   = clientY - cy;
+    const rad  = -angles[state] * (Math.PI / 180);
+    const ux   = dx * Math.cos(rad) - dy * Math.sin(rad);
+    const uy   = dx * Math.sin(rad) + dy * Math.cos(rad);
+    const imgX = ux + rect.width  / 2;
+    const imgY = uy + rect.height / 2;
+    if (imgX < 0 || imgY < 0 || imgX >= rect.width || imgY >= rect.height) return false;
+    const scaleX = ctx.canvas.width  / rect.width;
+    const scaleY = ctx.canvas.height / rect.height;
+    const alpha  = ctx.getImageData(Math.round(imgX * scaleX), Math.round(imgY * scaleY), 1, 1).data[3];
+    return alpha > 10;
+  }
+
+  el.addEventListener('click', (e) => {
+    if (!hitTest(e.clientX, e.clientY)) return;
+    setTilt((state + 1) % 2);
+    scheduleNext();
+  });
+
+  setTilt(0);
   scheduleNext();
 })();

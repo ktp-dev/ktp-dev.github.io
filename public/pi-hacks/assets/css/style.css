@@ -83,6 +83,7 @@ body.fade-out {
   color: white;
   line-height: 1;
   pointer-events: none;
+  z-index: 10;
 }
 
 .hackathon-subtitle {
@@ -95,6 +96,7 @@ body.fade-out {
   color: white;
   line-height: 1;
   pointer-events: none;
+  z-index: 10;
 }
 
 .partnership-text {
@@ -167,7 +169,7 @@ body.fade-out {
 
 .about-body {
   position: fixed;
-  top: 200px;
+  top: 250px;
   left: 50px;
   right: 800px; /* leaves space for the nav */
   font-family: Helvetica, Arial, sans-serif;
@@ -243,26 +245,34 @@ body.fade-out {
     font-size: 16px;
   }
 
+  /* Hide Red Bull section on about page */
+  .rb-section {
+    display: none;
+  }
+
   /* About page — hide stars, full width text */
   .about-star,
   .about-star-lb,
   .about-star-lp,
   .about-star-lu,
   .about-can,
-  .about-figma {
+  .about-figma,
+  .about-esg,
+  .sponsors-title {
     display: none;
   }
 
-  /* About page title — push below the nav links */
+  /* About page title — top left */
   .about-page .ktp-title {
-    top: 120px;
+    top: 24px;
+    line-height: 1.1;
   }
 
   .about-body {
-    top: 180px;
+    top: 150px;
     left: 20px;
     right: 20px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   /* Event details at bottom of about page on mobile */
@@ -279,6 +289,7 @@ body.fade-out {
     gap: 6px;
     pointer-events: none;
   }
+
 }
 
 /* About page stars */
@@ -299,26 +310,25 @@ body.fade-out {
 
 /* Base star positions — move these to reposition */
 .about-star-b {
-  top: 0%;
+  top: calc(0% - 35px);
   right: 22%;
 }
 
 .about-star-p {
-  top: 23%;
+  top: calc(23% - 35px);
   right: 0%;
 }
 
 .about-star-u {
-  top: 43%;
+  top: calc(43% - 35px);
   right: 22%;
 }
 
-/* L stars — 2/3 size, position controlled by JS (anchored to base star center) */
+/* L stars — hidden */
 .about-star-lb,
 .about-star-lp,
 .about-star-lu {
-  width: calc(var(--about-star-size) * 2 / 3);
-  height: calc(var(--about-star-size) * 2 / 3);
+  display: none;
 }
 
 .redbull-can {
@@ -350,4 +360,102 @@ body.fade-out {
   transform-origin: center center;
   transform: translate(-50%, -50%) rotate(-15deg);
   cursor: pointer;
+}
+
+/* ESG logo — position set by JS relative to purple star */
+.about-esg {
+  position: fixed;
+  width: 210px; /* ← change size here (130 * 1.75) */
+  height: auto;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  cursor: pointer;
+}
+
+/* FAQ page */
+.faq-container {
+  position: fixed;
+  top: 220px;
+  left: 48px;
+  right: 48px;
+  bottom: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px 32px;
+  overflow: hidden;
+}
+
+.faq-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-question {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 25px;
+}
+
+.faq-answer {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* FAQ mobile — must come after desktop FAQ styles to override grid */
+@media (max-width: 768px) {
+  html:has(.faq-page),
+  .faq-page {
+    overflow: auto;
+  }
+
+  .faq-page .ktp-title {
+    position: relative;
+    top: auto;
+    left: auto;
+    padding: 24px 20px 0;
+    font-size: 48px;
+  }
+
+  .faq-page .side-nav {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 16px 20px 0;
+    gap: 16px;
+  }
+
+  .faq-page .faq-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px 40px;
+    overflow: visible;
+  }
+
+  .faq-page .faq-item {
+    margin-bottom: 40px;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  .faq-page .faq-question {
+    font-size: 22px;
+  }
+
+  .faq-page .faq-answer {
+    font-size: 17px;
+    max-width: 100%;
+  }
 }
