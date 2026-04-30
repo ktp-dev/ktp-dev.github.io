@@ -53,7 +53,9 @@ const hardcodedAlumni = [
   { pledgeClass: 'Υ', names: ['Golpari Abari', 'Carma Abu-Elnaj', 'Sreya Challa', 'Carina Gordon', 'Ansley Lewis', 'Aaryan Mukherjee', 'Aniket Nedunuri', 'Miles Scheffler', 'Lennox Thomas', 'Abbie Tooman', 'Katie Valus'] },
   { pledgeClass: 'Φ', names: ['Arez Aziz', 'Zoe Banks', 'Francesca Demolino', 'Benjamin Jin', 'Brogan Kaczkofsky', 'Aartie Kalra', 'Aryan Kamath', 'Andrea Lesmes', 'Jessica Levine', 'Davis Malmer'] },
   { pledgeClass: 'Χ', names: ['Iris Funaioli'] },
-  { pledgeClass: 'Ψ', names: ['Kushaal Marri'] }
+  { pledgeClass: 'Ψ', names: ['Kushaal Marri'] },
+  { pledgeClass: 'Ω', names: ['Kushaal Marri'] },
+  { pledgeClass: 'ΑΒ', names: ['Kushaal Marri'] }
 ];
 
 // Eboard and Directors
@@ -80,7 +82,7 @@ const hardcodedMembers = [
   { name: 'Teyj Krishnan', imageUrl: '/images/members/Krishnan_Teyj.jpg', category: 'Directors', role: 'Co-Directors of Website Development', description: 'Maintains and updates the Kappa Theta Pi website.' },
 ];
 
-const greekLetters = ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ'];
+const greekLetters = ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω', 'ΑΒ'];
 
 // Pledge class mapping
 const pledgeClassMapping = {
@@ -111,7 +113,8 @@ const pledgeClassMapping = {
   AB: 'ΑΒ',
   AG: 'ΑΓ',
   AD: 'ΑΔ',
-  AE:'ΑE'
+  AE:'ΑE',
+  AZ:'AZ'
 };
 
 export default function Members() {
@@ -168,7 +171,7 @@ export default function Members() {
             const description = member['Grad Year'] ? `Grad Year: ${member['Grad Year']}, Linkedin: ${member.Linkedin || 'N/A'}` : 'No Description';
 
             // change to 2025 once seniors graduate
-            const isAlumni = member['Grad Year'] && parseInt(member['Grad Year']) <= 2025;
+            const isAlumni = member['Grad Year'] && parseInt(member['Grad Year']) <= 2026;
 
             return {
               name: `${firstName} ${lastName}`,
