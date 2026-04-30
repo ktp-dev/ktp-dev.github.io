@@ -54,8 +54,6 @@ const hardcodedAlumni = [
   { pledgeClass: 'Φ', names: ['Arez Aziz', 'Zoe Banks', 'Francesca Demolino', 'Benjamin Jin', 'Brogan Kaczkofsky', 'Aartie Kalra', 'Aryan Kamath', 'Andrea Lesmes', 'Jessica Levine', 'Davis Malmer'] },
   { pledgeClass: 'Χ', names: ['Iris Funaioli'] },
   { pledgeClass: 'Ψ', names: ['Kushaal Marri'] },
-  { pledgeClass: 'Ω', names: ['Kushaal Marri'] },
-  { pledgeClass: 'ΑΒ', names: ['Kushaal Marri'] }
 ];
 
 // Eboard and Directors
@@ -258,7 +256,13 @@ export default function Members() {
     setSelectedGreekLetter(letter);
   };
 
-  const filteredAlumni = selectedGreekLetter ? alumni.filter(group => group.pledgeClass === selectedGreekLetter) : alumni;
+  const filteredAlumni = (
+  selectedGreekLetter
+    ? alumni.filter(group => group.pledgeClass === selectedGreekLetter)
+    : alumni
+).sort((a, b) => {
+  return greekLetters.indexOf(a.pledgeClass) - greekLetters.indexOf(b.pledgeClass);
+});
 
   return (
     <div className="min-h-screen flex flex-col">
