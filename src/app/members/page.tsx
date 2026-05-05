@@ -58,8 +58,8 @@ const hardcodedAlumni = [
 
 // Eboard and Directors
 const hardcodedMembers = [
-  { name: 'Himanish Kolli', imageUrl: '/images/members/Kolli_Himanish.jpg', category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensures that all KTP members have an enjoyable and impactful experience in the fraternity.' },
-  { name: 'Teagan Hollman', imageUrl: '/images/members/Hollman_Teagan.jpg', category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keeps alumni up to date on the fraternity, and gives them opportunities to be a part of it.' },
+  { name: 'Teagan Hollman', imageUrl: '/images/members/Hollman_Teagan.jpg', category: 'E-Board', role: 'President', description: 'Oversees large scale changes in KTP and runs the Executive Board. Ensures that all KTP members have an enjoyable and impactful experience in the fraternity.' },
+  { name: 'Amaan Choudhury', imageUrl: '/images/members/Choudhury_Amaan.jpg', category: 'E-Board', role: 'VP of External Affairs', description: 'Responsible for senior experience, feedback, and nationals. Keeps alumni up to date on the fraternity, and gives them opportunities to be a part of it.' },
   { name: 'Atharva Gawde', imageUrl: '/images/members/Gawde_Atharva.jpg', category: 'E-Board', role: 'VP of Internal Operations', description: 'Manages KTP membership data, reserves spaces for chapter and events, and runs all Diversity, Inclusion, and Equity efforts in KTP.' },
   { name: 'Nicholas Govea', imageUrl: '/images/members/Govea_Nick.jpg', category: 'E-Board', role: 'VP of Finance', description: 'Budgets and plans various events, facilitates corporate sponsorships and fundraising.' },
   { name: 'Ayan Nair', imageUrl: '/images/members/Nair_Ayan.jpg', category: 'E-Board', role: 'VP of Technical Development', description: 'Oversees committees, plans technical workshops and hackathon, and supports members in their academic and professional careers.' },
