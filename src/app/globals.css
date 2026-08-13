@@ -52,6 +52,28 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Match Tailwind v4 ::placeholder color on empty date/time fields */
+input[type="date"].datetime-empty,
+input[type="time"].datetime-empty {
+  color: color-mix(in oklab, currentcolor 50%, transparent);
+}
+
+input[type="date"].datetime-empty::-webkit-datetime-edit,
+input[type="date"].datetime-empty::-webkit-datetime-edit-fields-wrapper,
+input[type="date"].datetime-empty::-webkit-datetime-edit-text,
+input[type="date"].datetime-empty::-webkit-datetime-edit-month-field,
+input[type="date"].datetime-empty::-webkit-datetime-edit-day-field,
+input[type="date"].datetime-empty::-webkit-datetime-edit-year-field,
+input[type="time"].datetime-empty::-webkit-datetime-edit,
+input[type="time"].datetime-empty::-webkit-datetime-edit-fields-wrapper,
+input[type="time"].datetime-empty::-webkit-datetime-edit-text,
+input[type="time"].datetime-empty::-webkit-datetime-edit-hour-field,
+input[type="time"].datetime-empty::-webkit-datetime-edit-minute-field,
+input[type="time"].datetime-empty::-webkit-datetime-edit-second-field,
+input[type="time"].datetime-empty::-webkit-datetime-edit-ampm-field {
+  color: inherit;
+}
+
 .homepage-grid {
   display: flex;
   flex-direction: column;

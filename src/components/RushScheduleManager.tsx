@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { createPortal } from 'react-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { createPortal, flushSync } from 'react-dom'
 import { createClient } from '@/lib/supabase/client'
 import { insertRushEvent, deleteRushEvent, updateRushEvent, updateRushEventOrder, type RushEventInput } from '@/app/admin/actions'
 import RushEvent from './RushEvent'
@@ -26,8 +26,11 @@ export default function RushScheduleManager() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState<string | null>(null)
   const [draggedEventId, setDraggedEventId] = useState<string | null>(null)
-  const [dragOverEventId, setDragOverEventId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const draggedEventIdRef = useRef<string | null>(null)
+  const rushEventsRef = useRef<RushEventData[]>([])
+  const originalEventsRef = useRef<RushEventData[]>([])
+  const cardElsRef = useRef<Map<string, HTMLElement>>(new Map())
   const [formData, setFormData] = useState<RushEventInput>({
     title: '',
     datetime: '',
@@ -37,59 +40,56 @@ export default function RushScheduleManager() {
     button_url: '',
     order_index: 0,
   })
-  const [startDateTime, setStartDateTime] = useState('')
+  const [eventDate, setEventDate] = useState('')
+  const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
 
   const supabase = createClient()
 
-  // Parse formatted datetime string back to datetime-local and time format
+  useEffect(() => {
+    rushEventsRef.current = rushEvents
+  }, [rushEvents])
+
+  // Parse formatted datetime string back to date + time fields
   // Input: "Wednesday, August 27, 4:30-6:00 PM" or "Wednesday, August 27, 4:30 PM"
-  // Returns: { startDateTime: "YYYY-MM-DDTHH:mm", endTime: "HH:mm" | "" }
-  const parseDateTimeString = (dateTimeStr: string): { startDateTime: string; endTime: string } => {
-    if (!dateTimeStr) return { startDateTime: '', endTime: '' }
+  const parseDateTimeString = (
+    dateTimeStr: string
+  ): { date: string; startTime: string; endTime: string } => {
+    if (!dateTimeStr) return { date: '', startTime: '', endTime: '' }
 
     try {
-      // Match format: "Wednesday, August 27, 4:30-6:00 PM" or "Wednesday, August 27, 4:30 PM"
       const match = dateTimeStr.match(/(\w+),\s+(\w+)\s+(\d+),\s+(\d+):(\d+)(?:\s*-\s*(\d+):(\d+))?\s*(AM|PM)/i)
-      
+
       if (!match) {
-        // Try to create a date from common formats
-        const date = new Date(dateTimeStr)
-        if (!isNaN(date.getTime())) {
-          const year = date.getFullYear()
-          const month = String(date.getMonth() + 1).padStart(2, '0')
-          const day = String(date.getDate()).padStart(2, '0')
-          const hours = String(date.getHours()).padStart(2, '0')
-          const minutes = String(date.getMinutes()).padStart(2, '0')
-          return { startDateTime: `${year}-${month}-${day}T${hours}:${minutes}`, endTime: '' }
+        const parsed = new Date(dateTimeStr)
+        if (!isNaN(parsed.getTime())) {
+          const year = parsed.getFullYear()
+          const month = String(parsed.getMonth() + 1).padStart(2, '0')
+          const day = String(parsed.getDate()).padStart(2, '0')
+          const hours = String(parsed.getHours()).padStart(2, '0')
+          const minutes = String(parsed.getMinutes()).padStart(2, '0')
+          return { date: `${year}-${month}-${day}`, startTime: `${hours}:${minutes}`, endTime: '' }
         }
-        return { startDateTime: '', endTime: '' }
+        return { date: '', startTime: '', endTime: '' }
       }
 
       const [, , monthName, day, startHour, startMin, endHour, endMin, ampm] = match
-      
-      // Convert month name to number
+
       const months: { [key: string]: string } = {
         january: '01', february: '02', march: '03', april: '04',
         may: '05', june: '06', july: '07', august: '08',
         september: '09', october: '10', november: '11', december: '12'
       }
       const month = months[monthName.toLowerCase()] || '01'
-      
-      // Get current year (or we could try to parse it from context, but for simplicity use current year)
       const year = new Date().getFullYear()
-      
-      // Convert 12-hour to 24-hour format
+
       let startHour24 = parseInt(startHour, 10)
       if (ampm.toUpperCase() === 'PM' && startHour24 !== 12) {
         startHour24 += 12
       } else if (ampm.toUpperCase() === 'AM' && startHour24 === 12) {
         startHour24 = 0
       }
-      
-      const startDateTime = `${year}-${month}-${day.padStart(2, '0')}T${String(startHour24).padStart(2, '0')}:${startMin.padStart(2, '0')}`
-      
-      // Parse end time if present
+
       let endTimeStr = ''
       if (endHour && endMin) {
         let endHour24 = parseInt(endHour, 10)
@@ -100,57 +100,53 @@ export default function RushScheduleManager() {
         }
         endTimeStr = `${String(endHour24).padStart(2, '0')}:${endMin.padStart(2, '0')}`
       }
-      
-      return { startDateTime, endTime: endTimeStr }
+
+      return {
+        date: `${year}-${month}-${day.padStart(2, '0')}`,
+        startTime: `${String(startHour24).padStart(2, '0')}:${startMin.padStart(2, '0')}`,
+        endTime: endTimeStr,
+      }
     } catch (e) {
-      return { startDateTime: '', endTime: '' }
+      return { date: '', startTime: '', endTime: '' }
     }
   }
 
-  // Convert datetime-local format to readable format with time range
+  // Convert date + time fields to readable format with time range
   // Matches format like "Wednesday, August 27, 4:30-6:00 PM"
-  // startDateTime: datetime-local format (YYYY-MM-DDTHH:mm)
-  // endTime: time format (HH:mm)
-  const formatDateTimeRange = (startDateTime: string, endTime: string): string => {
-    if (!startDateTime) return ''
-    
+  const formatDateTimeRange = (date: string, startTimeValue: string, endTimeValue: string): string => {
+    if (!date || !startTimeValue) return ''
+
     try {
-      const startDate = new Date(startDateTime)
+      const startDate = new Date(`${date}T${startTimeValue}`)
       const weekday = startDate.toLocaleDateString('en-US', { weekday: 'long' })
       const month = startDate.toLocaleDateString('en-US', { month: 'long' })
       const day = startDate.getDate()
-      
-      // Format start time
+
       const startHour = startDate.getHours()
       const startMinute = startDate.getMinutes()
       const startAmpm = startHour >= 12 ? 'PM' : 'AM'
       const startDisplayHour = startHour % 12 || 12
       const startDisplayMinute = startMinute.toString().padStart(2, '0')
       const startTimeStr = `${startDisplayHour}:${startDisplayMinute}`
-      
-      // Format end time if provided (endTime is in HH:mm format)
-      if (endTime) {
-        const [endHourStr, endMinuteStr] = endTime.split(':')
+
+      if (endTimeValue) {
+        const [endHourStr, endMinuteStr] = endTimeValue.split(':')
         const endHour = parseInt(endHourStr, 10)
         const endMinute = parseInt(endMinuteStr, 10)
         const endAmpm = endHour >= 12 ? 'PM' : 'AM'
         const endDisplayHour = endHour % 12 || 12
         const endDisplayMinute = endMinute.toString().padStart(2, '0')
         const endTimeStr = `${endDisplayHour}:${endDisplayMinute}`
-        
-        // If both times are in the same AM/PM period, only show it once
+
         if (startAmpm === endAmpm) {
           return `${weekday}, ${month} ${day}, ${startTimeStr}-${endTimeStr} ${startAmpm}`
-        } else {
-          // Different periods, show both
-          return `${weekday}, ${month} ${day}, ${startTimeStr} ${startAmpm}-${endTimeStr} ${endAmpm}`
         }
-      } else {
-        return `${weekday}, ${month} ${day}, ${startTimeStr} ${startAmpm}`
+        return `${weekday}, ${month} ${day}, ${startTimeStr} ${startAmpm}-${endTimeStr} ${endAmpm}`
       }
+
+      return `${weekday}, ${month} ${day}, ${startTimeStr} ${startAmpm}`
     } catch (e) {
-      // If parsing fails, return as-is
-      return startDateTime
+      return date
     }
   }
 
@@ -195,8 +191,7 @@ export default function RushScheduleManager() {
     setIsSubmitting(true)
     setError(null)
 
-    // Convert datetime-local to readable format with time range
-    const formattedDateTime = formatDateTimeRange(startDateTime, endTime)
+    const formattedDateTime = formatDateTimeRange(eventDate, startTime, endTime)
 
     // Convert empty strings to null for optional fields
     const eventData: RushEventInput = {
@@ -206,7 +201,7 @@ export default function RushScheduleManager() {
       description: formData.description?.trim() || null,
       button_label: formData.button_label?.trim() || null,
       button_url: formData.button_url?.trim() || null,
-      order_index: Number(formData.order_index) || 0,
+      order_index: isEditMode ? formData.order_index : rushEvents.length,
     }
 
     let result
@@ -228,9 +223,10 @@ export default function RushScheduleManager() {
         description: '',
         button_label: '',
         button_url: '',
-        order_index: rushEvents.length, // Set to next index
+        order_index: rushEvents.length,
       })
-      setStartDateTime('')
+      setEventDate('')
+      setStartTime('')
       setEndTime('')
       setIsModalOpen(false)
       setIsEditMode(false)
@@ -250,12 +246,17 @@ export default function RushScheduleManager() {
   }
 
   const handleOpenModal = () => {
-    // Set order_index to the next available index
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
+      title: '',
+      datetime: '',
+      location: '',
+      description: '',
+      button_label: '',
+      button_url: '',
       order_index: rushEvents.length,
-    }))
-    setStartDateTime('')
+    })
+    setEventDate('')
+    setStartTime('')
     setEndTime('')
     setIsEditMode(false)
     setEditingEventId(null)
@@ -264,9 +265,8 @@ export default function RushScheduleManager() {
   }
 
   const handleEditEvent = (event: RushEventData) => {
-    // Parse the datetime string back to datetime-local format
-    const { startDateTime: parsedStart, endTime: parsedEnd } = parseDateTimeString(event.datetime)
-    
+    const parsed = parseDateTimeString(event.datetime)
+
     setFormData({
       title: event.title,
       datetime: event.datetime,
@@ -276,8 +276,9 @@ export default function RushScheduleManager() {
       button_url: event.button_url || '',
       order_index: event.order_index,
     })
-    setStartDateTime(parsedStart)
-    setEndTime(parsedEnd)
+    setEventDate(parsed.date)
+    setStartTime(parsed.startTime)
+    setEndTime(parsed.endTime)
     setIsEditMode(true)
     setEditingEventId(event.id)
     setIsModalOpen(true)
@@ -291,73 +292,134 @@ export default function RushScheduleManager() {
     setError(null)
   }
 
-  const handleDragStart = (eventId: string, e: React.DragEvent) => {
-    setDraggedEventId(eventId)
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/html', eventId)
-  }
-
-  const handleDragOver = (eventId: string, e: React.DragEvent) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-    if (eventId !== draggedEventId) {
-      setDragOverEventId(eventId)
+  const setCardRef = (id: string, el: HTMLElement | null) => {
+    if (el) {
+      cardElsRef.current.set(id, el)
+    } else {
+      cardElsRef.current.delete(id)
     }
   }
 
-  const handleDragLeave = () => {
-    setDragOverEventId(null)
+  const animateCardShift = (previousTops: Map<string, number>) => {
+    cardElsRef.current.forEach((el, id) => {
+      const previousTop = previousTops.get(id)
+      if (previousTop == null) return
+
+      const dy = previousTop - el.getBoundingClientRect().top
+      if (Math.abs(dy) < 1) return
+
+      el.style.transition = 'none'
+      el.style.transform = `translateY(${dy}px)`
+      void el.offsetHeight
+      el.style.transition = 'transform 220ms cubic-bezier(0.2, 0, 0, 1)'
+      el.style.transform = ''
+    })
   }
 
-  const handleDrop = async (targetEventId: string, e: React.DragEvent) => {
-    e.preventDefault()
-    setDragOverEventId(null)
-
-    if (!draggedEventId || draggedEventId === targetEventId) {
-      setDraggedEventId(null)
-      return
+  const reorderToIndex = (fromId: string, insertIndex: number): RushEventData[] | null => {
+    const prev = rushEventsRef.current
+    const from = prev.findIndex((event) => event.id === fromId)
+    if (from === -1 || insertIndex < 0 || insertIndex >= prev.length || from === insertIndex) {
+      return null
     }
 
-    const draggedIndex = rushEvents.findIndex((e) => e.id === draggedEventId)
-    const targetIndex = rushEvents.findIndex((e) => e.id === targetEventId)
+    const next = [...prev]
+    const [moved] = next.splice(from, 1)
+    next.splice(insertIndex, 0, moved)
+    const ordered = next.map((event, index) => ({ ...event, order_index: index }))
 
-    if (draggedIndex === -1 || targetIndex === -1) {
-      setDraggedEventId(null)
-      return
-    }
+    const previousTops = new Map<string, number>()
+    cardElsRef.current.forEach((el, id) => {
+      previousTops.set(id, el.getBoundingClientRect().top)
+    })
 
-    // Create new ordered array
-    const newEvents = [...rushEvents]
-    const [removed] = newEvents.splice(draggedIndex, 1)
-    newEvents.splice(targetIndex, 0, removed)
+    flushSync(() => {
+      setRushEvents(ordered)
+    })
+    rushEventsRef.current = ordered
+    animateCardShift(previousTops)
+    return ordered
+  }
 
-    // Update order_index for all affected events
-    const orderUpdates = newEvents.map((event, index) => ({
+  const persistEventOrder = async (events: RushEventData[]) => {
+    const orderUpdates = events.map((event, index) => ({
       id: event.id,
       order_index: index,
     }))
 
-    // Optimistically update UI
-    setRushEvents(newEvents)
-
-    // Update database
     const result = await updateRushEventOrder(orderUpdates)
 
     if (result.error) {
-      // Revert on error
       setError(result.error)
-      // Refresh from server
-      const { data, error } = await supabase
-        .from('rush_events')
-        .select('*')
-        .order('order_index', { ascending: true })
+      setRushEvents(originalEventsRef.current)
+    }
+  }
 
-      if (!error && data) {
-        setRushEvents(data)
-      }
+  const handleDragStart = (eventId: string, e: React.DragEvent) => {
+    const card = cardElsRef.current.get(eventId)
+    if (card) {
+      const rect = card.getBoundingClientRect()
+      e.dataTransfer.setDragImage(card, e.clientX - rect.left, e.clientY - rect.top)
     }
 
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', eventId)
+    draggedEventIdRef.current = eventId
+    originalEventsRef.current = rushEventsRef.current
+    setDraggedEventId(eventId)
+  }
+
+  const handleDragOver = (targetEventId: string, e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+
+    const draggedId = draggedEventIdRef.current
+    if (!draggedId || draggedId === targetEventId) return
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const insertAfter = e.clientY > rect.top + rect.height / 2
+    const prev = rushEventsRef.current
+    const from = prev.findIndex((event) => event.id === draggedId)
+    const to = prev.findIndex((event) => event.id === targetEventId)
+    if (from === -1 || to === -1) return
+
+    let insertIndex = insertAfter ? to + 1 : to
+    if (from < insertIndex) insertIndex -= 1
+    reorderToIndex(draggedId, insertIndex)
+  }
+
+  const handleMoveClick = async (eventId: string, direction: -1 | 1) => {
+    const from = rushEventsRef.current.findIndex((event) => event.id === eventId)
+    if (from === -1) return
+
+    originalEventsRef.current = rushEventsRef.current
+    const ordered = reorderToIndex(eventId, from + direction)
+    if (ordered) {
+      await persistEventOrder(ordered)
+    }
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDragEnd = async () => {
+    cardElsRef.current.forEach((el) => {
+      el.style.transition = ''
+      el.style.transform = ''
+    })
+
+    const draggedId = draggedEventIdRef.current
+    draggedEventIdRef.current = null
     setDraggedEventId(null)
+
+    if (!draggedId) return
+
+    const currentIds = rushEventsRef.current.map((event) => event.id).join(',')
+    const originalIds = originalEventsRef.current.map((event) => event.id).join(',')
+    if (currentIds === originalIds) return
+
+    await persistEventOrder(rushEventsRef.current)
   }
 
   const handleDelete = async (eventId: string) => {
@@ -406,44 +468,87 @@ export default function RushScheduleManager() {
       ) : rushEvents.length === 0 ? (
         <p className="text-gray-600 text-sm">No rush events scheduled yet.</p>
       ) : (
-        <div className="space-y-4">
-          {rushEvents.map((event) => (
+        <div className="space-y-3">
+          {rushEvents.map((event, index) => {
+            const isFirst = index === 0
+            const isLast = index === rushEvents.length - 1
+
+            return (
             <div
               key={event.id}
-              className={`bg-gray-50 rounded-lg p-4 border border-gray-200 relative transition-all ${
-                draggedEventId === event.id ? 'opacity-50' : ''
-              } ${dragOverEventId === event.id ? 'border-blue-500 border-2' : ''}`}
+              ref={(el) => setCardRef(event.id, el)}
+              className={`flex items-start gap-3 bg-white/80 rounded-xl p-4 border border-gray-100 transition-opacity duration-200 ${
+                draggedEventId === event.id ? 'opacity-0' : ''
+              }`}
+              style={{
+                boxShadow: draggedEventId === event.id ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.04)',
+              }}
               onDragOver={(e) => handleDragOver(event.id, e)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(event.id, e)}
+              onDrop={handleDrop}
             >
-              {/* Drag Handle */}
-              <div
-                draggable
-                onDragStart={(e) => handleDragStart(event.id, e)}
-                className="absolute top-4 left-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
-                title="Drag to reorder"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+              <div className="shrink-0 self-center flex flex-col items-center">
+                <button
+                  type="button"
+                  onClick={() => handleMoveClick(event.id, -1)}
+                  disabled={isFirst}
+                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                    isFirst
+                      ? 'text-gray-300 cursor-not-allowed'
+                      : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 cursor-pointer'
+                  }`}
+                  title={isFirst ? 'Already at top' : 'Move up'}
                 >
-                  {/* Up triangle */}
-                  <path d="M12 2L8 8h8L12 2z" />
-                  {/* Three horizontal bars */}
-                  <rect x="8" y="10" width="8" height="1.5" rx="0.75" />
-                  <rect x="8" y="13" width="8" height="1.5" rx="0.75" />
-                  <rect x="8" y="16" width="8" height="1.5" rx="0.75" />
-                  {/* Down triangle */}
-                  <path d="M12 22L8 16h8L12 22z" />
-                </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 15l6-6 6 6" />
+                  </svg>
+                </button>
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStart(event.id, e)}
+                  onDragEnd={handleDragEnd}
+                  className="flex items-center justify-center w-9 h-8 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 cursor-grab active:cursor-grabbing"
+                  title="Drag to reorder"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <circle cx="7" cy="5" r="1.6" />
+                    <circle cx="13" cy="5" r="1.6" />
+                    <circle cx="7" cy="10" r="1.6" />
+                    <circle cx="13" cy="10" r="1.6" />
+                    <circle cx="7" cy="15" r="1.6" />
+                    <circle cx="13" cy="15" r="1.6" />
+                  </svg>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleMoveClick(event.id, 1)}
+                  disabled={isLast}
+                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                    isLast
+                      ? 'text-gray-300 cursor-not-allowed'
+                      : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 cursor-pointer'
+                  }`}
+                  title={isLast ? 'Already at bottom' : 'Move down'}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
               </div>
-              <div className="absolute top-2 right-2 flex gap-2">
+              <div className="flex-1 min-w-0">
+                <RushEvent
+                  title={event.title}
+                  datetime={event.datetime}
+                  location={event.location}
+                  description={event.description}
+                  buttonLabel={event.button_label}
+                  buttonUrl={event.button_url}
+                  compact
+                />
+              </div>
+              <div className="flex shrink-0 gap-0.5 -mt-1 -mr-1">
                 <button
                   onClick={() => handleEditEvent(event)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-[#315CA9] hover:bg-blue-50 hover:scale-110 transition-all duration-200 cursor-pointer"
                   title="Edit event"
                 >
                   <svg
@@ -458,7 +563,7 @@ export default function RushScheduleManager() {
                 <button
                   onClick={() => handleDelete(event.id)}
                   disabled={isDeleting === event.id}
-                  className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 hover:scale-110 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-gray-400"
                   title="Delete event"
                 >
                   {isDeleting === event.id ? (
@@ -479,18 +584,9 @@ export default function RushScheduleManager() {
                   )}
                 </button>
               </div>
-              <div className="ml-8">
-                <RushEvent
-                title={event.title}
-                datetime={event.datetime}
-                location={event.location}
-                description={event.description}
-                buttonLabel={event.button_label}
-                buttonUrl={event.button_url}
-              />
-              </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
@@ -499,12 +595,13 @@ export default function RushScheduleManager() {
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center"
+            className="fixed inset-0 bg-black/15 backdrop-blur-md flex items-center justify-center"
             style={{ zIndex: 99999 }}
             onClick={handleCloseModal}
           >
             <div
-              className="bg-white rounded-lg shadow-2xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto relative"
+              className="bg-white/95 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto relative border border-gray-100"
+              style={{ boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)' }}
               onClick={(e) => e.stopPropagation()}
             >
             <div className="flex justify-between items-center mb-4">
@@ -512,14 +609,27 @@ export default function RushScheduleManager() {
                 {isEditMode ? 'Edit Rush Event' : 'Add Rush Event'}
               </h3>
               <button
+                type="button"
                 onClick={handleCloseModal}
-                className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer"
+                className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 cursor-pointer"
+                title="Close"
               >
-                ×
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
               <div>
                 <label
                   htmlFor="title"
@@ -533,43 +643,70 @@ export default function RushScheduleManager() {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
+                  placeholder="e.g., Open House #1"
+                  autoComplete="off"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="startDateTime"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Date & Start Time <span className="text-red-500">*</span>
-                </label>
-                <div className="flex gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label
+                    htmlFor="eventDate"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Date <span className="text-red-500">*</span>
+                  </label>
                   <input
-                    type="datetime-local"
-                    id="startDateTime"
-                    name="startDateTime"
-                    value={startDateTime}
-                    onChange={(e) => setStartDateTime(e.target.value)}
+                    type="date"
+                    id="eventDate"
+                    name="eventDate"
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
                     required
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
+                      eventDate ? '' : 'datetime-empty'
+                    }`}
                   />
-                  {startDateTime && (
-                    <input
-                      type="time"
-                      id="endTime"
-                      name="endTime"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
-                      placeholder="End time"
-                    />
-                  )}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Select date and start time. Optionally add end time for time ranges.
-                </p>
+                <div>
+                  <label
+                    htmlFor="startTime"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Start Time <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="time"
+                    id="startTime"
+                    name="startTime"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    required
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
+                      startTime ? '' : 'datetime-empty'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="endTime"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    End Time <span className="text-gray-400 font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    type="time"
+                    id="endTime"
+                    name="endTime"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
+                      endTime ? '' : 'datetime-empty'
+                    }`}
+                  />
+                </div>
               </div>
 
               <div>
@@ -585,8 +722,10 @@ export default function RushScheduleManager() {
                   name="location"
                   value={formData.location || ''}
                   onChange={handleInputChange}
+                  placeholder="e.g., Michigan Union"
+                  autoComplete="off"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
                 />
               </div>
 
@@ -603,7 +742,8 @@ export default function RushScheduleManager() {
                   value={formData.description || ''}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                  placeholder="e.g., Stop by our table to meet brothers and learn about rush."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
                 />
               </div>
 
@@ -621,7 +761,7 @@ export default function RushScheduleManager() {
                   value={formData.button_label || ''}
                   onChange={handleInputChange}
                   placeholder="e.g., Join Zoom Meeting"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
                 />
               </div>
 
@@ -639,29 +779,8 @@ export default function RushScheduleManager() {
                   value={formData.button_url || ''}
                   onChange={handleInputChange}
                   placeholder="https://example.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
                 />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="order_index"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Order Index
-                </label>
-                <input
-                  type="number"
-                  id="order_index"
-                  name="order_index"
-                  value={formData.order_index}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#315CA9]"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Lower numbers appear first. Default: {rushEvents.length}
-                </p>
               </div>
 
               {error && (
@@ -674,7 +793,7 @@ export default function RushScheduleManager() {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   disabled={isSubmitting}
                 >
                   Cancel
@@ -682,7 +801,7 @@ export default function RushScheduleManager() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#315CA9] text-white rounded-md font-semibold hover:bg-[#234c8b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : 'Confirm'}
                 </button>
