@@ -40,12 +40,10 @@ export default async function Rush() {
                   Interest Form
                 </a>
                 <a
-                  href="https://forms.gle/DzouVtUQfhFEMGo16"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/apply"
                   className="px-4 py-2 bg-[#315CA9] text-white rounded-[40px] text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
                 >
-                  Application Link
+                  Application
                 </a>
               </div>
               <p

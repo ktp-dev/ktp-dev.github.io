@@ -31,7 +31,8 @@
     "react-scroll": "^1.9.3",
     "react-typed": "^2.0.12",
     "server-only": "^0.0.1",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

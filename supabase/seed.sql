@@ -49,3 +49,69 @@ INSERT INTO public.rush_events (
     'https://example.com/apply',
     3
   );
+
+INSERT INTO public.rush_cycles (
+  name,
+  opens_at,
+  closes_at,
+  intro_markdown,
+  hear_about_options,
+  is_active
+) VALUES (
+  'Fall 2026',
+  timezone('utc'::text, now()) - interval '1 day',
+  timezone('utc'::text, now()) + interval '30 days',
+  'Thank you for your interest in rushing Kappa Theta Pi. This local cycle is for development only.',
+  ARRAY[
+    'Search engine / ktpmichigan.com',
+    'Flyer',
+    'Email',
+    'Previous semester rush',
+    'Festifall/Northfest/Winterfest',
+    'Word of mouth',
+    'Diag Board',
+    'Instagram',
+    'Club Presentation',
+    'Other'
+  ],
+  true
+);
+
+INSERT INTO public.cycle_questions (
+  cycle_id,
+  prompt,
+  help_text,
+  max_words,
+  sort_order,
+  required
+)
+SELECT
+  id,
+  prompt,
+  help_text,
+  max_words,
+  sort_order,
+  true
+FROM public.rush_cycles
+CROSS JOIN (
+  VALUES
+    (
+      'Pitch a product idea that reflects an aspect of your identity or personal values. What makes this idea meaningful to you?',
+      '"Product" refers to a technical idea such as an app, tool, service, or system. It does not need to be fully built.',
+      350,
+      0
+    ),
+    (
+      'Share a memory that has stayed with you. How does it reflect the person you''ve become today?',
+      NULL,
+      350,
+      1
+    ),
+    (
+      'In three sentences or fewer, choose one of KTP''s Pillars of P.A.S.T.A. and explain why it inspires you to join KTP.',
+      NULL,
+      80,
+      2
+    )
+) AS q(prompt, help_text, max_words, sort_order)
+WHERE public.rush_cycles.is_active;

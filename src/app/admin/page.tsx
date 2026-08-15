@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
+import RushApplicationManager from '@/components/RushApplicationManager'
 import RushScheduleManager from '@/components/RushScheduleManager'
+import { getAdminCycle } from '@/lib/rush-cycles'
 import { getRushEvents, toClientRushEvent } from '@/lib/rush-events'
 import Unauthorized from '@/components/Unauthorized'
 
@@ -19,6 +21,7 @@ export default async function AdminPage() {
   }
 
   const initialEvents = (await getRushEvents()).map(toClientRushEvent)
+  const applicationCycle = await getAdminCycle()
 
   const sectionCardClass =
     'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
@@ -55,17 +58,17 @@ export default async function AdminPage() {
                 </p>
               </div>
 
-              {/* Placeholder for future widgets */}
+              {/* Admin widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                 <div className={sectionCardClass} style={sectionCardStyle}>
                   <RushScheduleManager initialEvents={initialEvents} />
                 </div>
                 
                 <div className={sectionCardClass} style={sectionCardStyle}>
-                  <h2 className="text-xl font-bold mb-4 font-inter">More Features</h2>
-                  <p className="text-gray-600 text-sm">
-                    Additional admin features will be added here.
-                  </p>
+                  <RushApplicationManager
+                    initialCycle={applicationCycle.cycle}
+                    initialQuestions={applicationCycle.questions}
+                  />
                 </div>
               </div>
             </div>

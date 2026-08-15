@@ -69,6 +69,7 @@ export default function HamburgerHeader() {
                         <li className='mb-2'><Link className="hover-text-custom font-medium" href="/rush" onClick={closeMenu}>Rush</Link></li>
                         <li className='mb-2'><Link className="hover-text-custom font-medium" href="/members" onClick={closeMenu}>Members</Link></li>
                         <li className='mb-2'><Link className="hover-text-custom font-medium" href="/nationals" onClick={closeMenu}>Nationals</Link></li>
+                        <li className='mb-2'><Link className="hover-text-custom font-bold" href="/apply" onClick={closeMenu}>Apply</Link></li>
                     </ul>
                 </div>
             </div>

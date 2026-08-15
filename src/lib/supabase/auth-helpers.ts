@@ -66,3 +66,14 @@ export async function getCurrentUser() {
   return user
 }
 
+/**
+ * Logged-in @umich.edu user (applicant or admin).
+ */
+export async function requireUser() {
+  const user = await getCurrentUser()
+  if (!user?.email?.toLowerCase().endsWith('@umich.edu')) {
+    return null
+  }
+  return user
+}
+
