@@ -2,24 +2,23 @@ import { redirect } from 'next/navigation'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
 import RushScheduleManager from '@/components/RushScheduleManager'
+import { getRushEvents, toClientRushEvent } from '@/lib/rush-events'
 import Unauthorized from '@/components/Unauthorized'
 
 export default async function AdminPage() {
-  // First check if user is authenticated
   const currentUser = await getCurrentUser()
   
-  // If no user at all, redirect to login
   if (!currentUser) {
     redirect('/login')
   }
 
-  // If user exists, check if they're an admin
   const adminUser = await checkIsAdmin()
 
-  // If user is authenticated but not an admin, show unauthorized page
   if (!adminUser) {
     return <Unauthorized />
   }
+
+  const initialEvents = (await getRushEvents()).map(toClientRushEvent)
 
   const sectionCardClass =
     'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
@@ -59,7 +58,7 @@ export default async function AdminPage() {
               {/* Placeholder for future widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                 <div className={sectionCardClass} style={sectionCardStyle}>
-                  <RushScheduleManager />
+                  <RushScheduleManager initialEvents={initialEvents} />
                 </div>
                 
                 <div className={sectionCardClass} style={sectionCardStyle}>

@@ -1,183 +1,134 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
+import {
+  createRushEvent,
+  getRushEvents,
+  patchRushEvent,
+  removeRushEvent,
+  reorderRushEvents,
+  toClientRushEvent,
+  type RushEventWrite,
+} from '@/lib/rush-events'
 
-export interface RushEventInput {
-  title: string
-  datetime: string
-  location: string
-  description: string | null
-  button_label: string | null
-  button_url: string | null
-  order_index: number
+export type RushEventInput = RushEventWrite
+
+async function requireAdmin() {
+  const user = await checkIsAdmin()
+  if (!user) {
+    return { error: 'Unauthorized: Admin access required' as const }
+  }
+  return { user, error: null }
+}
+
+function validateEvent(event: RushEventInput) {
+  if (!event.title || !event.datetime || !event.location) {
+    return 'Title, datetime, and location are required'
+  }
+  return null
+}
+
+export async function listRushEvents() {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const events = await getRushEvents()
+  return { data: events.map(toClientRushEvent), error: null }
 }
 
 export async function insertRushEvent(event: RushEventInput) {
-  // Check if user is admin
-  const user = await checkIsAdmin()
-  if (!user) {
-    return { error: 'Unauthorized: Admin access required' }
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
   }
 
-  // Validate required fields
-  if (!event.title || !event.datetime || !event.location) {
-    return { error: 'Title, datetime, and location are required' }
+  const validationError = validateEvent(event)
+  if (validationError) {
+    return { data: null, error: validationError }
   }
 
-  const supabase = await createClient()
-
-  // Insert the rush event
-  const { data, error } = await supabase
-    .from('rush_events')
-    .insert({
-      title: event.title,
-      datetime: event.datetime,
-      location: event.location,
+  try {
+    const created = await createRushEvent({
+      ...event,
       description: event.description || null,
       button_label: event.button_label || null,
       button_url: event.button_url || null,
-      order_index: event.order_index,
     })
-    .select()
-    .single()
-
-  if (error) {
+    revalidatePath('/rush')
+    revalidatePath('/admin')
+    return { data: toClientRushEvent(created), error: null }
+  } catch (error) {
     console.error('Error inserting rush event:', error)
-    return { error: error.message }
+    return { data: null, error: 'Failed to insert rush event' }
   }
-
-  return { data, error: null }
 }
 
 export async function deleteRushEvent(eventId: string) {
-  // Check if user is admin
-  const user = await checkIsAdmin()
-  if (!user) {
-    return { error: 'Unauthorized: Admin access required' }
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
   }
 
-  const supabase = await createClient()
-
-  // Get the order_index of the event being deleted
-  const { data: eventToDelete, error: fetchError } = await supabase
-    .from('rush_events')
-    .select('order_index')
-    .eq('id', eventId)
-    .single()
-
-  if (fetchError || !eventToDelete) {
-    return { error: 'Event not found' }
-  }
-
-  // Delete the event
-  const { error: deleteError } = await supabase
-    .from('rush_events')
-    .delete()
-    .eq('id', eventId)
-
-  if (deleteError) {
-    console.error('Error deleting rush event:', deleteError)
-    return { error: deleteError.message }
-  }
-
-  // Get all remaining events ordered by order_index
-  const { data: remainingEvents, error: fetchRemainingError } = await supabase
-    .from('rush_events')
-    .select('id, order_index')
-    .order('order_index', { ascending: true })
-
-  if (fetchRemainingError) {
-    console.error('Error fetching remaining events:', fetchRemainingError)
-    // Event is deleted, but we couldn't reorder - that's okay
+  try {
+    await removeRushEvent(eventId)
+    revalidatePath('/rush')
+    revalidatePath('/admin')
     return { data: null, error: null }
+  } catch (error) {
+    console.error('Error deleting rush event:', error)
+    const message = error instanceof Error ? error.message : 'Failed to delete rush event'
+    return { data: null, error: message }
   }
-
-  // Reorder all remaining events sequentially (0, 1, 2, ...)
-  if (remainingEvents && remainingEvents.length > 0) {
-    const updates = remainingEvents.map((event, index) => ({
-      id: event.id,
-      order_index: index,
-    }))
-
-    // Update all events in a transaction-like manner
-    for (const update of updates) {
-      const { error: updateError } = await supabase
-        .from('rush_events')
-        .update({ order_index: update.order_index })
-        .eq('id', update.id)
-
-      if (updateError) {
-        console.error('Error updating order_index:', updateError)
-        // Continue with other updates even if one fails
-      }
-    }
-  }
-
-  return { data: null, error: null }
 }
 
 export async function updateRushEvent(eventId: string, event: RushEventInput) {
-  // Check if user is admin
-  const user = await checkIsAdmin()
-  if (!user) {
-    return { error: 'Unauthorized: Admin access required' }
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
   }
 
-  // Validate required fields
-  if (!event.title || !event.datetime || !event.location) {
-    return { error: 'Title, datetime, and location are required' }
+  const validationError = validateEvent(event)
+  if (validationError) {
+    return { data: null, error: validationError }
   }
 
-  const supabase = await createClient()
-
-  // Update the rush event
-  const { data, error } = await supabase
-    .from('rush_events')
-    .update({
-      title: event.title,
-      datetime: event.datetime,
-      location: event.location,
+  try {
+    const updated = await patchRushEvent(eventId, {
+      ...event,
       description: event.description || null,
       button_label: event.button_label || null,
       button_url: event.button_url || null,
-      order_index: event.order_index,
     })
-    .eq('id', eventId)
-    .select()
-    .single()
-
-  if (error) {
-    console.error('Error updating rush event:', error)
-    return { error: error.message }
-  }
-
-  return { data, error: null }
-}
-
-export async function updateRushEventOrder(orderUpdates: Array<{ id: string; order_index: number }>) {
-  // Check if user is admin
-  const user = await checkIsAdmin()
-  if (!user) {
-    return { error: 'Unauthorized: Admin access required' }
-  }
-
-  const supabase = await createClient()
-
-  // Update all events' order_index in a batch
-  for (const update of orderUpdates) {
-    const { error } = await supabase
-      .from('rush_events')
-      .update({ order_index: update.order_index })
-      .eq('id', update.id)
-
-    if (error) {
-      console.error('Error updating order_index:', error)
-      return { error: error.message }
+    if (!updated) {
+      return { data: null, error: 'Event not found' }
     }
+    revalidatePath('/rush')
+    revalidatePath('/admin')
+    return { data: toClientRushEvent(updated), error: null }
+  } catch (error) {
+    console.error('Error updating rush event:', error)
+    return { data: null, error: 'Failed to update rush event' }
   }
-
-  return { data: null, error: null }
 }
 
+export async function updateRushEventOrder(
+  orderUpdates: Array<{ id: string; order_index: number }>
+) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
 
+  try {
+    await reorderRushEvents(orderUpdates)
+    revalidatePath('/rush')
+    revalidatePath('/admin')
+    return { data: null, error: null }
+  } catch (error) {
+    console.error('Error updating order_index:', error)
+    return { data: null, error: 'Failed to update event order' }
+  }
+}

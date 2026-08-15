@@ -2,24 +2,16 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { createPortal, flushSync } from 'react-dom'
-import { createClient } from '@/lib/supabase/client'
-import { insertRushEvent, deleteRushEvent, updateRushEvent, updateRushEventOrder, type RushEventInput } from '@/app/admin/actions'
+import { insertRushEvent, deleteRushEvent, updateRushEvent, updateRushEventOrder, listRushEvents, type RushEventInput } from '@/app/admin/actions'
 import RushEvent from './RushEvent'
+import type { ClientRushEvent } from '@/lib/rush-events'
 
-interface RushEventData {
-  id: string
-  title: string
-  datetime: string
-  location: string
-  description: string | null
-  button_label: string | null
-  button_url: string | null
-  order_index: number
-}
-
-export default function RushScheduleManager() {
-  const [rushEvents, setRushEvents] = useState<RushEventData[]>([])
-  const [loading, setLoading] = useState(true)
+export default function RushScheduleManager({
+  initialEvents,
+}: {
+  initialEvents: ClientRushEvent[]
+}) {
+  const [rushEvents, setRushEvents] = useState<ClientRushEvent[]>(initialEvents)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [editingEventId, setEditingEventId] = useState<string | null>(null)
@@ -28,8 +20,8 @@ export default function RushScheduleManager() {
   const [draggedEventId, setDraggedEventId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const draggedEventIdRef = useRef<string | null>(null)
-  const rushEventsRef = useRef<RushEventData[]>([])
-  const originalEventsRef = useRef<RushEventData[]>([])
+  const rushEventsRef = useRef<ClientRushEvent[]>([])
+  const originalEventsRef = useRef<ClientRushEvent[]>([])
   const cardElsRef = useRef<Map<string, HTMLElement>>(new Map())
   const [formData, setFormData] = useState<RushEventInput>({
     title: '',
@@ -43,12 +35,29 @@ export default function RushScheduleManager() {
   const [eventDate, setEventDate] = useState('')
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
-
-  const supabase = createClient()
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const MODAL_ANIMATION_MS = 280
 
   useEffect(() => {
     rushEventsRef.current = rushEvents
   }, [rushEvents])
+
+  useEffect(() => {
+    if (!isModalOpen) return
+
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsModalVisible(true))
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [isModalOpen])
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
+    }
+  }, [])
 
   // Parse formatted datetime string back to date + time fields
   // Input: "Wednesday, August 27, 4:30-6:00 PM" or "Wednesday, August 27, 4:30 PM"
@@ -150,31 +159,14 @@ export default function RushScheduleManager() {
     }
   }
 
-  // Fetch rush events from Supabase
-  useEffect(() => {
-    async function fetchRushEvents() {
-      try {
-        const { data, error } = await supabase
-          .from('rush_events')
-          .select('*')
-          .order('order_index', { ascending: true })
-
-        if (error) {
-          console.error('Error fetching rush events:', error)
-          setError('Failed to load rush events')
-        } else {
-          setRushEvents(data || [])
-        }
-      } catch (err) {
-        console.error('Error:', err)
-        setError('Failed to load rush events')
-      } finally {
-        setLoading(false)
-      }
+  const refreshRushEvents = async () => {
+    const { data, error: loadError } = await listRushEvents()
+    if (loadError) {
+      setError(loadError)
+      return
     }
-
-    fetchRushEvents()
-  }, [supabase])
+    setRushEvents(data || [])
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -215,34 +207,23 @@ export default function RushScheduleManager() {
       setError(result.error)
       setIsSubmitting(false)
     } else {
-      // Reset form and close modal
-      setFormData({
-        title: '',
-        datetime: '',
-        location: '',
-        description: '',
-        button_label: '',
-        button_url: '',
-        order_index: rushEvents.length,
-      })
-      setEventDate('')
-      setStartTime('')
-      setEndTime('')
-      setIsModalOpen(false)
-      setIsEditMode(false)
-      setEditingEventId(null)
       setIsSubmitting(false)
-
-      // Refresh the events list
-      const { data, error } = await supabase
-        .from('rush_events')
-        .select('*')
-        .order('order_index', { ascending: true })
-
-      if (!error && data) {
-        setRushEvents(data)
-      }
+      handleCloseModal()
+      await refreshRushEvents()
     }
+  }
+
+  const showModal = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setError(null)
+    setIsModalOpen(true)
+    setIsModalVisible(false)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsModalVisible(true))
+    })
   }
 
   const handleOpenModal = () => {
@@ -260,11 +241,10 @@ export default function RushScheduleManager() {
     setEndTime('')
     setIsEditMode(false)
     setEditingEventId(null)
-    setIsModalOpen(true)
-    setError(null)
+    showModal()
   }
 
-  const handleEditEvent = (event: RushEventData) => {
+  const handleEditEvent = (event: ClientRushEvent) => {
     const parsed = parseDateTimeString(event.datetime)
 
     setFormData({
@@ -281,15 +261,20 @@ export default function RushScheduleManager() {
     setEndTime(parsed.endTime)
     setIsEditMode(true)
     setEditingEventId(event.id)
-    setIsModalOpen(true)
-    setError(null)
+    showModal()
   }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setIsEditMode(false)
-    setEditingEventId(null)
-    setError(null)
+    if (!isModalOpen || closeTimeoutRef.current) return
+
+    setIsModalVisible(false)
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsModalOpen(false)
+      setIsEditMode(false)
+      setEditingEventId(null)
+      setError(null)
+      closeTimeoutRef.current = null
+    }, MODAL_ANIMATION_MS)
   }
 
   const setCardRef = (id: string, el: HTMLElement | null) => {
@@ -316,7 +301,7 @@ export default function RushScheduleManager() {
     })
   }
 
-  const reorderToIndex = (fromId: string, insertIndex: number): RushEventData[] | null => {
+  const reorderToIndex = (fromId: string, insertIndex: number): ClientRushEvent[] | null => {
     const prev = rushEventsRef.current
     const from = prev.findIndex((event) => event.id === fromId)
     if (from === -1 || insertIndex < 0 || insertIndex >= prev.length || from === insertIndex) {
@@ -341,7 +326,7 @@ export default function RushScheduleManager() {
     return ordered
   }
 
-  const persistEventOrder = async (events: RushEventData[]) => {
+  const persistEventOrder = async (events: ClientRushEvent[]) => {
     const orderUpdates = events.map((event, index) => ({
       id: event.id,
       order_index: index,
@@ -436,15 +421,7 @@ export default function RushScheduleManager() {
       setError(result.error)
       setIsDeleting(null)
     } else {
-      // Refresh the events list
-      const { data, error } = await supabase
-        .from('rush_events')
-        .select('*')
-        .order('order_index', { ascending: true })
-
-      if (!error && data) {
-        setRushEvents(data)
-      }
+      await refreshRushEvents()
       setIsDeleting(null)
     }
   }
@@ -461,9 +438,7 @@ export default function RushScheduleManager() {
         </button>
       </div>
 
-      {loading ? (
-        <p className="text-gray-600 text-sm">Loading rush events...</p>
-      ) : error && !isModalOpen ? (
+      {error && !isModalOpen ? (
         <p className="text-red-600 text-sm">{error}</p>
       ) : rushEvents.length === 0 ? (
         <p className="text-gray-600 text-sm">No rush events scheduled yet.</p>
@@ -595,12 +570,21 @@ export default function RushScheduleManager() {
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed inset-0 bg-black/15 backdrop-blur-md flex items-center justify-center"
+            className="fixed inset-0 flex items-center justify-center"
             style={{ zIndex: 99999 }}
-            onClick={handleCloseModal}
           >
             <div
-              className="bg-white/95 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto relative border border-gray-100"
+              className={`absolute inset-0 bg-black/15 backdrop-blur-md transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                isModalVisible ? 'opacity-100' : 'opacity-0'
+              }`}
+              onClick={handleCloseModal}
+            />
+            <div
+              className={`relative z-10 bg-white/95 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-gray-100 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                isModalVisible
+                  ? 'opacity-100 scale-100 translate-y-0'
+                  : 'opacity-0 scale-95 translate-y-3'
+              }`}
               style={{ boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)' }}
               onClick={(e) => e.stopPropagation()}
             >
