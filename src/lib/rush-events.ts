@@ -1,11 +1,25 @@
 import { asc, eq } from 'drizzle-orm'
-import { db, rushEvents } from '@/db'
+import { db, rushCycles, rushEvents } from '@/db'
 import type { RushEventWrite } from '@/lib/rush-event-schema'
 
 export type { RushEventWrite }
 
-export async function getRushEvents() {
-  return db.select().from(rushEvents).orderBy(asc(rushEvents.orderIndex))
+export async function getRushEventsForCycle(cycleId: string) {
+  return db
+    .select()
+    .from(rushEvents)
+    .where(eq(rushEvents.cycleId, cycleId))
+    .orderBy(asc(rushEvents.orderIndex))
+}
+
+export async function getPublicRushEvents() {
+  const [cycle] = await db
+    .select({ id: rushCycles.id })
+    .from(rushCycles)
+    .where(eq(rushCycles.isActive, true))
+    .limit(1)
+  if (!cycle) return []
+  return getRushEventsForCycle(cycle.id)
 }
 
 function toWriteValues(event: RushEventWrite) {
@@ -35,10 +49,13 @@ export function toClientRushEvent(event: typeof rushEvents.$inferSelect) {
 
 export type ClientRushEvent = ReturnType<typeof toClientRushEvent>
 
-export async function createRushEvent(event: RushEventWrite) {
+export async function createRushEvent(cycleId: string, event: RushEventWrite) {
   const [created] = await db
     .insert(rushEvents)
-    .values(toWriteValues(event))
+    .values({
+      cycleId,
+      ...toWriteValues(event),
+    })
     .returning()
   return created
 }
@@ -54,12 +71,12 @@ export async function patchRushEvent(eventId: string, event: RushEventWrite) {
 
 export async function removeRushEvent(eventId: string) {
   await db.transaction(async (tx) => {
-    const existing = await tx
-      .select({ id: rushEvents.id })
+    const [existing] = await tx
+      .select({ id: rushEvents.id, cycleId: rushEvents.cycleId })
       .from(rushEvents)
       .where(eq(rushEvents.id, eventId))
 
-    if (existing.length === 0) {
+    if (!existing) {
       throw new Error('Event not found')
     }
 
@@ -68,6 +85,7 @@ export async function removeRushEvent(eventId: string) {
     const remaining = await tx
       .select({ id: rushEvents.id })
       .from(rushEvents)
+      .where(eq(rushEvents.cycleId, existing.cycleId))
       .orderBy(asc(rushEvents.orderIndex))
 
     for (const [index, event] of remaining.entries()) {

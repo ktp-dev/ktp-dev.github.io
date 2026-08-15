@@ -74,6 +74,20 @@ input[type="time"].datetime-empty::-webkit-datetime-edit-ampm-field {
   color: inherit;
 }
 
+input[type="datetime-local"].datetime-empty,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-fields-wrapper,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-text,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-month-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-day-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-year-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-hour-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-minute-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-second-field,
+input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
+  color: #9ca3af !important;
+}
+
 .homepage-grid {
   display: flex;
   flex-direction: column;

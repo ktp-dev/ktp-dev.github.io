@@ -1,10 +1,8 @@
 import { redirect } from 'next/navigation'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
-import RushApplicationManager from '@/components/RushApplicationManager'
-import RushScheduleManager from '@/components/RushScheduleManager'
-import { getAdminCycle } from '@/lib/rush-cycles'
-import { getRushEvents, toClientRushEvent } from '@/lib/rush-events'
+import AdminRushDashboard from '@/components/AdminRushDashboard'
+import { getAdminCycle, listRushCycles } from '@/lib/rush-cycles'
 import Unauthorized from '@/components/Unauthorized'
 
 export default async function AdminPage() {
@@ -20,8 +18,14 @@ export default async function AdminPage() {
     return <Unauthorized />
   }
 
-  const initialEvents = (await getRushEvents()).map(toClientRushEvent)
-  const applicationCycle = await getAdminCycle()
+  const [cycles, applicationCycle] = await Promise.all([listRushCycles(), getAdminCycle()])
+  const initialBundle = applicationCycle.cycle
+    ? {
+        cycle: applicationCycle.cycle,
+        questions: applicationCycle.questions,
+        events: applicationCycle.events,
+      }
+    : null
 
   const sectionCardClass =
     'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
@@ -40,6 +44,8 @@ export default async function AdminPage() {
         <div className="inset-0 blob-c z-0" style={{ overflow: 'visible' }}>
           <div className="shape-blob eight" style={{ left: 'calc(8% - 40px)', top: '-1%' }}></div>
           <div className="shape-blob nine" style={{ left: 'calc(22% - 20px)', top: '3%' }}></div>
+          <div className="shape-blob eight" style={{ left: 'auto', right: '-2%', top: 'auto', bottom: '-4%' }}></div>
+          <div className="shape-blob nine" style={{ left: 'auto', right: '6%', top: 'auto', bottom: '2%' }}></div>
         </div>
 
         <div className="relative w-full z-10">
@@ -58,19 +64,7 @@ export default async function AdminPage() {
                 </p>
               </div>
 
-              {/* Admin widgets */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-                <div className={sectionCardClass} style={sectionCardStyle}>
-                  <RushScheduleManager initialEvents={initialEvents} />
-                </div>
-                
-                <div className={sectionCardClass} style={sectionCardStyle}>
-                  <RushApplicationManager
-                    initialCycle={applicationCycle.cycle}
-                    initialQuestions={applicationCycle.questions}
-                  />
-                </div>
-              </div>
+              <AdminRushDashboard initialCycles={cycles} initialBundle={initialBundle} />
             </div>
           </div>
         </div>
@@ -78,4 +72,3 @@ export default async function AdminPage() {
     </div>
   )
 }
-

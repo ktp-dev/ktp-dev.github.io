@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
 import { applyCardClass, applyCardStyle } from '@/components/apply/ApplyShell'
-import { validateApplyStep, type ApplicationFields } from '@/lib/apply-schema'
+import { answerLimitError, validateApplyStep, wordCount, type ApplicationFields } from '@/lib/apply-schema'
 import { APPLY_STEPS, nextStepPath, prevStepPath, type ApplyStepSlug } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
 
@@ -16,10 +16,6 @@ const btnClass =
   'cursor-pointer rounded-[40px] bg-[#315CA9] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md'
 const ghostBtnClass =
   'cursor-pointer rounded-[40px] border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md'
-
-function wordCount(text: string) {
-  return text.trim() === '' ? 0 : text.trim().split(/\s+/).length
-}
 
 export type ApplyFormPayload = {
   applicationId: string
@@ -67,13 +63,24 @@ export function ApplySectionForm({
     })
   }, [payload])
 
+  function draftAnswers() {
+    const state = useApplyStore.getState()
+    const answers: Record<string, string> = {}
+    for (const question of payload.questions) {
+      const body = state.answers[question.id] ?? ''
+      if (answerLimitError(body, question.maxWords)) continue
+      answers[question.id] = body
+    }
+    return answers
+  }
+
   async function persist(options?: { silent?: boolean }) {
     const gen = ++saveGen.current
     if (!options?.silent) setSaveStatus('saving')
     const state = useApplyStore.getState()
     const result = await saveApplyDraft({
       fields: state.fields,
-      answers: state.answers,
+      answers: draftAnswers(),
     })
     if (gen !== saveGen.current) return false
     if (result.error) {
@@ -176,6 +183,9 @@ export function ApplySectionForm({
             label="GPA *"
             hint="If this is your first semester, enter 0."
             type="number"
+            min={0}
+            max={4}
+            step="0.001"
             value={fields.gpa?.toString() ?? ''}
             onChange={(v) => { setField('gpa', v === '' ? null : Number(v)); queueSave() }}
           />
@@ -230,7 +240,7 @@ export function ApplySectionForm({
           {payload.questions.map((question) => {
             const body = answers[question.id] ?? ''
             const count = wordCount(body)
-            const over = count > question.maxWords
+            const over = Boolean(answerLimitError(body, question.maxWords))
             return (
               <label key={question.id} className="block">
                 <span className={labelClass}>
@@ -357,6 +367,9 @@ function Field({
   hint,
   type = 'text',
   placeholder,
+  min,
+  max,
+  step,
 }: {
   label: string
   value: string | null | undefined
@@ -364,6 +377,9 @@ function Field({
   hint?: string
   type?: string
   placeholder?: string
+  min?: number
+  max?: number
+  step?: string
 }) {
   return (
     <label className="block">
@@ -374,6 +390,9 @@ function Field({
         className={inputClass}
         value={value ?? ''}
         placeholder={placeholder}
+        min={min}
+        max={max}
+        step={step}
         onChange={(event) => onChange(event.target.value)}
       />
     </label>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import {
   closeRushApplicationNow,
   openRushApplicationNow,
@@ -28,13 +28,6 @@ type QuestionDraft = {
   help_text: string
   max_words: number
   required: boolean
-}
-
-function toDatetimeLocal(iso: string) {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return ''
-  const pad = (value: number) => String(value).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
 function questionsFromServer(questions: ClientCycleQuestion[]): QuestionDraft[] {
@@ -74,25 +67,39 @@ function cycleStatus(opensAt: string, closesAt: string) {
   return { label: 'Accepting responses', className: 'bg-[#315CA9] text-white' }
 }
 
-export default function RushApplicationManager({
-  initialCycle,
-  initialQuestions,
-}: {
-  initialCycle: ClientRushCycle | null
-  initialQuestions: ClientCycleQuestion[]
-}) {
+export type RushApplicationHandle = {
+  getDraft: () => {
+    intro_markdown: string
+    closed_markdown: string
+    hear_about_options: string[]
+    questions: Array<{
+      id?: string
+      prompt: string
+      help_text: string
+      max_words: number
+      required: boolean
+      sort_order: number
+    }>
+  }
+}
+
+const RushApplicationManager = forwardRef<
+  RushApplicationHandle,
+  {
+    initialCycle: ClientRushCycle | null
+    initialQuestions: ClientCycleQuestion[]
+    isDraft?: boolean
+    formId?: string
+    onUpdated?: (data: { cycle: ClientRushCycle; questions: ClientCycleQuestion[] }) => void
+  }
+>(function RushApplicationManager(
+  { initialCycle, initialQuestions, isDraft = false, formId, onUpdated },
+  ref
+) {
   const [cycleId, setCycleId] = useState(initialCycle?.id ?? null)
-  const [name, setName] = useState(initialCycle?.name ?? 'Fall 2026')
-  const [opensAt, setOpensAt] = useState(
-    initialCycle ? toDatetimeLocal(initialCycle.opens_at) : ''
-  )
-  const [closesAt, setClosesAt] = useState(
-    initialCycle ? toDatetimeLocal(initialCycle.closes_at) : ''
-  )
   const [intro, setIntro] = useState(initialCycle?.intro_markdown ?? '')
-  const [hearAbout, setHearAbout] = useState(
-    (initialCycle?.hear_about_options ?? []).join('\n')
-  )
+  const [closed, setClosed] = useState(initialCycle?.closed_markdown ?? '')
+  const [hearAbout, setHearAbout] = useState((initialCycle?.hear_about_options ?? []).join('\n'))
   const [questions, setQuestions] = useState<QuestionDraft[]>(
     initialQuestions.length ? questionsFromServer(initialQuestions) : [emptyQuestion()]
   )
@@ -101,27 +108,25 @@ export default function RushApplicationManager({
   const [isOpening, setIsOpening] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<string | null>(null)
-  const [isEditing, setIsEditing] = useState(!initialCycle)
+  const [isEditing, setIsEditing] = useState(isDraft)
   const [enteringKey, setEnteringKey] = useState<string | null>(null)
   const [exitingKeys, setExitingKeys] = useState<string[]>([])
   const questionEls = useRef<Map<string, HTMLElement>>(new Map())
-  const removeTimeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
+  const removeTimeouts = useRef<Map<string, number>>(new Map())
 
   const status = useMemo(
     () =>
-      cycleStatus(
-        opensAt ? new Date(opensAt).toISOString() : '',
-        closesAt ? new Date(closesAt).toISOString() : ''
-      ),
-    [opensAt, closesAt]
+      cycleStatus(initialCycle?.opens_at ?? '', initialCycle?.closes_at ?? ''),
+    [initialCycle?.opens_at, initialCycle?.closes_at]
   )
-  const cycleNameError = error === 'Cycle name is required'
   const visibleQuestionCount = questions.length - exitingKeys.length
+  const fieldsEditable = isDraft || isEditing
 
-  const accepting =
-    Boolean(opensAt && closesAt) &&
-    Date.now() >= new Date(opensAt).getTime() &&
-    Date.now() <= new Date(closesAt).getTime()
+  const accepting = Boolean(
+    initialCycle &&
+      Date.now() >= new Date(initialCycle.opens_at).getTime() &&
+      Date.now() <= new Date(initialCycle.closes_at).getTime()
+  )
 
   function applyServerState(data: {
     cycle: ClientRushCycle | null
@@ -129,10 +134,8 @@ export default function RushApplicationManager({
   }) {
     if (!data.cycle) return
     setCycleId(data.cycle.id)
-    setName(data.cycle.name)
-    setOpensAt(toDatetimeLocal(data.cycle.opens_at))
-    setClosesAt(toDatetimeLocal(data.cycle.closes_at))
     setIntro(data.cycle.intro_markdown ?? '')
+    setClosed(data.cycle.closed_markdown ?? '')
     setHearAbout(data.cycle.hear_about_options.join('\n'))
     setQuestions(
       data.questions.length ? questionsFromServer(data.questions) : [emptyQuestion()]
@@ -143,31 +146,33 @@ export default function RushApplicationManager({
 
   function payload() {
     return {
-      name,
-      opens_at: new Date(opensAt).toISOString(),
-      closes_at: new Date(closesAt).toISOString(),
       intro_markdown: intro,
+      closed_markdown: closed,
       hear_about_options: hearAbout
         .split('\n')
         .map((line) => line.trim())
         .filter(Boolean),
-      is_active: true,
       questions: questions
         .filter((question) => !exitingKeys.includes(question.key))
         .map((question, index) => ({
-        id: question.id || undefined,
-        prompt: question.prompt,
-        help_text: question.help_text,
-        max_words: question.max_words,
-        required: question.required,
-        sort_order: index,
-      })),
+          id: question.id || undefined,
+          prompt: question.prompt,
+          help_text: question.help_text,
+          max_words: question.max_words,
+          required: question.required,
+          sort_order: index,
+        })),
     }
   }
+
+  useImperativeHandle(ref, () => ({
+    getDraft: () => payload(),
+  }))
 
   async function handleSave() {
     setIsSaving(true)
     setError(null)
+    if (!cycleId) return
     const result = await saveRushApplicationCycle(cycleId, payload())
     setIsSaving(false)
     if (result.error || !result.data) {
@@ -175,6 +180,7 @@ export default function RushApplicationManager({
       return
     }
     applyServerState(result.data)
+    onUpdated?.(result.data)
     setSavedAt(new Date().toLocaleTimeString())
     setIsEditing(false)
   }
@@ -193,6 +199,7 @@ export default function RushApplicationManager({
       return
     }
     applyServerState(result.data)
+    onUpdated?.(result.data)
     setSavedAt(new Date().toLocaleTimeString())
   }
 
@@ -214,6 +221,7 @@ export default function RushApplicationManager({
       return
     }
     applyServerState(result.data)
+    onUpdated?.(result.data)
     setSavedAt(new Date().toLocaleTimeString())
   }
 
@@ -280,26 +288,27 @@ export default function RushApplicationManager({
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {cycleId && accepting ? (
+          {!isDraft && cycleId && accepting ? (
             <button type="button" className={ghostBtnClass} onClick={() => void handleCloseNow()} disabled={isClosing || isEditing}>
               {isClosing ? 'Closing…' : 'Close now'}
             </button>
           ) : null}
-          {cycleId && !accepting ? (
+          {!isDraft && cycleId && !accepting ? (
             <button type="button" className={ghostBtnClass} onClick={() => void handleOpenNow()} disabled={isOpening || isEditing}>
               {isOpening ? 'Opening…' : 'Open now'}
             </button>
           ) : null}
-          {isEditing ? (
+          {!isDraft && isEditing ? (
             <button
               type="submit"
               form="rush-application-form"
               className={btnClass}
               disabled={isSaving}
             >
-              {isSaving ? 'Saving…' : cycleId ? 'Save' : 'Create cycle'}
+              {isSaving ? 'Saving…' : 'Save'}
             </button>
-          ) : (
+          ) : null}
+          {!isDraft && !isEditing ? (
             <button
               type="button"
               className={btnClass}
@@ -309,92 +318,62 @@ export default function RushApplicationManager({
             >
               Edit
             </button>
-          )}
+          ) : null}
         </div>
       </div>
 
       <form
-        id="rush-application-form"
+        id={isDraft ? undefined : 'rush-application-form'}
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault()
-          void handleSave()
+          if (!isDraft) void handleSave()
         }}
       >
-        {error && !cycleNameError ? (
+        {error ? (
           <p className="text-sm text-red-500">{error}</p>
         ) : null}
-        {savedAt && !isEditing ? <p className="text-xs text-gray-400">Saved {savedAt}</p> : null}
+        {savedAt && !isEditing && !isDraft ? <p className="text-xs text-gray-400">Saved {savedAt}</p> : null}
 
         <div>
           <h3 className="mb-2 text-sm font-semibold text-gray-800">Welcome</h3>
           <div className={innerCardClass} style={innerCardStyle}>
             <div className="space-y-3">
               <div>
-                <label htmlFor="cycle-name" className={labelClass}>
-                  Cycle name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="cycle-name"
-                  className={`${inputClass} ${cycleNameError ? 'border-red-300' : ''}`}
-                  value={name}
-                  onChange={(event) => {
-                    setName(event.target.value)
-                    if (cycleNameError) setError(null)
-                  }}
-                  placeholder="Fall 2026"
-                  required
-                  disabled={!isEditing}
-                />
-                {cycleNameError ? (
-                  <p className="mt-1 text-sm text-red-500">Cycle name is required</p>
-                ) : null}
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="opens-at" className={labelClass}>
-                    Opens <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="opens-at"
-                    type="datetime-local"
-                    className={inputClass}
-                    value={opensAt}
-                    onChange={(event) => setOpensAt(event.target.value)}
-                    required
-                    disabled={!isEditing}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="closes-at" className={labelClass}>
-                    Closes <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="closes-at"
-                    type="datetime-local"
-                    className={inputClass}
-                    value={closesAt}
-                    onChange={(event) => setClosesAt(event.target.value)}
-                    required
-                    disabled={!isEditing}
-                  />
-                </div>
-              </div>
-
-              <div>
                 <label htmlFor="intro" className={labelClass}>
-                  Welcome text
+                  Welcome text <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="intro"
+                  form={isDraft ? formId : undefined}
                   className={inputClass}
                   rows={4}
                   value={intro}
                   onChange={(event) => setIntro(event.target.value)}
                   placeholder="Thank you for your interest… Applications are due by 11:59 PM on September 6th."
-                  disabled={!isEditing}
+                  required
+                  disabled={!fieldsEditable}
                 />
+              </div>
+
+              <div>
+                <label htmlFor="closed-text" className={labelClass}>
+                  Closed text <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="closed-text"
+                  form={isDraft ? formId : undefined}
+                  className={inputClass}
+                  rows={3}
+                  value={closed}
+                  onChange={(event) => setClosed(event.target.value)}
+                  placeholder="The Kappa Theta Pi Fall 2025 Rush Application has now been closed."
+                  required
+                  disabled={!fieldsEditable}
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Responders will see this message as the form is closed for responses.
+                </p>
               </div>
             </div>
           </div>
@@ -403,7 +382,7 @@ export default function RushApplicationManager({
         <div>
           <div className="mb-2 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-gray-800">Questions</h3>
-            {isEditing ? (
+            {fieldsEditable ? (
               <button
                 type="button"
                 className="cursor-pointer text-sm font-semibold text-[#315CA9] hover:underline"
@@ -433,8 +412,10 @@ export default function RushApplicationManager({
                   <div className={`min-h-0 ${isExiting ? 'overflow-hidden' : ''}`}>
                     <div className={innerCardClass} style={innerCardStyle}>
                   <div className="mb-1 flex h-5 items-center justify-between gap-2">
-                    <label className="text-sm font-medium text-gray-700">Prompt</label>
-                    {isEditing ? (
+                    <label className="text-sm font-medium text-gray-700">
+                      Prompt <span className="text-red-500">*</span>
+                    </label>
+                    {fieldsEditable ? (
                       <div className="-mr-1.5 -translate-y-0.5 flex items-center">
                         <button
                           type="button"
@@ -490,23 +471,24 @@ export default function RushApplicationManager({
                   </div>
                   <textarea
                     className={`${inputClass} mb-3`}
+                    form={isDraft ? formId : undefined}
                     rows={2}
                     value={question.prompt}
                     onChange={(event) => updateQuestion(question.key, { prompt: event.target.value })}
                     required
-                    disabled={!isEditing}
+                    disabled={!fieldsEditable}
                   />
                   <label className={labelClass}>Help text</label>
                   <input
                     className={`${inputClass} mb-3`}
                     value={question.help_text}
                     onChange={(event) => updateQuestion(question.key, { help_text: event.target.value })}
-                    disabled={!isEditing}
+                    disabled={!fieldsEditable}
                   />
                   <div className="flex flex-wrap items-end gap-6">
                     <div>
                       <label htmlFor={`max-words-${question.key}`} className={labelClass}>
-                        Max words
+                        Max words <span className="text-red-500">*</span>
                       </label>
                       <input
                         id={`max-words-${question.key}`}
@@ -517,7 +499,8 @@ export default function RushApplicationManager({
                         onChange={(event) =>
                           updateQuestion(question.key, { max_words: Number(event.target.value) })
                         }
-                        disabled={!isEditing}
+                        required
+                        disabled={!fieldsEditable}
                       />
                     </div>
                     <label className="flex h-10 items-center gap-2 text-sm text-gray-700">
@@ -528,9 +511,9 @@ export default function RushApplicationManager({
                           updateQuestion(question.key, { required: event.target.checked })
                         }
                         className="h-4 w-4 cursor-pointer accent-[#315CA9] disabled:cursor-not-allowed"
-                        disabled={!isEditing}
+                        disabled={!fieldsEditable}
                       />
-                      Required
+                      Required response
                     </label>
                   </div>
                     </div>
@@ -549,12 +532,13 @@ export default function RushApplicationManager({
             </label>
             <textarea
               id="hear-about"
+              form={isDraft ? formId : undefined}
               className={inputClass}
               rows={5}
               value={hearAbout}
               onChange={(event) => setHearAbout(event.target.value)}
               placeholder={'Flyer\nInstagram\nWord of mouth\nOther'}
-              disabled={!isEditing}
+              disabled={!fieldsEditable}
             />
             <p className="mt-1 text-xs text-gray-500">One option per line. Include “Other” if you want a write-in.</p>
           </div>
@@ -562,4 +546,6 @@ export default function RushApplicationManager({
       </form>
     </div>
   )
-}
+})
+
+export default RushApplicationManager

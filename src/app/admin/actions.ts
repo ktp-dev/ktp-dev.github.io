@@ -10,19 +10,22 @@ import {
 } from '@/lib/rush-event-schema'
 import {
   createRushEvent,
-  getRushEvents,
+  getRushEventsForCycle,
   patchRushEvent,
   removeRushEvent,
   reorderRushEvents,
   toClientRushEvent,
 } from '@/lib/rush-events'
-import { parseCycleId, parseRushCycle } from '@/lib/rush-cycle-schema'
+import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
 import {
+  activateRushCycle,
   closeRushCycleNow,
   createRushCycle,
-  getAdminCycle,
+  getCycleBundle,
+  listRushCycles,
   openRushCycleNow,
   saveRushCycle,
+  saveRushCycleMeta,
 } from '@/lib/rush-cycles'
 
 export type RushEventInput = RushEventWrite
@@ -35,20 +38,36 @@ async function requireAdmin() {
   return { user, error: null }
 }
 
-export async function listRushEvents() {
+function revalidateRush() {
+  revalidatePath('/admin')
+  revalidatePath('/rush')
+  revalidatePath('/apply')
+}
+
+export async function listRushEvents(cycleId: string) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
   }
 
-  const events = await getRushEvents()
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const events = await getRushEventsForCycle(parsedId.data)
   return { data: events.map(toClientRushEvent), error: null }
 }
 
-export async function insertRushEvent(event: RushEventInput) {
+export async function insertRushEvent(cycleId: string, event: RushEventInput) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
   }
 
   const parsed = parseRushEvent(event)
@@ -57,9 +76,8 @@ export async function insertRushEvent(event: RushEventInput) {
   }
 
   try {
-    const created = await createRushEvent(parsed.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    const created = await createRushEvent(parsedId.data, parsed.data)
+    revalidateRush()
     return { data: toClientRushEvent(created), error: null }
   } catch (error) {
     console.error('Error inserting rush event:', error)
@@ -80,8 +98,7 @@ export async function deleteRushEvent(eventId: string) {
 
   try {
     await removeRushEvent(parsedId.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error deleting rush event:', error)
@@ -111,8 +128,7 @@ export async function updateRushEvent(eventId: string, event: RushEventInput) {
     if (!updated) {
       return { data: null, error: 'Event not found' }
     }
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: toClientRushEvent(updated), error: null }
   } catch (error) {
     console.error('Error updating rush event:', error)
@@ -135,8 +151,7 @@ export async function updateRushEventOrder(
 
   try {
     await reorderRushEvents(parsed.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error updating order_index:', error)
@@ -144,47 +159,127 @@ export async function updateRushEventOrder(
   }
 }
 
-export async function getRushApplicationCycle() {
+export async function getRushCycleBundle(cycleId: string) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
   }
 
-  const data = await getAdminCycle()
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const data = await getCycleBundle(parsedId.data)
+  if (!data) return { data: null, error: 'Cycle not found' }
   return { data, error: null }
 }
 
-export async function saveRushApplicationCycle(
-  cycleId: string | null,
-  input: unknown
-) {
+export async function createRushCycleRecord(input: unknown) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
   }
 
-  const parsed = parseRushCycle(input)
+  const parsed = parseRushCycleCreate(input)
   if (parsed.error || !parsed.data) {
     return { data: null, error: parsed.error }
   }
 
   try {
-    if (cycleId) {
-      const parsedId = parseCycleId(cycleId)
-      if (parsedId.error || !parsedId.data) {
-        return { data: null, error: parsedId.error }
-      }
-      await saveRushCycle(parsedId.data, parsed.data)
-    } else {
-      await createRushCycle(parsed.data)
-    }
-    revalidatePath('/admin')
-    revalidatePath('/apply')
-    return { data: await getAdminCycle(), error: null }
+    const bundle = await createRushCycle(parsed.data)
+    if (!bundle) return { data: null, error: 'Failed to create cycle' }
+    const cycles = await listRushCycles()
+    revalidateRush()
+    return { data: { ...bundle, cycles }, error: null }
+  } catch (error) {
+    console.error('Error creating rush cycle:', error)
+    return { data: null, error: 'Failed to create cycle' }
+  }
+}
+
+export async function saveRushApplicationCycle(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushCycleApplication(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    await saveRushCycle(parsedId.data, parsed.data)
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
   } catch (error) {
     console.error('Error saving rush cycle:', error)
     const message = error instanceof Error ? error.message : 'Failed to save rush application'
     return { data: null, error: message }
+  }
+}
+
+export async function saveRushCycleDetails(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushCycleMeta(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const updated = await saveRushCycleMeta(parsedId.data, parsed.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error saving rush cycle:', error)
+    return { data: null, error: 'Failed to save rush cycle' }
+  }
+}
+
+export async function showRushCycleOnSite(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  try {
+    const updated = await activateRushCycle(parsedId.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const [data, cycles] = await Promise.all([
+      getCycleBundle(parsedId.data),
+      listRushCycles(),
+    ])
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data: { ...data, cycles }, error: null }
+  } catch (error) {
+    console.error('Error activating rush cycle:', error)
+    return { data: null, error: 'Failed to show cycle on site' }
   }
 }
 
@@ -202,9 +297,10 @@ export async function closeRushApplicationNow(cycleId: string) {
   try {
     const updated = await closeRushCycleNow(parsedId.data)
     if (!updated) return { data: null, error: 'Cycle not found' }
-    revalidatePath('/admin')
-    revalidatePath('/apply')
-    return { data: await getAdminCycle(), error: null }
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
   } catch (error) {
     console.error('Error closing rush cycle:', error)
     return { data: null, error: 'Failed to close applications' }
@@ -225,9 +321,13 @@ export async function openRushApplicationNow(cycleId: string) {
   try {
     const updated = await openRushCycleNow(parsedId.data)
     if (!updated) return { data: null, error: 'Cycle not found' }
-    revalidatePath('/admin')
-    revalidatePath('/apply')
-    return { data: await getAdminCycle(), error: null }
+    revalidateRush()
+    const [data, cycles] = await Promise.all([
+      getCycleBundle(parsedId.data),
+      listRushCycles(),
+    ])
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data: { ...data, cycles }, error: null }
   } catch (error) {
     console.error('Error opening rush cycle:', error)
     return { data: null, error: 'Failed to open applications' }

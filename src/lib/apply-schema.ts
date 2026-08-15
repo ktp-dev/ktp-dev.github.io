@@ -27,7 +27,11 @@ export const applicationFieldsSchema = z.object({
   ),
   gpa: z.preprocess(
     (value) => (value === '' || value == null ? null : value),
-    z.coerce.number().min(0).max(4.3).nullable()
+    z.coerce
+      .number()
+      .min(0, 'GPA must be between 0 and 4')
+      .max(4, 'GPA must be between 0 and 4')
+      .nullable()
   ),
   semesters_remaining: z.preprocess(
     (value) => (value === '' || value == null ? null : value),
@@ -46,8 +50,38 @@ export const applicationFieldsSchema = z.object({
 
 export type ApplicationFields = z.infer<typeof applicationFieldsSchema>
 
-function wordCount(text: string) {
+export function wordCount(text: string) {
   return text.trim() === '' ? 0 : text.trim().split(/\s+/).length
+}
+
+export function maxAnswerChars(maxWords: number) {
+  return Math.max(2000, maxWords * 20)
+}
+
+export function answerLimitError(body: string, maxWords: number) {
+  const trimmed = body.trim()
+  if (!trimmed) return null
+  if (trimmed.length > maxAnswerChars(maxWords) || wordCount(trimmed) > maxWords) {
+    return `Keep this answer within ${maxWords} words`
+  }
+  return null
+}
+
+export function parseApplicationAnswers(
+  answers: Record<string, string>,
+  questions: Array<{ id: string; maxWords: number }>
+) {
+  const data: { questionId: string; body: string | null }[] = []
+  for (const question of questions) {
+    if (!Object.hasOwn(answers, question.id)) continue
+    const error = answerLimitError(answers[question.id] ?? '', question.maxWords)
+    if (error) return { data: null, error }
+    data.push({
+      questionId: question.id,
+      body: (answers[question.id] ?? '').trim() || null,
+    })
+  }
+  return { data, error: null }
 }
 
 function hasText(value: string | null | undefined) {
@@ -104,8 +138,9 @@ export function validateApplyStep(input: {
       const body = (answers[question.id] ?? '').trim()
       if (question.required && !body) {
         missing.push(question.prompt.length > 80 ? `${question.prompt.slice(0, 80)}…` : question.prompt)
-      } else if (body && wordCount(body) > question.maxWords) {
-        missing.push(`Keep this answer within ${question.maxWords} words: ${question.prompt.slice(0, 60)}`)
+      } else {
+        const over = answerLimitError(body, question.maxWords)
+        if (over) missing.push(`${over}: ${question.prompt.slice(0, 60)}`)
       }
     }
   }
@@ -194,9 +229,8 @@ export function parseSubmitPayload(input: {
     if (question.required && !body) {
       return { error: `Please answer: ${question.prompt.slice(0, 80)}` }
     }
-    if (body && wordCount(body) > question.maxWords) {
-      return { error: `An answer is over the ${question.maxWords}-word limit` }
-    }
+    const over = answerLimitError(body, question.maxWords)
+    if (over) return { error: over }
   }
 
   const requiredSlots: FileSlot[] = [

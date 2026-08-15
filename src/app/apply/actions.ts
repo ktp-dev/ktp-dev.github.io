@@ -14,7 +14,7 @@ import {
   deleteDummyFile,
   submitApplication,
 } from '@/lib/applications'
-import { parseApplicationFields, parseSubmitPayload } from '@/lib/apply-schema'
+import { parseApplicationAnswers, parseApplicationFields, parseSubmitPayload } from '@/lib/apply-schema'
 import { FILE_SLOTS, type FileSlot } from '@/lib/apply-steps'
 
 async function requireDraftOwner() {
@@ -55,13 +55,12 @@ export async function saveApplyDraft(input: {
   if (!saved) return { error: 'Could not save. The application may already be submitted.' }
 
   const questions = await getCycleQuestions(auth.cycle.id)
-  await saveApplicationAnswers(
-    auth.application.id,
-    questions.map((question) => ({
-      questionId: question.id,
-      body: (input.answers[question.id] ?? '').trim() || null,
-    }))
-  )
+  const parsedAnswers = parseApplicationAnswers(input.answers, questions)
+  if (parsedAnswers.error || !parsedAnswers.data) {
+    return { error: parsedAnswers.error }
+  }
+
+  await saveApplicationAnswers(auth.application.id, parsedAnswers.data)
 
   revalidatePath('/apply')
   return { error: null }
@@ -124,22 +123,7 @@ export async function submitApply(input: {
   const parsedFields = parseApplicationFields(input.fields)
   if (parsedFields.error || !parsedFields.data) return { error: parsedFields.error }
 
-  const saved = await saveApplicationFields(
-    auth.application.id,
-    auth.user.id,
-    parsedFields.data
-  )
-  if (!saved) return { error: 'Could not save before submit.' }
-
   const questions = await getCycleQuestions(auth.cycle.id)
-  await saveApplicationAnswers(
-    auth.application.id,
-    questions.map((question) => ({
-      questionId: question.id,
-      body: (input.answers[question.id] ?? '').trim() || null,
-    }))
-  )
-
   const files = await getApplicationFiles(auth.application.id)
   const fileMap = Object.fromEntries(
     files.map((file) => [file.slot, file.originalFilename])
@@ -158,6 +142,20 @@ export async function submitApply(input: {
     hearAboutOptions: auth.cycle.hearAboutOptions ?? [],
   })
   if (submitCheck.error) return { error: submitCheck.error }
+
+  const parsedAnswers = parseApplicationAnswers(input.answers, questions)
+  if (parsedAnswers.error || !parsedAnswers.data) {
+    return { error: parsedAnswers.error }
+  }
+
+  const saved = await saveApplicationFields(
+    auth.application.id,
+    auth.user.id,
+    parsedFields.data
+  )
+  if (!saved) return { error: 'Could not save before submit.' }
+
+  await saveApplicationAnswers(auth.application.id, parsedAnswers.data)
 
   const submitted = await submitApplication(auth.application.id, auth.user.id)
   if (!submitted) return { error: 'Submit failed. You may have already submitted.' }

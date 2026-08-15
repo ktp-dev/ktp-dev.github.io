@@ -35,10 +35,19 @@ export function prevStepPath(slug: ApplyStepSlug) {
   return APPLY_STEPS[index - 1]?.path ?? '/apply'
 }
 
+export function cycleDisplayName(cycleName: string) {
+  return cycleName.replace(/\s*\(local\)\s*/gi, '').trim()
+}
+
 export function applicationTitle(cycleName: string) {
-  const season = cycleName.replace(/\s*\(local\)\s*/gi, '').trim()
+  const season = cycleDisplayName(cycleName)
   if (/kappa theta pi/i.test(season) && /rush application/i.test(season)) {
     return season
   }
   return `Kappa Theta Pi ${season} Rush Application`
+}
+
+export function applicationClosedMessage(cycleName: string, custom?: string | null) {
+  if (custom?.trim()) return custom.trim()
+  return `The Kappa Theta Pi ${cycleDisplayName(cycleName)} Rush Application has now been closed.`
 }

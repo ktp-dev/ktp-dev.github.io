@@ -22,10 +22,42 @@ export const admins = pgTable('admins', {
     .notNull(),
 })
 
+export const rushCycles = pgTable(
+  'rush_cycles',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    name: text('name').notNull(),
+    opensAt: timestamp('opens_at', { withTimezone: true, mode: 'string' }).notNull(),
+    closesAt: timestamp('closes_at', { withTimezone: true, mode: 'string' }).notNull(),
+    introMarkdown: text('intro_markdown'),
+    closedMarkdown: text('closed_markdown'),
+    publicBlurb: text('public_blurb'),
+    interestFormUrl: text('interest_form_url'),
+    youtubeUrl: text('youtube_url'),
+    calendarUrl: text('calendar_url'),
+    hearAboutOptions: text('hear_about_options').array().notNull().default(sql`ARRAY[]::text[]`),
+    isActive: boolean('is_active').default(false).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('rush_cycles_one_active')
+      .on(table.isActive)
+      .where(sql`${table.isActive}`),
+  ]
+)
+
 export const rushEvents = pgTable(
   'rush_events',
   {
     id: uuid('id').defaultRandom().primaryKey().notNull(),
+    cycleId: uuid('cycle_id')
+      .notNull()
+      .references(() => rushCycles.id, { onDelete: 'cascade' }),
     title: text('title').notNull(),
     datetime: text('datetime').notNull(),
     location: text('location').notNull(),
@@ -45,30 +77,7 @@ export const rushEvents = pgTable(
       'btree',
       table.orderIndex.asc().nullsLast().op('int4_ops')
     ),
-  ]
-)
-
-export const rushCycles = pgTable(
-  'rush_cycles',
-  {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    name: text('name').notNull(),
-    opensAt: timestamp('opens_at', { withTimezone: true, mode: 'string' }).notNull(),
-    closesAt: timestamp('closes_at', { withTimezone: true, mode: 'string' }).notNull(),
-    introMarkdown: text('intro_markdown'),
-    hearAboutOptions: text('hear_about_options').array().notNull().default(sql`ARRAY[]::text[]`),
-    isActive: boolean('is_active').default(false).notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
-      .default(sql`timezone('utc'::text, now())`)
-      .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
-      .default(sql`timezone('utc'::text, now())`)
-      .notNull(),
-  },
-  (table) => [
-    uniqueIndex('rush_cycles_one_active')
-      .on(table.isActive)
-      .where(sql`${table.isActive}`),
+    index('rush_events_cycle_id_idx').on(table.cycleId, table.orderIndex),
   ]
 )
 

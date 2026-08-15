@@ -6,6 +6,13 @@ const emptyToNull = (value: string | null | undefined) => {
   return trimmed === '' ? null : trimmed
 }
 
+const requiredUrl = z
+  .string()
+  .trim()
+  .min(1, 'URL is required')
+  .max(2000)
+  .refine((value) => URL.canParse(value), 'Must be a valid URL')
+
 export const cycleQuestionSchema = z.object({
   id: z.uuid().optional().nullable(),
   prompt: z.string().trim().min(1, 'Question prompt is required').max(2000),
@@ -20,40 +27,84 @@ export const cycleQuestionSchema = z.object({
   sort_order: z.number().int().min(0),
 })
 
-export const rushCycleSchema = z.object({
-  name: z.string().trim().min(1, 'Cycle name is required').max(120),
-  opens_at: z.string().min(1, 'Open date is required'),
-  closes_at: z.string().min(1, 'Close date is required'),
+const dateRangeRefine = (
+  value: { opens_at: string; closes_at: string },
+  ctx: z.RefinementCtx
+) => {
+  const opens = new Date(value.opens_at).getTime()
+  const closes = new Date(value.closes_at).getTime()
+  if (Number.isNaN(opens) || Number.isNaN(closes)) {
+    ctx.addIssue({ code: 'custom', message: 'Open and close must be valid dates' })
+    return
+  }
+  if (closes <= opens) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Close date must be after open date',
+      path: ['closes_at'],
+    })
+  }
+}
+
+export const rushCycleMetaSchema = z
+  .object({
+    name: z.string().trim().min(1, 'Cycle name is required').max(120),
+    opens_at: z.string().min(1, 'Open date is required'),
+    closes_at: z.string().min(1, 'Close date is required'),
+    interest_form_url: requiredUrl,
+    youtube_url: requiredUrl,
+    calendar_url: requiredUrl,
+  })
+  .superRefine(dateRangeRefine)
+
+export const rushCycleApplicationSchema = z.object({
   intro_markdown: z
     .string()
-    .max(8000)
-    .nullable()
-    .optional()
-    .transform(emptyToNull),
+    .trim()
+    .min(1, 'Welcome text is required')
+    .max(8000),
+  closed_markdown: z
+    .string()
+    .trim()
+    .min(1, 'Closed text is required')
+    .max(4000),
   hear_about_options: z.array(z.string().trim().min(1).max(200)).max(40),
-  is_active: z.boolean(),
-  questions: z.array(cycleQuestionSchema).max(20),
+  questions: z.array(cycleQuestionSchema).min(1).max(20),
 })
-  .superRefine((value, ctx) => {
-    const opens = new Date(value.opens_at).getTime()
-    const closes = new Date(value.closes_at).getTime()
-    if (Number.isNaN(opens) || Number.isNaN(closes)) {
-      ctx.addIssue({ code: 'custom', message: 'Open and close must be valid dates' })
-      return
-    }
-    if (closes <= opens) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Close date must be after open date',
-        path: ['closes_at'],
-      })
-    }
-  })
 
-export type RushCycleWrite = z.infer<typeof rushCycleSchema>
+export const rushCycleCreateSchema = z.intersection(
+  rushCycleMetaSchema,
+  rushCycleApplicationSchema
+)
 
-export function parseRushCycle(input: unknown) {
-  const result = rushCycleSchema.safeParse(input)
+export type RushCycleMetaWrite = z.infer<typeof rushCycleMetaSchema>
+export type RushCycleApplicationWrite = z.infer<typeof rushCycleApplicationSchema>
+export type RushCycleCreateWrite = z.infer<typeof rushCycleCreateSchema>
+
+export function parseRushCycleMeta(input: unknown) {
+  const result = rushCycleMetaSchema.safeParse(input)
+  if (!result.success) {
+    return {
+      data: null,
+      error: result.error.issues[0]?.message ?? 'Invalid cycle',
+    }
+  }
+  return { data: result.data, error: null }
+}
+
+export function parseRushCycleApplication(input: unknown) {
+  const result = rushCycleApplicationSchema.safeParse(input)
+  if (!result.success) {
+    return {
+      data: null,
+      error: result.error.issues[0]?.message ?? 'Invalid application',
+    }
+  }
+  return { data: result.data, error: null }
+}
+
+export function parseRushCycleCreate(input: unknown) {
+  const result = rushCycleCreateSchema.safeParse(input)
   if (!result.success) {
     return {
       data: null,

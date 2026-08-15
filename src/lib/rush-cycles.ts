@@ -1,7 +1,12 @@
 import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import { applicationAnswers, cycleQuestions, rushCycles } from '@/db/schema'
-import type { RushCycleWrite } from '@/lib/rush-cycle-schema'
+import type {
+  RushCycleApplicationWrite,
+  RushCycleCreateWrite,
+  RushCycleMetaWrite,
+} from '@/lib/rush-cycle-schema'
+import { getRushEventsForCycle, toClientRushEvent, type ClientRushEvent } from '@/lib/rush-events'
 
 export function toClientCycle(cycle: typeof rushCycles.$inferSelect) {
   return {
@@ -10,6 +15,11 @@ export function toClientCycle(cycle: typeof rushCycles.$inferSelect) {
     opens_at: cycle.opensAt,
     closes_at: cycle.closesAt,
     intro_markdown: cycle.introMarkdown,
+    closed_markdown: cycle.closedMarkdown,
+    public_blurb: cycle.publicBlurb,
+    interest_form_url: cycle.interestFormUrl,
+    youtube_url: cycle.youtubeUrl,
+    calendar_url: cycle.calendarUrl,
     hear_about_options: cycle.hearAboutOptions ?? [],
     is_active: cycle.isActive,
   }
@@ -29,6 +39,51 @@ export function toClientQuestion(question: typeof cycleQuestions.$inferSelect) {
 export type ClientRushCycle = ReturnType<typeof toClientCycle>
 export type ClientCycleQuestion = ReturnType<typeof toClientQuestion>
 
+export type CycleBundle = {
+  cycle: ClientRushCycle
+  questions: ClientCycleQuestion[]
+  events: ClientRushEvent[]
+}
+
+async function questionsForCycle(cycleId: string) {
+  const questions = await db
+    .select()
+    .from(cycleQuestions)
+    .where(eq(cycleQuestions.cycleId, cycleId))
+    .orderBy(asc(cycleQuestions.sortOrder))
+  return questions.map(toClientQuestion)
+}
+
+async function eventsForCycle(cycleId: string) {
+  const events = await getRushEventsForCycle(cycleId)
+  return events.map(toClientRushEvent)
+}
+
+export async function listRushCycles() {
+  const cycles = await db.select().from(rushCycles).orderBy(desc(rushCycles.opensAt))
+  return cycles.map(toClientCycle)
+}
+
+export async function getCycleBundle(cycleId: string): Promise<CycleBundle | null> {
+  const [cycle] = await db
+    .select()
+    .from(rushCycles)
+    .where(eq(rushCycles.id, cycleId))
+    .limit(1)
+  if (!cycle) return null
+
+  const [questions, events] = await Promise.all([
+    questionsForCycle(cycle.id),
+    eventsForCycle(cycle.id),
+  ])
+
+  return {
+    cycle: toClientCycle(cycle),
+    questions,
+    events,
+  }
+}
+
 export async function getAdminCycle() {
   const [active] = await db
     .select()
@@ -46,73 +101,140 @@ export async function getAdminCycle() {
         .limit(1)
     )[0]
 
-  if (!cycle) return { cycle: null, questions: [] as ClientCycleQuestion[] }
+  if (!cycle) return { cycle: null, questions: [] as ClientCycleQuestion[], events: [] as ClientRushEvent[] }
 
-  const questions = await db
-    .select()
-    .from(cycleQuestions)
-    .where(eq(cycleQuestions.cycleId, cycle.id))
-    .orderBy(asc(cycleQuestions.sortOrder))
+  const [questions, events] = await Promise.all([
+    questionsForCycle(cycle.id),
+    eventsForCycle(cycle.id),
+  ])
 
   return {
     cycle: toClientCycle(cycle),
-    questions: questions.map(toClientQuestion),
+    questions,
+    events,
   }
 }
 
-export async function createRushCycle(input: RushCycleWrite) {
-  return db.transaction(async (tx) => {
-    if (input.is_active) {
+function cycleMetaValues(input: RushCycleMetaWrite) {
+  return {
+    name: input.name,
+    opensAt: new Date(input.opens_at).toISOString(),
+    closesAt: new Date(input.closes_at).toISOString(),
+    interestFormUrl: input.interest_form_url,
+    youtubeUrl: input.youtube_url,
+    calendarUrl: input.calendar_url,
+  }
+}
+
+async function replaceQuestions(
+  tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+  cycleId: string,
+  questions: RushCycleApplicationWrite['questions']
+) {
+  const existing = await tx
+    .select({ id: cycleQuestions.id })
+    .from(cycleQuestions)
+    .where(eq(cycleQuestions.cycleId, cycleId))
+
+  const keepIds = questions
+    .map((question) => question.id)
+    .filter((id): id is string => Boolean(id))
+  const removeIds = existing.map((row) => row.id).filter((id) => !keepIds.includes(id))
+
+  if (removeIds.length) {
+    const [inUse] = await tx
+      .select({ id: applicationAnswers.id })
+      .from(applicationAnswers)
+      .where(inArray(applicationAnswers.questionId, removeIds))
+      .limit(1)
+
+    if (inUse) {
+      throw new Error('Cannot delete a question that applicants have already answered.')
+    }
+
+    await tx.delete(cycleQuestions).where(inArray(cycleQuestions.id, removeIds))
+  }
+
+  for (const [index, question] of questions.entries()) {
+    const values = {
+      prompt: question.prompt,
+      helpText: question.help_text,
+      maxWords: question.max_words,
+      required: question.required,
+      sortOrder: index,
+    }
+
+    if (question.id) {
+      await tx
+        .update(cycleQuestions)
+        .set(values)
+        .where(and(eq(cycleQuestions.id, question.id), eq(cycleQuestions.cycleId, cycleId)))
+    } else {
+      await tx.insert(cycleQuestions).values({
+        cycleId,
+        ...values,
+      })
+    }
+  }
+}
+
+export async function createRushCycle(input: RushCycleCreateWrite) {
+  const existing = await listRushCycles()
+  const makeActive = existing.length === 0
+
+  const created = await db.transaction(async (tx) => {
+    if (makeActive) {
       await tx.update(rushCycles).set({ isActive: false }).where(eq(rushCycles.isActive, true))
     }
 
-    const [created] = await tx
+    const [row] = await tx
       .insert(rushCycles)
       .values({
-        name: input.name,
-        opensAt: new Date(input.opens_at).toISOString(),
-        closesAt: new Date(input.closes_at).toISOString(),
+        ...cycleMetaValues(input),
         introMarkdown: input.intro_markdown,
+        closedMarkdown: input.closed_markdown,
         hearAboutOptions: input.hear_about_options,
-        isActive: input.is_active,
+        isActive: makeActive,
       })
       .returning()
 
-    if (input.questions.length) {
-      await tx.insert(cycleQuestions).values(
-        input.questions.map((question, index) => ({
-          cycleId: created.id,
-          prompt: question.prompt,
-          helpText: question.help_text,
-          maxWords: question.max_words,
-          required: question.required,
-          sortOrder: index,
-        }))
-      )
-    }
+    await tx.insert(cycleQuestions).values(
+      input.questions.map((question, index) => ({
+        cycleId: row.id,
+        prompt: question.prompt,
+        helpText: question.help_text,
+        maxWords: question.max_words,
+        required: question.required,
+        sortOrder: index,
+      }))
+    )
 
-    return created
+    return row
   })
+
+  return getCycleBundle(created.id)
 }
 
-export async function saveRushCycle(cycleId: string, input: RushCycleWrite) {
-  return db.transaction(async (tx) => {
-    if (input.is_active) {
-      await tx
-        .update(rushCycles)
-        .set({ isActive: false })
-        .where(and(eq(rushCycles.isActive, true), ne(rushCycles.id, cycleId)))
-    }
+export async function saveRushCycleMeta(cycleId: string, input: RushCycleMetaWrite) {
+  const [updated] = await db
+    .update(rushCycles)
+    .set({
+      ...cycleMetaValues(input),
+      updatedAt: sql`timezone('utc'::text, now())`,
+    })
+    .where(eq(rushCycles.id, cycleId))
+    .returning()
+  return updated ?? null
+}
 
+export async function saveRushCycle(cycleId: string, input: RushCycleApplicationWrite) {
+  return db.transaction(async (tx) => {
     const [updated] = await tx
       .update(rushCycles)
       .set({
-        name: input.name,
-        opensAt: new Date(input.opens_at).toISOString(),
-        closesAt: new Date(input.closes_at).toISOString(),
         introMarkdown: input.intro_markdown,
+        closedMarkdown: input.closed_markdown,
         hearAboutOptions: input.hear_about_options,
-        isActive: input.is_active,
         updatedAt: sql`timezone('utc'::text, now())`,
       })
       .where(eq(rushCycles.id, cycleId))
@@ -120,53 +242,26 @@ export async function saveRushCycle(cycleId: string, input: RushCycleWrite) {
 
     if (!updated) throw new Error('Cycle not found')
 
-    const existing = await tx
-      .select({ id: cycleQuestions.id })
-      .from(cycleQuestions)
-      .where(eq(cycleQuestions.cycleId, cycleId))
-
-    const keepIds = input.questions
-      .map((question) => question.id)
-      .filter((id): id is string => Boolean(id))
-    const removeIds = existing.map((row) => row.id).filter((id) => !keepIds.includes(id))
-
-    if (removeIds.length) {
-      const [inUse] = await tx
-        .select({ id: applicationAnswers.id })
-        .from(applicationAnswers)
-        .where(inArray(applicationAnswers.questionId, removeIds))
-        .limit(1)
-
-      if (inUse) {
-        throw new Error('Cannot delete a question that applicants have already answered.')
-      }
-
-      await tx.delete(cycleQuestions).where(inArray(cycleQuestions.id, removeIds))
-    }
-
-    for (const [index, question] of input.questions.entries()) {
-      const values = {
-        prompt: question.prompt,
-        helpText: question.help_text,
-        maxWords: question.max_words,
-        required: question.required,
-        sortOrder: index,
-      }
-
-      if (question.id) {
-        await tx
-          .update(cycleQuestions)
-          .set(values)
-          .where(and(eq(cycleQuestions.id, question.id), eq(cycleQuestions.cycleId, cycleId)))
-      } else {
-        await tx.insert(cycleQuestions).values({
-          cycleId,
-          ...values,
-        })
-      }
-    }
-
+    await replaceQuestions(tx, cycleId, input.questions)
     return updated
+  })
+}
+
+export async function activateRushCycle(cycleId: string) {
+  return db.transaction(async (tx) => {
+    await tx
+      .update(rushCycles)
+      .set({ isActive: false })
+      .where(and(eq(rushCycles.isActive, true), ne(rushCycles.id, cycleId)))
+    const [updated] = await tx
+      .update(rushCycles)
+      .set({
+        isActive: true,
+        updatedAt: sql`timezone('utc'::text, now())`,
+      })
+      .where(eq(rushCycles.id, cycleId))
+      .returning()
+    return updated ?? null
   })
 }
 

@@ -29,7 +29,8 @@ export const rushEventSchema = z.object({
     .optional()
     .transform(emptyToNull)
     .refine(
-      (value) => value === null || URL.canParse(value),
+      (value) =>
+        value === null || URL.canParse(value) || value.startsWith('/'),
       'Button URL must be a valid URL'
     ),
   order_index: z.number().int().min(0),

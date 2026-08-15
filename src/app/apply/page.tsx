@@ -3,7 +3,7 @@ import { ApplyRecap } from '@/components/apply/ApplySectionForm'
 import { applyCardStyle, ApplyShell } from '@/components/apply/ApplyShell'
 import { UmichGoogleButton } from '@/components/apply/UmichGoogleButton'
 import { loadApplyContext } from '@/lib/apply-load'
-import { applicationTitle } from '@/lib/apply-steps'
+import { applicationClosedMessage, applicationTitle } from '@/lib/apply-steps'
 
 export default async function ApplyWelcomePage() {
   const ctx = await loadApplyContext()
@@ -22,7 +22,7 @@ export default async function ApplyWelcomePage() {
   const windowClosed = ctx.window && !ctx.window.isOpen
   const closedCopy = ctx.window?.isBeforeOpen
     ? `Applications open ${new Date(ctx.cycle.opensAt).toLocaleString()}.`
-    : 'The deadline for this cycle has passed. Please apply next semester.'
+    : applicationClosedMessage(ctx.cycle.name, ctx.cycle.closedMarkdown)
 
   if (!ctx.user) {
     if (windowClosed) {

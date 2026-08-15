@@ -7,8 +7,10 @@ import RushEvent from './RushEvent'
 import type { ClientRushEvent } from '@/lib/rush-events'
 
 export default function RushScheduleManager({
+  cycleId,
   initialEvents,
 }: {
+  cycleId: string
   initialEvents: ClientRushEvent[]
 }) {
   const [rushEvents, setRushEvents] = useState<ClientRushEvent[]>(initialEvents)
@@ -160,7 +162,7 @@ export default function RushScheduleManager({
   }
 
   const refreshRushEvents = async () => {
-    const { data, error: loadError } = await listRushEvents()
+    const { data, error: loadError } = await listRushEvents(cycleId)
     if (loadError) {
       setError(loadError)
       return
@@ -200,7 +202,7 @@ export default function RushScheduleManager({
     if (isEditMode && editingEventId) {
       result = await updateRushEvent(editingEventId, eventData)
     } else {
-      result = await insertRushEvent(eventData)
+      result = await insertRushEvent(cycleId, eventData)
     }
 
     if (result.error) {
