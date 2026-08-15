@@ -91,7 +91,7 @@ export default function Footer() {
             </div>
 
             <div className='flex justify-center items-center mt-6 font-inter'>
-                © Kappa Theta Pi 2025. All rights reserved.
+                © Kappa Theta Pi 2026. All rights reserved.
             </div>
         </div>
     );

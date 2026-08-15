@@ -36,7 +36,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Allow public pages and auth routes
-  const publicPaths = ['/login', '/auth', '/', '/about', '/members', '/rush', '/nationals', '/life']
+  const publicPaths = ['/login', '/auth', '/', '/about', '/members', '/rush', '/nationals', '/life', '/privacy']
   const isPublicPath = publicPaths.some(path => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path))
   
   // Allow /admin through - it will handle its own auth/admin checks
