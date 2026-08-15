@@ -1,6 +1,8 @@
 -- Local-only fake rush events. Applied after migrations on
 -- `npx supabase start` (empty DB) and `npx supabase db reset`.
 -- Never copy production applicant or member data here.
+-- Do not put admin emails here (this file is committed). Use
+-- LOCAL_ADMIN_EMAILS in .env.local and `npm run db:seed-admins`.
 
 INSERT INTO public.rush_events (
   title,

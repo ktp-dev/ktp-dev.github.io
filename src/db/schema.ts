@@ -5,7 +5,7 @@ import { index, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-c
 // RLS, functions, triggers, and auth.users FKs live in supabase/migrations.
 
 export const admins = pgTable('admins', {
-  id: uuid('id').primaryKey().notNull(),
+  email: text('email').primaryKey().notNull(),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
     .default(sql`timezone('utc'::text, now())`)
     .notNull(),

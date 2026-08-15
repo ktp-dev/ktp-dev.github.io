@@ -31,11 +31,10 @@ export async function checkIsAdmin() {
     return null
   }
 
-  // Check if user is in admins table
   const { data: admin, error: adminError } = await supabase
     .from('admins')
-    .select('id')
-    .eq('id', user.id)
+    .select('email')
+    .eq('email', user.email.toLowerCase())
     .single()
 
   if (adminError) {
