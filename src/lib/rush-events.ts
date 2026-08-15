@@ -1,18 +1,11 @@
 import { asc, eq } from 'drizzle-orm'
 import { db, rushEvents } from '@/db'
+import type { RushEventWrite } from '@/lib/rush-event-schema'
+
+export type { RushEventWrite }
 
 export async function getRushEvents() {
   return db.select().from(rushEvents).orderBy(asc(rushEvents.orderIndex))
-}
-
-export type RushEventWrite = {
-  title: string
-  datetime: string
-  location: string
-  description: string | null
-  button_label: string | null
-  button_url: string | null
-  order_index: number
 }
 
 function toWriteValues(event: RushEventWrite) {

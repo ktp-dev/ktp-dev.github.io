@@ -3,13 +3,18 @@
 import { revalidatePath } from 'next/cache'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import {
+  parseRushEvent,
+  parseRushEventId,
+  parseRushEventOrder,
+  type RushEventWrite,
+} from '@/lib/rush-event-schema'
+import {
   createRushEvent,
   getRushEvents,
   patchRushEvent,
   removeRushEvent,
   reorderRushEvents,
   toClientRushEvent,
-  type RushEventWrite,
 } from '@/lib/rush-events'
 
 export type RushEventInput = RushEventWrite
@@ -20,13 +25,6 @@ async function requireAdmin() {
     return { error: 'Unauthorized: Admin access required' as const }
   }
   return { user, error: null }
-}
-
-function validateEvent(event: RushEventInput) {
-  if (!event.title || !event.datetime || !event.location) {
-    return 'Title, datetime, and location are required'
-  }
-  return null
 }
 
 export async function listRushEvents() {
@@ -45,18 +43,13 @@ export async function insertRushEvent(event: RushEventInput) {
     return { data: null, error: auth.error }
   }
 
-  const validationError = validateEvent(event)
-  if (validationError) {
-    return { data: null, error: validationError }
+  const parsed = parseRushEvent(event)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
   }
 
   try {
-    const created = await createRushEvent({
-      ...event,
-      description: event.description || null,
-      button_label: event.button_label || null,
-      button_url: event.button_url || null,
-    })
+    const created = await createRushEvent(parsed.data)
     revalidatePath('/rush')
     revalidatePath('/admin')
     return { data: toClientRushEvent(created), error: null }
@@ -72,8 +65,13 @@ export async function deleteRushEvent(eventId: string) {
     return { data: null, error: auth.error }
   }
 
+  const parsedId = parseRushEventId(eventId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
   try {
-    await removeRushEvent(eventId)
+    await removeRushEvent(parsedId.data)
     revalidatePath('/rush')
     revalidatePath('/admin')
     return { data: null, error: null }
@@ -90,18 +88,18 @@ export async function updateRushEvent(eventId: string, event: RushEventInput) {
     return { data: null, error: auth.error }
   }
 
-  const validationError = validateEvent(event)
-  if (validationError) {
-    return { data: null, error: validationError }
+  const parsedId = parseRushEventId(eventId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushEvent(event)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
   }
 
   try {
-    const updated = await patchRushEvent(eventId, {
-      ...event,
-      description: event.description || null,
-      button_label: event.button_label || null,
-      button_url: event.button_url || null,
-    })
+    const updated = await patchRushEvent(parsedId.data, parsed.data)
     if (!updated) {
       return { data: null, error: 'Event not found' }
     }
@@ -122,8 +120,13 @@ export async function updateRushEventOrder(
     return { data: null, error: auth.error }
   }
 
+  const parsed = parseRushEventOrder(orderUpdates)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
   try {
-    await reorderRushEvents(orderUpdates)
+    await reorderRushEvents(parsed.data)
     revalidatePath('/rush')
     revalidatePath('/admin')
     return { data: null, error: null }
