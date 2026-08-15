@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
+import AdminListManager from '@/components/AdminListManager'
 import AdminRushDashboard from '@/components/AdminRushDashboard'
+import { listAdmins } from '@/lib/admins'
 import { getAdminCycle, listRushCycles } from '@/lib/rush-cycles'
 import Unauthorized from '@/components/Unauthorized'
 
@@ -18,7 +20,11 @@ export default async function AdminPage() {
     return <Unauthorized />
   }
 
-  const [cycles, applicationCycle] = await Promise.all([listRushCycles(), getAdminCycle()])
+  const [cycles, applicationCycle, admins] = await Promise.all([
+    listRushCycles(),
+    getAdminCycle(),
+    listAdmins(),
+  ])
   const initialBundle = applicationCycle.cycle
     ? {
         cycle: applicationCycle.cycle,
@@ -26,14 +32,6 @@ export default async function AdminPage() {
         events: applicationCycle.events,
       }
     : null
-
-  const sectionCardClass =
-    'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
-
-  const sectionCardStyle = {
-    backgroundColor: 'rgba(249, 250, 251, 0.95)',
-    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-  }
 
   return (
     <div className="min-h-screen">
@@ -55,14 +53,11 @@ export default async function AdminPage() {
                 Admin Dashboard
               </h1>
               
-              <div className={`${sectionCardClass} mb-8`} style={sectionCardStyle}>
-                <h2 className="text-xl font-bold mb-4 font-inter">
-                  Welcome, {adminUser.email}!
-                </h2>
-                <p className="text-gray-600 text-sm">
-                  Admin portal features will be available here.
-                </p>
-              </div>
+              <h2 className="text-xl font-bold mb-6 font-inter text-gray-800">
+                Welcome, {adminUser.email}!
+              </h2>
+
+              <AdminListManager currentEmail={adminUser.email ?? ''} initialAdmins={admins} />
 
               <AdminRushDashboard initialCycles={cycles} initialBundle={initialBundle} />
             </div>

@@ -16,6 +16,8 @@ import {
   reorderRushEvents,
   toClientRushEvent,
 } from '@/lib/rush-events'
+import { parseAdminEmail } from '@/lib/admin-schema'
+import { addAdminEmail, removeAdminEmail } from '@/lib/admins'
 import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
 import {
   activateRushCycle,
@@ -42,6 +44,50 @@ function revalidateRush() {
   revalidatePath('/admin')
   revalidatePath('/rush')
   revalidatePath('/apply')
+}
+
+export async function addAdmin(email: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseAdminEmail(email)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await addAdminEmail(parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidatePath('/admin')
+    return { data: result.admin, error: null }
+  } catch (error) {
+    console.error('Error adding admin:', error)
+    return { data: null, error: 'Failed to add admin' }
+  }
+}
+
+export async function removeAdmin(email: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseAdminEmail(email)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await removeAdminEmail(parsed.data, auth.user.email ?? '')
+    if (result.error) return { data: null, error: result.error }
+    revalidatePath('/admin')
+    return { data: null, error: null }
+  } catch (error) {
+    console.error('Error removing admin:', error)
+    return { data: null, error: 'Failed to remove admin' }
+  }
 }
 
 export async function listRushEvents(cycleId: string) {
