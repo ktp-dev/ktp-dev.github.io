@@ -14,6 +14,7 @@ export default function Footer() {
                         <p><Link className="hover-text-custom font-medium" href="/rush">Rush</Link></p>
                         <p><Link className="hover-text-custom font-medium" href="/members">Members</Link></p>
                         <p><Link className="hover-text-custom font-medium" href="/nationals">Nationals</Link></p>
+                        <p><Link className="hover-text-custom font-medium" href="/privacy">Privacy Policy</Link></p>
                     </div>
 
                     {/* Contact Us */}
