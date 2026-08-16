@@ -1,5 +1,10 @@
 import { ApplyDraftSection } from '../ApplyDraftSection'
+import type { ApplyPreviewQuery } from '@/lib/apply-preview'
 
-export default function Page() {
-  return <ApplyDraftSection step="academic" />
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<ApplyPreviewQuery>
+}) {
+  return <ApplyDraftSection step="academic" searchParams={searchParams} />
 }

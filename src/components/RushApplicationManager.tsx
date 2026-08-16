@@ -6,6 +6,7 @@ import {
   openRushApplicationNow,
   saveRushApplicationCycle,
 } from '@/app/admin/actions'
+import { applyPreviewHref } from '@/lib/apply-preview'
 import type { ClientCycleQuestion, ClientRushCycle } from '@/lib/rush-cycles'
 
 const inputClass =
@@ -28,6 +29,15 @@ type QuestionDraft = {
   help_text: string
   max_words: number
   required: boolean
+}
+
+function EyeIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  )
 }
 
 function questionsFromServer(questions: ClientCycleQuestion[]): QuestionDraft[] {
@@ -64,7 +74,7 @@ function cycleStatus(opensAt: string, closesAt: string) {
   if (now > closes) {
     return { label: 'Closed', className: 'bg-gray-200/60 text-gray-600' }
   }
-  return { label: 'Accepting responses', className: 'bg-[#315CA9] text-white' }
+  return { label: 'Open', className: 'bg-[#315CA9] text-white' }
 }
 
 export type RushApplicationHandle = {
@@ -284,6 +294,18 @@ const RushApplicationManager = forwardRef<
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {!isDraft && cycleId ? (
+            <a
+              href={applyPreviewHref('/apply', cycleId)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-gray-300 text-gray-600 transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md"
+              title="Preview application"
+              aria-label="Preview application"
+            >
+              <EyeIcon />
+            </a>
+          ) : null}
           {!isDraft && cycleId && accepting ? (
             <button type="button" className={ghostBtnClass} onClick={() => void handleCloseNow()} disabled={isClosing || isEditing}>
               {isClosing ? 'Closing…' : 'Close now'}

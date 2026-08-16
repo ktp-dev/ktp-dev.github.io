@@ -120,7 +120,7 @@ CROSS JOIN (
   VALUES
     (
       'Pitch a product idea that reflects an aspect of your identity or personal values. What makes this idea meaningful to you?',
-      '"Product" refers to a technical idea such as an app, tool, service, or system. It does not need to be fully built.',
+      'Note: "Product" refers to a technical idea such as an app, tool, service, or system. It doesn''t need to be fully built, but should reflect your values or identity through its purpose or design. You are also welcome to relate your idea to your major or academic interests.',
       350,
       0
     ),

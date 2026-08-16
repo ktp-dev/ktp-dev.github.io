@@ -10,10 +10,26 @@ const LABELS: Record<FileSlot, string> = {
   transcript: 'Transcript',
   resume: 'Résumé (not anonymized)',
   resume_anonymized: 'Résumé (anonymized)',
-  life_app_screenshot: 'KTP Life app profile screenshot',
+  life_app_screenshot: 'Upload a screenshot of your KTP Life Mobile App profile',
 }
 
-export function DummyFileField({ slot, required }: { slot: FileSlot; required?: boolean }) {
+const HELP: Partial<Record<FileSlot, string>> = {
+  resume: 'Please submit this file with all personal information displayed on your résumé.',
+  resume_anonymized:
+    'Please submit this file with all personal information removed from your résumé. This includes your name, address, phone number, and email address, and LinkedIn. This practice is designed to promote fairness during the rush process.',
+  life_app_screenshot:
+    'If you are experiencing technical issues, submit a screenshot of the bug instead and email ktp-board@umich.edu. This won\'t impact your application in any way!',
+}
+
+export function DummyFileField({
+  slot,
+  required,
+  preview = false,
+}: {
+  slot: FileSlot
+  required?: boolean
+  preview?: boolean
+}) {
   const inputRef = useRef<HTMLInputElement>(null)
   const filename = useApplyStore((state) => state.files[slot])
   const setFile = useApplyStore((state) => state.setFile)
@@ -22,6 +38,11 @@ export function DummyFileField({ slot, required }: { slot: FileSlot; required?: 
   async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
+    if (preview) {
+      setFile(slot, file.name)
+      setSaveStatus('idle')
+      return
+    }
     setSaveStatus('saving')
     const result = await saveApplyDummyFile({
       slot,
@@ -38,6 +59,12 @@ export function DummyFileField({ slot, required }: { slot: FileSlot; required?: 
   }
 
   async function onRemove() {
+    if (preview) {
+      setFile(slot, null)
+      if (inputRef.current) inputRef.current.value = ''
+      setSaveStatus('idle')
+      return
+    }
     setSaveStatus('saving')
     const result = await deleteApplyDummyFile(slot)
     if (result.error) {
@@ -55,9 +82,9 @@ export function DummyFileField({ slot, required }: { slot: FileSlot; required?: 
         {LABELS[slot]}
         {required ? ' *' : ''}
       </p>
-      <p className="mb-2 text-xs text-gray-500">
-        Placeholder for now — we only store the filename until S3 is connected.
-      </p>
+      {HELP[slot] ? (
+        <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">{HELP[slot]}</p>
+      ) : null}
       <input
         ref={inputRef}
         type="file"

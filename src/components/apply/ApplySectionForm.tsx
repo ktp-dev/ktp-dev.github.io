@@ -6,6 +6,7 @@ import { saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
 import { applyCardClass, applyCardStyle } from '@/components/apply/ApplyShell'
 import { answerLimitError, validateApplyStep, wordCount, type ApplicationFields } from '@/lib/apply-schema'
+import { applyPreviewHref } from '@/lib/apply-preview'
 import { APPLY_STEPS, nextStepPath, prevStepPath, type ApplyStepSlug } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
 
@@ -35,9 +36,13 @@ export type ApplyFormPayload = {
 export function ApplySectionForm({
   step,
   payload,
+  preview = false,
+  previewCycleId = null,
 }: {
   step: ApplyStepSlug
   payload: ApplyFormPayload
+  preview?: boolean
+  previewCycleId?: string | null
 }) {
   const router = useRouter()
   const hydrated = useRef(false)
@@ -51,6 +56,7 @@ export function ApplySectionForm({
   const setAnswer = useApplyStore((state) => state.setAnswer)
   const setSaveStatus = useApplyStore((state) => state.setSaveStatus)
   const setToastErrors = useApplyStore((state) => state.setToastErrors)
+  const href = (path: string) => (preview ? applyPreviewHref(path, previewCycleId) : path)
 
   useEffect(() => {
     if (hydrated.current) return
@@ -75,6 +81,10 @@ export function ApplySectionForm({
   }
 
   async function persist(options?: { silent?: boolean }) {
+    if (preview) {
+      if (!options?.silent) setSaveStatus('idle')
+      return true
+    }
     const gen = ++saveGen.current
     if (!options?.silent) setSaveStatus('saving')
     const state = useApplyStore.getState()
@@ -92,6 +102,7 @@ export function ApplySectionForm({
   }
 
   function queueSave() {
+    if (preview) return
     setSaveStatus('saving')
     saveGen.current += 1
     if (timer.current) clearTimeout(timer.current)
@@ -103,6 +114,10 @@ export function ApplySectionForm({
   async function goNext() {
     if (timer.current) clearTimeout(timer.current)
     setSaveStatus('idle')
+    if (preview) {
+      router.push(href(nextStepPath(step)))
+      return
+    }
     const state = useApplyStore.getState()
     const missing = validateApplyStep({
       step,
@@ -117,11 +132,15 @@ export function ApplySectionForm({
       return
     }
     setToastErrors([])
-    const ok = await persist({ silent: true })
-    if (ok) router.push(nextStepPath(step))
+    const ok = preview ? true : await persist({ silent: true })
+    if (ok) router.push(href(nextStepPath(step)))
   }
 
   async function handleSubmit() {
+    if (preview) {
+      router.push('/admin')
+      return
+    }
     if (timer.current) clearTimeout(timer.current)
     setSaveStatus('idle')
     const ok = await persist({ silent: true })
@@ -146,7 +165,7 @@ export function ApplySectionForm({
       <div className="mb-5 flex items-start justify-between gap-4">
         <h2 className="text-xl font-bold font-inter text-gray-800">{stepMeta.label}</h2>
         <p className="min-h-5 shrink-0 pt-1 text-xs text-gray-400" aria-live="polite">
-          {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? 'Saved' : ''}
+          {preview ? '' : saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? 'Saved' : ''}
         </p>
       </div>
 
@@ -157,18 +176,18 @@ export function ApplySectionForm({
           <Field label="Preferred name" value={fields.preferred_name} onChange={(v) => { setField('preferred_name', v); queueSave() }} />
           <Field label="Preferred pronouns *" value={fields.pronouns} onChange={(v) => { setField('pronouns', v); queueSave() }} />
           <Field label="Phone number *" value={fields.phone} placeholder="XXX-XXX-XXXX" onChange={(v) => { setField('phone', v); queueSave() }} />
-          <DummyFileField slot="photo" required />
+          <DummyFileField slot="photo" required preview={preview} />
         </div>
       ) : null}
 
       {step === 'academic' ? (
         <div className="space-y-4">
-          <DummyFileField slot="transcript" required />
-          <DummyFileField slot="resume" required />
-          <DummyFileField slot="resume_anonymized" required />
+          <DummyFileField slot="transcript" required preview={preview} />
+          <DummyFileField slot="resume" required preview={preview} />
+          <DummyFileField slot="resume_anonymized" required preview={preview} />
           <Field
             label="Major(s) *"
-            hint='If undecided, enter "Undecided". If changing majors, enter "Prospective [New Major]".'
+            hint={'If you are undecided, enter "Undecided".\nIf you are planning to change majors or applying to an upper-level college, enter "Prospective [New Major]".'}
             value={fields.majors}
             onChange={(v) => { setField('majors', v); queueSave() }}
           />
@@ -190,7 +209,7 @@ export function ApplySectionForm({
             onChange={(v) => { setField('gpa', v === '' ? null : Number(v)); queueSave() }}
           />
           <Field
-            label="How many semesters will you be on campus after this semester (not including abroad)? *"
+            label="How many semesters will you be on campus after this semester, not including any semester spent abroad? *"
             type="number"
             value={fields.semesters_remaining?.toString() ?? ''}
             onChange={(v) => { setField('semesters_remaining', v === '' ? null : Number(v)); queueSave() }}
@@ -221,8 +240,10 @@ export function ApplySectionForm({
       {step === 'involvement' ? (
         <label className="block">
           <span className={labelClass}>Tell us about any campus activities. *</span>
-          <p className="mb-2 text-xs text-gray-500">
-            Jobs, volunteering, orgs, teams, and your role. Fine if you are not involved yet.
+          <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">
+            List any on-campus activities you are involved in, such as jobs, volunteering, student organizations, or athletic teams, along with your role or position. It&apos;s completely fine if you are not involved yet!
+            {'\n'}
+            (e.g., Gardening Club President, Grilled Cheese Club Chancellor)
           </p>
           <textarea
             className={`${inputClass} min-h-40`}
@@ -248,7 +269,7 @@ export function ApplySectionForm({
                   {question.required ? ' *' : ''}
                 </span>
                 {question.helpText ? (
-                  <p className="mb-2 text-xs text-gray-500">{question.helpText}</p>
+                  <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">{question.helpText}</p>
                 ) : null}
                 <textarea
                   className={`${inputClass} min-h-40`}
@@ -271,7 +292,9 @@ export function ApplySectionForm({
         <div className="space-y-4">
           <fieldset>
             <legend className={labelClass}>How did you hear about KTP? *</legend>
-            <p className="mb-2 text-xs text-gray-500">Select all that apply. Internal analytics only.</p>
+            <p className="mb-2 text-xs text-gray-500">
+              Select all that apply! This information is used for internal analytics only and will not affect your application. Please answer as honestly and accurately as you can.
+            </p>
             <div className="space-y-2">
               {payload.hearAboutOptions.map((option) => {
                 const checked = (fields.hear_about ?? []).includes(option)
@@ -306,7 +329,7 @@ export function ApplySectionForm({
           <label className="block">
             <span className={labelClass}>Anything else?</span>
             <p className="mb-2 text-xs text-gray-500">
-              Work, portfolios, websites, or other projects. Fine to leave blank.
+              Feel free to share anything else you would like us to know! This could include past work, portfolios, websites, videos, blogs, music, or other creative projects. It is completely fine to leave this blank.
             </p>
             <textarea
               className={`${inputClass} min-h-28`}
@@ -319,7 +342,9 @@ export function ApplySectionForm({
           </label>
           <label className="block">
             <span className={labelClass}>Any thoughts on the rush process?</span>
-            <p className="mb-2 text-xs text-gray-500">Will not affect decisions.</p>
+            <p className="mb-2 text-xs text-gray-500">
+              We welcome all feedback, whether positive, negative, or neutral. What did you enjoy? What could we improve? This will not affect any decisions and is only used to help us improve the process.
+            </p>
             <textarea
               className={`${inputClass} min-h-28`}
               value={fields.rush_feedback ?? ''}
@@ -329,7 +354,7 @@ export function ApplySectionForm({
               }}
             />
           </label>
-          <DummyFileField slot="life_app_screenshot" required />
+          <DummyFileField slot="life_app_screenshot" required preview={preview} />
         </div>
       ) : null}
 
@@ -343,12 +368,12 @@ export function ApplySectionForm({
       ) : null}
 
       <div className="mt-auto flex justify-between gap-3 pt-8">
-        <button type="button" className={ghostBtnClass} onClick={() => router.push(prevStepPath(step))}>
+        <button type="button" className={ghostBtnClass} onClick={() => router.push(href(prevStepPath(step)))}>
           Back
         </button>
         {step === 'review' ? (
           <button type="button" className={btnClass} onClick={() => void handleSubmit()}>
-            Submit application
+            {preview ? 'Exit preview' : 'Submit application'}
           </button>
         ) : (
           <button type="button" className={btnClass} onClick={() => void goNext()}>
@@ -384,7 +409,7 @@ function Field({
   return (
     <label className="block">
       <span className={labelClass}>{label}</span>
-      {hint ? <p className="mb-2 text-xs text-gray-500">{hint}</p> : null}
+      {hint ? <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">{hint}</p> : null}
       <input
         type={type}
         className={inputClass}

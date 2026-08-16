@@ -3,10 +3,33 @@ import { ApplyRecap } from '@/components/apply/ApplySectionForm'
 import { applyCardStyle, ApplyShell } from '@/components/apply/ApplyShell'
 import { UmichGoogleButton } from '@/components/apply/UmichGoogleButton'
 import { loadApplyContext } from '@/lib/apply-load'
+import { applyPreviewHref, parseApplyPreview, type ApplyPreviewQuery } from '@/lib/apply-preview'
 import { applicationClosedMessage, applicationTitle } from '@/lib/apply-steps'
 
-export default async function ApplyWelcomePage() {
-  const ctx = await loadApplyContext()
+export default async function ApplyWelcomePage({
+  searchParams,
+}: {
+  searchParams: Promise<ApplyPreviewQuery>
+}) {
+  const preview = parseApplyPreview(await searchParams)
+  const ctx = await loadApplyContext(preview)
+
+  if (ctx.isPreview && ctx.cycle) {
+    const title = applicationTitle(ctx.cycle.name)
+    return (
+      <ApplyShell title={title} preview>
+        <WelcomeCard>
+          <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
+          <Link
+            href={applyPreviewHref('/apply/personal', ctx.cycle.id)}
+            className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+          >
+            Continue application
+          </Link>
+        </WelcomeCard>
+      </ApplyShell>
+    )
+  }
 
   if (ctx.isBrother) {
     return (

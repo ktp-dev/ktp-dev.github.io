@@ -19,6 +19,11 @@ export async function getActiveCycle() {
   return cycle ?? null
 }
 
+export async function getCycleById(id: string) {
+  const [cycle] = await db.select().from(rushCycles).where(eq(rushCycles.id, id)).limit(1)
+  return cycle ?? null
+}
+
 export function cycleWindow(cycle: typeof rushCycles.$inferSelect) {
   const now = Date.now()
   const opens = new Date(cycle.opensAt).getTime()

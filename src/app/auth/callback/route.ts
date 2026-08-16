@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { getBrotherByUmichEmail } from '@/lib/brothers'
+import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 
 function safeNext(value: string | null) {
   if (value && value.startsWith('/') && !value.startsWith('//')) return value
@@ -30,10 +31,11 @@ export async function GET(request: Request) {
 
   const explicitNext = safeNext(requestUrl.searchParams.get('next'))
   if (brother) {
-    if (explicitNext === '/apply') {
-      return NextResponse.redirect(`${origin}/apply`)
-    }
-    if (explicitNext?.startsWith('/apply/')) {
+    if (explicitNext?.startsWith('/apply')) {
+      const nextUrl = new URL(explicitNext, origin)
+      if (nextUrl.searchParams.get('preview') === '1' && (await checkIsAdmin())) {
+        return NextResponse.redirect(`${origin}${explicitNext}`)
+      }
       return NextResponse.redirect(`${origin}/apply`)
     }
     return NextResponse.redirect(`${origin}${explicitNext ?? '/portal'}`)

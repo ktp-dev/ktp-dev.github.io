@@ -37,10 +37,12 @@ export function ApplyShell({
   children,
   current,
   title,
+  preview = false,
 }: {
   children: React.ReactNode
   current?: ApplyStepSlug
   title?: string
+  preview?: boolean
 }) {
   const currentIndex = current
     ? APPLY_STEPS.findIndex((step) => step.slug === current)
@@ -54,6 +56,12 @@ export function ApplyShell({
           title={title}
           className="mb-8 text-center text-3xl sm:text-4xl md:text-5xl font-black font-inter text-black"
         />
+      ) : null}
+
+      {preview ? (
+        <p className="mb-6 text-center text-sm font-medium text-[#315CA9]">
+          Preview only. Responses are not saved.
+        </p>
       ) : null}
 
       {current ? (
