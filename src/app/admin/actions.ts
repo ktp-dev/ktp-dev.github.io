@@ -17,7 +17,9 @@ import {
   toClientRushEvent,
 } from '@/lib/rush-events'
 import { parseAdminEmail } from '@/lib/admin-schema'
+import { parseBrotherId, parseBrotherWrite, type BrotherFormInput } from '@/lib/brother-schema'
 import { addAdminEmail, removeAdminEmail } from '@/lib/admins'
+import { addBrotherRow, removeBrotherRow, updateBrotherRow } from '@/lib/brothers'
 import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
 import {
   activateRushCycle,
@@ -44,6 +46,80 @@ function revalidateRush() {
   revalidatePath('/admin')
   revalidatePath('/rush')
   revalidatePath('/apply')
+}
+
+export async function addBrother(input: BrotherFormInput) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseBrotherWrite(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await addBrotherRow(parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidatePath('/admin')
+    revalidatePath('/portal')
+    return { data: result.brother, error: null }
+  } catch (error) {
+    console.error('Error adding brother:', error)
+    return { data: null, error: 'Failed to add brother' }
+  }
+}
+
+export async function updateBrother(id: string, input: BrotherFormInput) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseBrotherId(id)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseBrotherWrite(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await updateBrotherRow(parsedId.data, parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidatePath('/admin')
+    revalidatePath('/portal')
+    return { data: result.brother, error: null }
+  } catch (error) {
+    console.error('Error updating brother:', error)
+    return { data: null, error: 'Failed to update brother' }
+  }
+}
+
+export async function removeBrother(id: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseBrotherId(id)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await removeBrotherRow(parsed.data, auth.user.email ?? '')
+    if (result.error) return { data: null, error: result.error }
+    revalidatePath('/admin')
+    revalidatePath('/portal')
+    return { data: null, error: null }
+  } catch (error) {
+    console.error('Error removing brother:', error)
+    return { data: null, error: 'Failed to remove brother' }
+  }
 }
 
 export async function addAdmin(email: string) {

@@ -1,27 +1,43 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { getBrotherByUmichEmail } from '@/lib/brothers'
+
+function safeNext(value: string | null) {
+  if (value && value.startsWith('/') && !value.startsWith('//')) return value
+  return null
+}
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
   const origin = requestUrl.origin
+  const supabase = await createClient()
 
   if (code) {
-    const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    
+
     if (error) {
       console.error('Error exchanging code for session:', error)
       return NextResponse.redirect(`${origin}/login?error=auth_failed`)
     }
   }
 
-  const nextParam = requestUrl.searchParams.get('next')
-  const next =
-    nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//')
-      ? nextParam
-      : '/admin'
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const email = user?.email?.toLowerCase() ?? ''
+  const brother = email ? await getBrotherByUmichEmail(email) : null
 
-  return NextResponse.redirect(`${origin}${next}`)
+  const explicitNext = safeNext(requestUrl.searchParams.get('next'))
+  if (brother) {
+    if (explicitNext === '/apply') {
+      return NextResponse.redirect(`${origin}/apply`)
+    }
+    if (explicitNext?.startsWith('/apply/')) {
+      return NextResponse.redirect(`${origin}/apply`)
+    }
+    return NextResponse.redirect(`${origin}${explicitNext ?? '/portal'}`)
+  }
+
+  return NextResponse.redirect(`${origin}${explicitNext ?? '/apply'}`)
 }
-

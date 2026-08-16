@@ -22,6 +22,32 @@ export const admins = pgTable('admins', {
     .notNull(),
 })
 
+export const brothers = pgTable(
+  'brothers',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    firstName: text('first_name'),
+    lastName: text('last_name'),
+    umichEmail: text('umich_email'),
+    contactEmail: text('contact_email'),
+    linkedinUrl: text('linkedin_url'),
+    photoFilename: text('photo_filename'),
+    status: text('status').default('active').notNull().$type<'active' | 'alumni'>(),
+    pledgeClass: text('pledge_class'),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('brothers_umich_email_key')
+      .on(table.umichEmail)
+      .where(sql`${table.umichEmail} is not null`),
+  ]
+)
+
 export const rushCycles = pgTable(
   'rush_cycles',
   {

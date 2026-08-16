@@ -8,6 +8,25 @@ import { applicationClosedMessage, applicationTitle } from '@/lib/apply-steps'
 export default async function ApplyWelcomePage() {
   const ctx = await loadApplyContext()
 
+  if (ctx.isBrother) {
+    return (
+      <ApplyShell title={ctx.cycle ? applicationTitle(ctx.cycle.name) : 'Application'}>
+        <WelcomeCard>
+          <p className="text-base sm:text-lg leading-relaxed">You&apos;re signed in as a brother.</p>
+          <p className="text-base sm:text-lg leading-relaxed">
+            This application is only available to rushees applying this cycle. Please switch accounts to apply, or return to the Brother Portal to continue.
+          </p>
+          <Link
+            href="/portal"
+            className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+          >
+            Go to brother portal
+          </Link>
+        </WelcomeCard>
+      </ApplyShell>
+    )
+  }
+
   if (!ctx.cycle) {
     return (
       <ApplyShell title="Applications are closed">

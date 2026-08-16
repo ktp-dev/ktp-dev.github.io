@@ -9,32 +9,42 @@ import {
   getOrCreateApplication,
 } from '@/lib/applications'
 import type { FileSlot } from '@/lib/apply-steps'
+import { getBrotherByUmichEmail } from '@/lib/brothers'
 import { requireUser } from '@/lib/supabase/auth-helpers'
+
+const emptyFiles = {} as Partial<Record<FileSlot, string>>
+const emptyAnswers = {} as Record<string, string>
 
 export async function loadApplyContext() {
   const user = await requireUser()
   const cycle = await getActiveCycle()
+  const isBrother = Boolean(user?.email && (await getBrotherByUmichEmail(user.email)))
 
   if (!user) {
     return {
       user: null,
+      isBrother: false,
       cycle,
       application: null,
       questions: [],
-      answers: {} as Record<string, string>,
-      files: {} as Partial<Record<FileSlot, string>>,
+      answers: emptyAnswers,
+      files: emptyFiles,
       window: cycle ? cycleWindow(cycle) : null,
     }
   }
-  if (!cycle) {
+
+  const signedIn = { id: user.id, email: user.email! }
+
+  if (isBrother || !cycle) {
     return {
-      user: { id: user.id, email: user.email! },
-      cycle: null,
+      user: signedIn,
+      isBrother,
+      cycle,
       application: null,
       questions: [],
-      answers: {} as Record<string, string>,
-      files: {} as Partial<Record<FileSlot, string>>,
-      window: null,
+      answers: emptyAnswers,
+      files: emptyFiles,
+      window: cycle ? cycleWindow(cycle) : null,
     }
   }
 
@@ -48,7 +58,8 @@ export async function loadApplyContext() {
   const fileRows = await getApplicationFiles(application.id)
 
   return {
-    user: { id: user.id, email: user.email! },
+    user: signedIn,
+    isBrother: false,
     cycle,
     application: {
       id: application.id,
@@ -76,6 +87,7 @@ export async function loadApplyContext() {
 
 export async function requireApplyDraft() {
   const ctx = await loadApplyContext()
+  if (ctx.isBrother) redirect('/apply')
   if (!ctx.user || !ctx.cycle || !ctx.application) redirect('/apply')
   if (ctx.application.status === 'submitted') redirect('/apply')
   if (ctx.window && !ctx.window.isOpen) redirect('/apply')

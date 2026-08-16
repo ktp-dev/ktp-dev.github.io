@@ -2,8 +2,10 @@ import { redirect } from 'next/navigation'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 import Header from '@/components/Header'
 import AdminListManager from '@/components/AdminListManager'
+import BrotherListManager from '@/components/BrotherListManager'
 import AdminRushDashboard from '@/components/AdminRushDashboard'
 import { listAdmins } from '@/lib/admins'
+import { listBrothers } from '@/lib/brothers'
 import { getAdminCycle, listRushCycles } from '@/lib/rush-cycles'
 import Unauthorized from '@/components/Unauthorized'
 
@@ -20,10 +22,11 @@ export default async function AdminPage() {
     return <Unauthorized />
   }
 
-  const [cycles, applicationCycle, admins] = await Promise.all([
+  const [cycles, applicationCycle, admins, brothers] = await Promise.all([
     listRushCycles(),
     getAdminCycle(),
     listAdmins(),
+    listBrothers(),
   ])
   const initialBundle = applicationCycle.cycle
     ? {
@@ -52,12 +55,11 @@ export default async function AdminPage() {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter text-black" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
                 Admin Dashboard
               </h1>
-              
-              <h2 className="text-xl font-bold mb-6 font-inter text-gray-800">
-                Welcome, {adminUser.email}!
-              </h2>
 
-              <AdminListManager currentEmail={adminUser.email ?? ''} initialAdmins={admins} />
+              <div className="mb-8 grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+                <AdminListManager currentEmail={adminUser.email ?? ''} initialAdmins={admins} />
+                <BrotherListManager currentEmail={adminUser.email ?? ''} initialBrothers={brothers} />
+              </div>
 
               <AdminRushDashboard initialCycles={cycles} initialBundle={initialBundle} />
             </div>

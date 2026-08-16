@@ -107,7 +107,6 @@ const RushApplicationManager = forwardRef<
   const [isClosing, setIsClosing] = useState(false)
   const [isOpening, setIsOpening] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [savedAt, setSavedAt] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(isDraft)
   const [enteringKey, setEnteringKey] = useState<string | null>(null)
   const [exitingKeys, setExitingKeys] = useState<string[]>([])
@@ -181,7 +180,6 @@ const RushApplicationManager = forwardRef<
     }
     applyServerState(result.data)
     onUpdated?.(result.data)
-    setSavedAt(new Date().toLocaleTimeString())
     setIsEditing(false)
   }
 
@@ -200,7 +198,6 @@ const RushApplicationManager = forwardRef<
     }
     applyServerState(result.data)
     onUpdated?.(result.data)
-    setSavedAt(new Date().toLocaleTimeString())
   }
 
   async function handleOpenNow() {
@@ -222,7 +219,6 @@ const RushApplicationManager = forwardRef<
     }
     applyServerState(result.data)
     onUpdated?.(result.data)
-    setSavedAt(new Date().toLocaleTimeString())
   }
 
   function updateQuestion(key: string, patch: Partial<QuestionDraft>) {
@@ -333,7 +329,6 @@ const RushApplicationManager = forwardRef<
         {error ? (
           <p className="text-sm text-red-500">{error}</p>
         ) : null}
-        {savedAt && !isEditing && !isDraft ? <p className="text-xs text-gray-400">Saved {savedAt}</p> : null}
 
         <div>
           <h3 className="mb-2 text-sm font-semibold text-gray-800">Welcome</h3>

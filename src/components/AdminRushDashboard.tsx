@@ -28,6 +28,8 @@ const inputClass =
 const datetimeInputClass =
   'w-full px-3 py-2 border border-gray-300 rounded-md text-sm outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:shadow-none'
 const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
+const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80 p-4'
+const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 const CYCLE_FORM_ID = 'rush-cycle-form'
 const DRAFT_VALUE = '__draft__'
 
@@ -315,108 +317,112 @@ export default function AdminRushDashboard({
 
         {error ? <p className="mb-3 text-sm text-red-500">{error}</p> : null}
 
-        <form id={CYCLE_FORM_ID} className="space-y-3" onSubmit={(event) => void handleSaveCycle(event)}>
-          <div>
-            <label htmlFor="cycle-name" className={labelClass}>
-              Cycle name <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="cycle-name"
-              className={inputClass}
-              value={fields.name}
-              onChange={(event) => setFields((current) => ({ ...current, name: event.target.value }))}
-              placeholder="Fall 2026"
-              required
-              disabled={!fieldsEditable}
-            />
-          </div>
+        <form id={CYCLE_FORM_ID} onSubmit={(event) => void handleSaveCycle(event)}>
+          <div className={innerCardClass} style={innerCardStyle}>
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="cycle-name" className={labelClass}>
+                  Cycle name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="cycle-name"
+                  className={inputClass}
+                  value={fields.name}
+                  onChange={(event) => setFields((current) => ({ ...current, name: event.target.value }))}
+                  placeholder="Fall 2026"
+                  required
+                  disabled={!fieldsEditable}
+                />
+              </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <label htmlFor="opens-at" className={labelClass}>
-                Open Rush Opens <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="opens-at"
-                type="datetime-local"
-                className={`${datetimeInputClass} ${fields.opensAt ? 'text-gray-700' : 'datetime-empty'}`}
-                value={fields.opensAt}
-                onChange={(event) =>
-                  setFields((current) => ({ ...current, opensAt: event.target.value }))
-                }
-                required
-                disabled={!fieldsEditable}
-              />
-            </div>
-            <div>
-              <label htmlFor="closes-at" className={labelClass}>
-                Open Rush Closes <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="closes-at"
-                type="datetime-local"
-                className={`${datetimeInputClass} ${fields.closesAt ? 'text-gray-700' : 'datetime-empty'}`}
-                value={fields.closesAt}
-                onChange={(event) =>
-                  setFields((current) => ({ ...current, closesAt: event.target.value }))
-                }
-                required
-                disabled={!fieldsEditable}
-              />
-            </div>
-          </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="opens-at" className={labelClass}>
+                    Open Rush Opens <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="opens-at"
+                    type="datetime-local"
+                    className={`${datetimeInputClass} ${fields.opensAt ? 'text-gray-700' : 'datetime-empty'}`}
+                    value={fields.opensAt}
+                    onChange={(event) =>
+                      setFields((current) => ({ ...current, opensAt: event.target.value }))
+                    }
+                    required
+                    disabled={!fieldsEditable}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="closes-at" className={labelClass}>
+                    Open Rush Closes <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="closes-at"
+                    type="datetime-local"
+                    className={`${datetimeInputClass} ${fields.closesAt ? 'text-gray-700' : 'datetime-empty'}`}
+                    value={fields.closesAt}
+                    onChange={(event) =>
+                      setFields((current) => ({ ...current, closesAt: event.target.value }))
+                    }
+                    required
+                    disabled={!fieldsEditable}
+                  />
+                </div>
+              </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div>
-              <label htmlFor="interest-form-url" className={labelClass}>
-                Interest form URL <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="interest-form-url"
-                type="url"
-                className={inputClass}
-                value={fields.interestFormUrl}
-                onChange={(event) =>
-                  setFields((current) => ({ ...current, interestFormUrl: event.target.value }))
-                }
-                placeholder="https://forms.gle/…"
-                required
-                disabled={!fieldsEditable}
-              />
-            </div>
-            <div>
-              <label htmlFor="youtube-url" className={labelClass}>
-                YouTube URL <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="youtube-url"
-                type="url"
-                className={inputClass}
-                value={fields.youtubeUrl}
-                onChange={(event) =>
-                  setFields((current) => ({ ...current, youtubeUrl: event.target.value }))
-                }
-                placeholder="https://www.youtube.com/watch?v=…"
-                required
-                disabled={!fieldsEditable}
-              />
-            </div>
-            <div>
-              <label htmlFor="calendar-url" className={labelClass}>
-                Google Calendar URL <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="calendar-url"
-                type="url"
-                className={inputClass}
-                value={fields.calendarUrl}
-                onChange={(event) =>
-                  setFields((current) => ({ ...current, calendarUrl: event.target.value }))
-                }
-                placeholder="https://calendar.google.com/…"
-                required
-                disabled={!fieldsEditable}
-              />
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div>
+                  <label htmlFor="interest-form-url" className={labelClass}>
+                    Interest form URL <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="interest-form-url"
+                    type="url"
+                    className={inputClass}
+                    value={fields.interestFormUrl}
+                    onChange={(event) =>
+                      setFields((current) => ({ ...current, interestFormUrl: event.target.value }))
+                    }
+                    placeholder="https://forms.gle/…"
+                    required
+                    disabled={!fieldsEditable}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="youtube-url" className={labelClass}>
+                    YouTube URL <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="youtube-url"
+                    type="url"
+                    className={inputClass}
+                    value={fields.youtubeUrl}
+                    onChange={(event) =>
+                      setFields((current) => ({ ...current, youtubeUrl: event.target.value }))
+                    }
+                    placeholder="https://www.youtube.com/watch?v=…"
+                    required
+                    disabled={!fieldsEditable}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="calendar-url" className={labelClass}>
+                    Google Calendar URL <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="calendar-url"
+                    type="url"
+                    className={inputClass}
+                    value={fields.calendarUrl}
+                    onChange={(event) =>
+                      setFields((current) => ({ ...current, calendarUrl: event.target.value }))
+                    }
+                    placeholder="https://calendar.google.com/…"
+                    required
+                    disabled={!fieldsEditable}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </form>

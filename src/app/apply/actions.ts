@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { requireUser } from '@/lib/supabase/auth-helpers'
+import { getBrotherByUmichEmail } from '@/lib/brothers'
 import {
   cycleWindow,
   getActiveCycle,
@@ -20,6 +21,10 @@ import { FILE_SLOTS, type FileSlot } from '@/lib/apply-steps'
 async function requireDraftOwner() {
   const user = await requireUser()
   if (!user?.email) return { error: 'Please log in with your UMich Google account.' as const }
+
+  if (await getBrotherByUmichEmail(user.email)) {
+    return { error: 'Brothers cannot submit a rush application.' as const }
+  }
 
   const cycle = await getActiveCycle()
   if (!cycle) return { error: 'Applications are not open.' as const }
