@@ -38,9 +38,11 @@ const emptyForm = {
   brother: '',
 }
 
-function cellValue(row: InterviewRow, key: (typeof COLUMNS)[number]['key']) {
+function cellValue(row: InterviewRow, key: (typeof COLUMNS)[number]['key']): string {
   if (key === 'submitted') return submittedLabel(row.daysAgo)
-  return row[key] || '—'
+  const value = row[key]
+  if (value == null || value === '') return '—'
+  return String(value)
 }
 
 function SearchIcon() {
