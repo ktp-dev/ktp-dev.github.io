@@ -51,3 +51,16 @@ export function applicationClosedMessage(cycleName: string, custom?: string | nu
   if (custom?.trim()) return custom.trim()
   return `The Kappa Theta Pi ${cycleDisplayName(cycleName)} Rush Application has now been closed.`
 }
+
+export function formatApplyDeadline(iso: string) {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return null
+  return date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}

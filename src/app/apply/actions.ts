@@ -41,9 +41,6 @@ async function requireDraftOwner() {
     email: user.email,
   })
 
-  if (application.status === 'submitted') {
-    return { error: 'This application has already been submitted.' as const }
-  }
   if (!window.isOpen && !isAdmin) {
     return { error: 'This application cycle is not open for edits.' as const }
   }
@@ -258,8 +255,10 @@ export async function submitApply(input: {
 
   await saveApplicationAnswers(auth.application.id, parsedAnswers.data)
 
-  const submitted = await submitApplication(auth.application.id, auth.user.id)
-  if (!submitted) return { error: 'Submit failed. You may have already submitted.' }
+  if (auth.application.status === 'draft') {
+    const submitted = await submitApplication(auth.application.id, auth.user.id)
+    if (!submitted) return { error: 'Submit failed.' }
+  }
 
   revalidatePath('/apply')
   return { error: null }

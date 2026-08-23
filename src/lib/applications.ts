@@ -1,4 +1,4 @@
-import { and, asc, eq } from 'drizzle-orm'
+import { and, asc, eq, inArray } from 'drizzle-orm'
 import { db } from '@/db'
 import {
   applicationAnswers,
@@ -24,14 +24,18 @@ export async function getCycleById(id: string) {
   return cycle ?? null
 }
 
+/** Extra time after closesAt before edits lock (not shown to rushees). */
+export const APPLY_CLOSE_GRACE_MS = 2 * 60 * 1000
+
 export function cycleWindow(cycle: typeof rushCycles.$inferSelect) {
   const now = Date.now()
   const opens = new Date(cycle.opensAt).getTime()
   const closes = new Date(cycle.closesAt).getTime()
+  const effectiveClose = closes + APPLY_CLOSE_GRACE_MS
   return {
-    isOpen: now >= opens && now <= closes,
+    isOpen: now >= opens && now <= effectiveClose,
     isBeforeOpen: now < opens,
-    isAfterClose: now > closes,
+    isAfterClose: now > effectiveClose,
   }
 }
 
@@ -142,7 +146,7 @@ export async function saveApplicationFields(
       and(
         eq(applications.id, applicationId),
         eq(applications.userId, userId),
-        eq(applications.status, 'draft')
+        inArray(applications.status, ['draft', 'submitted'])
       )
     )
     .returning()

@@ -167,7 +167,6 @@ export async function requireApplyDraft(options?: { preview?: boolean; cycleId?:
   }
   if (ctx.isBrother && !ctx.isAdmin) redirect('/apply')
   if (!ctx.user || !ctx.cycle || !ctx.application) redirect('/apply')
-  if (ctx.application.status === 'submitted') redirect('/apply')
   if (ctx.window && !ctx.window.isOpen && !ctx.isAdmin) redirect('/apply')
   return {
     user: ctx.user,

@@ -1,12 +1,9 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import {
-  confirmApplyFileUpload,
-  deleteApplyDummyFile,
-  presignApplyFileUpload,
-} from '@/app/apply/actions'
-import { fileAcceptForSlot, fileRequirementsLabel, resolveUploadMime, validateApplyFile } from '@/lib/apply-files'
+import { deleteApplyDummyFile } from '@/app/apply/actions'
+import { uploadApplyFile } from '@/lib/apply-client-upload'
+import { fileAcceptForSlot, fileRequirementsLabel, validateApplyFile } from '@/lib/apply-files'
 import type { FileSlot } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
 
@@ -39,6 +36,9 @@ export function DummyFileField({
   const [busyMessage, setBusyMessage] = useState<'Uploading…' | 'Removing…' | null>(null)
   const busy = busyMessage !== null
   const filename = useApplyStore((state) => state.files[slot])
+  const isSubmittedEdit = useApplyStore((state) => state.isSubmittedEdit)
+  const setPendingUpload = useApplyStore((state) => state.setPendingUpload)
+  const removePendingFile = useApplyStore((state) => state.removePendingFile)
   const setFile = useApplyStore((state) => state.setFile)
   const setSaveStatus = useApplyStore((state) => state.setSaveStatus)
 
@@ -64,57 +64,26 @@ export function DummyFileField({
       return
     }
 
+    if (isSubmittedEdit) {
+      setPendingUpload(slot, file)
+      if (inputRef.current) inputRef.current.value = ''
+      setSaveStatus('unsaved')
+      return
+    }
+
     setSaveStatus('saving')
     setBusyMessage('Uploading…')
 
     try {
-      const presigned = await presignApplyFileUpload({
-        slot,
-        filename: file.name,
-        mimeType: file.type,
-        sizeBytes: file.size,
-      })
-      if (presigned.error || !presigned.uploadUrl || !presigned.key) {
+      const result = await uploadApplyFile(slot, file)
+      if (result.error) {
         if (inputRef.current) inputRef.current.value = ''
         setBusyMessage(null)
-        setSaveStatus('error', presigned.error ?? 'Could not prepare upload.')
+        setSaveStatus('error', result.error)
         return
       }
 
-      const contentType =
-        resolveUploadMime({
-          slot,
-          mimeType: file.type,
-          filename: file.name,
-        }) ?? file.type
-
-      const uploadResponse = await fetch(presigned.uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: { 'Content-Type': contentType },
-      })
-      if (!uploadResponse.ok) {
-        if (inputRef.current) inputRef.current.value = ''
-        setBusyMessage(null)
-        setSaveStatus('error', 'Upload failed. Try again.')
-        return
-      }
-
-      const confirmed = await confirmApplyFileUpload({
-        slot,
-        key: presigned.key,
-        filename: file.name,
-        mimeType: file.type,
-        sizeBytes: file.size,
-      })
-      if (confirmed.error || !confirmed.file) {
-        if (inputRef.current) inputRef.current.value = ''
-        setBusyMessage(null)
-        setSaveStatus('error', confirmed.error ?? 'Could not save upload.')
-        return
-      }
-
-      setFile(slot, confirmed.file.filename ?? file.name)
+      setFile(slot, result.filename ?? file.name)
       setBusyMessage(null)
       setSaveStatus('saved')
     } catch {
@@ -131,6 +100,14 @@ export function DummyFileField({
       setSaveStatus('idle')
       return
     }
+
+    if (isSubmittedEdit) {
+      removePendingFile(slot)
+      if (inputRef.current) inputRef.current.value = ''
+      setSaveStatus('unsaved')
+      return
+    }
+
     setSaveStatus('saving')
     setBusyMessage('Removing…')
     const result = await deleteApplyDummyFile(slot)

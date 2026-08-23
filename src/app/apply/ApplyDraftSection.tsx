@@ -20,6 +20,7 @@ export async function ApplyDraftSection({
         step={step}
         preview={ctx.isPreview}
         previewCycleId={ctx.isPreview ? ctx.cycle.id : null}
+        isSubmitted={!ctx.isPreview && ctx.application.status === 'submitted'}
         payload={{
           applicationId: ctx.application.id,
           fields: ctx.application.fields,

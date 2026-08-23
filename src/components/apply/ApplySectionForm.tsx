@@ -2,9 +2,10 @@
 
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { saveApplyDraft, submitApply } from '@/app/apply/actions'
+import { deleteApplyDummyFile, saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
 import { applyCardClass, applyCardStyle } from '@/components/apply/ApplyShell'
+import { uploadPendingApplyFiles } from '@/lib/apply-client-upload'
 import { answerLimitError, validateApplyStep, wordCount, type ApplicationFields } from '@/lib/apply-schema'
 import { applyPreviewHref } from '@/lib/apply-preview'
 import { APPLY_STEPS, nextStepPath, prevStepPath, type ApplyStepSlug } from '@/lib/apply-steps'
@@ -38,11 +39,13 @@ export function ApplySectionForm({
   payload,
   preview = false,
   previewCycleId = null,
+  isSubmitted = false,
 }: {
   step: ApplyStepSlug
   payload: ApplyFormPayload
   preview?: boolean
   previewCycleId?: string | null
+  isSubmitted?: boolean
 }) {
   const router = useRouter()
   const hydrated = useRef(false)
@@ -52,10 +55,15 @@ export function ApplySectionForm({
   const answers = useApplyStore((state) => state.answers)
   const files = useApplyStore((state) => state.files)
   const saveStatus = useApplyStore((state) => state.saveStatus)
+  const isSubmittedEdit = useApplyStore((state) => state.isSubmittedEdit)
+  const pendingUploads = useApplyStore((state) => state.pendingUploads)
+  const pendingRemovals = useApplyStore((state) => state.pendingRemovals)
   const setField = useApplyStore((state) => state.setField)
   const setAnswer = useApplyStore((state) => state.setAnswer)
   const setSaveStatus = useApplyStore((state) => state.setSaveStatus)
   const setToastErrors = useApplyStore((state) => state.setToastErrors)
+  const clearEditSession = useApplyStore((state) => state.clearEditSession)
+  const clearPendingFileState = useApplyStore((state) => state.clearPendingFileState)
   const href = (path: string) => (preview ? applyPreviewHref(path, previewCycleId) : path)
 
   useEffect(() => {
@@ -66,8 +74,9 @@ export function ApplySectionForm({
       fields: payload.fields,
       answers: payload.answers,
       files: payload.files,
+      isSubmitted,
     })
-  }, [payload])
+  }, [payload, isSubmitted])
 
   function draftAnswers() {
     const state = useApplyStore.getState()
@@ -81,7 +90,7 @@ export function ApplySectionForm({
   }
 
   async function persist(options?: { silent?: boolean }) {
-    if (preview) {
+    if (preview || isSubmittedEdit) {
       if (!options?.silent) setSaveStatus('idle')
       return true
     }
@@ -103,6 +112,10 @@ export function ApplySectionForm({
 
   function queueSave() {
     if (preview) return
+    if (isSubmittedEdit) {
+      setSaveStatus('unsaved')
+      return
+    }
     setSaveStatus('saving')
     saveGen.current += 1
     if (timer.current) clearTimeout(timer.current)
@@ -128,12 +141,28 @@ export function ApplySectionForm({
     })
     if (missing.length) {
       setToastErrors(missing)
-      void persist({ silent: true })
+      if (!isSubmittedEdit) void persist({ silent: true })
       return
     }
     setToastErrors([])
-    const ok = preview ? true : await persist({ silent: true })
+    const ok = preview || isSubmittedEdit ? true : await persist({ silent: true })
     if (ok) router.push(href(nextStepPath(step)))
+  }
+
+  async function commitSubmittedEdits() {
+    for (const slot of pendingRemovals) {
+      const result = await deleteApplyDummyFile(slot)
+      if (result.error) {
+        return { error: result.error }
+      }
+    }
+
+    const uploadResult = await uploadPendingApplyFiles(pendingUploads)
+    if (uploadResult.error) {
+      return { error: uploadResult.error }
+    }
+
+    return { error: null }
   }
 
   async function handleSubmit() {
@@ -142,10 +171,55 @@ export function ApplySectionForm({
       return
     }
     if (timer.current) clearTimeout(timer.current)
+    setSaveStatus('saving')
+    const state = useApplyStore.getState()
+
+    if (isSubmittedEdit) {
+      const allMissing: string[] = []
+      for (const item of APPLY_STEPS) {
+        if (item.slug === 'review') continue
+        allMissing.push(
+          ...validateApplyStep({
+            step: item.slug,
+            fields: state.fields,
+            answers: state.answers,
+            files: state.files,
+            questions: payload.questions,
+          })
+        )
+      }
+      if (allMissing.length) {
+        setToastErrors(allMissing)
+        setSaveStatus('unsaved')
+        return
+      }
+      setToastErrors([])
+
+      const fileResult = await commitSubmittedEdits()
+      if (fileResult.error) {
+        setSaveStatus('error', fileResult.error)
+        return
+      }
+
+      const result = await submitApply({
+        fields: state.fields,
+        answers: state.answers,
+      })
+      if (result.error) {
+        setSaveStatus('error', result.error)
+        return
+      }
+
+      clearPendingFileState()
+      clearEditSession()
+      router.push('/apply?updated=1')
+      router.refresh()
+      return
+    }
+
     setSaveStatus('idle')
     const ok = await persist({ silent: true })
     if (!ok) return
-    const state = useApplyStore.getState()
     const result = await submitApply({
       fields: state.fields,
       answers: state.answers,
@@ -154,18 +228,35 @@ export function ApplySectionForm({
       setSaveStatus('error', result.error)
       return
     }
+    clearEditSession()
     router.push('/apply')
     router.refresh()
   }
 
   const stepMeta = APPLY_STEPS.find((item) => item.slug === step)!
+  const statusLabel =
+    preview
+      ? ''
+      : saveStatus === 'saving'
+        ? 'Saving…'
+        : saveStatus === 'saved'
+          ? 'Saved'
+          : saveStatus === 'unsaved'
+            ? 'Unsaved changes'
+            : ''
 
   return (
     <div className={`${applyCardClass} flex min-h-full flex-1 flex-col`} style={applyCardStyle}>
+      {isSubmittedEdit ? (
+        <div className="mb-5 rounded-lg border border-[#315CA9]/20 bg-[#315CA9]/5 px-4 py-3 text-sm text-gray-700">
+          Changes are not saved until you submit again on the Review step. This includes file
+          uploads.
+        </div>
+      ) : null}
       <div className="mb-5 flex items-start justify-between gap-4">
         <h2 className="text-xl font-bold font-inter text-gray-800">{stepMeta.label}</h2>
         <p className="min-h-5 shrink-0 pt-1 text-xs text-gray-400" aria-live="polite">
-          {preview ? '' : saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? 'Saved' : ''}
+          {statusLabel}
         </p>
       </div>
 
@@ -373,7 +464,7 @@ export function ApplySectionForm({
         </button>
         {step === 'review' ? (
           <button type="button" className={btnClass} onClick={() => void handleSubmit()}>
-            {preview ? 'Exit preview' : 'Submit application'}
+            {preview ? 'Exit preview' : isSubmittedEdit ? 'Save changes' : 'Submit application'}
           </button>
         ) : (
           <button type="button" className={btnClass} onClick={() => void goNext()}>

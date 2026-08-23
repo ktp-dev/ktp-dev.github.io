@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ApplyRecap } from '@/components/apply/ApplySectionForm'
+import { ApplySubmittedHome } from '@/components/apply/ApplySubmittedHome'
 import { applyCardStyle, ApplyShell } from '@/components/apply/ApplyShell'
 import { UmichGoogleButton } from '@/components/apply/UmichGoogleButton'
 import { loadApplyContext } from '@/lib/apply-load'
@@ -9,10 +9,12 @@ import { applicationClosedMessage, applicationTitle } from '@/lib/apply-steps'
 export default async function ApplyWelcomePage({
   searchParams,
 }: {
-  searchParams: Promise<ApplyPreviewQuery>
+  searchParams: Promise<ApplyPreviewQuery & { updated?: string }>
 }) {
-  const preview = parseApplyPreview(await searchParams)
+  const params = await searchParams
+  const preview = parseApplyPreview(params)
   const ctx = await loadApplyContext(preview)
+  const showUpdated = params.updated === '1'
 
   if (ctx.isPreview && ctx.cycle) {
     const title = applicationTitle(ctx.cycle.name)
@@ -87,25 +89,21 @@ export default async function ApplyWelcomePage({
   }
 
   if (ctx.application?.status === 'submitted') {
+    const canEdit = Boolean(ctx.window?.isOpen || ctx.isAdmin)
+
     return (
       <ApplyShell title={title}>
-        <WelcomeCard>
-          <p>
-            Your application has been submitted
-            {ctx.application.submittedAt
-              ? ` (${new Date(ctx.application.submittedAt).toLocaleString()})`
-              : ''}
-            . Responses below are locked.
-          </p>
-          <div className="w-full text-left">
-            <ApplyRecap
-              fields={ctx.application.fields}
-              answers={ctx.answers}
-              questions={ctx.questions}
-              files={ctx.files}
-            />
-          </div>
-        </WelcomeCard>
+        <ApplySubmittedHome
+          applicationId={ctx.application.id}
+          closesAt={ctx.cycle!.closesAt}
+          submittedAt={ctx.application.submittedAt}
+          updated={showUpdated && canEdit}
+          canEdit={canEdit}
+          fields={ctx.application.fields}
+          answers={ctx.answers}
+          questions={ctx.questions}
+          files={ctx.files}
+        />
       </ApplyShell>
     )
   }
