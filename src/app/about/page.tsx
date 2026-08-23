@@ -10,8 +10,6 @@ import { PiGlobeBold } from "react-icons/pi";
 import { HiAcademicCap } from "react-icons/hi2";
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-
-
 const categories = ['President\'s Welcome', 'Our Pillars', 'History', 'DEI Commitment'];
 
 export default function About() {
