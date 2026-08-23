@@ -18,6 +18,7 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="KTP Life App">
 
   <!-- iOS meta tags & icons -->
@@ -32,9 +33,25 @@
   <title>ktp_life</title>
   <link rel="manifest" href="manifest.json">
 
+  <style>
+    html { height: 100%; }
+    body {
+      margin: 0;
+      height: 100%;
+      background-color: #e8eaef;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    /* Meet & Greet swipe: stop the browser from natively dragging <img>s. */
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+  </style>
+
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "4162628080";
+    const serviceWorkerVersion = "3225699227" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
