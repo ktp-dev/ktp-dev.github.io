@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { TimeGreeting } from '@/components/portal/TimeGreeting'
-import { AlumniDirectoryTable } from '@/components/portal/AlumniDirectoryTable'
-import { InterviewHomeSection } from '@/components/portal/InterviewHomeSection'
+// import { AlumniDirectoryTable } from '@/components/portal/AlumniDirectoryTable'
+// import { InterviewHomeSection } from '@/components/portal/InterviewHomeSection'
 import {
   PortalShell,
   portalInnerCardClass,
@@ -116,12 +116,17 @@ export default async function PortalPage() {
       ) : null}
 
       <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
+        <h2 className="mb-2 text-xl font-bold font-inter">More coming soon</h2>
+        <p className="text-sm text-gray-500">More features coming soon. Stay tuned.</p>
+      </div>
+
+      {/* <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
         <AlumniDirectoryTable />
       </div>
 
       <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
         <InterviewHomeSection />
-      </div>
+      </div> */}
     </PortalShell>
   )
 }

@@ -11,6 +11,7 @@ import RushApplicationManager, {
   type RushApplicationHandle,
 } from '@/components/RushApplicationManager'
 import RushScheduleManager from '@/components/RushScheduleManager'
+import { AdminRubricManager } from '@/components/admin/AdminRubricManager'
 import type { ClientCycleQuestion, ClientRushCycle, CycleBundle } from '@/lib/rush-cycles'
 
 const btnClass =
@@ -240,6 +241,11 @@ export default function AdminRushDashboard({
     )
   }
 
+  function handleRubricUpdated(categories: CycleBundle['categories']) {
+    if (!bundle) return
+    setBundle({ ...bundle, categories })
+  }
+
   return (
     <div className="space-y-6">
       <div className={sectionCardClass} style={sectionCardStyle}>
@@ -428,7 +434,7 @@ export default function AdminRushDashboard({
         </form>
       </div>
 
-      <div className={`grid grid-cols-1 gap-6 pb-12 ${isDraft ? '' : 'md:grid-cols-2'} ${isLoading ? 'pointer-events-none opacity-60' : ''}`}>
+      <div className={`grid grid-cols-1 gap-6 ${isDraft ? '' : 'md:grid-cols-2'} ${isLoading ? 'pointer-events-none opacity-60' : ''}`}>
         {!isDraft && selected && bundle ? (
           <div className={sectionCardClass} style={sectionCardStyle}>
             <RushScheduleManager
@@ -446,10 +452,25 @@ export default function AdminRushDashboard({
             initialQuestions={isDraft ? [] : bundle?.questions ?? []}
             isDraft={isDraft}
             formId={isDraft ? CYCLE_FORM_ID : undefined}
+            draftMeta={isDraft ? { cycleName: fields.name } : undefined}
             onUpdated={handleUpdated}
           />
         </div>
       </div>
+
+      {!isDraft && selected && bundle ? (
+        <div
+          className={`${sectionCardClass} pb-12 ${isLoading ? 'pointer-events-none opacity-60' : ''}`}
+          style={sectionCardStyle}
+        >
+          <AdminRubricManager
+            key={`${selected.id}-rubric`}
+            cycleId={selected.id}
+            initialCategories={bundle.categories}
+            onUpdated={handleRubricUpdated}
+          />
+        </div>
+      ) : null}
     </div>
   )
 }

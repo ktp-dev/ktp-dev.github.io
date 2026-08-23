@@ -268,7 +268,12 @@ export function ApplySectionForm({
         <div className="space-y-4">
           <Field label="First name *" value={fields.first_name} onChange={(v) => { setField('first_name', v); queueSave() }} />
           <Field label="Last name *" value={fields.last_name} onChange={(v) => { setField('last_name', v); queueSave() }} />
-          <Field label="Preferred name" value={fields.preferred_name} onChange={(v) => { setField('preferred_name', v); queueSave() }} />
+          <Field
+            label="Preferred first name"
+            hint="Optional. Use this if you go by a different first name than your legal name."
+            value={fields.preferred_name}
+            onChange={(v) => { setField('preferred_name', v); queueSave() }}
+          />
           <Field label="Preferred pronouns *" value={fields.pronouns} onChange={(v) => { setField('pronouns', v); queueSave() }} />
           <Field label="Phone number *" value={fields.phone} placeholder="XXX-XXX-XXXX" onChange={(v) => { setField('phone', v); queueSave() }} />
           <DummyFileField slot="photo" required preview={preview} />
@@ -585,7 +590,7 @@ export function ApplyRecap({
         rows={[
           ['First name', fields.first_name],
           ['Last name', fields.last_name],
-          ['Preferred name', fields.preferred_name],
+          ['Preferred first name', fields.preferred_name],
           ['Pronouns', fields.pronouns],
           ['Phone', fields.phone],
           [

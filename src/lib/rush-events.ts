@@ -1,5 +1,6 @@
 import { asc, eq } from 'drizzle-orm'
 import { db, rushCycles, rushEvents } from '@/db'
+import { buildDefaultRushEventSeeds } from '@/lib/default-rush-events'
 import type { RushEventWrite } from '@/lib/rush-event-schema'
 
 export type { RushEventWrite }
@@ -48,6 +49,33 @@ export function toClientRushEvent(event: typeof rushEvents.$inferSelect) {
 }
 
 export type ClientRushEvent = ReturnType<typeof toClientRushEvent>
+
+export async function seedDefaultRushEvents(
+  tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+  cycleId: string
+) {
+  const existing = await tx
+    .select({ id: rushEvents.id })
+    .from(rushEvents)
+    .where(eq(rushEvents.cycleId, cycleId))
+    .limit(1)
+
+  if (existing.length) return
+
+  const seeds = buildDefaultRushEventSeeds()
+  await tx.insert(rushEvents).values(
+    seeds.map((seed) => ({
+      cycleId,
+      title: seed.title,
+      datetime: seed.datetime,
+      location: seed.location,
+      description: seed.description,
+      buttonLabel: seed.buttonLabel,
+      buttonUrl: seed.buttonUrl,
+      orderIndex: seed.orderIndex,
+    }))
+  )
+}
 
 export async function createRushEvent(cycleId: string, event: RushEventWrite) {
   const [created] = await db

@@ -1,12 +1,25 @@
 import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import { applicationAnswers, cycleQuestions, rushCycles } from '@/db/schema'
+import {
+  listRubricCategoriesForCycle,
+  seedDefaultRubricCategories,
+  type ClientRubricCategory,
+} from '@/lib/rubric-admin'
+import {
+  withDefaultApplicationCopy,
+} from '@/lib/default-rush-application'
 import type {
   RushCycleApplicationWrite,
   RushCycleCreateWrite,
   RushCycleMetaWrite,
 } from '@/lib/rush-cycle-schema'
-import { getRushEventsForCycle, toClientRushEvent, type ClientRushEvent } from '@/lib/rush-events'
+import {
+  getRushEventsForCycle,
+  seedDefaultRushEvents,
+  toClientRushEvent,
+  type ClientRushEvent,
+} from '@/lib/rush-events'
 
 export function toClientCycle(cycle: typeof rushCycles.$inferSelect) {
   return {
@@ -43,6 +56,7 @@ export type CycleBundle = {
   cycle: ClientRushCycle
   questions: ClientCycleQuestion[]
   events: ClientRushEvent[]
+  categories: ClientRubricCategory[]
 }
 
 async function questionsForCycle(cycleId: string) {
@@ -72,15 +86,17 @@ export async function getCycleBundle(cycleId: string): Promise<CycleBundle | nul
     .limit(1)
   if (!cycle) return null
 
-  const [questions, events] = await Promise.all([
+  const [questions, events, categories] = await Promise.all([
     questionsForCycle(cycle.id),
     eventsForCycle(cycle.id),
+    listRubricCategoriesForCycle(cycle.id),
   ])
 
   return {
     cycle: toClientCycle(cycle),
     questions,
     events,
+    categories,
   }
 }
 
@@ -101,17 +117,26 @@ export async function getAdminCycle() {
         .limit(1)
     )[0]
 
-  if (!cycle) return { cycle: null, questions: [] as ClientCycleQuestion[], events: [] as ClientRushEvent[] }
+  if (!cycle) {
+    return {
+      cycle: null,
+      questions: [] as ClientCycleQuestion[],
+      events: [] as ClientRushEvent[],
+      categories: [] as ClientRubricCategory[],
+    }
+  }
 
-  const [questions, events] = await Promise.all([
+  const [questions, events, categories] = await Promise.all([
     questionsForCycle(cycle.id),
     eventsForCycle(cycle.id),
+    listRubricCategoriesForCycle(cycle.id),
   ])
 
   return {
     cycle: toClientCycle(cycle),
     questions,
     events,
+    categories,
   }
 }
 
@@ -181,6 +206,7 @@ async function replaceQuestions(
 export async function createRushCycle(input: RushCycleCreateWrite) {
   const existing = await listRushCycles()
   const makeActive = existing.length === 0
+  const application = withDefaultApplicationCopy(input)
 
   const created = await db.transaction(async (tx) => {
     if (makeActive) {
@@ -190,16 +216,16 @@ export async function createRushCycle(input: RushCycleCreateWrite) {
     const [row] = await tx
       .insert(rushCycles)
       .values({
-        ...cycleMetaValues(input),
-        introMarkdown: input.intro_markdown,
-        closedMarkdown: input.closed_markdown,
-        hearAboutOptions: input.hear_about_options,
+        ...cycleMetaValues(application),
+        introMarkdown: application.intro_markdown,
+        closedMarkdown: application.closed_markdown,
+        hearAboutOptions: application.hear_about_options,
         isActive: makeActive,
       })
       .returning()
 
     await tx.insert(cycleQuestions).values(
-      input.questions.map((question, index) => ({
+      application.questions.map((question, index) => ({
         cycleId: row.id,
         prompt: question.prompt,
         helpText: question.help_text,
@@ -208,6 +234,9 @@ export async function createRushCycle(input: RushCycleCreateWrite) {
         sortOrder: index,
       }))
     )
+
+    await seedDefaultRubricCategories(tx, row.id)
+    await seedDefaultRushEvents(tx, row.id)
 
     return row
   })

@@ -31,6 +31,8 @@ import {
   saveRushCycle,
   saveRushCycleMeta,
 } from '@/lib/rush-cycles'
+import { saveRushRubric } from '@/lib/rubric-admin'
+import { parseRushRubricSave } from '@/lib/rubric-schema'
 
 export type RushEventInput = RushEventWrite
 
@@ -44,8 +46,17 @@ async function requireAdmin() {
 
 function revalidateRush() {
   revalidatePath('/admin')
+  revalidatePath('/admin/rush')
+  revalidatePath('/admin/apps')
   revalidatePath('/rush')
   revalidatePath('/apply')
+  revalidatePath('/portal/reads')
+}
+
+function revalidateMembers() {
+  revalidatePath('/admin')
+  revalidatePath('/admin/members')
+  revalidatePath('/portal')
 }
 
 export async function addBrother(input: BrotherFormInput) {
@@ -62,8 +73,7 @@ export async function addBrother(input: BrotherFormInput) {
   try {
     const result = await addBrotherRow(parsed.data)
     if (result.error) return { data: null, error: result.error }
-    revalidatePath('/admin')
-    revalidatePath('/portal')
+    revalidateMembers()
     return { data: result.brother, error: null }
   } catch (error) {
     console.error('Error adding brother:', error)
@@ -90,8 +100,7 @@ export async function updateBrother(id: string, input: BrotherFormInput) {
   try {
     const result = await updateBrotherRow(parsedId.data, parsed.data)
     if (result.error) return { data: null, error: result.error }
-    revalidatePath('/admin')
-    revalidatePath('/portal')
+    revalidateMembers()
     return { data: result.brother, error: null }
   } catch (error) {
     console.error('Error updating brother:', error)
@@ -113,8 +122,7 @@ export async function removeBrother(id: string) {
   try {
     const result = await removeBrotherRow(parsed.data, auth.user.email ?? '')
     if (result.error) return { data: null, error: result.error }
-    revalidatePath('/admin')
-    revalidatePath('/portal')
+    revalidateMembers()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error removing brother:', error)
@@ -136,7 +144,7 @@ export async function addAdmin(email: string) {
   try {
     const result = await addAdminEmail(parsed.data)
     if (result.error) return { data: null, error: result.error }
-    revalidatePath('/admin')
+    revalidateMembers()
     return { data: result.admin, error: null }
   } catch (error) {
     console.error('Error adding admin:', error)
@@ -158,7 +166,7 @@ export async function removeAdmin(email: string) {
   try {
     const result = await removeAdminEmail(parsed.data, auth.user.email ?? '')
     if (result.error) return { data: null, error: result.error }
-    revalidatePath('/admin')
+    revalidateMembers()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error removing admin:', error)
@@ -453,5 +461,32 @@ export async function openRushApplicationNow(cycleId: string) {
   } catch (error) {
     console.error('Error opening rush cycle:', error)
     return { data: null, error: 'Failed to open applications' }
+  }
+}
+
+export async function saveRushRubricCategories(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushRubricSave(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const categories = await saveRushRubric(parsedId.data, parsed.data)
+    revalidateRush()
+    return { data: { categories }, error: null }
+  } catch (error) {
+    console.error('Error saving rush rubric:', error)
+    const message = error instanceof Error ? error.message : 'Failed to save rubric'
+    return { data: null, error: message }
   }
 }

@@ -7,6 +7,11 @@ import {
   saveRushApplicationCycle,
 } from '@/app/admin/actions'
 import { applyPreviewHref } from '@/lib/apply-preview'
+import {
+  buildDefaultClosedMarkdown,
+  buildDefaultIntroMarkdown,
+  defaultHearAboutOptionsText,
+} from '@/lib/default-rush-application'
 import type { ClientCycleQuestion, ClientRushCycle } from '@/lib/rush-cycles'
 
 const inputClass =
@@ -100,16 +105,28 @@ const RushApplicationManager = forwardRef<
     initialQuestions: ClientCycleQuestion[]
     isDraft?: boolean
     formId?: string
+    draftMeta?: { cycleName: string }
     onUpdated?: (data: { cycle: ClientRushCycle; questions: ClientCycleQuestion[] }) => void
   }
 >(function RushApplicationManager(
-  { initialCycle, initialQuestions, isDraft = false, formId, onUpdated },
+  { initialCycle, initialQuestions, isDraft = false, formId, draftMeta, onUpdated },
   ref
 ) {
   const [cycleId, setCycleId] = useState(initialCycle?.id ?? null)
-  const [intro, setIntro] = useState(initialCycle?.intro_markdown ?? '')
-  const [closed, setClosed] = useState(initialCycle?.closed_markdown ?? '')
-  const [hearAbout, setHearAbout] = useState((initialCycle?.hear_about_options ?? []).join('\n'))
+  const [intro, setIntro] = useState(
+    initialCycle?.intro_markdown ?? (isDraft ? buildDefaultIntroMarkdown() : '')
+  )
+  const [closed, setClosed] = useState(
+    initialCycle?.closed_markdown ??
+      (isDraft ? buildDefaultClosedMarkdown(draftMeta?.cycleName) : '')
+  )
+  const [hearAbout, setHearAbout] = useState(
+    initialCycle?.hear_about_options?.length
+      ? initialCycle.hear_about_options.join('\n')
+      : isDraft
+        ? defaultHearAboutOptionsText()
+        : ''
+  )
   const [questions, setQuestions] = useState<QuestionDraft[]>(
     initialQuestions.length ? questionsFromServer(initialQuestions) : [emptyQuestion()]
   )
