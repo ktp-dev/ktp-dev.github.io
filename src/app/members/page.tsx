@@ -21,10 +21,6 @@ interface Member {
   linkedin: string;
 }
 
-// Import images
-import LogoImages from '../../../public/images/LogosHover.png';
-import defaultImage from '../../../public/images/default.jpg';
-
 // Categories for the members
 const categories = ['Actives', 'E-Board', 'Directors', 'Alumni'];
 
@@ -153,7 +149,6 @@ export default function Members() {
         const csvText = await response.text();
         
         parseCsv(csvText, (data: Record<string, string>[]) => {
-          console.log('Parsed Data:', data);
           const currentYear = new Date().getFullYear();
 
           const filteredData = data.filter((member: Record<string, string>) => member.First && member.Last);
