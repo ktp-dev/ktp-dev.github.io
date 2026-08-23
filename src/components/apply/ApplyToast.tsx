@@ -7,6 +7,7 @@ const TOAST_ANIMATION_MS = 320
 
 export function ApplyToast() {
   const toastErrors = useApplyStore((state) => state.toastErrors)
+  const toastTitle = useApplyStore((state) => state.toastTitle)
   const setToastErrors = useApplyStore((state) => state.setToastErrors)
   const [items, setItems] = useState<string[]>([])
   const [open, setOpen] = useState(false)
@@ -50,7 +51,7 @@ export function ApplyToast() {
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="font-semibold text-gray-800">Please complete:</p>
+            <p className="font-semibold text-gray-800">{toastTitle}</p>
             <ul className="mt-1.5 list-disc space-y-0.5 pl-5">
               {items.map((item) => (
                 <li key={item}>{item}</li>

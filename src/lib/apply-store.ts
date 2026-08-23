@@ -44,6 +44,7 @@ type ApplyStore = {
   saveStatus: SaveStatus
   saveError: string | null
   toastErrors: string[]
+  toastTitle: string
   hydrate: (payload: {
     applicationId: string
     fields: ApplicationFields
@@ -61,7 +62,7 @@ type ApplyStore = {
   removePendingFile: (slot: FileSlot) => void
   setSaveStatus: (status: SaveStatus, error?: string | null) => void
   markUnsaved: () => void
-  setToastErrors: (errors: string[]) => void
+  setToastErrors: (errors: string[], title?: string) => void
   clearPendingFileState: () => void
 }
 
@@ -83,6 +84,7 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
   saveStatus: 'idle',
   saveError: null,
   toastErrors: [],
+  toastTitle: 'Please complete:',
 
   hydrate: (payload) => {
     const state = get()
@@ -107,6 +109,7 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
         saveStatus: 'idle',
         saveError: null,
         toastErrors: [],
+        toastTitle: 'Please complete:',
       })
       return
     }
@@ -129,6 +132,7 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
       saveStatus: 'idle',
       saveError: null,
       toastErrors: [],
+      toastTitle: 'Please complete:',
     })
   },
 
@@ -156,6 +160,7 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
       saveStatus: 'idle',
       saveError: null,
       toastErrors: [],
+      toastTitle: 'Please complete:',
     })
   },
 
@@ -230,7 +235,9 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
     set((state) => ({
       saveStatus: status,
       saveError: error,
-      toastErrors: status === 'error' && error ? [error] : state.toastErrors,
+      ...(status === 'error' && error
+        ? { toastErrors: [error], toastTitle: 'Error:' }
+        : {}),
     })),
 
   markUnsaved: () =>
@@ -238,7 +245,8 @@ export const useApplyStore = create<ApplyStore>((set, get) => ({
       saveStatus: state.isSubmittedEdit ? 'unsaved' : state.saveStatus,
     })),
 
-  setToastErrors: (errors) => set({ toastErrors: errors }),
+  setToastErrors: (errors, title = 'Please complete:') =>
+    set({ toastErrors: errors, toastTitle: title }),
 
   clearPendingFileState: () => set({ pendingUploads: {}, pendingRemovals: [] }),
 }))
