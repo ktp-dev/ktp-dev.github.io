@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteApplyDummyFile, saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
+import { ApplyRecapFileLink } from '@/components/apply/ApplyFileDownloadLink'
 import { applyCardClass, applyCardStyle } from '@/components/apply/ApplyShell'
 import { uploadPendingApplyFiles } from '@/lib/apply-client-upload'
 import { answerLimitError, validateApplyStep, wordCount, type ApplicationFields } from '@/lib/apply-schema'
@@ -217,9 +218,11 @@ export function ApplySectionForm({
       return
     }
 
-    setSaveStatus('idle')
     const ok = await persist({ silent: true })
-    if (!ok) return
+    if (!ok) {
+      setSaveStatus('error')
+      return
+    }
     const result = await submitApply({
       fields: state.fields,
       answers: state.answers,
@@ -234,6 +237,7 @@ export function ApplySectionForm({
   }
 
   const stepMeta = APPLY_STEPS.find((item) => item.slug === step)!
+  const submitBusy = step === 'review' && saveStatus === 'saving'
   const statusLabel =
     preview
       ? ''
@@ -455,16 +459,35 @@ export function ApplySectionForm({
           answers={answers}
           questions={payload.questions}
           files={files}
+          preview={preview}
         />
       ) : null}
 
       <div className="mt-auto flex justify-between gap-3 pt-8">
-        <button type="button" className={ghostBtnClass} onClick={() => router.push(href(prevStepPath(step)))}>
+        <button
+          type="button"
+          className={`${ghostBtnClass} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100`}
+          disabled={submitBusy}
+          onClick={() => router.push(href(prevStepPath(step)))}
+        >
           Back
         </button>
         {step === 'review' ? (
-          <button type="button" className={btnClass} onClick={() => void handleSubmit()}>
-            {preview ? 'Exit preview' : isSubmittedEdit ? 'Save changes' : 'Submit application'}
+          <button
+            type="button"
+            className={`${btnClass} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100`}
+            disabled={submitBusy}
+            onClick={() => void handleSubmit()}
+          >
+            {preview
+              ? 'Exit preview'
+              : submitBusy
+                ? isSubmittedEdit
+                  ? 'Saving…'
+                  : 'Submitting…'
+                : isSubmittedEdit
+                  ? 'Save changes'
+                  : 'Submit application'}
           </button>
         ) : (
           <button type="button" className={btnClass} onClick={() => void goNext()}>
@@ -547,33 +570,70 @@ export function ApplyRecap({
   answers,
   questions,
   files,
+  preview = false,
 }: {
   fields: ApplicationFields
   answers: Record<string, string>
   questions: ApplyFormPayload['questions']
   files: Partial<Record<string, string>>
+  preview?: boolean
 }) {
   return (
     <div className="space-y-6 text-sm">
-      <RecapBlock title="Personal" rows={[
-        ['First name', fields.first_name],
-        ['Last name', fields.last_name],
-        ['Preferred name', fields.preferred_name],
-        ['Pronouns', fields.pronouns],
-        ['Phone', fields.phone],
-        ['Photo', files.photo],
-      ]} />
-      <RecapBlock title="Academic" rows={[
-        ['Majors', fields.majors],
-        ['Minors', fields.minors],
-        ['Graduation year', fields.graduation_year?.toString()],
-        ['GPA', fields.gpa?.toString()],
-        ['Semesters remaining', fields.semesters_remaining?.toString()],
-        ['Other professional fraternity', fields.other_professional_fraternity == null ? null : fields.other_professional_fraternity ? 'Yes' : 'No'],
-        ['Transcript', files.transcript],
-        ['Résumé', files.resume],
-        ['Anonymized résumé', files.resume_anonymized],
-      ]} />
+      <RecapBlock
+        title="Personal"
+        rows={[
+          ['First name', fields.first_name],
+          ['Last name', fields.last_name],
+          ['Preferred name', fields.preferred_name],
+          ['Pronouns', fields.pronouns],
+          ['Phone', fields.phone],
+          [
+            'Photo',
+            <ApplyRecapFileLink key="photo" slot="photo" filename={files.photo} preview={preview} />,
+          ],
+        ]}
+      />
+      <RecapBlock
+        title="Academic"
+        rows={[
+          ['Majors', fields.majors],
+          ['Minors', fields.minors],
+          ['Graduation year', fields.graduation_year?.toString()],
+          ['GPA', fields.gpa?.toString()],
+          ['Semesters remaining', fields.semesters_remaining?.toString()],
+          [
+            'Other professional fraternity',
+            fields.other_professional_fraternity == null
+              ? null
+              : fields.other_professional_fraternity
+                ? 'Yes'
+                : 'No',
+          ],
+          [
+            'Transcript',
+            <ApplyRecapFileLink
+              key="transcript"
+              slot="transcript"
+              filename={files.transcript}
+              preview={preview}
+            />,
+          ],
+          [
+            'Résumé',
+            <ApplyRecapFileLink key="resume" slot="resume" filename={files.resume} preview={preview} />,
+          ],
+          [
+            'Anonymized résumé',
+            <ApplyRecapFileLink
+              key="resume_anonymized"
+              slot="resume_anonymized"
+              filename={files.resume_anonymized}
+              preview={preview}
+            />,
+          ],
+        ]}
+      />
       <RecapBlock title="Involvement" rows={[['Campus activities', fields.campus_activities]]} />
       <div>
         <h2 className="mb-2 text-xl font-bold font-inter">Short answers</h2>
@@ -584,18 +644,35 @@ export function ApplyRecap({
           </div>
         ))}
       </div>
-      <RecapBlock title="Additional" rows={[
-        ['How you heard', (fields.hear_about ?? []).join(', ')],
-        ['Other', fields.hear_about_other],
-        ['Anything else', fields.anything_else],
-        ['Rush feedback', fields.rush_feedback],
-        ['Life app screenshot', files.life_app_screenshot],
-      ]} />
+      <RecapBlock
+        title="Additional"
+        rows={[
+          ['How you heard', (fields.hear_about ?? []).join(', ')],
+          ['Other', fields.hear_about_other],
+          ['Anything else', fields.anything_else],
+          ['Rush feedback', fields.rush_feedback],
+          [
+            'Life app screenshot',
+            <ApplyRecapFileLink
+              key="life_app_screenshot"
+              slot="life_app_screenshot"
+              filename={files.life_app_screenshot}
+              preview={preview}
+            />,
+          ],
+        ]}
+      />
     </div>
   )
 }
 
-function RecapBlock({ title, rows }: { title: string; rows: [string, string | null | undefined][] }) {
+function RecapBlock({
+  title,
+  rows,
+}: {
+  title: string
+  rows: [string, React.ReactNode][]
+}) {
   return (
     <div>
       <h2 className="mb-2 text-xl font-bold font-inter">{title}</h2>
@@ -603,7 +680,7 @@ function RecapBlock({ title, rows }: { title: string; rows: [string, string | nu
         {rows.map(([label, value]) => (
           <div key={label}>
             <dt className="inline font-medium text-gray-500">{label}: </dt>
-            <dd className="inline whitespace-pre-wrap">{value || '—'}</dd>
+            <dd className="inline whitespace-pre-wrap">{value ?? '—'}</dd>
           </div>
         ))}
       </dl>

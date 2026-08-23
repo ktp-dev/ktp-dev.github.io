@@ -9,6 +9,7 @@ import {
   getActiveCycle,
   getApplicationFileForSlot,
   getApplicationFiles,
+  getApplicationForUser,
   getCycleQuestions,
   getOrCreateApplication,
   saveApplicationAnswers,
@@ -19,7 +20,7 @@ import {
 import { parseApplicationAnswers, parseApplicationFields, parseSubmitPayload } from '@/lib/apply-schema'
 import { resolveUploadMime, validateApplyFile } from '@/lib/apply-files'
 import { buildApplicationFileKey, isApplicationFileKey, isDeletableS3ObjectKey } from '@/lib/apply-s3'
-import { createPresignedPutUrl, deleteS3Object, headS3Object } from '@/lib/s3'
+import { createPresignedGetUrl, createPresignedPutUrl, deleteS3Object, headS3Object } from '@/lib/s3'
 import { FILE_SLOTS, type FileSlot } from '@/lib/apply-steps'
 
 async function requireDraftOwner() {
@@ -43,6 +44,26 @@ async function requireDraftOwner() {
 
   if (!window.isOpen && !isAdmin) {
     return { error: 'This application cycle is not open for edits.' as const }
+  }
+
+  return { user, cycle, application, error: null }
+}
+
+async function requireApplicationOwner() {
+  const user = await requireUser()
+  if (!user?.email) return { error: 'Please log in with your UMich Google account.' as const }
+
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin && (await getBrotherByUmichEmail(user.email))) {
+    return { error: 'Brothers cannot access rush applications.' as const }
+  }
+
+  const cycle = await getActiveCycle()
+  if (!cycle) return { error: 'Applications are not open.' as const }
+
+  const application = await getApplicationForUser(cycle.id, user.id)
+  if (!application) {
+    return { error: 'No application found for this cycle.' as const }
   }
 
   return { user, cycle, application, error: null }
@@ -100,7 +121,12 @@ export async function presignApplyFileUpload(input: {
     return { error: parsed.error, uploadUrl: null, key: null }
   }
 
-  const key = buildApplicationFileKey(auth.application.id, parsed.slot, parsed.contentType)
+  const key = buildApplicationFileKey(
+    auth.cycle.name,
+    auth.application.id,
+    parsed.slot,
+    parsed.contentType
+  )
   const presigned = await createPresignedPutUrl({
     key,
     contentType: parsed.contentType,
@@ -128,7 +154,7 @@ export async function confirmApplyFileUpload(input: {
   if (parsed.error || !parsed.slot || !parsed.contentType) {
     return { error: parsed.error, file: null }
   }
-  if (!isApplicationFileKey(input.key, auth.application.id, parsed.slot)) {
+  if (!isApplicationFileKey(input.key, auth.application.id, parsed.slot, auth.cycle.name)) {
     return { error: 'Invalid upload key.', file: null }
   }
 
@@ -209,6 +235,38 @@ export async function deleteApplyDummyFile(slot: string) {
 
   revalidatePath('/apply')
   return { error: null }
+}
+
+export async function getApplyFileDownloadUrl(slot: string) {
+  const auth = await requireApplicationOwner()
+  if (auth.error) {
+    return { error: auth.error, downloadUrl: null }
+  }
+
+  if (!FILE_SLOTS.includes(slot as FileSlot)) {
+    return { error: 'Invalid file slot' as const, downloadUrl: null }
+  }
+
+  const fileSlot = slot as FileSlot
+  const file = await getApplicationFileForSlot(auth.application.id, fileSlot)
+  if (!file?.s3Key) {
+    return { error: 'File not found.' as const, downloadUrl: null }
+  }
+
+  if (!isApplicationFileKey(file.s3Key, auth.application.id, fileSlot, auth.cycle.name)) {
+    return { error: 'Invalid file.' as const, downloadUrl: null }
+  }
+
+  const presigned = await createPresignedGetUrl({
+    key: file.s3Key,
+    filename: file.originalFilename?.trim() || `${fileSlot}`,
+    contentType: file.mimeType,
+  })
+  if (presigned.error || !presigned.downloadUrl) {
+    return { error: presigned.error ?? 'Could not prepare download.', downloadUrl: null }
+  }
+
+  return { error: null, downloadUrl: presigned.downloadUrl }
 }
 
 export async function submitApply(input: {

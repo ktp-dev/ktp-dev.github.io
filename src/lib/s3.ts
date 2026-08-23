@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const PRESIGN_EXPIRES_SECONDS = 300
@@ -60,6 +60,37 @@ export async function createPresignedPutUrl(input: {
   })
 
   return { error: null, uploadUrl, bucket: env.bucket }
+}
+
+function contentDispositionAttachment(filename: string) {
+  const trimmed = filename.trim() || 'download'
+  const ascii = trimmed.replace(/[^\x20-\x7E]/g, '_').replace(/["\\]/g, '_') || 'download'
+  return `attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(trimmed)}`
+}
+
+export async function createPresignedGetUrl(input: {
+  key: string
+  filename: string
+  contentType?: string | null
+  expiresInSeconds?: number
+}) {
+  const env = readS3Env()
+  if (!env) {
+    return { error: 'S3 is not configured (check AWS env vars).' as const, downloadUrl: null }
+  }
+
+  const command = new GetObjectCommand({
+    Bucket: env.bucket,
+    Key: input.key,
+    ResponseContentDisposition: contentDispositionAttachment(input.filename),
+    ...(input.contentType ? { ResponseContentType: input.contentType } : {}),
+  })
+
+  const downloadUrl = await getSignedUrl(env.client, command, {
+    expiresIn: input.expiresInSeconds ?? PRESIGN_EXPIRES_SECONDS,
+  })
+
+  return { error: null, downloadUrl }
 }
 
 export async function headS3Object(key: string) {

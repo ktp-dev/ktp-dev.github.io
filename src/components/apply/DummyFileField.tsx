@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { deleteApplyDummyFile } from '@/app/apply/actions'
+import { ApplyFileDownloadLink } from '@/components/apply/ApplyFileDownloadLink'
 import { uploadApplyFile } from '@/lib/apply-client-upload'
 import { fileAcceptForSlot, fileRequirementsLabel, validateApplyFile } from '@/lib/apply-files'
 import type { FileSlot } from '@/lib/apply-steps'
@@ -146,7 +147,7 @@ export function DummyFileField({
         </div>
       ) : filename ? (
         <div className="flex items-center gap-2 rounded-md border border-gray-100 bg-white/80 px-3 py-2">
-          <span className="min-w-0 flex-1 truncate text-sm leading-5 text-gray-700">{filename}</span>
+          <ApplyFileDownloadLink slot={slot} filename={filename} preview={preview} />
           <button
             type="button"
             onClick={() => void onRemove()}

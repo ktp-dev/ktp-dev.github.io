@@ -10,7 +10,23 @@ const MIME_EXTENSION: Record<string, string> = {
   'image/webp': 'webp',
 }
 
+/** S3 prefix segment from cycle name, e.g. "Fall 2026" → "fall-2026". */
+export function cycleStorageSlug(cycleName: string) {
+  const slug = cycleName
+    .replace(/\s*\(local\)\s*/gi, '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return slug || 'cycle'
+}
+
+export function cycleApplicationPrefix(cycleName: string) {
+  return `applications/${cycleStorageSlug(cycleName)}/`
+}
+
 export function buildApplicationFileKey(
+  cycleName: string,
   applicationId: string,
   slot: FileSlot,
   contentType: string
@@ -19,16 +35,38 @@ export function buildApplicationFileKey(
   if (!ext) {
     throw new Error('Unsupported content type for S3 key')
   }
-  return `applications/${applicationId}/${slot}/${randomUUID()}.${ext}`
+  const cycleSlug = cycleStorageSlug(cycleName)
+  return `applications/${cycleSlug}/${applicationId}/${slot}/${randomUUID()}.${ext}`
 }
 
-export function isApplicationFileKey(key: string, applicationId: string, slot: FileSlot) {
-  const prefix = `applications/${applicationId}/${slot}/`
+function slotKeySuffix(key: string, prefix: string) {
   if (!key.startsWith(prefix) || key.includes('..')) {
-    return false
+    return null
   }
   const suffix = key.slice(prefix.length)
-  return suffix.length > 0 && !suffix.includes('/')
+  if (suffix.length === 0 || suffix.includes('/')) {
+    return null
+  }
+  return suffix
+}
+
+export function isApplicationFileKey(
+  key: string,
+  applicationId: string,
+  slot: FileSlot,
+  cycleName?: string
+) {
+  if (cycleName) {
+    const cycleSlug = cycleStorageSlug(cycleName)
+    const prefixed = slotKeySuffix(
+      key,
+      `applications/${cycleSlug}/${applicationId}/${slot}/`
+    )
+    if (prefixed) return true
+  }
+
+  // Legacy keys uploaded before cycle folders: applications/{appId}/{slot}/...
+  return Boolean(slotKeySuffix(key, `applications/${applicationId}/${slot}/`))
 }
 
 export function isDeletableS3ObjectKey(key: string) {
