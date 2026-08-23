@@ -11,6 +11,8 @@ import {
 } from '@/components/PortalShell'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import { requirePortalUser } from '@/lib/portal'
+import { canReviewApplications } from '@/lib/review-access'
+import { getActiveCycle } from '@/lib/applications'
 
 type QuickLink = {
   href: string
@@ -49,6 +51,10 @@ function LinkRow({ link }: { link: QuickLink }) {
 export default async function PortalPage() {
   const { email, brother } = await requirePortalUser()
   const adminUser = await checkIsAdmin()
+  const activeCycle = await getActiveCycle()
+  const showApplicationReads = activeCycle
+    ? await canReviewApplications({ email, cycleId: activeCycle.id })
+    : false
   const greetingName = brother.first_name?.trim() || email
 
   const quickLinks: QuickLink[] = [
@@ -96,16 +102,18 @@ export default async function PortalPage() {
         </div>
       </div>
 
-      <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
-        <h2 className="mb-4 text-xl font-bold font-inter">Your Tasks</h2>
-        <LinkRow
-          link={{
-            href: '/portal/reads',
-            title: 'Application Reads',
-            subtitle: 'Review submitted rush applications',
-          }}
-        />
-      </div>
+      {showApplicationReads ? (
+        <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
+          <h2 className="mb-4 text-xl font-bold font-inter">Your Tasks</h2>
+          <LinkRow
+            link={{
+              href: '/portal/reads',
+              title: 'Application Reads',
+              subtitle: 'Review submitted rush applications',
+            }}
+          />
+        </div>
+      ) : null}
 
       <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
         <AlumniDirectoryTable />

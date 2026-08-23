@@ -6,7 +6,7 @@ import {
   portalSectionCardClass,
   portalSectionCardStyle,
 } from '@/components/PortalShell'
-import { requirePortalUser } from '@/lib/portal'
+import { requireReviewer } from '@/lib/review-access'
 
 const DUMMY_READS = [
   { name: 'Alex Kim', cycle: 'Fall 2026', status: 'Unread' },
@@ -15,7 +15,7 @@ const DUMMY_READS = [
 ]
 
 export default async function PortalReadsPage() {
-  await requirePortalUser()
+  const { cycle } = await requireReviewer()
 
   return (
     <PortalShell title="Application Reads">
@@ -23,7 +23,9 @@ export default async function PortalReadsPage() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="text-xl font-bold font-inter">Queue</h2>
-            <p className="mt-1 text-sm text-gray-500">Dummy list. Real reads will land here later.</p>
+            <p className="mt-1 text-sm text-gray-500">
+              Dummy list for {cycle.name}. Real reads will land here later.
+            </p>
           </div>
           <Link href="/portal" className="text-sm font-semibold text-[#315CA9]">
             Back to portal

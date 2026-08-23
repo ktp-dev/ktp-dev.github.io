@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from 'drizzle-orm'
+import { and, asc, eq, inArray, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import {
   applicationAnswers,
@@ -235,19 +235,51 @@ export async function deleteApplicationFileRecord(applicationId: string, slot: F
 }
 
 export async function submitApplication(applicationId: string, userId: string) {
-  const [updated] = await db
-    .update(applications)
-    .set({
-      status: 'submitted',
-      submittedAt: new Date().toISOString(),
-    })
-    .where(
-      and(
-        eq(applications.id, applicationId),
-        eq(applications.userId, userId),
-        eq(applications.status, 'draft')
+  return db.transaction(async (tx) => {
+    const [app] = await tx
+      .select({ id: applications.id, cycleId: applications.cycleId })
+      .from(applications)
+      .where(
+        and(
+          eq(applications.id, applicationId),
+          eq(applications.userId, userId),
+          eq(applications.status, 'draft')
+        )
       )
+      .limit(1)
+
+    if (!app) return null
+
+    // Serialize display_number assignment per cycle (two simultaneous submits won't collide).
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtext(${app.cycleId}::text))`
     )
-    .returning()
-  return updated ?? null
+
+    const [nextRow] = await tx
+      .select({
+        next: sql<number>`coalesce(max(${applications.displayNumber}), 0) + 1`.mapWith(Number),
+      })
+      .from(applications)
+      .where(eq(applications.cycleId, app.cycleId))
+
+    const displayNumber = nextRow?.next ?? 1
+
+    const [updated] = await tx
+      .update(applications)
+      .set({
+        status: 'submitted',
+        submittedAt: new Date().toISOString(),
+        displayNumber,
+      })
+      .where(
+        and(
+          eq(applications.id, applicationId),
+          eq(applications.userId, userId),
+          eq(applications.status, 'draft')
+        )
+      )
+      .returning()
+
+    return updated ?? null
+  })
 }

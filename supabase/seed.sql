@@ -138,3 +138,41 @@ CROSS JOIN (
     )
 ) AS q(prompt, help_text, max_words, sort_order)
 WHERE public.rush_cycles.is_active;
+
+INSERT INTO public.rubric_categories (
+  cycle_id,
+  title,
+  sort_order,
+  scale_min,
+  scale_max
+)
+SELECT
+  c.id,
+  seed.title,
+  seed.sort_order,
+  1,
+  4
+FROM public.rush_cycles AS c
+CROSS JOIN (
+  VALUES
+    (
+      0,
+      'Did the applicant put effort into the application (including the resume)?'
+    ),
+    (1, 'Did the applicant display creativity and passion for technology?'),
+    (2, 'Does the applicant''s ideas draw on their experiences/identity?'),
+    (
+      3,
+      'Does the applicant demonstrate passion or interests that would resonate with brothers?'
+    ),
+    (4, 'Does the applicant express a love for community?'),
+    (
+      5,
+      'Does the applicant express a desire to learn from KTP/give back to the community?'
+    ),
+    (
+      6,
+      'Does the applicant''s resume demonstrate drive and initiative which can be expanded upon by KTP?'
+    )
+) AS seed (sort_order, title)
+WHERE c.is_active;

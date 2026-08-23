@@ -3,14 +3,22 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   numeric,
   pgTable,
+  smallint,
   text,
   timestamp,
   unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core'
+
+/** Optional per-score rating labels (Strong No, bullets, etc.) for rubric UI. */
+export type RubricRatingLabels = Record<
+  string,
+  { label: string; bullets?: string[] }
+>
 
 // TypeScript map of public tables for queries.
 // RLS, functions, triggers, and auth.users FKs live in supabase/migrations.
@@ -150,6 +158,14 @@ export const applications = pgTable(
     hearAboutOther: text('hear_about_other'),
     anythingElse: text('anything_else'),
     rushFeedback: text('rush_feedback'),
+    displayNumber: integer('display_number'),
+    assignedReviewerId: uuid('assigned_reviewer_id'),
+    assignedAt: timestamp('assigned_at', { withTimezone: true, mode: 'string' }),
+    assignmentExpiresAt: timestamp('assignment_expires_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    reviewCount: integer('review_count').default(0).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .default(sql`timezone('utc'::text, now())`)
       .notNull(),
@@ -159,8 +175,20 @@ export const applications = pgTable(
   },
   (table) => [
     unique('applications_cycle_user_unique').on(table.cycleId, table.userId),
+    uniqueIndex('applications_cycle_display_number_unique')
+      .on(table.cycleId, table.displayNumber)
+      .where(sql`${table.displayNumber} is not null`),
     index('applications_user_id_idx').on(table.userId),
     index('applications_cycle_status_idx').on(table.cycleId, table.status),
+    index('applications_read_queue_idx').on(
+      table.cycleId,
+      table.status,
+      table.reviewCount,
+      table.submittedAt
+    ),
+    index('applications_assigned_reviewer_idx')
+      .on(table.assignedReviewerId)
+      .where(sql`${table.assignedReviewerId} is not null`),
   ]
 )
 
@@ -209,4 +237,84 @@ export const applicationFiles = pgTable(
       .notNull(),
   },
   (table) => [unique('application_files_app_slot_unique').on(table.applicationId, table.slot)]
+)
+
+export const reviewAccess = pgTable(
+  'review_access',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    cycleId: uuid('cycle_id')
+      .notNull()
+      .references(() => rushCycles.id, { onDelete: 'cascade' }),
+    email: text('email').notNull(),
+    minRequiredReviews: integer('min_required_reviews').default(12).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+  },
+  (table) => [
+    unique('review_access_cycle_email_unique').on(table.cycleId, table.email),
+    index('review_access_cycle_id_idx').on(table.cycleId),
+  ]
+)
+
+export const rubricCategories = pgTable(
+  'rubric_categories',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    cycleId: uuid('cycle_id')
+      .notNull()
+      .references(() => rushCycles.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    description: text('description'),
+    sortOrder: integer('sort_order').default(0).notNull(),
+    scaleMin: integer('scale_min').default(1).notNull(),
+    scaleMax: integer('scale_max').default(4).notNull(),
+    ratingLabels: jsonb('rating_labels').$type<RubricRatingLabels | null>(),
+    archivedAt: timestamp('archived_at', { withTimezone: true, mode: 'string' }),
+  },
+  (table) => [index('rubric_categories_cycle_id_idx').on(table.cycleId, table.sortOrder)]
+)
+
+export const reviews = pgTable(
+  'reviews',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    applicationId: uuid('application_id')
+      .notNull()
+      .references(() => applications.id, { onDelete: 'cascade' }),
+    reviewerUserId: uuid('reviewer_user_id').notNull(),
+    notes: text('notes'),
+    startedAt: timestamp('started_at', { withTimezone: true, mode: 'string' }),
+    endedAt: timestamp('ended_at', { withTimezone: true, mode: 'string' }),
+    submittedAt: timestamp('submitted_at', { withTimezone: true, mode: 'string' })
+      .default(sql`timezone('utc'::text, now())`)
+      .notNull(),
+  },
+  (table) => [
+    unique('reviews_application_reviewer_unique').on(
+      table.applicationId,
+      table.reviewerUserId
+    ),
+    index('reviews_application_id_idx').on(table.applicationId),
+    index('reviews_reviewer_user_id_idx').on(table.reviewerUserId),
+  ]
+)
+
+export const reviewScores = pgTable(
+  'review_scores',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    reviewId: uuid('review_id')
+      .notNull()
+      .references(() => reviews.id, { onDelete: 'cascade' }),
+    categoryId: uuid('category_id')
+      .notNull()
+      .references(() => rubricCategories.id, { onDelete: 'restrict' }),
+    score: smallint('score').notNull(),
+  },
+  (table) => [
+    unique('review_scores_review_category_unique').on(table.reviewId, table.categoryId),
+    index('review_scores_category_id_idx').on(table.categoryId),
+  ]
 )
