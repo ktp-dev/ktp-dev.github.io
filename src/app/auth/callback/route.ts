@@ -32,8 +32,7 @@ export async function GET(request: Request) {
   const explicitNext = safeNext(requestUrl.searchParams.get('next'))
   if (brother) {
     if (explicitNext?.startsWith('/apply')) {
-      const nextUrl = new URL(explicitNext, origin)
-      if (nextUrl.searchParams.get('preview') === '1' && (await checkIsAdmin())) {
+      if (await checkIsAdmin()) {
         return NextResponse.redirect(`${origin}${explicitNext}`)
       }
       return NextResponse.redirect(`${origin}/apply`)

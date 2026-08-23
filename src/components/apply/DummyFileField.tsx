@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { deleteApplyDummyFile, saveApplyDummyFile } from '@/app/apply/actions'
+import { fileAcceptForSlot, validateApplyFile } from '@/lib/apply-files'
 import type { FileSlot } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
 
@@ -38,6 +39,19 @@ export function DummyFileField({
   async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
+
+    const validation = validateApplyFile({
+      slot,
+      filename: file.name,
+      mimeType: file.type,
+      sizeBytes: file.size,
+    })
+    if (validation.error) {
+      if (inputRef.current) inputRef.current.value = ''
+      setSaveStatus('error', validation.error)
+      return
+    }
+
     if (preview) {
       setFile(slot, file.name)
       setSaveStatus('idle')
@@ -51,6 +65,7 @@ export function DummyFileField({
       sizeBytes: file.size,
     })
     if (result.error || !result.file) {
+      if (inputRef.current) inputRef.current.value = ''
       setSaveStatus('error', result.error)
       return
     }
@@ -78,7 +93,7 @@ export function DummyFileField({
 
   return (
     <div>
-      <p className="mb-1 text-sm font-semibold">
+      <p className="mb-1 block text-sm font-semibold text-gray-700">
         {LABELS[slot]}
         {required ? ' *' : ''}
       </p>
@@ -88,19 +103,20 @@ export function DummyFileField({
       <input
         ref={inputRef}
         type="file"
+        accept={fileAcceptForSlot(slot)}
         className="sr-only"
         onChange={onChange}
       />
       {filename ? (
-        <div className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white/80 px-3 py-2">
-          <span className="min-w-0 flex-1 truncate text-sm text-gray-800">{filename}</span>
+        <div className="flex items-center gap-2 rounded-md border border-gray-100 bg-white/80 px-3 py-2">
+          <span className="min-w-0 flex-1 truncate text-sm leading-5 text-gray-700">{filename}</span>
           <button
             type="button"
             onClick={() => void onRemove()}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-500"
+            className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-500"
             aria-label={`Remove ${filename}`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"

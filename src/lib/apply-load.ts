@@ -45,8 +45,8 @@ const previewApplication = {
 export async function loadApplyContext(options?: { preview?: boolean; cycleId?: string }) {
   const user = await requireUser()
   const wantPreview = Boolean(options?.preview)
-  const adminUser = wantPreview ? await checkIsAdmin() : null
-  const isPreview = Boolean(wantPreview && adminUser)
+  const isAdmin = user ? await checkIsAdmin() : null
+  const isPreview = Boolean(wantPreview && isAdmin)
 
   const cycle = isPreview
     ? options?.cycleId
@@ -54,11 +54,13 @@ export async function loadApplyContext(options?: { preview?: boolean; cycleId?: 
       : await getActiveCycle()
     : await getActiveCycle()
   const isBrother = Boolean(user?.email && (await getBrotherByUmichEmail(user.email)))
+  const blockedAsBrother = isBrother && !isAdmin
 
   if (!user) {
     return {
       user: null,
       isBrother: false,
+      isAdmin: false,
       isPreview: false,
       cycle,
       application: null,
@@ -76,6 +78,7 @@ export async function loadApplyContext(options?: { preview?: boolean; cycleId?: 
     return {
       user: signedIn,
       isBrother,
+      isAdmin: Boolean(isAdmin),
       isPreview: true,
       cycle,
       application: previewApplication,
@@ -93,10 +96,11 @@ export async function loadApplyContext(options?: { preview?: boolean; cycleId?: 
     }
   }
 
-  if (isBrother || !cycle) {
+  if (blockedAsBrother || !cycle) {
     return {
       user: signedIn,
       isBrother,
+      isAdmin: Boolean(isAdmin),
       isPreview: false,
       cycle,
       application: null,
@@ -118,7 +122,8 @@ export async function loadApplyContext(options?: { preview?: boolean; cycleId?: 
 
   return {
     user: signedIn,
-    isBrother: false,
+    isBrother,
+    isAdmin: Boolean(isAdmin),
     isPreview: false,
     cycle,
     application: {
@@ -160,10 +165,10 @@ export async function requireApplyDraft(options?: { preview?: boolean; cycleId?:
       isPreview: true as const,
     }
   }
-  if (ctx.isBrother) redirect('/apply')
+  if (ctx.isBrother && !ctx.isAdmin) redirect('/apply')
   if (!ctx.user || !ctx.cycle || !ctx.application) redirect('/apply')
   if (ctx.application.status === 'submitted') redirect('/apply')
-  if (ctx.window && !ctx.window.isOpen) redirect('/apply')
+  if (ctx.window && !ctx.window.isOpen && !ctx.isAdmin) redirect('/apply')
   return {
     user: ctx.user,
     cycle: ctx.cycle,

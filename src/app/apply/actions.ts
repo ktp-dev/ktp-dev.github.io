@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireUser } from '@/lib/supabase/auth-helpers'
+import { checkIsAdmin, requireUser } from '@/lib/supabase/auth-helpers'
 import { getBrotherByUmichEmail } from '@/lib/brothers'
 import {
   cycleWindow,
@@ -16,13 +16,15 @@ import {
   submitApplication,
 } from '@/lib/applications'
 import { parseApplicationAnswers, parseApplicationFields, parseSubmitPayload } from '@/lib/apply-schema'
+import { validateApplyFile } from '@/lib/apply-files'
 import { FILE_SLOTS, type FileSlot } from '@/lib/apply-steps'
 
 async function requireDraftOwner() {
   const user = await requireUser()
   if (!user?.email) return { error: 'Please log in with your UMich Google account.' as const }
 
-  if (await getBrotherByUmichEmail(user.email)) {
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin && (await getBrotherByUmichEmail(user.email))) {
     return { error: 'Brothers cannot submit a rush application.' as const }
   }
 
@@ -39,7 +41,7 @@ async function requireDraftOwner() {
   if (application.status === 'submitted') {
     return { error: 'This application has already been submitted.' as const }
   }
-  if (!window.isOpen) {
+  if (!window.isOpen && !isAdmin) {
     return { error: 'This application cycle is not open for edits.' as const }
   }
 
@@ -87,12 +89,23 @@ export async function saveApplyDummyFile(input: {
     return { error: 'Choose a file first', file: null }
   }
 
+  const slot = input.slot as FileSlot
+  const fileCheck = validateApplyFile({
+    slot,
+    filename: input.filename,
+    mimeType: input.mimeType,
+    sizeBytes: input.sizeBytes,
+  })
+  if (fileCheck.error) {
+    return { error: fileCheck.error, file: null }
+  }
+
   const saved = await saveDummyFile({
     applicationId: auth.application.id,
-    slot: input.slot as FileSlot,
+    slot,
     filename: input.filename.trim(),
-    mimeType: input.mimeType || 'application/octet-stream',
-    sizeBytes: input.sizeBytes || 0,
+    mimeType: input.mimeType.trim() || 'application/octet-stream',
+    sizeBytes: input.sizeBytes,
   })
 
   revalidatePath('/apply')

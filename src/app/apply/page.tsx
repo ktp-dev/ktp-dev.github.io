@@ -31,7 +31,7 @@ export default async function ApplyWelcomePage({
     )
   }
 
-  if (ctx.isBrother) {
+  if (ctx.isBrother && !ctx.isAdmin) {
     return (
       <ApplyShell title={ctx.cycle ? applicationTitle(ctx.cycle.name) : 'Application'}>
         <WelcomeCard>
@@ -110,7 +110,7 @@ export default async function ApplyWelcomePage({
     )
   }
 
-  if (ctx.window && !ctx.window.isOpen) {
+  if (ctx.window && !ctx.window.isOpen && !ctx.isAdmin) {
     return (
       <ApplyShell title={title}>
         <WelcomeCard>
@@ -120,16 +120,37 @@ export default async function ApplyWelcomePage({
     )
   }
 
+  const adminHasProgress =
+    ctx.isAdmin &&
+    (Object.values(ctx.application?.fields ?? {}).some((value) =>
+      Array.isArray(value) ? value.length > 0 : value != null && value !== ''
+    ) ||
+      Object.values(ctx.answers).some((answer) => answer.trim()) ||
+      Object.keys(ctx.files).length > 0)
+
+  const continueLabel = ctx.isAdmin
+    ? adminHasProgress
+      ? 'Continue as administrator'
+      : 'Start as administrator'
+    : 'Continue application'
+
   return (
     <ApplyShell title={title}>
       <WelcomeCard>
         <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
+        {ctx.isAdmin ? (
+          <p className="self-center text-center text-sm leading-relaxed text-[#315CA9]">
+            You are testing as an administrator. Your responses are saved to a live draft for this
+            cycle. If you submit, please delete the test application afterward so it is not reviewed
+            with real applicants.
+          </p>
+        ) : null}
         <p className="self-center text-sm text-gray-500">Signed in as {ctx.user.email}</p>
         <Link
           href="/apply/personal"
           className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
         >
-          Continue application
+          {continueLabel}
         </Link>
       </WelcomeCard>
     </ApplyShell>
