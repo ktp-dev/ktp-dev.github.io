@@ -43,6 +43,13 @@ export function fileAcceptForSlot(slot: FileSlot) {
   return 'image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp'
 }
 
+export function fileRequirementsLabel(slot: FileSlot) {
+  if (PDF_SLOTS.has(slot)) {
+    return `PDF only, ${maxSizeLabel(APPLY_PDF_MAX_BYTES)} max.`
+  }
+  return `JPEG, PNG, or WebP, ${maxSizeLabel(APPLY_IMAGE_MAX_BYTES)} max.`
+}
+
 export function validateApplyFile(input: {
   slot: FileSlot
   filename: string
@@ -74,4 +81,26 @@ export function validateApplyFile(input: {
   }
 
   return { error: null }
+}
+
+export function resolveUploadMime(input: {
+  slot: FileSlot
+  mimeType: string
+  filename: string
+}) {
+  const mime = input.mimeType.trim().toLowerCase()
+  const ext = fileExtension(input.filename)
+  const isPdf = PDF_SLOTS.has(input.slot)
+
+  if (isPdf) {
+    if (PDF_MIMES.has(mime)) return 'application/pdf'
+    if (PDF_EXTENSIONS.has(ext)) return 'application/pdf'
+    return null
+  }
+
+  if (IMAGE_MIMES.has(mime)) return mime
+  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg'
+  if (ext === '.png') return 'image/png'
+  if (ext === '.webp') return 'image/webp'
+  return null
 }

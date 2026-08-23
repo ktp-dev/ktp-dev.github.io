@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const PRESIGN_EXPIRES_SECONDS = 300
@@ -90,5 +90,25 @@ export async function headS3Object(key: string) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Object not found'
     return { error: message, object: null }
+  }
+}
+
+export async function deleteS3Object(key: string) {
+  const env = readS3Env()
+  if (!env) {
+    return { error: 'S3 is not configured (check AWS env vars).' as const }
+  }
+
+  try {
+    await env.client.send(
+      new DeleteObjectCommand({
+        Bucket: env.bucket,
+        Key: key,
+      })
+    )
+    return { error: null }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Delete failed'
+    return { error: message }
   }
 }

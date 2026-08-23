@@ -1,8 +1,12 @@
 'use client'
 
-import { useRef } from 'react'
-import { deleteApplyDummyFile, saveApplyDummyFile } from '@/app/apply/actions'
-import { fileAcceptForSlot, validateApplyFile } from '@/lib/apply-files'
+import { useRef, useState } from 'react'
+import {
+  confirmApplyFileUpload,
+  deleteApplyDummyFile,
+  presignApplyFileUpload,
+} from '@/app/apply/actions'
+import { fileAcceptForSlot, fileRequirementsLabel, resolveUploadMime, validateApplyFile } from '@/lib/apply-files'
 import type { FileSlot } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
 
@@ -32,6 +36,8 @@ export function DummyFileField({
   preview?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const [busyMessage, setBusyMessage] = useState<'Uploading…' | 'Removing…' | null>(null)
+  const busy = busyMessage !== null
   const filename = useApplyStore((state) => state.files[slot])
   const setFile = useApplyStore((state) => state.setFile)
   const setSaveStatus = useApplyStore((state) => state.setSaveStatus)
@@ -57,20 +63,65 @@ export function DummyFileField({
       setSaveStatus('idle')
       return
     }
+
     setSaveStatus('saving')
-    const result = await saveApplyDummyFile({
-      slot,
-      filename: file.name,
-      mimeType: file.type,
-      sizeBytes: file.size,
-    })
-    if (result.error || !result.file) {
+    setBusyMessage('Uploading…')
+
+    try {
+      const presigned = await presignApplyFileUpload({
+        slot,
+        filename: file.name,
+        mimeType: file.type,
+        sizeBytes: file.size,
+      })
+      if (presigned.error || !presigned.uploadUrl || !presigned.key) {
+        if (inputRef.current) inputRef.current.value = ''
+        setBusyMessage(null)
+        setSaveStatus('error', presigned.error ?? 'Could not prepare upload.')
+        return
+      }
+
+      const contentType =
+        resolveUploadMime({
+          slot,
+          mimeType: file.type,
+          filename: file.name,
+        }) ?? file.type
+
+      const uploadResponse = await fetch(presigned.uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': contentType },
+      })
+      if (!uploadResponse.ok) {
+        if (inputRef.current) inputRef.current.value = ''
+        setBusyMessage(null)
+        setSaveStatus('error', 'Upload failed. Try again.')
+        return
+      }
+
+      const confirmed = await confirmApplyFileUpload({
+        slot,
+        key: presigned.key,
+        filename: file.name,
+        mimeType: file.type,
+        sizeBytes: file.size,
+      })
+      if (confirmed.error || !confirmed.file) {
+        if (inputRef.current) inputRef.current.value = ''
+        setBusyMessage(null)
+        setSaveStatus('error', confirmed.error ?? 'Could not save upload.')
+        return
+      }
+
+      setFile(slot, confirmed.file.filename ?? file.name)
+      setBusyMessage(null)
+      setSaveStatus('saved')
+    } catch {
       if (inputRef.current) inputRef.current.value = ''
-      setSaveStatus('error', result.error)
-      return
+      setBusyMessage(null)
+      setSaveStatus('error', 'Upload failed. Try again.')
     }
-    setFile(slot, result.file.filename ?? file.name)
-    setSaveStatus('saved')
   }
 
   async function onRemove() {
@@ -81,13 +132,16 @@ export function DummyFileField({
       return
     }
     setSaveStatus('saving')
+    setBusyMessage('Removing…')
     const result = await deleteApplyDummyFile(slot)
     if (result.error) {
+      setBusyMessage(null)
       setSaveStatus('error', result.error)
       return
     }
     setFile(slot, null)
     if (inputRef.current) inputRef.current.value = ''
+    setBusyMessage(null)
     setSaveStatus('saved')
   }
 
@@ -97,6 +151,7 @@ export function DummyFileField({
         {LABELS[slot]}
         {required ? ' *' : ''}
       </p>
+      <p className="mb-2 text-xs text-gray-500">{fileRequirementsLabel(slot)}</p>
       {HELP[slot] ? (
         <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">{HELP[slot]}</p>
       ) : null}
@@ -105,9 +160,14 @@ export function DummyFileField({
         type="file"
         accept={fileAcceptForSlot(slot)}
         className="sr-only"
+        disabled={busy}
         onChange={onChange}
       />
-      {filename ? (
+      {busy ? (
+        <div className="rounded-md border border-gray-100 bg-white/80 px-3 py-2 text-sm leading-5 text-gray-500">
+          {busyMessage}
+        </div>
+      ) : filename ? (
         <div className="flex items-center gap-2 rounded-md border border-gray-100 bg-white/80 px-3 py-2">
           <span className="min-w-0 flex-1 truncate text-sm leading-5 text-gray-700">{filename}</span>
           <button
@@ -128,8 +188,9 @@ export function DummyFileField({
       ) : (
         <button
           type="button"
+          disabled={busy}
           onClick={() => inputRef.current?.click()}
-          className="cursor-pointer rounded-[40px] border border-[#315CA9] px-4 py-2 text-sm font-semibold text-[#315CA9] transition-all duration-300 hover:scale-105 hover:bg-[#315CA9] hover:text-white hover:shadow-md"
+          className="cursor-pointer rounded-[40px] border border-[#315CA9] px-4 py-2 text-sm font-semibold text-[#315CA9] transition-all duration-300 hover:scale-105 hover:bg-[#315CA9] hover:text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
           Choose file
         </button>

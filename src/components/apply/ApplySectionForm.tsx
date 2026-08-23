@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
@@ -271,7 +271,7 @@ export function ApplySectionForm({
                 {question.helpText ? (
                   <p className="mb-2 whitespace-pre-wrap text-xs text-gray-500">{question.helpText}</p>
                 ) : null}
-                <textarea
+                <AutoResizeTextarea
                   className={`${inputClass} min-h-40`}
                   value={body}
                   onChange={(event) => {
@@ -382,6 +382,33 @@ export function ApplySectionForm({
         )}
       </div>
     </div>
+  )
+}
+
+function AutoResizeTextarea({
+  className = '',
+  value,
+  onChange,
+  ...props
+}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const ref = useRef<HTMLTextAreaElement>(null)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${el.scrollHeight}px`
+  }, [value])
+
+  return (
+    <textarea
+      ref={ref}
+      rows={1}
+      className={`resize-none overflow-hidden ${className}`}
+      value={value}
+      onChange={onChange}
+      {...props}
+    />
   )
 }
 

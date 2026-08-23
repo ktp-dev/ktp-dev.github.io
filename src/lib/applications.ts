@@ -168,35 +168,49 @@ export async function saveApplicationAnswers(
   }
 }
 
-export async function saveDummyFile(input: {
+export async function saveApplicationFileRecord(input: {
   applicationId: string
   slot: FileSlot
-  filename: string
+  s3Key: string
   mimeType: string
   sizeBytes: number
+  originalFilename: string
 }) {
-  const s3Key = `dummy/${input.applicationId}/${input.slot}/${input.filename}`
   const [saved] = await db
     .insert(applicationFiles)
     .values({
       applicationId: input.applicationId,
       slot: input.slot,
-      s3Key,
+      s3Key: input.s3Key,
       mimeType: input.mimeType,
       sizeBytes: input.sizeBytes,
-      originalFilename: input.filename,
+      originalFilename: input.originalFilename,
     })
     .onConflictDoUpdate({
       target: [applicationFiles.applicationId, applicationFiles.slot],
       set: {
-        s3Key,
+        s3Key: input.s3Key,
         mimeType: input.mimeType,
         sizeBytes: input.sizeBytes,
-        originalFilename: input.filename,
+        originalFilename: input.originalFilename,
       },
     })
     .returning()
   return saved
+}
+
+export async function getApplicationFileForSlot(applicationId: string, slot: FileSlot) {
+  const [row] = await db
+    .select()
+    .from(applicationFiles)
+    .where(
+      and(
+        eq(applicationFiles.applicationId, applicationId),
+        eq(applicationFiles.slot, slot)
+      )
+    )
+    .limit(1)
+  return row ?? null
 }
 
 export async function deleteDummyFile(applicationId: string, slot: FileSlot) {
@@ -208,6 +222,12 @@ export async function deleteDummyFile(applicationId: string, slot: FileSlot) {
         eq(applicationFiles.slot, slot)
       )
     )
+}
+
+export async function deleteApplicationFileRecord(applicationId: string, slot: FileSlot) {
+  const existing = await getApplicationFileForSlot(applicationId, slot)
+  await deleteDummyFile(applicationId, slot)
+  return existing
 }
 
 export async function submitApplication(applicationId: string, userId: string) {
