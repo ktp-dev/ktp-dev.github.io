@@ -62,10 +62,10 @@ export async function createPresignedPutUrl(input: {
   return { error: null, uploadUrl, bucket: env.bucket }
 }
 
-function contentDispositionAttachment(filename: string) {
+function contentDisposition(filename: string, disposition: 'attachment' | 'inline') {
   const trimmed = filename.trim() || 'download'
   const ascii = trimmed.replace(/[^\x20-\x7E]/g, '_').replace(/["\\]/g, '_') || 'download'
-  return `attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(trimmed)}`
+  return `${disposition}; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(trimmed)}`
 }
 
 export async function createPresignedGetUrl(input: {
@@ -73,17 +73,24 @@ export async function createPresignedGetUrl(input: {
   filename: string
   contentType?: string | null
   expiresInSeconds?: number
+  /** attachment = force download; inline = browser can display (PDF iframe). */
+  disposition?: 'attachment' | 'inline'
 }) {
   const env = readS3Env()
   if (!env) {
     return { error: 'S3 is not configured (check AWS env vars).' as const, downloadUrl: null }
   }
 
+  const disposition = input.disposition ?? 'attachment'
   const command = new GetObjectCommand({
     Bucket: env.bucket,
     Key: input.key,
-    ResponseContentDisposition: contentDispositionAttachment(input.filename),
-    ...(input.contentType ? { ResponseContentType: input.contentType } : {}),
+    ResponseContentDisposition: contentDisposition(input.filename, disposition),
+    ...(input.contentType
+      ? { ResponseContentType: input.contentType }
+      : disposition === 'inline'
+        ? { ResponseContentType: 'application/pdf' }
+        : {}),
   })
 
   const downloadUrl = await getSignedUrl(env.client, command, {
