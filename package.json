@@ -10,7 +10,10 @@
     "db:pull": "drizzle-kit pull",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:seed-admins": "node scripts/seed-local-admins.mjs"
+    "db:seed-admins": "node scripts/seed-local-admins.mjs",
+    "images:optimize:home": "node scripts/optimize-images.mjs --preset home",
+    "images:optimize:about": "node scripts/optimize-images.mjs --preset about",
+    "images:optimize:members": "node scripts/optimize-images.mjs --preset member"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
@@ -46,6 +49,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "raw-loader": "^4.0.2",
+    "sharp": "^0.35.3",
     "supabase": "^2.114.0",
     "tailwindcss": "^4",
     "typescript": "^5"

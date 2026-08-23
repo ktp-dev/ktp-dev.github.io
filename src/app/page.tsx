@@ -22,53 +22,55 @@ export default function Home() {
 
   // Network company data
   const networkCompanies = [
-    { src: '/network/google.png', alt: 'Google' },
-    { src: '/network/microsoft.png', alt: 'Microsoft' },
-    { src: '/network/deloitte.png', alt: 'Deloitte' },
-    { src: '/network/jpmorgan.png', alt: 'JP Morgan' },
-    { src: '/network/meta.png', alt: 'Meta' },
-    { src: '/network/citadel.png', alt: 'Citadel' },
-    { src: '/network/capital_one.png', alt: 'Capital One' },
-    { src: '/network/spotify.png', alt: 'Spotify' },
-    { src: '/network/bloomberg.png', alt: 'Bloomberg' },
-    { src: '/network/doordash.png', alt: 'Doordash' },
-    { src: '/network/hudson_river_trading.png', alt: 'Hudson River Trading' },
-    { src: '/network/amazon.png', alt: 'Amazon' },
-    { src: '/network/apple.png', alt: 'Apple' },
-    { src: '/network/tiktok.png', alt: 'Tiktok' },
-    { src: '/network/nvidia.png', alt: 'Nvidia' },
-    { src: '/network/duolingo.png', alt: 'Duolingo' },
-    { src: '/network/jane_street.png', alt: 'Jane Street' },
-    { src: '/network/pwc.png', alt: 'PWC' },
-    { src: '/network/ey.png', alt: 'EY' },
-    { src: '/network/accenture.png', alt: 'Accenture' },
-    { src: '/network/linkedin.png', alt: 'LinkedIn' },
-    { src: '/network/tesla.png', alt: 'Tesla' },
-    { src: '/network/ibm.png', alt: 'IBM' },
-    { src: '/network/cisco.png', alt: 'Cisco' },
-    { src: '/network/asana.png', alt: 'Asana' },
-    { src: '/network/slack.png', alt: 'Slack' },
-    { src: '/network/figma.png', alt: 'Figma' },
-    { src: '/network/bleacher_report.png', alt: 'Bleacher Report' },
-    { src: '/network/stripe.png', alt: 'Stripe' },
-    { src: '/network/pnc.png', alt: 'PNC' },
-    { src: '/network/boeing.png', alt: 'Boeing' },
-    { src: '/network/salesforce.png', alt: 'Salesforce' },
-    { src: '/network/mongo_db.png', alt: 'MongoDB' },
-    { src: '/network/vmware.png', alt: 'VMware' },
-    { src: '/network/nike.png', alt: 'Nike' },
-    { src: '/network/uber.png', alt: 'Uber' },
-    { src: '/network/netskope.png', alt: 'Netskope' },
-    { src: '/network/att.png', alt: 'AT&T' },
-    { src: '/network/ford.png', alt: 'Ford' },
-    { src: '/network/modern_treasury.png', alt: 'Modern Treasury' },
-    { src: '/network/indeed.png', alt: 'Indeed' },
-    { src: '/network/bank_of_america.png', alt: 'Bank of America' },
-    { src: '/network/workday.png', alt: 'Workday' },
-    { src: '/network/caterpillar.png', alt: 'Caterpillar' },
-    { src: '/network/p&g.png', alt: 'P&G' },
-    { src: '/network/viget.png', alt: 'Viget' },
-    { src: '/network/united.png', alt: 'United' },
+    { src: '/network/google.svg', alt: 'Google' },
+    { src: '/network/microsoft.svg', alt: 'Microsoft' },
+    { src: '/network/deloitte.svg', alt: 'Deloitte' },
+    { src: '/network/jpmc.svg', alt: 'JP Morgan' },
+    { src: '/network/meta.svg', alt: 'Meta' },
+    { src: '/network/citadel.svg', alt: 'Citadel' },
+    { src: '/network/capitalone.svg', alt: 'Capital One' },
+    { src: '/network/spotify.svg', alt: 'Spotify' },
+    { src: '/network/bloomberg.svg', alt: 'Bloomberg' },
+    { src: '/network/doordash.svg', alt: 'Doordash' },
+    { src: '/network/hrt.svg', alt: 'Hudson River Trading' },
+    { src: '/network/huntington.svg', alt: 'Huntington' },
+    { src: '/network/amazon.svg', alt: 'Amazon' },
+    { src: '/network/apple.svg', alt: 'Apple' },
+    { src: '/network/tiktok.svg', alt: 'Tiktok' },
+    { src: '/network/nvidia.svg', alt: 'Nvidia' },
+    { src: '/network/duolingo.svg', alt: 'Duolingo' },
+    { src: '/network/janestreet.svg', alt: 'Jane Street' },
+    { src: '/network/pwc.svg', alt: 'PWC' },
+    { src: '/network/ey.svg', alt: 'EY' },
+    { src: '/network/accenture.svg', alt: 'Accenture' },
+    { src: '/network/linkedin.svg', alt: 'LinkedIn' },
+    { src: '/network/tesla.svg', alt: 'Tesla' },
+    { src: '/network/ibm.svg', alt: 'IBM' },
+    { src: '/network/cisco.svg', alt: 'Cisco' },
+    { src: '/network/asana.svg', alt: 'Asana' },
+    { src: '/network/atlassian.svg', alt: 'Atlassian' },
+    { src: '/network/slack.svg', alt: 'Slack' },
+    { src: '/network/figma.svg', alt: 'Figma' },
+    { src: '/network/bleacherreport.svg', alt: 'Bleacher Report' },
+    { src: '/network/stripe.svg', alt: 'Stripe' },
+    { src: '/network/pnc.svg', alt: 'PNC' },
+    { src: '/network/boeing.svg', alt: 'Boeing' },
+    { src: '/network/salesforce.svg', alt: 'Salesforce' },
+    { src: '/network/mongodb.svg', alt: 'MongoDB' },
+    { src: '/network/vmware.svg', alt: 'VMware' },
+    { src: '/network/nike.svg', alt: 'Nike' },
+    { src: '/network/uber.svg', alt: 'Uber' },
+    { src: '/network/netskope.svg', alt: 'Netskope' },
+    { src: '/network/att.svg', alt: 'AT&T' },
+    { src: '/network/ford.svg', alt: 'Ford' },
+    { src: '/network/moderntreasury.svg', alt: 'Modern Treasury' },
+    { src: '/network/indeed.svg', alt: 'Indeed' },
+    { src: '/network/bofa.svg', alt: 'Bank of America' },
+    { src: '/network/workday.svg', alt: 'Workday' },
+    { src: '/network/caterpillar.svg', alt: 'Caterpillar' },
+    { src: '/network/p_and_g.svg', alt: 'P&G' },
+    { src: '/network/viget.svg', alt: 'Viget' },
+    { src: '/network/united.svg', alt: 'United' },
   ];
 
   return (
@@ -82,9 +84,9 @@ export default function Home() {
             <div className="shape-blob eleven"></div>
         </div>
         <div className='flex-1 flex flex-col items-end'>
-          <img src="/images/home/ae_lighthouse.jpg" className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
-          <img src="/images/home/rock.JPEG" className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
-          <img src="/images/home/agoats.jpeg" className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
+          <img src={`/images/home/ae_lighthouse.jpg`} className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
+          <img src={`/images/home/rock.JPEG`} className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
+          <img src={`/images/home/agoats.jpeg`} className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
         </div>
 
         <div className='flex flex-col flex-none'>
@@ -110,11 +112,11 @@ export default function Home() {
         </div>
 
         <div className='flex-1 flex flex-col items-start'>
-          <img src="/images/home/alpha_delta_lq.jpeg" className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
+          <img src={`/images/home/alpha_delta_lq.jpeg`} className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
 
           <div className='flex flex-row'>
-            <img src="/images/home/ae_crossover.jpg" className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
-            <img src="/images/home/omega_dp.jpeg" className='hidden xl:block' style={{ width: '350px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px', marginTop: '20px' }} />
+            <img src={`/images/home/ae_crossover.jpg`} className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src={`/images/home/omega_dp.jpeg`} className='hidden xl:block' style={{ width: '350px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px', marginTop: '20px' }} />
           </div>
         </div>
       </div>
@@ -122,11 +124,11 @@ export default function Home() {
       <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
         {/* Description */}
         <div className='flex flex-col 2xl:flex-row mb-8 md:mb-12'>
-          {/* <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
-            <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/images/home/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 2xl:hidden' style={{ borderRadius: '10px' }} />
-          </div> */}
+          <div className='hidden 2xl:flex flex-row justify-center md:justify-start gap-4'>
+            {/* <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} /> */}
+            <img src={`/images/home/chi2.jpeg`} alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+            {/* <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 2xl:hidden' style={{ borderRadius: '10px' }} /> */}
+          </div>
 
           <div className='flex flex-col justify-center items-center 2xl:ml-16'>
             <div>
@@ -150,11 +152,11 @@ export default function Home() {
         </div>
 
         <div className='hidden md:flex flex-row gap-4 justify-center px-6 sm:px-8 md:px-12 lg:px-20'>
-          <img src="/images/home/ab.jpg" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/tailgater.jpg" alt="In and Chris" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src={`/images/home/ab.jpg`} alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src={`/images/home/pledge_projects.jpeg`} alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src={`/images/home/tailgater.jpg`} alt="In and Chris" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src={`/images/home/alumni.jpg`} alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
+          <img src={`/images/home/tailgate.jpg`} alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
         </div>
       </div>
 
