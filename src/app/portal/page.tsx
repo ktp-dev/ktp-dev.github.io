@@ -1,13 +1,13 @@
 import Link from 'next/link'
-import { TimeGreeting } from '@/components/portal/TimeGreeting'
+import { SignedInAccountBar } from '@/components/SignedInAccountBar'
 // import { AlumniDirectoryTable } from '@/components/portal/AlumniDirectoryTable'
 // import { InterviewHomeSection } from '@/components/portal/InterviewHomeSection'
 import {
   PortalShell,
-  portalInnerCardClass,
-  portalInnerCardStyle,
-  portalSectionCardClass,
-  portalSectionCardStyle,
+  portalDarkInnerCardClass,
+  portalDarkInnerCardStyle,
+  portalDarkSectionCardClass,
+  portalDarkSectionCardStyle,
 } from '@/components/PortalShell'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import { requirePortalUser } from '@/lib/portal'
@@ -22,40 +22,47 @@ type QuickLink = {
 }
 
 function LinkRow({ link }: { link: QuickLink }) {
-  const className = `${portalInnerCardClass} cursor-pointer transition-all duration-200 hover:bg-white`
+  const className = `${portalDarkInnerCardClass} cursor-pointer`
   const body = (
     <>
       <div className="min-w-0">
-        <p className="text-sm font-medium text-gray-800">{link.title}</p>
-        <p className="text-xs text-gray-500">{link.subtitle}</p>
+        <p className="text-sm font-medium text-white">{link.title}</p>
+        <p className="text-xs text-slate-300">{link.subtitle}</p>
       </div>
-      <span className="shrink-0 text-sm font-semibold text-[#315CA9]">{link.external ? 'Open' : 'View'}</span>
+      <span className="shrink-0 text-sm font-semibold text-sky-200">
+        {link.external ? 'Open' : 'View'}
+      </span>
     </>
   )
 
   if (link.external) {
     return (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className={className} style={portalInnerCardStyle}>
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        style={portalDarkInnerCardStyle}
+      >
         {body}
       </a>
     )
   }
 
   return (
-    <Link href={link.href} className={className} style={portalInnerCardStyle}>
+    <Link href={link.href} className={className} style={portalDarkInnerCardStyle}>
       {body}
     </Link>
   )
 }
 
 export default async function PortalPage() {
-  const { email, brother } = await requirePortalUser()
+  const { email } = await requirePortalUser()
   const adminUser = await checkIsAdmin()
   const activeCycle = await getActiveCycle()
   const showApplicationReads = activeCycle
     ? await canReviewApplications({ email, cycleId: activeCycle.id })
     : false
-  const greetingName = brother.first_name?.trim() || email
 
   const quickLinks: QuickLink[] = [
     {
@@ -83,18 +90,21 @@ export default async function PortalPage() {
 
   return (
     <PortalShell
+      tone="dark"
       title="Brother Portal"
-      subtitle={<TimeGreeting name={greetingName} />}
+      subtitle={
+        <SignedInAccountBar tone="dark" variant="compact" align="start" email={email} />
+      }
       headerRight={
         <img
           src="/images/beep-bop.svg"
           alt=""
-          className="h-24 w-24 shrink-0 brightness-0 sm:h-28 sm:w-28 md:h-32 md:w-32"
+          className="h-24 w-24 shrink-0 brightness-0 invert sm:h-28 sm:w-28 md:h-32 md:w-32"
         />
       }
     >
-      <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
-        <h2 className="mb-4 text-xl font-bold font-inter">Quick Links</h2>
+      <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
+        <h2 className="mb-4 font-inter text-xl font-bold text-white">Quick Links</h2>
         <div className="flex flex-col gap-2">
           {quickLinks.map((link) => (
             <LinkRow key={link.href} link={link} />
@@ -103,8 +113,8 @@ export default async function PortalPage() {
       </div>
 
       {showApplicationReads ? (
-        <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
-          <h2 className="mb-4 text-xl font-bold font-inter">Your Tasks</h2>
+        <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
+          <h2 className="mb-4 font-inter text-xl font-bold text-white">Your Tasks</h2>
           <LinkRow
             link={{
               href: '/portal/reads',
@@ -115,16 +125,16 @@ export default async function PortalPage() {
         </div>
       ) : null}
 
-      <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
-        <h2 className="mb-2 text-xl font-bold font-inter">More coming soon</h2>
-        <p className="text-sm text-gray-500">More features coming soon. Stay tuned.</p>
+      <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
+        <h2 className="mb-2 font-inter text-xl font-bold text-white">More coming soon</h2>
+        <p className="text-sm text-slate-300">More features coming soon. Stay tuned.</p>
       </div>
 
-      {/* <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
+      {/* <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
         <AlumniDirectoryTable />
       </div>
 
-      <div className={`${portalSectionCardClass} mb-8`} style={portalSectionCardStyle}>
+      <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
         <InterviewHomeSection />
       </div> */}
     </PortalShell>
