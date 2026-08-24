@@ -4,13 +4,20 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { RubricRatingLabels } from '@/db/schema'
 import { RubricDetailPanel } from '@/components/portal/RubricDetailPanel'
-import { readsScoreBtnClass } from '@/components/portal/reads-ui'
+import {
+  readsDarkPanelClass,
+  readsDarkPanelStyle,
+  readsHeadingClass,
+  readsMutedClass,
+  readsScoreBtnClass,
+  readsScoreBtnIdleStyle,
+} from '@/components/portal/reads-ui'
 import { resolveRatingLabels, ratingLabelsToList } from '@/lib/rubric-ui'
 
 const MODAL_ANIMATION_MS = 280
 
 const helpBtnClass =
-  'inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-blue-50 hover:text-[#315CA9]'
+  'inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
 
 function HelpIcon() {
   return (
@@ -32,7 +39,7 @@ function HelpIcon() {
 }
 
 const closeBtnClass =
-  'shrink-0 cursor-pointer text-xs font-semibold text-[#315CA9] transition-colors'
+  'shrink-0 cursor-pointer text-xs font-semibold text-white transition-opacity hover:opacity-80'
 
 export function ScoreCategoryCard({
   category,
@@ -102,13 +109,27 @@ export function ScoreCategoryCard({
     closeTimeoutRef.current = setTimeout(() => setOpen(false), MODAL_ANIMATION_MS)
   }
 
+  function ScoreButton({ score }: { score: number }) {
+    const selected = value === score
+    return (
+      <button
+        type="button"
+        onClick={() => onChange(score)}
+        className={readsScoreBtnClass(selected)}
+        style={selected ? undefined : readsScoreBtnIdleStyle}
+      >
+        {score}
+      </button>
+    )
+  }
+
   return (
     <>
-      <div className="rounded-xl border border-gray-100 bg-white/70 p-3">
+      <div className={`p-3 ${readsDarkPanelClass}`} style={readsDarkPanelStyle}>
         <div className="relative pr-7">
-          <p className="text-sm font-medium leading-snug text-gray-800">{category.title}</p>
+          <p className={`text-sm font-medium leading-snug ${readsHeadingClass}`}>{category.title}</p>
           {category.description ? (
-            <p className="mt-1 text-xs leading-relaxed text-gray-500">{category.description}</p>
+            <p className={`mt-1 text-xs leading-relaxed ${readsMutedClass}`}>{category.description}</p>
           ) : null}
           {hasRubricDetail ? (
             <button
@@ -125,29 +146,21 @@ export function ScoreCategoryCard({
         <div className="mt-3">
           <div className="hidden items-center gap-4 sm:flex md:gap-5">
             {lowLabel ? (
-              <span className="w-[5.25rem] shrink-0 text-xs leading-snug text-gray-500 md:w-28">
+              <span className={`w-[5.25rem] shrink-0 text-xs leading-snug ${readsMutedClass} md:w-28`}>
                 {lowLabel}
               </span>
             ) : (
               <span className="w-0 shrink-0" aria-hidden />
             )}
             <div className="flex flex-1 justify-center gap-3 md:gap-3.5">
-              {scores.map((score) => {
-                const selected = value === score
-                return (
-                  <button
-                    key={score}
-                    type="button"
-                    onClick={() => onChange(score)}
-                    className={readsScoreBtnClass(selected)}
-                  >
-                    {score}
-                  </button>
-                )
-              })}
+              {scores.map((score) => (
+                <ScoreButton key={score} score={score} />
+              ))}
             </div>
             {highLabel ? (
-              <span className="w-[5.25rem] shrink-0 text-right text-xs leading-snug text-gray-500 md:w-28">
+              <span
+                className={`w-[5.25rem] shrink-0 text-right text-xs leading-snug ${readsMutedClass} md:w-28`}
+              >
                 {highLabel}
               </span>
             ) : null}
@@ -155,29 +168,21 @@ export function ScoreCategoryCard({
 
           <div className="sm:hidden">
             <div className="flex justify-center gap-3">
-              {scores.map((score) => {
-                const selected = value === score
-                return (
-                  <button
-                    key={score}
-                    type="button"
-                    onClick={() => onChange(score)}
-                    className={readsScoreBtnClass(selected)}
-                  >
-                    {score}
-                  </button>
-                )
-              })}
+              {scores.map((score) => (
+                <ScoreButton key={score} score={score} />
+              ))}
             </div>
             {lowLabel || highLabel ? (
               <div className="mt-2.5 flex items-start justify-between gap-4 px-0.5">
                 {lowLabel ? (
-                  <span className="max-w-[46%] text-[11px] leading-snug text-gray-500">{lowLabel}</span>
+                  <span className={`max-w-[46%] text-[11px] leading-snug ${readsMutedClass}`}>
+                    {lowLabel}
+                  </span>
                 ) : (
                   <span />
                 )}
                 {highLabel ? (
-                  <span className="max-w-[46%] text-right text-[11px] leading-snug text-gray-500">
+                  <span className={`max-w-[46%] text-right text-[11px] leading-snug ${readsMutedClass}`}>
                     {highLabel}
                   </span>
                 ) : null}
@@ -192,20 +197,22 @@ export function ScoreCategoryCard({
         createPortal(
           <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6">
             <div
-              className={`absolute inset-0 bg-black/15 backdrop-blur-md transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`absolute inset-0 bg-[#0f172a]/80 backdrop-blur-sm transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 visible ? 'opacity-100' : 'opacity-0'
               }`}
               onClick={closeModal}
             />
             <div
-              className={`relative z-10 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-gray-100 bg-white/95 p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`relative z-10 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0f172a] p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 visible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-3 scale-95 opacity-0'
               }`}
-              style={{ boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)' }}
+              style={{
+                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.45)',
+              }}
               onClick={(event) => event.stopPropagation()}
             >
               <div className="mb-4 flex items-start justify-between gap-3">
-                <h3 className="text-base font-semibold leading-relaxed text-gray-900">
+                <h3 className={`text-base font-semibold leading-relaxed ${readsHeadingClass}`}>
                   {category.title}
                 </h3>
                 <button type="button" className={closeBtnClass} onClick={closeModal}>

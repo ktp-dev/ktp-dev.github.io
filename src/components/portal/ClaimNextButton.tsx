@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { claimNextApplicationAction } from '@/app/portal/reads/actions'
-import { readsPrimaryBtnClass } from '@/components/portal/reads-ui'
+import { readsMutedClass, readsPrimaryBtnClass } from '@/components/portal/reads-ui'
 
 export function ClaimNextButton({
   disabled,
@@ -50,8 +50,8 @@ export function ClaimNextButton({
       >
         {pending ? 'Claiming…' : 'Start reviewing'}
       </button>
-      {emptyMessage ? <p className="mt-2 text-sm text-gray-500">{emptyMessage}</p> : null}
-      {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
+      {emptyMessage ? <p className={`mt-2 text-sm ${readsMutedClass}`}>{emptyMessage}</p> : null}
+      {error ? <p className="mt-2 text-sm text-red-400">{error}</p> : null}
     </div>
   )
 }

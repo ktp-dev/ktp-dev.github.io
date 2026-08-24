@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { readsMutedClass } from '@/components/portal/reads-ui'
 
 const MODAL_ANIMATION_MS = 280
 
 const iconBtnClass =
-  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-blue-50 hover:text-[#315CA9]'
+  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
 
 function ExpandIcon() {
   return (
@@ -27,9 +28,10 @@ function CollapseIcon() {
 function ResumeFrame({ src, tall }: { src: string; tall?: boolean }) {
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-gray-200 bg-white ${
+      className={`overflow-hidden rounded-xl border bg-white ${
         tall ? 'h-full min-h-0' : 'h-[70vh]'
       }`}
+      style={{ borderColor: 'rgba(255, 255, 255, 0.12)' }}
     >
       <iframe title="Résumé preview" src={src} className="h-full w-full" />
     </div>
@@ -83,12 +85,13 @@ export function ResumeViewer({
 
   return (
     <>
-      <h3 className="text-sm font-bold uppercase tracking-wide text-gray-500">{heading}</h3>
+      <h3 className={`text-sm font-bold uppercase tracking-wide ${readsMutedClass}`}>{heading}</h3>
       <div className="relative mt-3">
         <ResumeFrame src={iframeSrc} />
         <button
           type="button"
-          className={`absolute top-2 right-2 z-10 bg-white/90 shadow-sm ${iconBtnClass}`}
+          className={`absolute top-2 right-2 z-10 shadow-sm ${iconBtnClass}`}
+          style={{ backgroundColor: 'rgba(15, 23, 42, 0.9)' }}
           onClick={openExpanded}
           title="Expand résumé"
           aria-label="Expand résumé"
@@ -102,20 +105,26 @@ export function ResumeViewer({
         createPortal(
           <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6" style={{ zIndex: 99999 }}>
             <div
-              className={`absolute inset-0 bg-black/15 backdrop-blur-md transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isVisible ? 'opacity-100' : 'opacity-0'
               }`}
               onClick={closeExpanded}
             />
             <div
-              className={`relative z-10 flex h-full w-full max-w-[1400px] flex-col rounded-xl border border-gray-100 bg-white/95 p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`relative z-10 flex h-full w-full max-w-[1400px] flex-col rounded-xl border p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isVisible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-3 scale-95 opacity-0'
               }`}
-              style={{ boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)' }}
+              style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.96)',
+                borderColor: 'rgba(255, 255, 255, 0.12)',
+                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.45)',
+              }}
               onClick={(event) => event.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between gap-3">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-gray-500">{heading}</h3>
+                <h3 className={`text-sm font-bold uppercase tracking-wide ${readsMutedClass}`}>
+                  {heading}
+                </h3>
                 <button
                   type="button"
                   className={iconBtnClass}

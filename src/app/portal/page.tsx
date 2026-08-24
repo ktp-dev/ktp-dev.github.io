@@ -29,7 +29,7 @@ function LinkRow({ link }: { link: QuickLink }) {
         <p className="text-sm font-medium text-white">{link.title}</p>
         <p className="text-xs text-slate-300">{link.subtitle}</p>
       </div>
-      <span className="shrink-0 text-sm font-semibold text-sky-200">
+      <span className="shrink-0 text-sm font-semibold text-white">
         {link.external ? 'Open' : 'View'}
       </span>
     </>
@@ -127,7 +127,7 @@ export default async function PortalPage() {
 
       <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>
         <h2 className="mb-2 font-inter text-xl font-bold text-white">More coming soon</h2>
-        <p className="text-sm text-slate-300">More features coming soon. Stay tuned.</p>
+        <p className="text-sm text-slate-300">More features coming soon. Stay tuned!</p>
       </div>
 
       {/* <div className={`${portalDarkSectionCardClass} mb-8`} style={portalDarkSectionCardStyle}>

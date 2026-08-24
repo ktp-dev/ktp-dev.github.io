@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import {
   PortalShell,
-  portalSectionCardClass,
-  portalSectionCardStyle,
+  portalDarkSectionCardClass,
+  portalDarkSectionCardStyle,
 } from '@/components/PortalShell'
 import { requireReviewer } from '@/lib/review-access'
 import { getCurrentUser } from '@/lib/supabase/auth-helpers'
@@ -20,8 +20,8 @@ export default async function PortalReadsReviewPage() {
   }
 
   return (
-    <PortalShell title={`Application #${assigned.displayNumber ?? '—'}`}>
-      <div className={`${portalSectionCardClass} mb-4`} style={portalSectionCardStyle}>
+    <PortalShell tone="dark" title={`Application #${assigned.displayNumber ?? '—'}`}>
+      <div className={`${portalDarkSectionCardClass} mb-4`} style={portalDarkSectionCardStyle}>
         <ReviewSession key={assigned.id} initial={assigned} />
       </div>
     </PortalShell>

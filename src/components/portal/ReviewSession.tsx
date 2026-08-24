@@ -11,10 +11,17 @@ import {
 import type { AnonymizedReviewApplication } from '@/lib/reviews'
 import { ResumeViewer } from '@/components/portal/ResumeViewer'
 import { ScoreCategoryCard } from '@/components/portal/ScoreCategoryCard'
-import { readsFieldClass, readsPrimaryBtnClass } from '@/components/portal/reads-ui'
+import {
+  readsBodyClass,
+  readsFieldClass,
+  readsFieldStyle,
+  readsHeadingClass,
+  readsLinkClass,
+  readsMutedClass,
+  readsPrimaryBtnClass,
+} from '@/components/portal/reads-ui'
 
-const sectionHeadingClass = 'text-sm font-bold uppercase tracking-wide text-gray-500'
-const backLinkClass = 'shrink-0 text-sm font-semibold text-[#315CA9]'
+const sectionHeadingClass = `text-sm font-bold uppercase tracking-wide ${readsMutedClass}`
 const RENEW_INTERVAL_MS = 5 * 60 * 1000
 
 function resumeHeading(app: AnonymizedReviewApplication) {
@@ -138,29 +145,29 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
         <section>
           <div className="flex items-center justify-between gap-3">
             <h3 className={sectionHeadingClass}>Overview</h3>
-            <Link href="/portal/reads" className={`${backLinkClass} lg:hidden`}>
+            <Link href="/portal/reads" className={`${readsLinkClass} lg:hidden`}>
               Back to reads
             </Link>
           </div>
-          <dl className="mt-3 space-y-2 text-sm text-gray-800">
+          <dl className={`mt-3 space-y-2 text-sm ${readsBodyClass}`}>
             <div>
-              <dt className="text-gray-500">Major(s)</dt>
+              <dt className={readsMutedClass}>Major(s)</dt>
               <dd>{app.overview.majors || '—'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Graduation year</dt>
+              <dt className={readsMutedClass}>Graduation year</dt>
               <dd>{app.overview.graduationYear || '—'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Semesters remaining</dt>
+              <dt className={readsMutedClass}>Semesters remaining</dt>
               <dd>{app.overview.semestersRemaining || '—'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Other professional fraternity</dt>
+              <dt className={readsMutedClass}>Other professional fraternity</dt>
               <dd>{app.overview.otherProfessionalFraternity || '—'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Campus activities</dt>
+              <dt className={readsMutedClass}>Campus activities</dt>
               <dd className="whitespace-pre-wrap">{app.overview.campusActivities || '—'}</dd>
             </div>
           </dl>
@@ -171,8 +178,8 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
           <div className="mt-3 space-y-4">
             {app.essays.map((essay) => (
               <div key={essay.questionId}>
-                <p className="text-sm font-medium text-gray-800">{essay.prompt}</p>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700">
+                <p className={`text-sm font-medium ${readsMutedClass}`}>{essay.prompt}</p>
+                <p className={`mt-1 whitespace-pre-wrap text-sm ${readsBodyClass}`}>
                   {essay.answer || '—'}
                 </p>
               </div>
@@ -184,17 +191,17 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
           {!app.resume.filename ? (
             <>
               <h3 className={sectionHeadingClass}>{resumeHeading(app)}</h3>
-              <p className="mt-2 text-sm text-gray-500">No résumé on file.</p>
+              <p className={`mt-2 text-sm ${readsMutedClass}`}>No résumé on file.</p>
             </>
           ) : resumeLoading ? (
             <>
               <h3 className={sectionHeadingClass}>{resumeHeading(app)}</h3>
-              <p className="mt-3 text-sm text-gray-500">Loading résumé…</p>
+              <p className={`mt-3 text-sm ${readsMutedClass}`}>Loading résumé…</p>
             </>
           ) : resumeError ? (
             <>
               <h3 className={sectionHeadingClass}>{resumeHeading(app)}</h3>
-              <p className="mt-3 text-sm text-red-600">{resumeError}</p>
+              <p className="mt-3 text-sm text-red-400">{resumeError}</p>
             </>
           ) : iframeSrc ? (
             <ResumeViewer iframeSrc={iframeSrc} heading={resumeHeading(app)} />
@@ -205,7 +212,7 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
       <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
         <div className="flex items-center justify-between gap-3">
           <h3 className={sectionHeadingClass}>Scoring</h3>
-          <Link href="/portal/reads" className={`${backLinkClass} hidden lg:inline`}>
+          <Link href="/portal/reads" className={`${readsLinkClass} hidden lg:inline`}>
             Back to reads
           </Link>
         </div>
@@ -222,8 +229,8 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
         ))}
 
         <div>
-          <label htmlFor="review-notes" className="text-sm font-medium text-gray-700">
-            Internal notes <span className="font-normal text-gray-500">(optional)</span>
+          <label htmlFor="review-notes" className={`text-sm font-medium ${readsBodyClass}`}>
+            Internal notes <span className={`font-normal ${readsMutedClass}`}>(optional)</span>
           </label>
           <textarea
             id="review-notes"
@@ -233,12 +240,13 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
             rows={4}
             disabled={scoringDisabled}
             className={`${readsFieldClass} mt-1 min-h-24 disabled:cursor-not-allowed disabled:opacity-60`}
+            style={readsFieldStyle}
           />
         </div>
 
         {assignmentReleased ? (
           <div className="space-y-3">
-            <p className="text-sm leading-relaxed text-red-600">
+            <p className="text-sm leading-relaxed text-red-400">
               This application was released after being idle.
               <br />
               Your scores weren&apos;t saved.
@@ -249,7 +257,7 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
           </div>
         ) : (
           <>
-            {error ? <p className="text-sm text-red-600">{error}</p> : null}
+            {error ? <p className="text-sm text-red-400">{error}</p> : null}
             <button
               type="button"
               onClick={onSubmit}
