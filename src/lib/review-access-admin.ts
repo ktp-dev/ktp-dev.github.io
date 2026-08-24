@@ -5,6 +5,7 @@ import { db } from '@/db'
 import { brothers, reviewAccess } from '@/db/schema'
 import { MIN_REQUIRED_REVIEWS } from '@/lib/reviews'
 import { normalizeReviewEmail } from '@/lib/review-access'
+import { umichEmailSchema } from '@/lib/umich-email'
 
 export type ClientReviewAccess = {
   id: string
@@ -55,10 +56,14 @@ export async function addReviewAccessEntry(input: {
   email: string
   minRequiredReviews?: number
 }) {
-  const email = normalizeReviewEmail(input.email)
-  if (!email.endsWith('@umich.edu')) {
-    return { entry: null, error: 'Reviewers must use a @umich.edu email.' as const }
+  const parsedEmail = umichEmailSchema.safeParse(input.email)
+  if (!parsedEmail.success) {
+    return {
+      entry: null,
+      error: parsedEmail.error.issues[0]?.message ?? 'Enter a valid uniqname.' as const,
+    }
   }
+  const email = normalizeReviewEmail(parsedEmail.data)
 
   const minRequiredReviews = input.minRequiredReviews ?? MIN_REQUIRED_REVIEWS
   if (!Number.isInteger(minRequiredReviews) || minRequiredReviews < 1) {

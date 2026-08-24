@@ -40,5 +40,9 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}${explicitNext ?? '/portal'}`)
   }
 
-  return NextResponse.redirect(`${origin}${explicitNext ?? '/apply'}`)
+  // Rushee / non-brother: never send to portal or admin from this callback
+  if (explicitNext?.startsWith('/apply')) {
+    return NextResponse.redirect(`${origin}${explicitNext}`)
+  }
+  return NextResponse.redirect(`${origin}/apply`)
 }

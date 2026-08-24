@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { umichEmailSchema } from '@/lib/umich-email'
 
 const emptyToNull = (value: string | null | undefined) => {
   if (value == null) return null
@@ -9,14 +10,7 @@ const emptyToNull = (value: string | null | undefined) => {
 export const brotherWriteSchema = z.object({
   first_name: z.string().trim().min(1, 'First name is required').max(80),
   last_name: z.string().trim().min(1, 'Last name is required').max(80),
-  umich_email: z
-    .string()
-    .trim()
-    .min(1, 'UMich email is required')
-    .max(320)
-    .toLowerCase()
-    .email('Enter a valid UMich email')
-    .refine((value) => value.endsWith('@umich.edu'), 'UMich email must be @umich.edu'),
+  umich_email: umichEmailSchema,
   pledge_class: z.string().trim().min(1, 'Pledge class is required').max(40),
   linkedin_url: z
     .string()
@@ -59,6 +53,15 @@ export type ClientBrother = {
   linkedin_url: string | null
   photo_filename: string | null
   status: 'active' | 'alumni'
+  pledge_class: string | null
+}
+
+export type BrotherSearchHit = {
+  id: string
+  first_name: string | null
+  last_name: string | null
+  umich_email: string
+  uniqname: string
   pledge_class: string | null
 }
 

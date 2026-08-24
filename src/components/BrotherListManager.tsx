@@ -353,15 +353,16 @@ export default function BrotherListManager({
 
                   <div>
                     <label htmlFor="brother-umich-email" className={labelClass}>
-                      UMich email <span className="text-red-500">*</span>
+                      Uniqname <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="brother-umich-email"
-                      type="email"
+                      type="text"
+                      autoComplete="username"
                       className={inputClass}
                       value={form.umich_email}
                       onChange={(event) => setForm((current) => ({ ...current, umich_email: event.target.value }))}
-                      placeholder="uniqname@umich.edu"
+                      placeholder="uniqname"
                       required
                     />
                   </div>

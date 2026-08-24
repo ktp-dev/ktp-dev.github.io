@@ -6,6 +6,7 @@ import {
   removeReviewAccessAction,
   updateReviewAccessMinimumAction,
 } from '@/app/admin/apps/actions'
+import { BrotherTypeahead } from '@/components/admin/BrotherTypeahead'
 import type { ClientReviewAccess } from '@/lib/review-access-admin'
 
 const btnClass =
@@ -114,12 +115,11 @@ export function AdminReviewAccessManager({
             >
               Add brother
             </label>
-            <input
+            <BrotherTypeahead
               id="reviewer-email"
-              type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="uniqname@umich.edu"
+              onChange={setEmail}
+              placeholder="uniqname"
               className={inputClass}
               required
             />

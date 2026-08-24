@@ -1,6 +1,7 @@
 'use client'
 
 import { ApplyToast } from '@/components/apply/ApplyToast'
+import { SignedInAccountBar } from '@/components/SignedInAccountBar'
 import { APPLY_STEPS, type ApplyStepSlug } from '@/lib/apply-steps'
 
 export const applyCardClass =
@@ -51,6 +52,7 @@ export function ApplyShell({
   return (
     <div className="mx-auto flex w-full max-w-3xl lg:max-w-4xl flex-1 flex-col pt-12 sm:pt-16 pb-12">
       <ApplyToast />
+      <SignedInAccountBar className="mb-4" align="end" />
       {title ? (
         <ApplicationHeading
           title={title}

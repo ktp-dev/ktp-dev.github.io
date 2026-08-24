@@ -143,7 +143,6 @@ export default async function ApplyWelcomePage({
             with real applicants.
           </p>
         ) : null}
-        <p className="self-center text-sm text-gray-500">Signed in as {ctx.user.email}</p>
         <Link
           href="/apply/personal"
           className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"

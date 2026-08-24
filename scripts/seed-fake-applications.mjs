@@ -20,7 +20,7 @@ loadEnvConfig(process.cwd())
 const args = process.argv.slice(2)
 const countArg = args.find((arg, i) => args[i - 1] === '--count')
 const cycleArg = args.find((arg, i) => args[i - 1] === '--cycle')
-const count = Math.max(1, Math.min(50, Number(countArg ?? 8) || 8))
+const count = Math.max(1, Math.min(50, Number(countArg ?? 16) || 16))
 
 if (!process.env.DATABASE_URL) {
   console.error('DATABASE_URL is not set.')
@@ -113,6 +113,41 @@ const APPLICANTS = [
     preferred: null,
     majors: 'Computer Science',
     activities: 'Teaching assistant, peer mentor',
+  },
+  {
+    first: 'Cameron',
+    last: 'Wright',
+    preferred: null,
+    majors: 'Cognitive Science',
+    activities: 'Research lab, debate',
+  },
+  {
+    first: 'Harper',
+    last: 'Diaz',
+    preferred: 'Harps',
+    majors: 'Computer Science, Spanish',
+    activities: 'Language exchange, hackathons',
+  },
+  {
+    first: 'Reese',
+    last: 'Nguyen',
+    preferred: null,
+    majors: 'Data Science',
+    activities: 'Analytics club, intramural soccer',
+  },
+  {
+    first: 'Parker',
+    last: 'Brooks',
+    preferred: null,
+    majors: 'Computer Engineering',
+    activities: 'MHacks, maker space',
+  },
+  {
+    first: 'Skyler',
+    last: 'Adams',
+    preferred: 'Sky',
+    majors: 'Business, CS minor',
+    activities: 'Startups club, volunteer tutoring',
   },
 ]
 

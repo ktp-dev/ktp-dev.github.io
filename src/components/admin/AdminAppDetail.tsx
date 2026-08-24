@@ -29,6 +29,43 @@ function slotLabel(slot: string) {
 const sectionClass = 'rounded-xl border border-gray-100 bg-white/80 p-4'
 const sectionStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 
+const navIconClass =
+  'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-gray-100 hover:text-gray-700'
+
+function ChevronLeftIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  )
+}
+
 export function AdminAppDetail({
   detail,
   prevApplicationId,
@@ -57,26 +94,44 @@ export function AdminAppDetail({
           ) : null}
           <p className="text-sm text-gray-600">{application.email}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           {prevApplicationId ? (
             <Link
               href={`/admin/apps/${prevApplicationId}`}
-              className="text-sm font-semibold text-[#315CA9]"
+              className={navIconClass}
+              title="Previous application"
+              aria-label="Previous application"
             >
-              ← Previous
+              <ChevronLeftIcon />
             </Link>
-          ) : null}
-          <Link href="/admin/apps" className="text-sm font-semibold text-[#315CA9]">
+          ) : (
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-300"
+              aria-hidden
+            >
+              <ChevronLeftIcon />
+            </span>
+          )}
+          <Link href="/admin/apps" className="px-2 text-sm font-semibold text-[#315CA9]">
             Back to applications
           </Link>
           {nextApplicationId ? (
             <Link
               href={`/admin/apps/${nextApplicationId}`}
-              className="text-sm font-semibold text-[#315CA9]"
+              className={navIconClass}
+              title="Next application"
+              aria-label="Next application"
             >
-              Next →
+              <ChevronRightIcon />
             </Link>
-          ) : null}
+          ) : (
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-300"
+              aria-hidden
+            >
+              <ChevronRightIcon />
+            </span>
+          )}
         </div>
       </div>
 

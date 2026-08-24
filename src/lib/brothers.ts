@@ -1,11 +1,11 @@
 import 'server-only'
 
-import { and, asc, eq, ne, sql } from 'drizzle-orm'
+import { and, asc, eq, ilike, ne, or, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import { admins, brothers } from '@/db/schema'
-import type { BrotherWrite, ClientBrother } from '@/lib/brother-schema'
+import type { BrotherWrite, ClientBrother, BrotherSearchHit } from '@/lib/brother-schema'
 
-export type { ClientBrother }
+export type { ClientBrother, BrotherSearchHit }
 
 export function toClientBrother(row: typeof brothers.$inferSelect): ClientBrother {
   return {
@@ -24,6 +24,57 @@ export function toClientBrother(row: typeof brothers.$inferSelect): ClientBrothe
 export function brotherDisplayName(brother: ClientBrother, fallbackEmail: string) {
   const name = [brother.first_name, brother.last_name].filter(Boolean).join(' ').trim()
   return name || fallbackEmail
+}
+
+function uniqnameFromEmail(email: string) {
+  return email.replace(/@umich\.edu$/i, '')
+}
+
+export async function searchBrothers(query: string, limit = 8): Promise<BrotherSearchHit[]> {
+  const trimmed = query.trim().toLowerCase()
+  if (trimmed.length < 2) return []
+
+  const safe = trimmed.replace(/[%_\\]/g, '')
+  if (safe.length < 2) return []
+  const pattern = `%${safe}%`
+
+  const rows = await db
+    .select({
+      id: brothers.id,
+      firstName: brothers.firstName,
+      lastName: brothers.lastName,
+      umichEmail: brothers.umichEmail,
+      pledgeClass: brothers.pledgeClass,
+    })
+    .from(brothers)
+    .where(
+      and(
+        sql`${brothers.umichEmail} is not null`,
+        or(
+          ilike(brothers.firstName, pattern),
+          ilike(brothers.lastName, pattern),
+          ilike(brothers.umichEmail, pattern),
+          sql`concat_ws(' ', ${brothers.firstName}, ${brothers.lastName}) ilike ${pattern}`
+        )
+      )
+    )
+    .orderBy(
+      sql`lower(coalesce(${brothers.firstName}, ''))`,
+      sql`lower(coalesce(${brothers.lastName}, ''))`,
+      asc(brothers.umichEmail)
+    )
+    .limit(limit)
+
+  return rows
+    .filter((row): row is typeof row & { umichEmail: string } => Boolean(row.umichEmail))
+    .map((row) => ({
+      id: row.id,
+      first_name: row.firstName,
+      last_name: row.lastName,
+      umich_email: row.umichEmail,
+      uniqname: uniqnameFromEmail(row.umichEmail),
+      pledge_class: row.pledgeClass,
+    }))
 }
 
 export async function getBrotherByUmichEmail(email: string) {
@@ -113,7 +164,11 @@ export async function removeBrotherRow(id: string, actorEmail: string) {
     return { error: 'You cannot remove yourself' as const }
   }
   if (row.umichEmail) {
-    const [admin] = await db.select({ email: admins.email }).from(admins).where(eq(admins.email, row.umichEmail)).limit(1)
+    const [admin] = await db
+      .select({ email: admins.email })
+      .from(admins)
+      .where(eq(admins.email, row.umichEmail))
+      .limit(1)
     if (admin) return { error: 'Remove their admin access first' as const }
   }
 

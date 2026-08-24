@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { addAdmin, removeAdmin } from '@/app/admin/actions'
+import { BrotherTypeahead } from '@/components/admin/BrotherTypeahead'
 import type { ClientAdmin } from '@/lib/admins'
 
 const btnClass =
@@ -72,14 +73,15 @@ export default function AdminListManager({
       <div className="mb-4 flex min-h-10 flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold font-inter">Admins</h2>
         <form onSubmit={(event) => void handleAdd(event)} className="flex min-w-0 items-center gap-2">
-          <input
-            type="email"
-            className={`${inputClass} w-40 sm:w-48`}
-            placeholder="uniqname@umich.edu"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
+          <div className="w-40 sm:w-56">
+            <BrotherTypeahead
+              className={inputClass}
+              placeholder="uniqname"
+              value={email}
+              onChange={setEmail}
+              required
+            />
+          </div>
           <button type="submit" className={`${btnClass} shrink-0`} disabled={isAdding}>
             {isAdding ? 'Adding…' : 'Add admin'}
           </button>

@@ -139,9 +139,9 @@ export function AdminAppsTable({
             : 'No applications match your search.'}
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-gray-100 bg-white/80">
+        <div className="max-h-[min(36rem,70vh)] overflow-auto rounded-xl border border-gray-100 bg-white/80">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-gray-100 bg-gray-50/80 text-xs uppercase tracking-wide text-gray-500">
+            <thead className="sticky top-0 z-10 border-b border-gray-100 bg-gray-50/95 text-xs uppercase tracking-wide text-gray-500 backdrop-blur-sm">
               <tr>
                 <th className="px-4 py-3 font-semibold">App #</th>
                 <th className="px-4 py-3 font-semibold">Applicant</th>
@@ -155,22 +155,36 @@ export function AdminAppsTable({
             </thead>
             <tbody>
               {filtered.map((app) => (
-                <tr key={app.id} className="border-b border-gray-50 last:border-0">
-                  <td className="px-4 py-3 font-medium text-gray-900">
+                <tr
+                  key={app.id}
+                  className="group border-b border-gray-50 last:border-0"
+                >
+                  <td className="px-4 py-3 font-medium text-gray-900 group-hover:bg-[#eef4fb]">
                     {app.displayNumber ?? '—'}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 group-hover:bg-[#eef4fb]">
                     <div className="font-medium text-gray-900">{app.name}</div>
                     <div className="text-xs text-gray-500">{app.email}</div>
                   </td>
-                  <td className="max-w-[12rem] truncate px-4 py-3 text-gray-700" title={app.majors ?? undefined}>
+                  <td
+                    className="max-w-[12rem] truncate px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]"
+                    title={app.majors ?? undefined}
+                  >
                     {app.majors || '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-700">{app.graduationYear ?? '—'}</td>
-                  <td className="px-4 py-3 text-gray-700">{app.readCount}</td>
-                  <td className="px-4 py-3 text-gray-700">{formatScore(app.avgScore)}</td>
-                  <td className="px-4 py-3 text-gray-700">{formatScore(app.normalizedAvgScore)}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                    {app.graduationYear ?? '—'}
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                    {app.readCount}
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                    {formatScore(app.avgScore)}
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                    {formatScore(app.normalizedAvgScore)}
+                  </td>
+                  <td className="px-4 py-3 text-right group-hover:bg-[#eef4fb]">
                     <Link
                       href={`/admin/apps/${app.id}`}
                       className="text-sm font-semibold text-[#315CA9]"

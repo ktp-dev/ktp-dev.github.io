@@ -32,7 +32,7 @@ function HelpIcon() {
 }
 
 const closeBtnClass =
-  'shrink-0 cursor-pointer text-xs font-semibold text-[#315CA9] transition-colors hover:underline'
+  'shrink-0 cursor-pointer text-xs font-semibold text-[#315CA9] transition-colors'
 
 export function ScoreCategoryCard({
   category,

@@ -19,7 +19,7 @@ import {
 import { parseAdminEmail } from '@/lib/admin-schema'
 import { parseBrotherId, parseBrotherWrite, type BrotherFormInput } from '@/lib/brother-schema'
 import { addAdminEmail, removeAdminEmail } from '@/lib/admins'
-import { addBrotherRow, removeBrotherRow, updateBrotherRow } from '@/lib/brothers'
+import { addBrotherRow, removeBrotherRow, searchBrothers, updateBrotherRow } from '@/lib/brothers'
 import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
 import {
   activateRushCycle,
@@ -127,6 +127,21 @@ export async function removeBrother(id: string) {
   } catch (error) {
     console.error('Error removing brother:', error)
     return { data: null, error: 'Failed to remove brother' }
+  }
+}
+
+export async function searchBrothersAction(query: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  try {
+    const data = await searchBrothers(query, 8)
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error searching brothers:', error)
+    return { data: null, error: 'Failed to search brothers' }
   }
 }
 
