@@ -19,8 +19,8 @@ export default function About() {
     <div>
       <Header />
 
-      {/* Spill clip only — no `relative` (that shifts absolute blobs on desktop too) */}
-      <div className="w-full max-w-full overflow-x-hidden">
+      {/* Spill clip — `page-spill-clip` is relative only on mobile (desktop CB unchanged) */}
+      <div className="page-spill-clip w-full max-w-full overflow-x-hidden">
         <div className="relative w-full bg-white">
           <div className="absolute inset-0 z-0 blob-c about-mobile-blobs about-hero-blobs">
             <div className="shape-blob eight"></div>

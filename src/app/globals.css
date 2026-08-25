@@ -28,8 +28,17 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* clip (not hidden) — hidden on body breaks position:sticky headers */
+  overflow-x: clip;
   overflow-y: auto;
+}
+
+/* Mobile only: make page clip wrappers contain abspos blobs without shifting desktop CBs */
+@media (max-width: 1023px) {
+  .page-spill-clip {
+    position: relative;
+    overflow-x: clip;
+  }
 }
 
 /* Improve SVG rendering quality */
@@ -494,7 +503,11 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
    */
   .blob-c.about-mobile-blobs {
     filter: none;
-    overflow: visible;
+  }
+
+  /* Hero stacks — clip edge spill (visible was escaping after body overflow-x: clip) */
+  .blob-c.about-hero-blobs {
+    overflow: hidden;
   }
 
   .about-mobile-blobs .shape-blob.eight {
@@ -524,14 +537,16 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   }
 
   /* Header pair — nudge from base; blue left a bit, green stays */
-  .about-hero-blobs .shape-blob.eight {
+  .about-hero-blobs .shape-blob.eight,
+  .rush-hero-blobs .shape-blob.eight {
     left: calc(40% - 195px);
     top: 8%;
     height: 240px;
     width: 320px;
   }
 
-  .about-hero-blobs .shape-blob.nine {
+  .about-hero-blobs .shape-blob.nine,
+  .rush-hero-blobs .shape-blob.nine {
     left: calc(70% - 145px);
     top: 8%;
     height: 240px;
@@ -543,6 +558,7 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     inset: 0;
     height: 100%;
     width: 100%;
+    overflow: visible;
   }
 
   .about-photo-blobs .shape-blob.eight {
@@ -560,6 +576,100 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     width: 280px;
     transform: translate(-20%, -50%);
   }
+
+  /*
+   * Rush mobile only — drop blur + freeze motion.
+   * Hero size/position shared with about-hero-blobs above.
+   * Video stack re-anchors around the embed.
+   */
+  .blob-c.rush-mobile-blobs {
+    filter: none;
+  }
+
+  /* Hero only — clip edge spill; video stack stays visible below */
+  .blob-c.rush-hero-blobs {
+    overflow: hidden;
+  }
+
+  .rush-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .rush-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-green,
+  .rush-mobile-blobs .shape-blob.rush-static-blue {
+    border-radius: 50%;
+    -webkit-animation: none !important;
+    animation: none !important;
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-green {
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-blue {
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+  }
+
+  .blob-c.rush-video-blobs {
+    min-height: 0;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-green {
+    left: 50%;
+    top: 50%;
+    height: 340px;
+    width: 380px;
+    transform: translate(5%, -35%);
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-blue {
+    left: 50%;
+    top: 50%;
+    height: 300px;
+    width: 280px;
+    transform: translate(-25%, -20%);
+  }
+}
+
+/* Video stack — allow soft edges on desktop blur too (page html clips sideways spill) */
+.blob-c.rush-video-blobs {
+  overflow: visible;
 }
 
 .footer {
