@@ -2,15 +2,26 @@
 
 import { useMemo, useState, useTransition } from 'react'
 import Link from 'next/link'
-import type { AdminApplicationListItem } from '@/lib/admin-applications'
+import {
+  filterAdminApplications,
+  sortAdminApplications,
+  type AdminApplicationListItem,
+  type AdminApplicationSortKey,
+} from '@/lib/admin-applications-shared'
 import { exportApplicationsCsvAction } from '@/app/admin/apps/actions'
-
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md bg-white/80 text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]'
-
-type SortKey = 'display' | 'alpha' | 'score_desc' | 'normalized_score_desc' | 'reads_desc'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminHeadingClass,
+  adminLabelClass,
+  adminLinkClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminTableHeadClass,
+  adminTableRowClass,
+  adminTableWrapClass,
+} from '@/components/admin/admin-ui'
 
 function formatScore(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) return '—'
@@ -27,55 +38,19 @@ export function AdminAppsTable({
   applications: AdminApplicationListItem[]
 }) {
   const [query, setQuery] = useState('')
-  const [sort, setSort] = useState<SortKey>('display')
+  const [sort, setSort] = useState<AdminApplicationSortKey>('display')
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase()
-    let list = applications
-    if (normalized) {
-      list = list.filter((app) => {
-        const haystack = [
-          app.name,
-          app.email,
-          app.majors ?? '',
-          app.displayNumber != null ? String(app.displayNumber) : '',
-        ]
-          .join(' ')
-          .toLowerCase()
-        return haystack.includes(normalized)
-      })
-    }
-
-    const sorted = [...list]
-    sorted.sort((a, b) => {
-      if (sort === 'score_desc') {
-        return (b.avgScore ?? -1) - (a.avgScore ?? -1) || a.name.localeCompare(b.name)
-      }
-      if (sort === 'normalized_score_desc') {
-        return (
-          (b.normalizedAvgScore ?? -1) - (a.normalizedAvgScore ?? -1) ||
-          a.name.localeCompare(b.name)
-        )
-      }
-      if (sort === 'reads_desc') {
-        return b.readCount - a.readCount || a.name.localeCompare(b.name)
-      }
-      if (sort === 'alpha') {
-        return a.name.localeCompare(b.name)
-      }
-      const aNum = a.displayNumber ?? Number.MAX_SAFE_INTEGER
-      const bNum = b.displayNumber ?? Number.MAX_SAFE_INTEGER
-      return aNum - bNum || a.name.localeCompare(b.name)
-    })
-    return sorted
-  }, [applications, query, sort])
+  const filtered = useMemo(
+    () => sortAdminApplications(filterAdminApplications(applications, query), sort),
+    [applications, query, sort]
+  )
 
   function onExport() {
     setError(null)
     startTransition(async () => {
-      const result = await exportApplicationsCsvAction(cycleId, cycleName)
+      const result = await exportApplicationsCsvAction(cycleId, cycleName, { query, sort })
       if (result.error || !result.csv) {
         setError(result.error ?? 'Export failed.')
         return
@@ -95,7 +70,7 @@ export function AdminAppsTable({
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <label htmlFor="apps-search" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <label htmlFor="apps-search" className={adminLabelClass}>
               Search
             </label>
             <input
@@ -104,18 +79,20 @@ export function AdminAppsTable({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Name, email, major, or app #"
-              className={inputClass}
+              className={adminFieldClass}
+              style={adminFieldEditStyle}
             />
           </div>
           <div>
-            <label htmlFor="apps-sort" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <label htmlFor="apps-sort" className={adminLabelClass}>
               Sort
             </label>
             <select
               id="apps-sort"
               value={sort}
-              onChange={(event) => setSort(event.target.value as SortKey)}
-              className={inputClass}
+              onChange={(event) => setSort(event.target.value as AdminApplicationSortKey)}
+              className={adminFieldClass}
+              style={adminFieldEditStyle}
             >
               <option value="display">Application #</option>
               <option value="alpha">Name (A–Z)</option>
@@ -125,70 +102,67 @@ export function AdminAppsTable({
             </select>
           </div>
         </div>
-        <button type="button" onClick={onExport} disabled={pending || applications.length === 0} className={btnClass}>
+        <button
+          type="button"
+          onClick={onExport}
+          disabled={pending || applications.length === 0}
+          className={adminPrimaryBtnClass}
+        >
           {pending ? 'Exporting…' : 'Export CSV'}
         </button>
       </div>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className={`text-sm ${adminMutedClass}`}>
           {applications.length === 0
             ? 'No submitted applications for this cycle yet.'
             : 'No applications match your search.'}
         </p>
       ) : (
-        <div className="max-h-[min(36rem,70vh)] overflow-auto rounded-xl border border-gray-100 bg-white/80">
+        <div className={`max-h-[min(36rem,70vh)] overflow-y-auto overflow-x-auto ${adminTableWrapClass}`}>
           <table className="min-w-full text-left text-sm">
-            <thead className="sticky top-0 z-10 border-b border-gray-100 bg-gray-50/95 text-xs uppercase tracking-wide text-gray-500 backdrop-blur-sm">
+            <thead className={`sticky top-0 z-10 ${adminTableHeadClass}`}>
               <tr>
-                <th className="px-4 py-3 font-semibold">App #</th>
-                <th className="px-4 py-3 font-semibold">Applicant</th>
-                <th className="px-4 py-3 font-semibold">Major(s)</th>
-                <th className="px-4 py-3 font-semibold">Year</th>
-                <th className="px-4 py-3 font-semibold">Reads</th>
-                <th className="px-4 py-3 font-semibold">Avg</th>
-                <th className="px-4 py-3 font-semibold">Adj</th>
-                <th className="px-4 py-3 font-semibold" />
+                <th className="px-4 py-3">App #</th>
+                <th className="px-4 py-3">Applicant</th>
+                <th className="px-4 py-3">Major(s)</th>
+                <th className="px-4 py-3">Year</th>
+                <th className="px-4 py-3">Reads</th>
+                <th className="px-4 py-3">Avg</th>
+                <th className="px-4 py-3">Adj</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody>
               {filtered.map((app) => (
-                <tr
-                  key={app.id}
-                  className="group border-b border-gray-50 last:border-0"
-                >
-                  <td className="px-4 py-3 font-medium text-gray-900 group-hover:bg-[#eef4fb]">
+                <tr key={app.id} className={adminTableRowClass}>
+                  <td className={`px-4 py-3 font-medium ${adminHeadingClass}`}>
                     {app.displayNumber ?? '—'}
                   </td>
-                  <td className="px-4 py-3 group-hover:bg-[#eef4fb]">
-                    <div className="font-medium text-gray-900">{app.name}</div>
-                    <div className="text-xs text-gray-500">{app.email}</div>
+                  <td className="px-4 py-3">
+                    <div className={`font-medium ${adminHeadingClass}`}>{app.name}</div>
+                    <div className={`text-xs ${adminMutedClass}`}>{app.email}</div>
                   </td>
                   <td
-                    className="max-w-[12rem] truncate px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]"
+                    className={`max-w-[12rem] truncate px-4 py-3 ${adminBodyClass}`}
                     title={app.majors ?? undefined}
                   >
                     {app.majors || '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>
                     {app.graduationYear ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
-                    {app.readCount}
-                  </td>
-                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>{app.readCount}</td>
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>
                     {formatScore(app.avgScore)}
                   </td>
-                  <td className="px-4 py-3 text-gray-700 group-hover:bg-[#eef4fb]">
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>
                     {formatScore(app.normalizedAvgScore)}
                   </td>
-                  <td className="px-4 py-3 text-right group-hover:bg-[#eef4fb]">
-                    <Link
-                      href={`/admin/apps/${app.id}`}
-                      className="text-sm font-semibold text-[#315CA9]"
-                    >
+                  <td className="px-4 py-3 text-right">
+                    <Link href={`/admin/apps/${app.id}`} className={adminLinkClass}>
                       View
                     </Link>
                   </td>

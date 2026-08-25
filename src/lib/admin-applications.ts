@@ -11,22 +11,16 @@ import {
   reviews,
   rubricCategories,
 } from '@/db/schema'
+import { deleteS3Object } from '@/lib/s3'
+import {
+  filterAdminApplications,
+  sortAdminApplications,
+  type AdminApplicationListItem,
+  type AdminApplicationSortKey,
+} from '@/lib/admin-applications-shared'
 
-export type AdminApplicationListItem = {
-  id: string
-  displayNumber: number | null
-  name: string
-  email: string
-  majors: string | null
-  graduationYear: number | null
-  submittedAt: string | null
-  readCount: number
-  avgScore: number | null
-  normalizedAvgScore: number | null
-  categoryAverages: Record<string, number> | null
-  hasResume: boolean
-  hasResumeAnonymized: boolean
-}
+export type { AdminApplicationListItem, AdminApplicationSortKey }
+export { filterAdminApplications, sortAdminApplications }
 
 export type AdminReviewDetail = {
   id: string
@@ -513,9 +507,10 @@ function csvEscape(value: string | number | null | undefined) {
 
 export async function buildApplicationsExportCsv(
   cycleId: string,
-  cycleName: string
+  cycleName: string,
+  options?: { query?: string; sort?: AdminApplicationSortKey }
 ): Promise<string> {
-  const [items, categories] = await Promise.all([
+  const [applications, categories] = await Promise.all([
     listApplicationsForAdmin(cycleId),
     db
       .select()
@@ -523,6 +518,11 @@ export async function buildApplicationsExportCsv(
       .where(eq(rubricCategories.cycleId, cycleId))
       .orderBy(asc(rubricCategories.sortOrder)),
   ])
+
+  const items = sortAdminApplications(
+    filterAdminApplications(applications, options?.query ?? ''),
+    options?.sort ?? 'display'
+  )
 
   const headers = [
     'Application #',
@@ -562,4 +562,33 @@ export async function buildApplicationsExportCsv(
     headers.map(csvEscape).join(','),
     ...rows.map((row) => row.map(csvEscape).join(',')),
   ].join('\n')
+}
+
+/** Deletes an application and best-effort removes its S3 objects. Related rows cascade. */
+export async function deleteApplicationForAdmin(
+  cycleId: string,
+  applicationId: string
+): Promise<{ error: string | null }> {
+  const [app] = await db
+    .select({ id: applications.id })
+    .from(applications)
+    .where(and(eq(applications.id, applicationId), eq(applications.cycleId, cycleId)))
+    .limit(1)
+
+  if (!app) return { error: 'Application not found.' }
+
+  const files = await db
+    .select({ s3Key: applicationFiles.s3Key })
+    .from(applicationFiles)
+    .where(eq(applicationFiles.applicationId, applicationId))
+
+  await Promise.all(
+    files.map(async (file) => {
+      if (!file.s3Key) return
+      await deleteS3Object(file.s3Key)
+    })
+  )
+
+  await db.delete(applications).where(eq(applications.id, applicationId))
+  return { error: null }
 }

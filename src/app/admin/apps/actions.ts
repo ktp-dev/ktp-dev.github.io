@@ -7,8 +7,10 @@ import { applications, rushCycles } from '@/db/schema'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import {
   buildApplicationsExportCsv,
+  deleteApplicationForAdmin,
   getApplicationReviewDetailsForAdmin,
   listApplicationsForAdmin,
+  type AdminApplicationSortKey,
 } from '@/lib/admin-applications'
 import {
   addReviewAccessEntry,
@@ -42,12 +44,16 @@ export async function listApplicationsForAdminAction(cycleId: string) {
   return { error: null, applications }
 }
 
-export async function exportApplicationsCsvAction(cycleId: string, cycleName: string) {
+export async function exportApplicationsCsvAction(
+  cycleId: string,
+  cycleName: string,
+  options?: { query?: string; sort?: AdminApplicationSortKey }
+) {
   const auth = await requireAdmin()
   if (auth.error) return { error: auth.error, csv: null, filename: null }
   if (!cycleId) return { error: 'Missing cycle.', csv: null, filename: null }
 
-  const csv = await buildApplicationsExportCsv(cycleId, cycleName)
+  const csv = await buildApplicationsExportCsv(cycleId, cycleName, options)
   const slug = cycleName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   return {
     error: null,
@@ -114,6 +120,19 @@ export async function getApplicationDetailAction(cycleId: string, applicationId:
   const detail = await getApplicationReviewDetailsForAdmin(cycleId, applicationId)
   if (!detail) return { error: 'Application not found.', detail: null }
   return { error: null, detail }
+}
+
+export async function deleteApplicationAction(cycleId: string, applicationId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) return { error: auth.error }
+  if (!cycleId || !applicationId) return { error: 'Missing application.' }
+
+  const result = await deleteApplicationForAdmin(cycleId, applicationId)
+  if (result.error) return { error: result.error }
+
+  revalidateApps()
+  revalidatePath(`/admin/apps/${applicationId}`)
+  return { error: null }
 }
 
 export async function getAdminApplicationFileDownloadUrl(input: {

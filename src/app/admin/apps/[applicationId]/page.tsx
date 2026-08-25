@@ -7,13 +7,6 @@ import { getAdjacentAdminApplications, getApplicationReviewDetailsForAdmin } fro
 import { getAdminCycle } from '@/lib/rush-cycles'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 
-const sectionCardClass =
-  'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
-const sectionCardStyle = {
-  backgroundColor: 'rgba(249, 250, 251, 0.95)',
-  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-}
-
 export default async function AdminAppDetailPage({
   params,
 }: {
@@ -37,13 +30,12 @@ export default async function AdminAppDetailPage({
   return (
     <AdminPageShell>
       <AdminQuickLinks currentPath="/admin/apps" />
-      <div className={sectionCardClass} style={sectionCardStyle}>
-        <AdminAppDetail
-          detail={detail}
-          prevApplicationId={prevId}
-          nextApplicationId={nextId}
-        />
-      </div>
+      <AdminAppDetail
+        cycleId={cycle.id}
+        detail={detail}
+        prevApplicationId={prevId}
+        nextApplicationId={nextId}
+      />
     </AdminPageShell>
   )
 }
