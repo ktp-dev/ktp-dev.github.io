@@ -746,6 +746,60 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     animation: none !important;
     transform: none;
   }
+
+  /*
+   * Apply mobile only — drop blur + freeze motion.
+   * Keep Apply’s own left/top (not the About/Rush header pair).
+   * Desktop uses a separate lg:block stack with inline positions.
+   */
+  .blob-c.apply-mobile-blobs {
+    filter: none;
+  }
+
+  /* visible — soft edges under the header; body overflow-x: clip still contains sideways spill */
+  .blob-c.apply-hero-blobs {
+    overflow: visible;
+  }
+
+  .apply-hero-blobs .shape-blob.eight {
+    left: calc(2% - 40px);
+    top: 14%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .apply-hero-blobs .shape-blob.nine {
+    left: calc(42% - 20px);
+    top: 18%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .apply-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .apply-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
 }
 
 /* Video stack — allow soft edges on desktop blur too (page html clips sideways spill) */

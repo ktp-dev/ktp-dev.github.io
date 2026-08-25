@@ -54,11 +54,11 @@ export function ApplyShell({
     : -1
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl lg:max-w-4xl flex-1 flex-col pt-12 sm:pt-16 pb-12">
+    <div className="mx-auto flex w-full max-w-3xl lg:max-w-4xl flex-1 flex-col pt-4 sm:pt-6 pb-12">
       <ApplyToast />
       {showAccountBar ? (
         <SignedInAccountBar
-          className="mb-4"
+          className="mb-8 sm:mb-10"
           align="end"
           variant="minimal"
           email={accountEmail}
