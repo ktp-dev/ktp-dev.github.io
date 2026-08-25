@@ -39,11 +39,15 @@ export function ApplyShell({
   current,
   title,
   preview = false,
+  showAccountBar = true,
+  accountEmail,
 }: {
   children: React.ReactNode
   current?: ApplyStepSlug
   title?: string
   preview?: boolean
+  showAccountBar?: boolean
+  accountEmail?: string
 }) {
   const currentIndex = current
     ? APPLY_STEPS.findIndex((step) => step.slug === current)
@@ -52,7 +56,14 @@ export function ApplyShell({
   return (
     <div className="mx-auto flex w-full max-w-3xl lg:max-w-4xl flex-1 flex-col pt-12 sm:pt-16 pb-12">
       <ApplyToast />
-      <SignedInAccountBar className="mb-4" align="end" />
+      {showAccountBar ? (
+        <SignedInAccountBar
+          className="mb-4"
+          align="end"
+          variant="minimal"
+          email={accountEmail}
+        />
+      ) : null}
       {title ? (
         <ApplicationHeading
           title={title}

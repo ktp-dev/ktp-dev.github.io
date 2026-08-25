@@ -1,14 +1,14 @@
 import Link from 'next/link'
-
-const adminCardStyle = {
-  backgroundColor: 'rgba(249, 250, 251, 0.95)',
-  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-}
-
-const compactCardClass =
-  'flex items-center justify-between gap-3 rounded-xl border border-gray-100 px-4 py-3 transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)] cursor-pointer'
-const homeCardClass =
-  'flex h-full flex-col justify-between gap-4 rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)] cursor-pointer'
+import {
+  adminBodyClass,
+  adminHeadingClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLinkClass,
+  adminMutedClass,
+  adminSectionCardClass,
+  adminSectionCardStyle,
+} from '@/components/admin/admin-ui'
 
 const homeLinks = [
   {
@@ -51,12 +51,17 @@ export function AdminQuickLinks({
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {homeLinks.map((link) => (
-          <Link key={link.href} href={link.href} className={homeCardClass} style={adminCardStyle}>
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`${adminSectionCardClass} flex h-full cursor-pointer flex-col justify-between gap-4`}
+            style={adminSectionCardStyle}
+          >
             <div className="min-w-0">
-              <p className="text-lg font-semibold text-gray-900">{link.title}</p>
-              <p className="mt-1 text-sm text-gray-500">{link.subtitle}</p>
+              <p className={`text-lg font-semibold ${adminHeadingClass}`}>{link.title}</p>
+              <p className={`mt-1 text-sm ${adminMutedClass}`}>{link.subtitle}</p>
             </div>
-            <span className="text-sm font-semibold text-[#315CA9]">View</span>
+            <span className={adminLinkClass}>View</span>
           </Link>
         ))}
       </div>
@@ -71,11 +76,11 @@ export function AdminQuickLinks({
           <Link
             key={link.href}
             href={link.href}
-            className={`${compactCardClass}${isCurrent ? ' ring-2 ring-[#315CA9]/20' : ''}`}
-            style={adminCardStyle}
+            className={`${adminInnerCardClass} cursor-pointer${isCurrent ? ' ring-2 ring-white/20' : ''}`}
+            style={adminInnerCardStyle}
           >
-            <p className="min-w-0 text-sm font-medium text-gray-800">{link.title}</p>
-            <span className="shrink-0 text-sm font-semibold text-[#315CA9]">
+            <p className={`min-w-0 text-sm font-medium ${adminBodyClass}`}>{link.title}</p>
+            <span className={`shrink-0 ${adminLinkClass}`}>
               {isCurrent ? 'Current' : 'View'}
             </span>
           </Link>

@@ -2,9 +2,17 @@
 
 import { useMemo, useState } from 'react'
 import type { AdminReviewerProgress } from '@/lib/admin-reviewer-progress'
-
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md bg-white/80 text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminHeadingClass,
+  adminLabelClass,
+  adminMutedClass,
+  adminTableHeadClass,
+  adminTableRowClass,
+  adminTableWrapClass,
+} from '@/components/admin/admin-ui'
 
 type SortKey = 'alpha' | 'reads_desc' | 'reads_asc' | 'remaining_desc'
 
@@ -46,7 +54,7 @@ export function AdminReviewerProgressTable({
 
   if (reviewers.length === 0) {
     return (
-      <p className="text-sm text-gray-500">
+      <p className={`text-sm ${adminMutedClass}`}>
         Add reviewers above to track their progress toward the minimum.
       </p>
     )
@@ -55,17 +63,15 @@ export function AdminReviewerProgressTable({
   return (
     <div className="space-y-4">
       <div className="max-w-xs">
-        <label
-          htmlFor="reviewer-progress-sort"
-          className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500"
-        >
+        <label htmlFor="reviewer-progress-sort" className={adminLabelClass}>
           Sort
         </label>
         <select
           id="reviewer-progress-sort"
           value={sort}
           onChange={(event) => setSort(event.target.value as SortKey)}
-          className={inputClass}
+          className={adminFieldClass}
+          style={adminFieldEditStyle}
         >
           <option value="reads_desc">Completed (high–low)</option>
           <option value="reads_asc">Completed (low–high)</option>
@@ -74,38 +80,38 @@ export function AdminReviewerProgressTable({
         </select>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-gray-100 bg-white/80">
+      <div className={`overflow-x-auto ${adminTableWrapClass}`}>
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-gray-100 bg-gray-50/80 text-xs uppercase tracking-wide text-gray-500">
+          <thead className={adminTableHeadClass}>
             <tr>
-              <th className="px-4 py-3 font-semibold">Reviewer</th>
-              <th className="px-4 py-3 font-semibold">Completed</th>
-              <th className="px-4 py-3 font-semibold">Minimum</th>
-              <th className="px-4 py-3 font-semibold">Remaining</th>
-              <th className="px-4 py-3 font-semibold">Avg time</th>
-              <th className="px-4 py-3 font-semibold">Status</th>
+              <th className="px-4 py-3">Reviewer</th>
+              <th className="px-4 py-3">Completed</th>
+              <th className="px-4 py-3">Minimum</th>
+              <th className="px-4 py-3">Remaining</th>
+              <th className="px-4 py-3">Avg time</th>
+              <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map((reviewer) => {
               const met = reviewer.completedCount >= reviewer.minRequiredReviews
               return (
-                <tr key={reviewer.email} className="border-b border-gray-50 last:border-0">
+                <tr key={reviewer.email} className={adminTableRowClass}>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-gray-900">
+                    <div className={`font-medium ${adminHeadingClass}`}>
                       {reviewer.name ?? reviewer.email}
                     </div>
                     {reviewer.name ? (
-                      <div className="text-xs text-gray-500">{reviewer.email}</div>
+                      <div className={`text-xs ${adminMutedClass}`}>{reviewer.email}</div>
                     ) : null}
                   </td>
-                  <td className="px-4 py-3 text-gray-700">{reviewer.completedCount}</td>
-                  <td className="px-4 py-3 text-gray-700">{reviewer.minRequiredReviews}</td>
-                  <td className="px-4 py-3 text-gray-700">{reviewer.remainingToMinimum}</td>
-                  <td className="px-4 py-3 text-gray-700">
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>{reviewer.completedCount}</td>
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>{reviewer.minRequiredReviews}</td>
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>{reviewer.remainingToMinimum}</td>
+                  <td className={`px-4 py-3 ${adminBodyClass}`}>
                     {formatDuration(reviewer.avgDurationMs)}
                   </td>
-                  <td className="px-4 py-3 text-xs font-medium text-gray-600">
+                  <td className={`px-4 py-3 text-xs font-medium ${adminMutedClass}`}>
                     {!reviewer.hasSignedIn
                       ? 'Not signed in yet'
                       : met

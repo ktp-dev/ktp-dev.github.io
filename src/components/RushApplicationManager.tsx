@@ -6,6 +6,19 @@ import {
   openRushApplicationNow,
   saveRushApplicationCycle,
 } from '@/app/admin/actions'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldStyleFor,
+  adminHeadingClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLabelClass,
+  adminLinkClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminSecondaryBtnClass,
+} from '@/components/admin/admin-ui'
 import { applyPreviewHref } from '@/lib/apply-preview'
 import {
   buildDefaultClosedMarkdown,
@@ -14,17 +27,6 @@ import {
 } from '@/lib/default-rush-application'
 import type { ClientCycleQuestion, ClientRushCycle } from '@/lib/rush-cycles'
 
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-600 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-600 disabled:shadow-none'
-const compactInputClass =
-  'px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-600 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-600 disabled:shadow-none'
-const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const ghostBtnClass =
-  'px-4 py-2 border border-gray-300 rounded-lg text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80 p-4'
-const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 const QUESTION_ANIMATION_MS = 280
 
 type QuestionDraft = {
@@ -71,15 +73,15 @@ function cycleStatus(opensAt: string, closesAt: string) {
   const opens = new Date(opensAt).getTime()
   const closes = new Date(closesAt).getTime()
   if (!opensAt || !closesAt || Number.isNaN(opens) || Number.isNaN(closes)) {
-    return { label: 'Closed', className: 'bg-gray-200/60 text-gray-600' }
+    return { label: 'Closed', className: 'bg-white/10 text-slate-400' }
   }
   if (now < opens) {
-    return { label: 'Scheduled', className: 'bg-gray-200/60 text-gray-700' }
+    return { label: 'Scheduled', className: 'bg-white/10 text-slate-300' }
   }
   if (now > closes) {
-    return { label: 'Closed', className: 'bg-gray-200/60 text-gray-600' }
+    return { label: 'Closed', className: 'bg-white/10 text-slate-400' }
   }
-  return { label: 'Open', className: 'bg-[#315CA9] text-white' }
+  return { label: 'Open', className: 'bg-[#163556] text-white' }
 }
 
 export type RushApplicationHandle = {
@@ -305,7 +307,7 @@ const RushApplicationManager = forwardRef<
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold font-inter">Rush Application</h2>
+          <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Rush Application</h2>
           <span className={`rounded-[40px] px-3 py-1 text-xs font-semibold ${status.className}`}>
             {status.label}
           </span>
@@ -316,7 +318,7 @@ const RushApplicationManager = forwardRef<
               href={applyPreviewHref('/apply', cycleId)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-gray-300 text-gray-600 transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-white/15 text-slate-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
               title="Preview application"
               aria-label="Preview application"
             >
@@ -324,12 +326,22 @@ const RushApplicationManager = forwardRef<
             </a>
           ) : null}
           {!isDraft && cycleId && accepting ? (
-            <button type="button" className={ghostBtnClass} onClick={() => void handleCloseNow()} disabled={isClosing || isEditing}>
+            <button
+              type="button"
+              className={adminSecondaryBtnClass}
+              onClick={() => void handleCloseNow()}
+              disabled={isClosing || isEditing}
+            >
               {isClosing ? 'Closing…' : 'Close now'}
             </button>
           ) : null}
           {!isDraft && cycleId && !accepting ? (
-            <button type="button" className={ghostBtnClass} onClick={() => void handleOpenNow()} disabled={isOpening || isEditing}>
+            <button
+              type="button"
+              className={adminSecondaryBtnClass}
+              onClick={() => void handleOpenNow()}
+              disabled={isOpening || isEditing}
+            >
               {isOpening ? 'Opening…' : 'Open now'}
             </button>
           ) : null}
@@ -337,7 +349,7 @@ const RushApplicationManager = forwardRef<
             <button
               type="submit"
               form="rush-application-form"
-              className={btnClass}
+              className={adminPrimaryBtnClass}
               disabled={isSaving}
             >
               {isSaving ? 'Saving…' : 'Save'}
@@ -346,7 +358,7 @@ const RushApplicationManager = forwardRef<
           {!isDraft && !isEditing ? (
             <button
               type="button"
-              className={btnClass}
+              className={adminPrimaryBtnClass}
               onClick={() => {
                 window.setTimeout(() => setIsEditing(true), 0)
               }}
@@ -366,21 +378,22 @@ const RushApplicationManager = forwardRef<
         }}
       >
         {error ? (
-          <p className="text-sm text-red-500">{error}</p>
+          <p className="text-sm text-red-400">{error}</p>
         ) : null}
 
         <div>
-          <h3 className="mb-2 text-sm font-semibold text-gray-800">Welcome</h3>
-          <div className={innerCardClass} style={innerCardStyle}>
-            <div className="space-y-3">
+          <h3 className={`mb-2 text-sm font-semibold ${adminBodyClass}`}>Welcome</h3>
+          <div className={`${adminInnerCardClass} flex-col items-stretch`} style={adminInnerCardStyle}>
+            <div className="w-full space-y-3">
               <div>
-                <label htmlFor="intro" className={labelClass}>
-                  Welcome text <span className="text-red-500">*</span>
+                <label htmlFor="intro" className={adminLabelClass}>
+                  Welcome text <span className="text-red-400">*</span>
                 </label>
                 <textarea
                   id="intro"
                   form={isDraft ? formId : undefined}
-                  className={inputClass}
+                  className={`${adminFieldClass} h-auto`}
+                  style={adminFieldStyleFor(fieldsEditable)}
                   rows={4}
                   value={intro}
                   onChange={(event) => setIntro(event.target.value)}
@@ -391,13 +404,14 @@ const RushApplicationManager = forwardRef<
               </div>
 
               <div>
-                <label htmlFor="closed-text" className={labelClass}>
-                  Closed text <span className="text-red-500">*</span>
+                <label htmlFor="closed-text" className={adminLabelClass}>
+                  Closed text <span className="text-red-400">*</span>
                 </label>
                 <textarea
                   id="closed-text"
                   form={isDraft ? formId : undefined}
-                  className={inputClass}
+                  className={`${adminFieldClass} h-auto`}
+                  style={adminFieldStyleFor(fieldsEditable)}
                   rows={3}
                   value={closed}
                   onChange={(event) => setClosed(event.target.value)}
@@ -405,7 +419,7 @@ const RushApplicationManager = forwardRef<
                   required
                   disabled={!fieldsEditable}
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className={`mt-1 text-xs ${adminMutedClass}`}>
                   Responders will see this message as the form is closed for responses.
                 </p>
               </div>
@@ -415,13 +429,9 @@ const RushApplicationManager = forwardRef<
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-800">Questions</h3>
+            <h3 className={`text-sm font-semibold ${adminBodyClass}`}>Questions</h3>
             {fieldsEditable ? (
-              <button
-                type="button"
-                className="cursor-pointer text-sm font-semibold text-[#315CA9] hover:underline"
-                onClick={addQuestion}
-              >
+              <button type="button" className={adminLinkClass} onClick={addQuestion}>
                 Add question
               </button>
             ) : null}
@@ -444,10 +454,13 @@ const RushApplicationManager = forwardRef<
                   } ${isEntering ? 'faq-content-expand' : ''}`}
                 >
                   <div className={`min-h-0 ${isExiting ? 'overflow-hidden' : ''}`}>
-                    <div className={innerCardClass} style={innerCardStyle}>
-                  <div className="mb-1 flex h-5 items-center justify-between gap-2">
-                    <label className="text-sm font-medium text-gray-700">
-                      Prompt <span className="text-red-500">*</span>
+                    <div
+                      className={`${adminInnerCardClass} flex-col items-stretch`}
+                      style={adminInnerCardStyle}
+                    >
+                  <div className="mb-1 flex h-5 w-full items-center justify-between gap-2">
+                    <label className="text-sm font-medium text-slate-300">
+                      Prompt <span className="text-red-400">*</span>
                     </label>
                     {fieldsEditable ? (
                       <div className="-mr-1.5 -translate-y-0.5 flex items-center">
@@ -457,8 +470,8 @@ const RushApplicationManager = forwardRef<
                           disabled={isFirst}
                           className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             isFirst
-                              ? 'cursor-not-allowed text-gray-300'
-                              : 'cursor-pointer text-gray-400 hover:scale-110 hover:bg-gray-100 hover:text-gray-700'
+                              ? 'cursor-not-allowed text-slate-600'
+                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
                           }`}
                           title={isFirst ? 'Already at top' : 'Move up'}
                         >
@@ -472,8 +485,8 @@ const RushApplicationManager = forwardRef<
                           disabled={isLast}
                           className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             isLast
-                              ? 'cursor-not-allowed text-gray-300'
-                              : 'cursor-pointer text-gray-400 hover:scale-110 hover:bg-gray-100 hover:text-gray-700'
+                              ? 'cursor-not-allowed text-slate-600'
+                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
                           }`}
                           title={isLast ? 'Already at bottom' : 'Move down'}
                         >
@@ -487,8 +500,8 @@ const RushApplicationManager = forwardRef<
                           disabled={visibleQuestionCount <= 1}
                           className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             visibleQuestionCount <= 1
-                              ? 'cursor-not-allowed text-gray-300'
-                              : 'cursor-pointer text-gray-400 hover:scale-110 hover:bg-red-50 hover:text-red-500'
+                              ? 'cursor-not-allowed text-slate-600'
+                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
                           }`}
                           title={visibleQuestionCount <= 1 ? 'Keep at least one question' : 'Remove question'}
                         >
@@ -504,7 +517,8 @@ const RushApplicationManager = forwardRef<
                     ) : null}
                   </div>
                   <textarea
-                    className={`${inputClass} mb-3`}
+                    className={`${adminFieldClass} mb-3 h-auto`}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     form={isDraft ? formId : undefined}
                     rows={2}
                     value={question.prompt}
@@ -512,23 +526,25 @@ const RushApplicationManager = forwardRef<
                     required
                     disabled={!fieldsEditable}
                   />
-                  <label className={labelClass}>Help text</label>
+                  <label className={adminLabelClass}>Help text</label>
                   <input
-                    className={`${inputClass} mb-3`}
+                    className={`${adminFieldClass} mb-3`}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={question.help_text}
                     onChange={(event) => updateQuestion(question.key, { help_text: event.target.value })}
                     disabled={!fieldsEditable}
                   />
                   <div className="flex flex-wrap items-end gap-6">
                     <div>
-                      <label htmlFor={`max-words-${question.key}`} className={labelClass}>
-                        Max words <span className="text-red-500">*</span>
+                      <label htmlFor={`max-words-${question.key}`} className={adminLabelClass}>
+                        Max words <span className="text-red-400">*</span>
                       </label>
                       <input
                         id={`max-words-${question.key}`}
                         type="number"
                         min={1}
-                        className={`${compactInputClass} h-10 w-28`}
+                        className={`${adminFieldClass} h-10 !w-28`}
+                        style={adminFieldStyleFor(fieldsEditable)}
                         value={question.max_words}
                         onChange={(event) =>
                           updateQuestion(question.key, { max_words: Number(event.target.value) })
@@ -537,14 +553,14 @@ const RushApplicationManager = forwardRef<
                         disabled={!fieldsEditable}
                       />
                     </div>
-                    <label className="flex h-10 items-center gap-2 text-sm text-gray-700">
+                    <label className={`flex h-10 items-center gap-2 text-sm ${adminBodyClass}`}>
                       <input
                         type="checkbox"
                         checked={question.required}
                         onChange={(event) =>
                           updateQuestion(question.key, { required: event.target.checked })
                         }
-                        className="h-4 w-4 cursor-pointer accent-[#315CA9] disabled:cursor-not-allowed"
+                        className="h-4 w-4 cursor-pointer accent-[#163556] disabled:cursor-not-allowed"
                         disabled={!fieldsEditable}
                       />
                       Required response
@@ -559,22 +575,27 @@ const RushApplicationManager = forwardRef<
         </div>
 
         <div>
-          <h3 className="mb-2 text-sm font-semibold text-gray-800">Additional</h3>
-          <div className={innerCardClass} style={innerCardStyle}>
-            <label htmlFor="hear-about" className={labelClass}>
-              How did you hear about KTP?
-            </label>
-            <textarea
-              id="hear-about"
-              form={isDraft ? formId : undefined}
-              className={inputClass}
-              rows={5}
-              value={hearAbout}
-              onChange={(event) => setHearAbout(event.target.value)}
-              placeholder={'Flyer\nInstagram\nWord of mouth\nOther'}
-              disabled={!fieldsEditable}
-            />
-            <p className="mt-1 text-xs text-gray-500">One option per line. Include “Other” if you want a write-in.</p>
+          <h3 className={`mb-2 text-sm font-semibold ${adminBodyClass}`}>Additional</h3>
+          <div className={`${adminInnerCardClass} flex-col items-stretch`} style={adminInnerCardStyle}>
+            <div className="w-full">
+              <label htmlFor="hear-about" className={adminLabelClass}>
+                How did you hear about KTP?
+              </label>
+              <textarea
+                id="hear-about"
+                form={isDraft ? formId : undefined}
+                className={`${adminFieldClass} h-auto`}
+                style={adminFieldStyleFor(fieldsEditable)}
+                rows={5}
+                value={hearAbout}
+                onChange={(event) => setHearAbout(event.target.value)}
+                placeholder={'Flyer\nInstagram\nWord of mouth\nOther'}
+                disabled={!fieldsEditable}
+              />
+              <p className={`mt-1 text-xs ${adminMutedClass}`}>
+                One option per line. Include “Other” if you want a write-in.
+              </p>
+            </div>
           </div>
         </div>
       </form>

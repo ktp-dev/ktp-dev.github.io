@@ -1,6 +1,10 @@
 import { redirect } from 'next/navigation'
 import AdminRushDashboard from '@/components/AdminRushDashboard'
-import { AdminPageShell } from '@/components/admin/AdminPageShell'
+import {
+  AdminPageShell,
+  adminPageTitleClass,
+  adminPageTitleStyle,
+} from '@/components/admin/AdminPageShell'
 import { AdminQuickLinks } from '@/components/admin/AdminQuickLinks'
 import Unauthorized from '@/components/Unauthorized'
 import { getAdminCycle, listRushCycles } from '@/lib/rush-cycles'
@@ -25,10 +29,7 @@ export default async function AdminRushPage() {
 
   return (
     <AdminPageShell>
-      <h1
-        className="text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter text-black"
-        style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
-      >
+      <h1 className={adminPageTitleClass} style={adminPageTitleStyle}>
         Rush
       </h1>
 

@@ -2,19 +2,22 @@
 
 import { useState } from 'react'
 import { saveRushRubricCategories } from '@/app/admin/actions'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldStyleFor,
+  adminHeadingClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLabelClass,
+  adminLinkClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminSecondaryBtnClass,
+} from '@/components/admin/admin-ui'
 import type { RubricRatingLabels } from '@/db/schema'
 import { buildDefaultRubricCategorySeeds } from '@/lib/default-rubric-categories'
 import type { ClientRubricCategory } from '@/lib/rubric-admin'
-
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-600 disabled:shadow-none'
-const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const ghostBtnClass =
-  'px-4 py-2 border border-gray-300 rounded-lg text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80 p-4'
-const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 
 type RatingDraft = {
   label: string
@@ -217,8 +220,8 @@ export function AdminRubricManager({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold font-inter">Review rubric</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Review rubric</h2>
+          <p className={`mt-1 text-sm ${adminMutedClass}`}>
             Categories and score guidance shown to brothers on Application Reads.
           </p>
         </div>
@@ -227,7 +230,7 @@ export function AdminRubricManager({
             <>
               <button
                 type="button"
-                className={ghostBtnClass}
+                className={adminSecondaryBtnClass}
                 onClick={handleCancel}
                 disabled={isSaving}
               >
@@ -235,7 +238,7 @@ export function AdminRubricManager({
               </button>
               <button
                 type="button"
-                className={btnClass}
+                className={adminPrimaryBtnClass}
                 onClick={() => void handleSave()}
                 disabled={isSaving || categories.length === 0}
               >
@@ -245,7 +248,7 @@ export function AdminRubricManager({
           ) : (
             <button
               type="button"
-              className={btnClass}
+              className={adminPrimaryBtnClass}
               onClick={() => {
                 window.setTimeout(() => setIsEditing(true), 0)
               }}
@@ -256,18 +259,18 @@ export function AdminRubricManager({
         </div>
       </div>
 
-      {error ? <p className="text-sm text-red-500">{error}</p> : null}
+      {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
       {categories.length === 0 ? (
-        <div className={innerCardClass} style={innerCardStyle}>
-          <p className="text-sm text-gray-600">
+        <div className={`${adminInnerCardClass} flex-col items-stretch`} style={adminInnerCardStyle}>
+          <p className={`text-sm ${adminBodyClass}`}>
             No rubric categories for this cycle yet. Load the standard 7-category rubric to get
             started.
           </p>
           {fieldsEditable ? (
             <button
               type="button"
-              className={`${btnClass} mt-3`}
+              className={`${adminPrimaryBtnClass} mt-3 self-start`}
               onClick={() => setCategories(defaultsAsDrafts())}
             >
               Load standard rubric
@@ -275,7 +278,7 @@ export function AdminRubricManager({
           ) : (
             <button
               type="button"
-              className={`${btnClass} mt-3`}
+              className={`${adminPrimaryBtnClass} mt-3 self-start`}
               onClick={() => {
                 setCategories(defaultsAsDrafts())
                 setIsEditing(true)
@@ -288,16 +291,20 @@ export function AdminRubricManager({
       ) : (
         <div className="space-y-3">
           {categories.map((category, index) => (
-            <div key={category.key} className={innerCardClass} style={innerCardStyle}>
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <div
+              key={category.key}
+              className={`${adminInnerCardClass} flex-col items-stretch`}
+              style={adminInnerCardStyle}
+            >
+              <div className="flex w-full flex-wrap items-start justify-between gap-2">
+                <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
                   Category {index + 1}
                 </p>
                 {fieldsEditable ? (
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      className={ghostBtnClass}
+                      className={adminSecondaryBtnClass}
                       onClick={() => moveCategory(index, -1)}
                       disabled={index === 0 || isSaving}
                     >
@@ -305,7 +312,7 @@ export function AdminRubricManager({
                     </button>
                     <button
                       type="button"
-                      className={ghostBtnClass}
+                      className={adminSecondaryBtnClass}
                       onClick={() => moveCategory(index, 1)}
                       disabled={index === categories.length - 1 || isSaving}
                     >
@@ -313,7 +320,7 @@ export function AdminRubricManager({
                     </button>
                     <button
                       type="button"
-                      className={ghostBtnClass}
+                      className={adminSecondaryBtnClass}
                       onClick={() => removeCategory(category.key)}
                       disabled={isSaving || categories.length <= 1}
                     >
@@ -323,14 +330,15 @@ export function AdminRubricManager({
                 ) : null}
               </div>
 
-              <div className="mt-3 space-y-3">
+              <div className="mt-3 w-full space-y-3">
                 <div>
-                  <label className={labelClass} htmlFor={`rubric-title-${category.key}`}>
-                    Prompt <span className="text-red-500">*</span>
+                  <label className={adminLabelClass} htmlFor={`rubric-title-${category.key}`}>
+                    Prompt <span className="text-red-400">*</span>
                   </label>
                   <input
                     id={`rubric-title-${category.key}`}
-                    className={inputClass}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={category.title}
                     onChange={(event) =>
                       updateCategory(category.key, { title: event.target.value })
@@ -341,12 +349,13 @@ export function AdminRubricManager({
                 </div>
 
                 <div>
-                  <label className={labelClass} htmlFor={`rubric-desc-${category.key}`}>
+                  <label className={adminLabelClass} htmlFor={`rubric-desc-${category.key}`}>
                     Optional subtitle
                   </label>
                   <input
                     id={`rubric-desc-${category.key}`}
-                    className={inputClass}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={category.description}
                     onChange={(event) =>
                       updateCategory(category.key, { description: event.target.value })
@@ -359,7 +368,7 @@ export function AdminRubricManager({
                 {fieldsEditable ? (
                   <div className="grid grid-cols-2 gap-3 sm:max-w-xs">
                     <div>
-                      <label className={labelClass} htmlFor={`rubric-min-${category.key}`}>
+                      <label className={adminLabelClass} htmlFor={`rubric-min-${category.key}`}>
                         Scale min
                       </label>
                       <input
@@ -367,7 +376,8 @@ export function AdminRubricManager({
                         type="number"
                         min={1}
                         max={10}
-                        className={inputClass}
+                        className={adminFieldClass}
+                        style={adminFieldStyleFor(fieldsEditable)}
                         value={category.scaleMin}
                         onChange={(event) =>
                           setScale(category.key, Number(event.target.value), category.scaleMax)
@@ -376,7 +386,7 @@ export function AdminRubricManager({
                       />
                     </div>
                     <div>
-                      <label className={labelClass} htmlFor={`rubric-max-${category.key}`}>
+                      <label className={adminLabelClass} htmlFor={`rubric-max-${category.key}`}>
                         Scale max
                       </label>
                       <input
@@ -384,7 +394,8 @@ export function AdminRubricManager({
                         type="number"
                         min={1}
                         max={10}
-                        className={inputClass}
+                        className={adminFieldClass}
+                        style={adminFieldStyleFor(fieldsEditable)}
                         value={category.scaleMax}
                         onChange={(event) =>
                           setScale(category.key, category.scaleMin, Number(event.target.value))
@@ -394,14 +405,14 @@ export function AdminRubricManager({
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-gray-500">
+                  <p className={`text-xs ${adminMutedClass}`}>
                     Scale {category.scaleMin}–{category.scaleMax}
                   </p>
                 )}
 
                 <button
                   type="button"
-                  className="cursor-pointer text-sm font-semibold text-[#315CA9]"
+                  className={adminLinkClass}
                   onClick={() =>
                     updateCategory(category.key, { expanded: !category.expanded })
                   }
@@ -416,20 +427,24 @@ export function AdminRubricManager({
                       return (
                         <div
                           key={`${category.key}-${score}`}
-                          className="rounded-lg border border-gray-100 bg-white/90 p-3"
+                          className="flex flex-col items-stretch rounded-xl border px-3 py-3"
+                          style={adminFieldStyleFor(fieldsEditable)}
                         >
-                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                          <p
+                            className={`mb-2 text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}
+                          >
                             Score {score}
                           </p>
                           <label
-                            className={labelClass}
+                            className={adminLabelClass}
                             htmlFor={`rubric-label-${category.key}-${score}`}
                           >
                             Label
                           </label>
                           <input
                             id={`rubric-label-${category.key}-${score}`}
-                            className={inputClass}
+                            className={adminFieldClass}
+                            style={adminFieldStyleFor(fieldsEditable)}
                             value={rating.label}
                             onChange={(event) => {
                               const nextRatings = [...category.ratings]
@@ -442,14 +457,15 @@ export function AdminRubricManager({
                             disabled={!fieldsEditable || isSaving}
                           />
                           <label
-                            className={`${labelClass} mt-2`}
+                            className={`${adminLabelClass} mt-2`}
                             htmlFor={`rubric-bullets-${category.key}-${score}`}
                           >
                             Guidance bullets (one per line)
                           </label>
                           <textarea
                             id={`rubric-bullets-${category.key}-${score}`}
-                            className={`${inputClass} min-h-[6rem]`}
+                            className={`${adminFieldClass} h-auto min-h-[6rem]`}
+                            style={adminFieldStyleFor(fieldsEditable)}
                             value={rating.bulletsText}
                             onChange={(event) => {
                               const nextRatings = [...category.ratings]
@@ -476,7 +492,7 @@ export function AdminRubricManager({
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            className={ghostBtnClass}
+            className={adminSecondaryBtnClass}
             onClick={() => setCategories((current) => [...current, emptyCategory()])}
             disabled={isSaving || categories.length >= 20}
           >
@@ -485,7 +501,7 @@ export function AdminRubricManager({
           {categories.length === 0 ? null : (
             <button
               type="button"
-              className={ghostBtnClass}
+              className={adminSecondaryBtnClass}
               onClick={() => {
                 if (
                   !confirm(

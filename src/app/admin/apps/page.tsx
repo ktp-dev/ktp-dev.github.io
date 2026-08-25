@@ -1,27 +1,29 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { AdminAppsTable } from '@/components/admin/AdminAppsTable'
-import { AdminPageShell } from '@/components/admin/AdminPageShell'
+import {
+  AdminPageShell,
+  adminPageTitleClass,
+  adminPageTitleStyle,
+} from '@/components/admin/AdminPageShell'
 import { AdminQuickLinks } from '@/components/admin/AdminQuickLinks'
 import { AdminReviewAccessManager } from '@/components/admin/AdminReviewAccessManager'
 import { AdminReviewerProgressTable } from '@/components/admin/AdminReviewerProgressTable'
 import {
-  portalInnerCardClass,
-  portalInnerCardStyle,
-} from '@/components/PortalShell'
+  adminHeadingClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLinkClass,
+  adminMutedClass,
+  adminSectionCardClass,
+  adminSectionCardStyle,
+} from '@/components/admin/admin-ui'
 import Unauthorized from '@/components/Unauthorized'
 import { listApplicationsForAdmin } from '@/lib/admin-applications'
 import { listReviewerProgressForAdmin } from '@/lib/admin-reviewer-progress'
 import { listReviewAccessForCycle } from '@/lib/review-access-admin'
 import { getAdminCycle } from '@/lib/rush-cycles'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
-
-const sectionCardClass =
-  'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
-const sectionCardStyle = {
-  backgroundColor: 'rgba(249, 250, 251, 0.95)',
-  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-}
 
 export default async function AdminAppsPage() {
   const currentUser = await getCurrentUser()
@@ -34,15 +36,14 @@ export default async function AdminAppsPage() {
   if (!cycle) {
     return (
       <AdminPageShell>
-        <h1
-          className="text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter text-black"
-          style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
-        >
+        <h1 className={adminPageTitleClass} style={adminPageTitleStyle}>
           Applications
         </h1>
         <AdminQuickLinks currentPath="/admin/apps" />
-        <p className="text-sm text-gray-600">Create a rush cycle before managing applications.</p>
-        <Link href="/admin/rush" className="mt-4 inline-block text-sm font-semibold text-[#315CA9]">
+        <p className={`text-sm ${adminMutedClass}`}>
+          Create a rush cycle before managing applications.
+        </p>
+        <Link href="/admin/rush" className={`mt-4 inline-block ${adminLinkClass}`}>
           Go to rush admin
         </Link>
       </AdminPageShell>
@@ -72,58 +73,65 @@ export default async function AdminAppsPage() {
 
   return (
     <AdminPageShell>
-      <h1
-        className="text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter text-black"
-        style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
-      >
+      <h1 className={adminPageTitleClass} style={adminPageTitleStyle}>
         Applications
       </h1>
 
       <AdminQuickLinks currentPath="/admin/apps" />
 
-      <div className={`${sectionCardClass} mb-8`} style={sectionCardStyle}>
+      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
-          <h2 className="text-xl font-bold font-inter">{cycle.name}</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>{cycle.name}</h2>
+          <p className={`mt-1 text-sm ${adminMutedClass}`}>
             EBoard overview for this rush cycle. Reviewers only see anonymized applications.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          <div className={portalInnerCardClass} style={portalInnerCardStyle}>
+          <div className={adminInnerCardClass} style={adminInnerCardStyle}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Submitted</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">{applications.length}</p>
+              <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
+                Submitted
+              </p>
+              <p className={`mt-1 text-2xl font-bold ${adminHeadingClass}`}>{applications.length}</p>
             </div>
           </div>
-          <div className={portalInnerCardClass} style={portalInnerCardStyle}>
+          <div className={adminInnerCardClass} style={adminInnerCardStyle}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Total reads</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">{totalReads}</p>
+              <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
+                Total reads
+              </p>
+              <p className={`mt-1 text-2xl font-bold ${adminHeadingClass}`}>{totalReads}</p>
             </div>
           </div>
-          <div className={portalInnerCardClass} style={portalInnerCardStyle}>
+          <div className={adminInnerCardClass} style={adminInnerCardStyle}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Reviewers met min</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">
+              <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
+                Reviewers met min
+              </p>
+              <p className={`mt-1 text-2xl font-bold ${adminHeadingClass}`}>
                 {metMinimumCount}
-                <span className="text-base font-normal text-gray-500">
+                <span className={`text-base font-normal ${adminMutedClass}`}>
                   {' '}
                   / {reviewAccess.length}
                 </span>
               </p>
             </div>
           </div>
-          <div className={portalInnerCardClass} style={portalInnerCardStyle}>
+          <div className={adminInnerCardClass} style={adminInnerCardStyle}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Avg reads / app</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">{avgReadsPerApp}</p>
+              <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
+                Avg reads / app
+              </p>
+              <p className={`mt-1 text-2xl font-bold ${adminHeadingClass}`}>{avgReadsPerApp}</p>
             </div>
           </div>
-          <div className={portalInnerCardClass} style={portalInnerCardStyle}>
+          <div className={adminInnerCardClass} style={adminInnerCardStyle}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Avg review time</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">
+              <p className={`text-xs font-semibold uppercase tracking-wide ${adminMutedClass}`}>
+                Avg review time
+              </p>
+              <p className={`mt-1 text-2xl font-bold ${adminHeadingClass}`}>
                 {avgReviewDurationMs == null
                   ? '—'
                   : Math.round(avgReviewDurationMs / 60000) < 1
@@ -135,10 +143,12 @@ export default async function AdminAppsPage() {
         </div>
       </div>
 
-      <div className={`${sectionCardClass} mb-8`} style={sectionCardStyle}>
+      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
-          <h2 className="text-xl font-bold font-inter">Submitted applications</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>
+            Submitted applications
+          </h2>
+          <p className={`mt-1 text-sm ${adminMutedClass}`}>
             Search, sort, and export the full applicant list.
           </p>
         </div>
@@ -149,10 +159,10 @@ export default async function AdminAppsPage() {
         />
       </div>
 
-      <div className={`${sectionCardClass} mb-8`} style={sectionCardStyle}>
+      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
-          <h2 className="text-xl font-bold font-inter">Reviewer access</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>Reviewer access</h2>
+          <p className={`mt-1 text-sm ${adminMutedClass}`}>
             Brothers on this list can use Application Reads. They must already be in the brothers
             directory. Site admins can always review.
           </p>
@@ -160,10 +170,10 @@ export default async function AdminAppsPage() {
         <AdminReviewAccessManager cycleId={cycle.id} initialEntries={reviewAccess} />
       </div>
 
-      <div className={`${sectionCardClass} mb-8`} style={sectionCardStyle}>
+      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
-          <h2 className="text-xl font-bold font-inter">Reviewer progress</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>Reviewer progress</h2>
+          <p className={`mt-1 text-sm ${adminMutedClass}`}>
             Completed reads, remaining toward each reviewer&apos;s minimum, and average time per app.
           </p>
         </div>

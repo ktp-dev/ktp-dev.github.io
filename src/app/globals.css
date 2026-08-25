@@ -52,10 +52,57 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Match Tailwind v4 ::placeholder color on empty date/time fields */
+/* Empty date/time — force slate-500 to beat Tailwind text-slate-100 on admin fields */
 input[type="date"].datetime-empty,
-input[type="time"].datetime-empty {
-  color: color-mix(in oklab, currentcolor 50%, transparent);
+input[type="time"].datetime-empty,
+input[type="datetime-local"].datetime-empty {
+  color: #64748b !important;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+/* Replace native (often black) picker glyphs with slate-500 SVGs */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0;
+  margin-left: 0.25rem;
+  border: none;
+  color: transparent;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1.1rem 1.1rem;
+  filter: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='1.75'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 2v2m8-2v2M4.5 8h15M6 4h12a2 2 0 012 2v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z'/%3E%3C/svg%3E");
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0;
+  margin-left: 0.25rem;
+  border: none;
+  color: transparent;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1.1rem 1.1rem;
+  filter: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='1.75'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 7v5l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E");
 }
 
 input[type="date"].datetime-empty::-webkit-datetime-edit,
@@ -70,11 +117,7 @@ input[type="time"].datetime-empty::-webkit-datetime-edit-text,
 input[type="time"].datetime-empty::-webkit-datetime-edit-hour-field,
 input[type="time"].datetime-empty::-webkit-datetime-edit-minute-field,
 input[type="time"].datetime-empty::-webkit-datetime-edit-second-field,
-input[type="time"].datetime-empty::-webkit-datetime-edit-ampm-field {
-  color: inherit;
-}
-
-input[type="datetime-local"].datetime-empty,
+input[type="time"].datetime-empty::-webkit-datetime-edit-ampm-field,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-fields-wrapper,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-text,
@@ -85,7 +128,7 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-hour-field,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-minute-field,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-second-field,
 input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
-  color: #9ca3af !important;
+  color: #64748b !important;
 }
 
 .homepage-grid {

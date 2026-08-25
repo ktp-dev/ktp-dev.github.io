@@ -1,7 +1,11 @@
 import { redirect } from 'next/navigation'
 import AdminListManager from '@/components/AdminListManager'
 import BrotherListManager from '@/components/BrotherListManager'
-import { AdminPageShell } from '@/components/admin/AdminPageShell'
+import {
+  AdminPageShell,
+  adminPageTitleClass,
+  adminPageTitleStyle,
+} from '@/components/admin/AdminPageShell'
 import { AdminQuickLinks } from '@/components/admin/AdminQuickLinks'
 import Unauthorized from '@/components/Unauthorized'
 import { listAdmins } from '@/lib/admins'
@@ -19,10 +23,7 @@ export default async function AdminMembersPage() {
 
   return (
     <AdminPageShell>
-      <h1
-        className="text-3xl sm:text-4xl md:text-5xl font-black mb-8 font-inter text-black"
-        style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
-      >
+      <h1 className={adminPageTitleClass} style={adminPageTitleStyle}>
         Members
       </h1>
 

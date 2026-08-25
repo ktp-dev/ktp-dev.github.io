@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
 import { searchBrothersAction } from '@/app/admin/actions'
 import type { BrotherSearchHit } from '@/lib/brother-schema'
 
@@ -12,6 +12,7 @@ export function BrotherTypeahead({
   value,
   onChange,
   className,
+  style,
   placeholder = 'uniqname',
   required,
   disabled,
@@ -20,6 +21,7 @@ export function BrotherTypeahead({
   value: string
   onChange: (value: string) => void
   className?: string
+  style?: CSSProperties
   placeholder?: string
   required?: boolean
   disabled?: boolean
@@ -87,6 +89,7 @@ export function BrotherTypeahead({
         aria-controls={listId}
         aria-autocomplete="list"
         className={className}
+        style={style}
         placeholder={placeholder}
         value={value}
         required={required}
@@ -106,10 +109,10 @@ export function BrotherTypeahead({
         <ul
           id={listId}
           role="listbox"
-          className="absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-y-auto rounded-md border border-gray-200 bg-white py-1 shadow-lg"
+          className="absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-y-auto rounded-md border border-white/10 bg-[#0f172a] py-1 shadow-lg shadow-black/40"
         >
           {loading && results.length === 0 ? (
-            <li className="px-3 py-2 text-sm text-gray-500">Searching…</li>
+            <li className="px-3 py-2 text-sm text-slate-400">Searching…</li>
           ) : (
             results.map((hit) => {
               const name = [hit.first_name, hit.last_name].filter(Boolean).join(' ').trim()
@@ -117,14 +120,14 @@ export function BrotherTypeahead({
                 <li key={hit.id} role="option">
                   <button
                     type="button"
-                    className="flex w-full cursor-pointer flex-col items-start px-3 py-2 text-left hover:bg-blue-50"
+                    className="flex w-full cursor-pointer flex-col items-start px-3 py-2 text-left hover:bg-white/10"
                     onMouseDown={(event) => event.preventDefault()}
                     onClick={() => pick(hit)}
                   >
-                    <span className="truncate text-sm font-medium text-gray-800">
+                    <span className="truncate text-sm font-medium text-slate-200">
                       {name || hit.uniqname}
                     </span>
-                    <span className="truncate text-xs text-gray-500">
+                    <span className="truncate text-xs text-slate-400">
                       {hit.uniqname}
                       {hit.pledge_class ? ` · ${hit.pledge_class}` : ''}
                     </span>

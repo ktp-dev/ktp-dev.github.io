@@ -92,7 +92,7 @@ export default async function ApplyWelcomePage({
     const canEdit = Boolean(ctx.window?.isOpen || ctx.isAdmin)
 
     return (
-      <ApplyShell title={title}>
+      <ApplyShell title={title} accountEmail={ctx.user.email}>
         <ApplySubmittedHome
           applicationId={ctx.application.id}
           closesAt={ctx.cycle!.closesAt}
@@ -133,7 +133,7 @@ export default async function ApplyWelcomePage({
     : 'Continue application'
 
   return (
-    <ApplyShell title={title}>
+    <ApplyShell title={title} accountEmail={ctx.user.email}>
       <WelcomeCard>
         <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
         {ctx.isAdmin ? (

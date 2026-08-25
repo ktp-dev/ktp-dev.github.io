@@ -12,25 +12,22 @@ import RushApplicationManager, {
 } from '@/components/RushApplicationManager'
 import RushScheduleManager from '@/components/RushScheduleManager'
 import { AdminRubricManager } from '@/components/admin/AdminRubricManager'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminFieldStyleFor,
+  adminHeadingClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLabelClass,
+  adminPrimaryBtnClass,
+  adminSecondaryBtnClass,
+  adminSectionCardClass,
+  adminSectionCardStyle,
+} from '@/components/admin/admin-ui'
 import type { ClientCycleQuestion, ClientRushCycle, CycleBundle } from '@/lib/rush-cycles'
 
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const ghostBtnClass =
-  'px-4 py-2 border border-gray-300 rounded-lg text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const sectionCardClass =
-  'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
-const sectionCardStyle = {
-  backgroundColor: 'rgba(249, 250, 251, 0.95)',
-  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-}
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-600 disabled:shadow-none'
-const datetimeInputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md text-sm outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:shadow-none'
-const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
-const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80 p-4'
-const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 const CYCLE_FORM_ID = 'rush-cycle-form'
 const DRAFT_VALUE = '__draft__'
 
@@ -248,13 +245,14 @@ export default function AdminRushDashboard({
 
   return (
     <div className="space-y-6">
-      <div className={sectionCardClass} style={sectionCardStyle}>
+      <div className={adminSectionCardClass} style={adminSectionCardStyle}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-xl font-bold font-inter">Rush cycle</h2>
+            <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Rush cycle</h2>
             {cycles.length || isDraft ? (
               <select
-                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                className={`${adminFieldClass} !w-auto`}
+                style={adminFieldEditStyle}
                 value={isDraft ? DRAFT_VALUE : selected?.id ?? ''}
                 onChange={(event) => void handleSelect(event.target.value)}
                 disabled={isLoading || isSaving}
@@ -273,7 +271,7 @@ export default function AdminRushDashboard({
             {isDraft ? (
               <button
                 type="button"
-                className={ghostBtnClass}
+                className={adminSecondaryBtnClass}
                 onClick={handleCancelDraft}
                 disabled={isSaving || !bundle}
               >
@@ -282,7 +280,7 @@ export default function AdminRushDashboard({
             ) : (
               <button
                 type="button"
-                className={ghostBtnClass}
+                className={adminSecondaryBtnClass}
                 onClick={() => void handleShowOnSite()}
                 disabled={!selected || selected.is_active || isActivating || isLoading || isEditing}
               >
@@ -293,7 +291,7 @@ export default function AdminRushDashboard({
               <button
                 type="submit"
                 form={CYCLE_FORM_ID}
-                className={btnClass}
+                className={adminPrimaryBtnClass}
                 disabled={isSaving || isLoading}
               >
                 {isSaving ? 'Saving…' : 'Save'}
@@ -301,7 +299,7 @@ export default function AdminRushDashboard({
             ) : (
               <button
                 type="button"
-                className={btnClass}
+                className={adminPrimaryBtnClass}
                 onClick={() => {
                   window.setTimeout(() => setIsEditing(true), 0)
                 }}
@@ -312,7 +310,7 @@ export default function AdminRushDashboard({
             )}
             <button
               type="button"
-              className={btnClass}
+              className={adminPrimaryBtnClass}
               onClick={handleNewCycle}
               disabled={isSaving || isLoading}
             >
@@ -321,18 +319,19 @@ export default function AdminRushDashboard({
           </div>
         </div>
 
-        {error ? <p className="mb-3 text-sm text-red-500">{error}</p> : null}
+        {error ? <p className="mb-3 text-sm text-red-400">{error}</p> : null}
 
         <form id={CYCLE_FORM_ID} onSubmit={(event) => void handleSaveCycle(event)}>
-          <div className={innerCardClass} style={innerCardStyle}>
-            <div className="space-y-3">
+          <div className={`${adminInnerCardClass} flex-col items-stretch`} style={adminInnerCardStyle}>
+            <div className="w-full space-y-3">
               <div>
-                <label htmlFor="cycle-name" className={labelClass}>
-                  Cycle name <span className="text-red-500">*</span>
+                <label htmlFor="cycle-name" className={adminLabelClass}>
+                  Cycle name <span className="text-red-400">*</span>
                 </label>
                 <input
                   id="cycle-name"
-                  className={inputClass}
+                  className={adminFieldClass}
+                  style={adminFieldStyleFor(fieldsEditable)}
                   value={fields.name}
                   onChange={(event) => setFields((current) => ({ ...current, name: event.target.value }))}
                   placeholder="Fall 2026"
@@ -343,13 +342,14 @@ export default function AdminRushDashboard({
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="opens-at" className={labelClass}>
-                    Open Rush Opens <span className="text-red-500">*</span>
+                  <label htmlFor="opens-at" className={adminLabelClass}>
+                    Open Rush Opens <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="opens-at"
                     type="datetime-local"
-                    className={`${datetimeInputClass} ${fields.opensAt ? 'text-gray-700' : 'datetime-empty'}`}
+                    className={`${adminFieldClass} ${fields.opensAt ? adminBodyClass : 'datetime-empty'}`}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={fields.opensAt}
                     onChange={(event) =>
                       setFields((current) => ({ ...current, opensAt: event.target.value }))
@@ -359,13 +359,14 @@ export default function AdminRushDashboard({
                   />
                 </div>
                 <div>
-                  <label htmlFor="closes-at" className={labelClass}>
-                    Open Rush Closes <span className="text-red-500">*</span>
+                  <label htmlFor="closes-at" className={adminLabelClass}>
+                    Open Rush Closes <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="closes-at"
                     type="datetime-local"
-                    className={`${datetimeInputClass} ${fields.closesAt ? 'text-gray-700' : 'datetime-empty'}`}
+                    className={`${adminFieldClass} ${fields.closesAt ? adminBodyClass : 'datetime-empty'}`}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={fields.closesAt}
                     onChange={(event) =>
                       setFields((current) => ({ ...current, closesAt: event.target.value }))
@@ -378,13 +379,14 @@ export default function AdminRushDashboard({
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
-                  <label htmlFor="interest-form-url" className={labelClass}>
-                    Interest form URL <span className="text-red-500">*</span>
+                  <label htmlFor="interest-form-url" className={adminLabelClass}>
+                    Interest form URL <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="interest-form-url"
                     type="url"
-                    className={inputClass}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={fields.interestFormUrl}
                     onChange={(event) =>
                       setFields((current) => ({ ...current, interestFormUrl: event.target.value }))
@@ -395,13 +397,14 @@ export default function AdminRushDashboard({
                   />
                 </div>
                 <div>
-                  <label htmlFor="youtube-url" className={labelClass}>
-                    YouTube URL <span className="text-red-500">*</span>
+                  <label htmlFor="youtube-url" className={adminLabelClass}>
+                    YouTube URL <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="youtube-url"
                     type="url"
-                    className={inputClass}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={fields.youtubeUrl}
                     onChange={(event) =>
                       setFields((current) => ({ ...current, youtubeUrl: event.target.value }))
@@ -412,13 +415,14 @@ export default function AdminRushDashboard({
                   />
                 </div>
                 <div>
-                  <label htmlFor="calendar-url" className={labelClass}>
-                    Google Calendar URL <span className="text-red-500">*</span>
+                  <label htmlFor="calendar-url" className={adminLabelClass}>
+                    Google Calendar URL <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="calendar-url"
                     type="url"
-                    className={inputClass}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
                     value={fields.calendarUrl}
                     onChange={(event) =>
                       setFields((current) => ({ ...current, calendarUrl: event.target.value }))
@@ -436,7 +440,7 @@ export default function AdminRushDashboard({
 
       <div className={`grid grid-cols-1 gap-6 ${isDraft ? '' : 'md:grid-cols-2'} ${isLoading ? 'pointer-events-none opacity-60' : ''}`}>
         {!isDraft && selected && bundle ? (
-          <div className={sectionCardClass} style={sectionCardStyle}>
+          <div className={adminSectionCardClass} style={adminSectionCardStyle}>
             <RushScheduleManager
               key={`${selected.id}-schedule`}
               cycleId={selected.id}
@@ -444,7 +448,7 @@ export default function AdminRushDashboard({
             />
           </div>
         ) : null}
-        <div className={sectionCardClass} style={sectionCardStyle}>
+        <div className={adminSectionCardClass} style={adminSectionCardStyle}>
           <RushApplicationManager
             key={isDraft ? `draft-${draftKey}` : `${selected?.id}-application`}
             ref={applicationRef}
@@ -460,8 +464,8 @@ export default function AdminRushDashboard({
 
       {!isDraft && selected && bundle ? (
         <div
-          className={`${sectionCardClass} pb-12 ${isLoading ? 'pointer-events-none opacity-60' : ''}`}
-          style={sectionCardStyle}
+          className={`${adminSectionCardClass} pb-12 ${isLoading ? 'pointer-events-none opacity-60' : ''}`}
+          style={adminSectionCardStyle}
         >
           <AdminRubricManager
             key={`${selected.id}-rubric`}

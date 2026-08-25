@@ -15,7 +15,12 @@ export async function ApplyDraftSection({
   const ctx = await requireApplyDraft(preview)
 
   return (
-    <ApplyShell current={step} title={applicationTitle(ctx.cycle.name)} preview={ctx.isPreview}>
+    <ApplyShell
+      current={step}
+      title={applicationTitle(ctx.cycle.name)}
+      preview={ctx.isPreview}
+      accountEmail={ctx.user.email}
+    >
       <ApplySectionForm
         step={step}
         preview={ctx.isPreview}

@@ -14,8 +14,8 @@ export function SignedInAccountBar({
   className?: string
   align?: 'start' | 'end' | 'center'
   tone?: 'light' | 'dark'
-  /** default = "Signed in as …"; compact = "email Sign out" for use as a subtitle */
-  variant?: 'default' | 'compact'
+  /** default = "Signed in as …"; compact = portal subtitle; minimal = email + sign out, apply-sized */
+  variant?: 'default' | 'compact' | 'minimal'
   /** Optional initial email (avoids empty flash when known server-side) */
   email?: string
 }) {
@@ -24,6 +24,7 @@ export function SignedInAccountBar({
   const [pending, setPending] = useState(false)
   const isDark = tone === 'dark'
   const isCompact = variant === 'compact'
+  const isMinimal = variant === 'minimal'
 
   useEffect(() => {
     const supabase = createClient()
@@ -57,17 +58,23 @@ export function SignedInAccountBar({
   return (
     <div
       className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${
-        isCompact
+        isMinimal
           ? isDark
-            ? 'text-xl font-bold text-slate-300'
-            : 'text-xl font-bold text-gray-800'
-          : isDark
             ? 'text-sm text-slate-400'
             : 'text-sm text-gray-600'
+          : isCompact
+            ? isDark
+              ? 'text-xl font-bold text-slate-300'
+              : 'text-xl font-bold text-gray-800'
+            : isDark
+              ? 'text-sm text-slate-400'
+              : 'text-sm text-gray-600'
       } ${alignClass} ${className}`}
     >
-      {isCompact ? (
-        <span className="min-w-0 truncate">{email}</span>
+      {isCompact || isMinimal ? (
+        <span className={`min-w-0 truncate ${isMinimal && !isDark ? 'font-medium text-gray-800' : ''}`}>
+          {email}
+        </span>
       ) : (
         <span className="min-w-0 truncate">
           Signed in as{' '}

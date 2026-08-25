@@ -8,13 +8,17 @@ import {
 } from '@/app/admin/apps/actions'
 import { BrotherTypeahead } from '@/components/admin/BrotherTypeahead'
 import type { ClientReviewAccess } from '@/lib/review-access-admin'
-
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md bg-white/80 text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]'
-const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80'
-const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminHeadingClass,
+  adminLabelClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminTableRowClass,
+  adminTableWrapClass,
+} from '@/components/admin/admin-ui'
 
 function entryName(entry: ClientReviewAccess) {
   return [entry.firstName, entry.lastName].filter(Boolean).join(' ').trim()
@@ -109,10 +113,7 @@ export function AdminReviewAccessManager({
       >
         <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <label
-              htmlFor="reviewer-email"
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500"
-            >
+            <label htmlFor="reviewer-email" className={adminLabelClass}>
               Add brother
             </label>
             <BrotherTypeahead
@@ -120,15 +121,13 @@ export function AdminReviewAccessManager({
               value={email}
               onChange={setEmail}
               placeholder="uniqname"
-              className={inputClass}
+              className={adminFieldClass}
+              style={adminFieldEditStyle}
               required
             />
           </div>
           <div className="w-full sm:w-28">
-            <label
-              htmlFor="reviewer-min"
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500"
-            >
+            <label htmlFor="reviewer-min" className={adminLabelClass}>
               Minimum
             </label>
             <input
@@ -137,42 +136,43 @@ export function AdminReviewAccessManager({
               min={1}
               value={minRequired}
               onChange={(event) => setMinRequired(event.target.value)}
-              className={inputClass}
+              className={adminFieldClass}
+              style={adminFieldEditStyle}
             />
           </div>
-          <button type="submit" disabled={adding} className={`${btnClass} shrink-0`}>
+          <button type="submit" disabled={adding} className={`${adminPrimaryBtnClass} shrink-0`}>
             {adding ? 'Adding…' : 'Add'}
           </button>
         </div>
       </form>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
-      <div className={`${innerCardClass} overflow-hidden`} style={innerCardStyle}>
+      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`}>
         {entries.length === 0 ? (
-          <p className="px-4 py-2 text-sm text-gray-500">
+          <p className={`px-4 py-3 text-sm ${adminMutedClass}`}>
             No brothers on the reviewer list for this cycle yet.
           </p>
         ) : (
-          <ul className="max-h-64 divide-y divide-gray-100 overflow-y-auto">
+          <ul>
             {entries.map((entry) => {
               const name = entryName(entry)
               const removing = pendingKey === entry.id
               return (
                 <li
                   key={entry.id}
-                  className="flex items-center justify-between gap-3 px-4 py-2"
+                  className={`flex items-center justify-between gap-3 px-4 py-3 first:border-t-0 ${adminTableRowClass}`}
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-gray-800">
+                    <p className={`truncate text-sm font-medium ${adminHeadingClass}`}>
                       {name || entry.email}
                     </p>
                     {name ? (
-                      <p className="truncate text-xs text-gray-500">{entry.email}</p>
+                      <p className={`truncate text-xs ${adminMutedClass}`}>{entry.email}</p>
                     ) : null}
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    <label className="flex items-center gap-1.5 text-xs text-gray-600">
+                    <label className={`flex items-center gap-1.5 text-xs ${adminBodyClass}`}>
                       Min
                       <input
                         type="number"
@@ -182,7 +182,8 @@ export function AdminReviewAccessManager({
                         onBlur={(event) =>
                           void handleMinimumChange(entry.id, event.target.value)
                         }
-                        className="w-14 rounded-md border border-gray-300 px-2 py-1 text-sm"
+                        className="w-14 rounded-md border px-2 py-1 text-sm text-slate-100 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-white/30 focus:shadow-[0_0_0_3px_rgba(255,255,255,0.08)] disabled:opacity-50"
+                        style={adminFieldEditStyle}
                       />
                     </label>
                     <button
@@ -191,8 +192,8 @@ export function AdminReviewAccessManager({
                       disabled={Boolean(pendingKey)}
                       className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
                         pendingKey
-                          ? 'cursor-not-allowed text-gray-300'
-                          : 'cursor-pointer text-gray-400 hover:scale-110 hover:bg-red-50 hover:text-red-500'
+                          ? 'cursor-not-allowed text-slate-600'
+                          : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
                       }`}
                       title="Remove reviewer"
                       aria-label={`Remove ${name || entry.email}`}

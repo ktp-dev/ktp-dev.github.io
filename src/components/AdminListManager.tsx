@@ -3,20 +3,19 @@
 import { useState } from 'react'
 import { addAdmin, removeAdmin } from '@/app/admin/actions'
 import { BrotherTypeahead } from '@/components/admin/BrotherTypeahead'
+import {
+  adminBodyClass,
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminHeadingClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminSectionCardClass,
+  adminSectionCardStyle,
+  adminTableRowClass,
+  adminTableWrapClass,
+} from '@/components/admin/admin-ui'
 import type { ClientAdmin } from '@/lib/admins'
-
-const btnClass =
-  'px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 rounded-md bg-white/80 text-sm text-gray-700 outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]'
-const sectionCardClass =
-  'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
-const sectionCardStyle = {
-  backgroundColor: 'rgba(249, 250, 251, 0.95)',
-  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
-}
-const innerCardClass = 'rounded-xl border border-gray-100 bg-white/80'
-const innerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 
 export default function AdminListManager({
   currentEmail,
@@ -69,43 +68,47 @@ export default function AdminListManager({
   }
 
   return (
-    <div className={`${sectionCardClass} flex h-full flex-col`} style={sectionCardStyle}>
+    <div className={`${adminSectionCardClass} flex h-full flex-col`} style={adminSectionCardStyle}>
       <div className="mb-4 flex min-h-10 flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-bold font-inter">Admins</h2>
+        <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Admins</h2>
         <form onSubmit={(event) => void handleAdd(event)} className="flex min-w-0 items-center gap-2">
           <div className="w-40 sm:w-56">
             <BrotherTypeahead
-              className={inputClass}
+              className={adminFieldClass}
+              style={adminFieldEditStyle}
               placeholder="uniqname"
               value={email}
               onChange={setEmail}
               required
             />
           </div>
-          <button type="submit" className={`${btnClass} shrink-0`} disabled={isAdding}>
+          <button type="submit" className={`${adminPrimaryBtnClass} shrink-0`} disabled={isAdding}>
             {isAdding ? 'Adding…' : 'Add admin'}
           </button>
         </form>
       </div>
 
-      <div className={`${innerCardClass} overflow-hidden`} style={innerCardStyle}>
+      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`}>
         {admins.length === 0 ? (
-          <p className="px-4 py-2 text-sm text-gray-500">No admins yet.</p>
+          <p className={`px-4 py-3 text-sm ${adminMutedClass}`}>No admins yet.</p>
         ) : (
-          <ul className="max-h-64 divide-y divide-gray-100 overflow-y-auto">
+          <ul>
             {admins.map((admin) => {
               const isSelf = admin.email === self
               const isLast = admins.length <= 1
               const removing = pendingEmail === admin.email
               const name = [admin.first_name, admin.last_name].filter(Boolean).join(' ').trim()
               return (
-                <li key={admin.email} className="flex items-center justify-between gap-3 px-4 py-2">
+                <li
+                  key={admin.email}
+                  className={`flex items-center justify-between gap-3 px-4 py-3 first:border-t-0 ${adminTableRowClass}`}
+                >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-gray-800">
+                    <p className={`truncate text-sm font-medium ${adminBodyClass}`}>
                       {name || admin.email}
-                      {isSelf ? <span className="ml-2 text-xs font-normal text-gray-500">You</span> : null}
+                      {isSelf ? <span className={`ml-2 text-xs font-normal ${adminMutedClass}`}>You</span> : null}
                     </p>
-                    {name ? <p className="truncate text-xs text-gray-500">{admin.email}</p> : null}
+                    {name ? <p className={`truncate text-xs ${adminMutedClass}`}>{admin.email}</p> : null}
                   </div>
                   <button
                     type="button"
@@ -113,8 +116,8 @@ export default function AdminListManager({
                     disabled={isSelf || isLast || Boolean(pendingEmail)}
                     className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
                       isSelf || isLast
-                        ? 'cursor-not-allowed text-gray-300'
-                        : 'cursor-pointer text-gray-400 hover:scale-110 hover:bg-red-50 hover:text-red-500'
+                        ? 'cursor-not-allowed text-slate-600'
+                        : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
                     }`}
                     title={
                       isSelf
@@ -140,7 +143,7 @@ export default function AdminListManager({
         )}
       </div>
 
-      {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { getAdminApplicationFileDownloadUrl } from '@/app/admin/apps/actions'
+import { adminLinkClass } from '@/components/admin/admin-ui'
 
 export function AdminFileDownloadLink({
   applicationId,
@@ -39,12 +40,12 @@ export function AdminFileDownloadLink({
         type="button"
         onClick={() => void onDownload()}
         disabled={busy}
-        className="cursor-pointer truncate text-left text-sm text-[#315CA9] disabled:opacity-60"
+        className={`cursor-pointer truncate text-left disabled:opacity-60 ${adminLinkClass}`}
         title={`Download ${filename}`}
       >
         {busy ? 'Preparing download…' : filename}
       </button>
-      {error ? <span className="text-xs text-red-600">{error}</span> : null}
+      {error ? <span className="text-xs text-red-300">{error}</span> : null}
     </span>
   )
 }
