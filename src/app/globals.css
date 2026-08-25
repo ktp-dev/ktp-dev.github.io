@@ -539,7 +539,8 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   /* Header pair — nudge from base; blue left a bit, green stays */
   .about-hero-blobs .shape-blob.eight,
   .rush-hero-blobs .shape-blob.eight,
-  .members-hero-blobs .shape-blob.eight {
+  .members-hero-blobs .shape-blob.eight,
+  .nationals-hero-blobs .shape-blob.eight {
     left: calc(40% - 195px);
     top: 4%;
     height: 240px;
@@ -548,7 +549,8 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
 
   .about-hero-blobs .shape-blob.nine,
   .rush-hero-blobs .shape-blob.nine,
-  .members-hero-blobs .shape-blob.nine {
+  .members-hero-blobs .shape-blob.nine,
+  .nationals-hero-blobs .shape-blob.nine {
     left: calc(70% - 145px);
     top: 4%;
     height: 240px;
@@ -695,6 +697,44 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   }
 
   .members-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /*
+   * Nationals mobile only — drop blur + freeze motion.
+   * Desktop uses a separate blob stack (lg:block) outside these classes.
+   */
+  .blob-c.nationals-mobile-blobs {
+    filter: none;
+  }
+
+  .blob-c.nationals-hero-blobs {
+    overflow: hidden;
+  }
+
+  .nationals-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .nationals-mobile-blobs .shape-blob.nine {
     border-radius: 50%;
     background: radial-gradient(
       ellipse at center,
@@ -1156,6 +1196,7 @@ button:hover .close-icon path {
 
 /* Nationals page styles */
 .logo-container-2{
+    position: relative;
     width: 72px;
     /* Set the width */
     height: 72px;
@@ -1169,6 +1210,7 @@ button:hover .close-icon path {
     justify-content: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Optional: add a shadow */
+    overflow: hidden;
 }
 
 .logo-container-2 .logo-image {
