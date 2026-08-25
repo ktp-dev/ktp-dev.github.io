@@ -37,11 +37,12 @@ img[src*=".svg"] {
   image-rendering: crisp-edges;
 }
 
-/* Specific styling for phone frame images to improve quality */
+/* Phone frame PNGs — don't use crisp-edges (that was for the old SVGs) */
 img[src*="phone_frame"] {
-  image-rendering: crisp-edges;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto;
+  width: auto !important;
+  max-width: none;
+  object-fit: contain;
 }
 
 code {
@@ -447,6 +448,50 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   }
   50% {
     transform: translate(-50%, 20%);
+  }
+}
+
+/* Home mobile blobs only — kill expensive blur; keep left/top/size from base rules */
+@media (max-width: 1023px) {
+  .blob-c.home-mobile-blobs {
+    filter: none;
+  }
+
+  .home-mobile-blobs .shape-blob.twelve {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    /* Match keyframe rest; base rotate(-180deg) would snap in without this */
+    transform: none;
+    /* Nudge up from base 40% — still below green; +compensate for clip wrapper below header */
+    top: 6%;
+    left: 14%;
+    height: 260px;
+    width: 400px;
+  }
+
+  .home-mobile-blobs .shape-blob.thirteen {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    /* Nudge down from base 2% — still above blue; +compensate for clip wrapper below header */
+    top: 1%;
+    left: -6%;
+    height: 260px;
+    width: 400px;
   }
 }
 
@@ -925,7 +970,6 @@ button:hover .close-icon path {
 }
 
 .network-logo-simple {
-  animation: simple-fade-in 0.5s ease-out;
   transition: transform 0.2s ease;
   display: inline-block;
   object-fit: contain;
@@ -938,6 +982,8 @@ button:hover .close-icon path {
   .network-logo-simple {
     min-width: 50px;
     max-width: 150px;
+    opacity: 0;
+    animation: simple-fade-in 0.5s ease-out forwards;
   }
 }
 
