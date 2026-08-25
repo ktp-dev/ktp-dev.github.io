@@ -46,6 +46,7 @@
     "@types/aos": "^3.0.7",
     "@types/leaflet": "^1.9.20",
     "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-scroll": "^1.8.10",

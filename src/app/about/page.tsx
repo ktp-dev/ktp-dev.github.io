@@ -19,16 +19,11 @@ export default function About() {
     <div>
       <Header />
 
-      {/* Spill clip — `page-spill-clip` is relative only on mobile (desktop CB unchanged) */}
+      {/* Spill clip — `page-spill-clip` is relative only on mobile (desktop CB unchanged).
+          Hero blobs: top/left only — never inset-0 (bottom:0 makes the layer page-tall,
+          so top:8% on children is 8% of the document, not the viewport). */}
       <div className="page-spill-clip w-full max-w-full overflow-x-hidden">
-        <div className="relative w-full bg-white">
-          <div className="absolute inset-0 z-0 blob-c about-mobile-blobs about-hero-blobs">
-            <div className="shape-blob eight"></div>
-            <div className="shape-blob nine"></div>
-          </div>
-        </div>
-
-        <div className="inset-0 z-0 blob-c about-mobile-blobs about-hero-blobs">
+        <div className="absolute left-0 right-0 top-0 z-0 blob-c about-mobile-blobs about-hero-blobs">
           <div className="shape-blob eight"></div>
           <div className="shape-blob nine"></div>
         </div>

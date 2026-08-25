@@ -38,14 +38,15 @@ export default async function Rush() {
     <div className="min-h-screen">
       <Header />
 
-      {/* Spill clip — `page-spill-clip` is relative only on mobile (desktop CB unchanged) */}
+      {/* Spill clip — `page-spill-clip` is relative only on mobile (desktop CB unchanged).
+          Hero blobs: top/left only — never inset-0 (see About). */}
       <div className="page-spill-clip w-full max-w-full overflow-x-hidden">
-        <div className="flex-1 px-6 sm:px-8 md:px-16 lg:px-20">
-          <div className="inset-0 z-0 blob-c rush-mobile-blobs rush-hero-blobs">
-            <div className="shape-blob eight"></div>
-            <div className="shape-blob nine"></div>
-          </div>
+        <div className="absolute left-0 right-0 top-0 z-0 blob-c rush-mobile-blobs rush-hero-blobs">
+          <div className="shape-blob eight"></div>
+          <div className="shape-blob nine"></div>
+        </div>
 
+        <div className="relative z-10 flex-1 px-6 sm:px-8 md:px-16 lg:px-20">
           <div className="relative z-10 w-full">
             <div className="relative z-10 pt-12 sm:pt-16">
               <div className="flex flex-col text-center">

@@ -538,17 +538,19 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
 
   /* Header pair — nudge from base; blue left a bit, green stays */
   .about-hero-blobs .shape-blob.eight,
-  .rush-hero-blobs .shape-blob.eight {
+  .rush-hero-blobs .shape-blob.eight,
+  .members-hero-blobs .shape-blob.eight {
     left: calc(40% - 195px);
-    top: 8%;
+    top: 4%;
     height: 240px;
     width: 320px;
   }
 
   .about-hero-blobs .shape-blob.nine,
-  .rush-hero-blobs .shape-blob.nine {
+  .rush-hero-blobs .shape-blob.nine,
+  .members-hero-blobs .shape-blob.nine {
     left: calc(70% - 145px);
-    top: 8%;
+    top: 4%;
     height: 240px;
     width: 320px;
   }
@@ -664,6 +666,45 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     height: 300px;
     width: 280px;
     transform: translate(-25%, -20%);
+  }
+
+  /*
+   * Members mobile only — drop blur + freeze motion.
+   * Own selectors (same numbers as about/rush hero) so Members tweaks
+   * cannot look like they edited About/Rush rules.
+   */
+  .blob-c.members-mobile-blobs {
+    filter: none;
+  }
+
+  .blob-c.members-hero-blobs {
+    overflow: hidden;
+  }
+
+  .members-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .members-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
   }
 }
 
@@ -933,6 +974,18 @@ img.blue-shadow {
 .active-member:hover .pledge-class {
   opacity: 1;
   transform: translateY(-10px);
+}
+
+@media (max-width: 640px) {
+  .pledge-class {
+    bottom: 8px;
+    right: 8px;
+    font-size: 12px;
+  }
+
+  .active-member:hover .pledge-class {
+    transform: translateY(-10px);
+  }
 }
 
 .contact-us {
