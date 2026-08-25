@@ -314,17 +314,22 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   /* animation: blob-movement-two 15s ease-in-out infinite both; */
 }
 
-/* Desktop blobs - largest size starting at md breakpoint */
+/*
+  Desktop blob sizes.
+  Keep one cascade (md → lg) with no competing !important on eight/nine.
+  Turbopack preserves source order; the old 280×200 !important block won in
+  `next dev` while prod CSS merged it away — so local About looked smaller
+  than Vercel/production for the same commit.
+*/
 @media (min-width: 768px) {
-
   .shape-blob.eight {
-    height: 200px !important;
-    width: 280px !important;
+    height: 250px;
+    width: 350px;
   }
 
   .shape-blob.nine {
-    height: 200px !important;
-    width: 280px !important;
+    height: 250px;
+    width: 350px;
   }
 
   .shape-blob.ten {
@@ -338,18 +343,6 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     width: 600px !important;
     left: 200px !important;
     top: 200px !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .shape-blob.eight {
-    height: 250px;
-    width: 350px;
-  }
-
-  .shape-blob.nine {
-    height: 250px;
-    width: 350px;
   }
 }
 
@@ -492,6 +485,80 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     left: -6%;
     height: 260px;
     width: 400px;
+  }
+
+  /*
+   * About mobile only — drop blur + freeze motion.
+   * Hero keeps base left/top/size. Photo stacks re-anchor below so both
+   * colors stay visible without blur (page-math left% clips in a narrow column).
+   */
+  .blob-c.about-mobile-blobs {
+    filter: none;
+    overflow: visible;
+  }
+
+  .about-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .about-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /* Header pair — nudge from base; blue left a bit, green stays */
+  .about-hero-blobs .shape-blob.eight {
+    left: calc(40% - 195px);
+    top: 8%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .about-hero-blobs .shape-blob.nine {
+    left: calc(70% - 145px);
+    top: 8%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .blob-c.about-photo-blobs {
+    min-height: 0;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .about-photo-blobs .shape-blob.eight {
+    left: 50%;
+    top: 50%;
+    height: 220px;
+    width: 280px;
+    transform: translate(-80%, -50%);
+  }
+
+  .about-photo-blobs .shape-blob.nine {
+    left: 50%;
+    top: 50%;
+    height: 220px;
+    width: 280px;
+    transform: translate(-20%, -50%);
   }
 }
 
