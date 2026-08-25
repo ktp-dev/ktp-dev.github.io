@@ -18,7 +18,7 @@ import { normalizeReviewEmail } from '@/lib/review-access'
 import { resolveRatingLabels } from '@/lib/rubric-ui'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 
-export const ASSIGNMENT_DURATION_MS = 60 * 60 * 1000
+export const ASSIGNMENT_DURATION_MS = 20 * 60 * 1000
 export const MIN_REQUIRED_REVIEWS = 12
 export const NOTES_MAX_LENGTH = 1000
 
