@@ -5,10 +5,14 @@ import { usePathname } from 'next/navigation'
 
 const PRESS_SELECTOR = '.tap-press, .contact-us, .hover-text-custom, .more-about-us a'
 const PRESS_CLASSES = ['is-pressed', 'is-pressed-scale'] as const
-/** Almost none — spring back on lift (long linger made buttons feel sluggish) */
-const LINGER_MS = 40
+/** Release press class immediately on lift so the bounce can play */
+const LINGER_MS = 0
+/** Nav text needs a slightly longer visible state than pill buttons */
+const NAV_TEXT_LINGER_MS = 130
 /** Nav text: brief beat so green can ease in before same-tab navigate */
-const NAV_TEXT_NAV_DELAY_MS = 160
+const NAV_TEXT_NAV_DELAY_MS = 130
+/** Same-tab CTAs: let bounce start before navigating away */
+const BUTTON_NAV_DELAY_MS = 180
 
 function isMobileTapViewport() {
   return window.matchMedia('(max-width: 1023px)').matches
@@ -25,6 +29,12 @@ function clearPressedInstant(el: Element) {
 
 function hasPressClass(el: Element) {
   return PRESS_CLASSES.some((c) => el.classList.contains(c))
+}
+
+function eventTargetElement(target: EventTarget | null) {
+  if (target instanceof Element) return target
+  if (target instanceof Node) return target.parentElement
+  return null
 }
 
 /**
@@ -93,8 +103,8 @@ export default function TapFeedback() {
     const onStart = (event: TouchEvent) => {
       if (!isMobileTapViewport()) return
 
-      const target = event.target
-      if (!(target instanceof Element)) return
+      const target = eventTargetElement(event.target)
+      if (!target) return
       const el = target.closest(PRESS_SELECTOR)
       if (!el) {
         active = null
@@ -127,7 +137,18 @@ export default function TapFeedback() {
         return
       }
 
-      scheduleClear(el)
+      const isNavText = el.classList.contains('hover-text-custom')
+      if (isNavText) {
+        const existing = timers.get(el)
+        if (existing) clearTimeout(existing)
+        const timer = setTimeout(() => {
+          el.classList.remove(...PRESS_CLASSES)
+          timers.delete(el)
+        }, NAV_TEXT_LINGER_MS)
+        timers.set(el, timer)
+      } else {
+        scheduleClear(el)
+      }
 
       if (!isMobileTapViewport()) return
 
@@ -137,7 +158,6 @@ export default function TapFeedback() {
       // Stop the cancelled-click path; go ourselves (Interest Form never hits this).
       event.preventDefault()
 
-      const isNavText = el.classList.contains('hover-text-custom')
       if (isNavText) {
         window.setTimeout(() => {
           window.location.assign(anchor.href)
@@ -145,7 +165,10 @@ export default function TapFeedback() {
         return
       }
 
-      window.location.assign(anchor.href)
+      // Brief delay so the spring-back can start before the page unloads
+      window.setTimeout(() => {
+        window.location.assign(anchor.href)
+      }, BUTTON_NAV_DELAY_MS)
     }
 
     const onCancel = () => {

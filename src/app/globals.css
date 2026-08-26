@@ -1270,27 +1270,30 @@ img.blue-shadow {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    /* ~pill switch speed — spring back on release, no long hold */
+    /* Release spring — slight overshoot so it reads as bounce-back, not a stuck dip */
     transition:
-      transform 0.28s cubic-bezier(0.33, 1, 0.68, 1),
+      transform 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
       background-color 0.28s cubic-bezier(0.33, 1, 0.68, 1),
       color 0.28s cubic-bezier(0.33, 1, 0.68, 1),
       box-shadow 0.28s cubic-bezier(0.33, 1, 0.68, 1);
   }
 
-  /* Kill sticky hover scale-up only while NOT pressed */
+  /*
+   * Kill sticky hover:scale-105, but use scale(1) — not transform:none.
+   * transform:none !important snapped release and killed the bounce.
+   */
   .tap-press:hover:not(.is-pressed):not(.is-pressed-scale),
   .contact-us:hover:not(.is-pressed),
   a:hover:not(:has(.is-pressed)):not(:has(.is-pressed-scale)) > .contact-us:not(.is-pressed) {
-    transform: none !important;
+    transform: scale(1) !important;
   }
 
   .contact-us.is-pressed,
   .tap-press.is-pressed {
     transition:
-      transform 0.12s cubic-bezier(0.33, 1, 0.68, 1),
-      background-color 0.12s cubic-bezier(0.33, 1, 0.68, 1),
-      color 0.12s cubic-bezier(0.33, 1, 0.68, 1);
+      transform 0.1s cubic-bezier(0.33, 1, 0.68, 1),
+      background-color 0.1s cubic-bezier(0.33, 1, 0.68, 1),
+      color 0.1s cubic-bezier(0.33, 1, 0.68, 1);
     transform: scale(0.94) !important;
     background-color: #234c8b !important;
     color: #ffffff !important;
@@ -1298,7 +1301,7 @@ img.blue-shadow {
 
   /* Selected pills: scale only — never apply navy (set via JS is-pressed-scale) */
   .tap-press.is-pressed-scale {
-    transition: transform 0.12s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: transform 0.1s cubic-bezier(0.33, 1, 0.68, 1);
     transform: scale(0.94) !important;
   }
 
@@ -1309,9 +1312,9 @@ img.blue-shadow {
   }
 
   .hover-text-custom.is-pressed {
-    /* Quick ease into green — short delay before navigate lets this play */
+    /* Faster green ramp so it reads before mobile nav navigation */
     color: #8ddd88 !important;
-    transition-duration: 0.16s;
+    transition-duration: 0.09s;
     transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
   }
 }

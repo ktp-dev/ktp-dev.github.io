@@ -12,6 +12,10 @@ interface RushEventProps {
   tone?: 'light' | 'dark'
 }
 
+function isSameSitePath(url: string) {
+  return url.startsWith('/')
+}
+
 export default function RushEvent({
   title,
   datetime,
@@ -56,9 +60,15 @@ export default function RushEvent({
       </div>
       {description ? <p className={descriptionClass}>{description}</p> : null}
       {buttonLabel && buttonUrl ? (
-        <a href={buttonUrl} target="_blank" rel="noopener noreferrer" className={buttonClass}>
-          {buttonLabel}
-        </a>
+        isSameSitePath(buttonUrl) ? (
+          <a href={buttonUrl} className={buttonClass}>
+            {buttonLabel}
+          </a>
+        ) : (
+          <a href={buttonUrl} target="_blank" rel="noopener noreferrer" className={buttonClass}>
+            {buttonLabel}
+          </a>
+        )
       ) : null}
     </>
   )
