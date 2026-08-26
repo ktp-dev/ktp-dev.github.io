@@ -63,7 +63,7 @@ export default function Home() {
       <div className="relative w-full max-w-full flex-1 overflow-x-hidden">
       {/* Main content */}
       <div className='flex flex-row justify-center xl:justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
-        <div className="absolute inset-0 blob-c z-0 hidden md:block">
+        <div className="absolute inset-0 z-0 hidden blob-c md:block">
             <div className="shape-blob ten"></div>
             <div className="shape-blob eleven"></div>
         </div>
@@ -74,11 +74,12 @@ export default function Home() {
         </div>
 
         <div className='flex flex-col flex-none'>
-          <div className="absolute inset-0 blob-c home-mobile-blobs z-0 block md:hidden overflow-hidden">
+          {/* top/left only — inset-0 was covering the page and blocking clicks below */}
+          <div className="absolute left-0 right-0 top-0 z-0 block overflow-hidden blob-c home-mobile-blobs md:hidden">
               <div className="shape-blob twelve"></div>
               <div className="shape-blob thirteen"></div>
           </div>
-          <div className='flex flex-col items-center justify-center z-10'>
+          <div className='relative z-10 flex flex-col items-center justify-center'>
             <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36 font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
             We&apos;re the University of Michigan&apos;s Premier Technology Fraternity
             </div>
@@ -88,7 +89,7 @@ export default function Home() {
             </div>
 
             <Link href="/rush">
-              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 cursor-pointer'>
+              <div className='contact-us tap-press text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 cursor-pointer'>
                 Rush
               </div>
             </Link>
@@ -134,8 +135,8 @@ export default function Home() {
                 The first technology fraternity in the nation.
               </p>
               {/* More about us button */}
-              <div className="more-about-us flex flex-row items-center justify-center font-inter text-sm">
-                <Link className="font-bold hover:text-[#315CA9]" href="/about">
+              <div className="more-about-us relative z-20 flex flex-row items-center justify-center font-inter text-sm">
+                <Link className="tap-press font-bold hover:text-[#315CA9]" href="/about">
                   More About Us
                   <svg
                     className="ml-1 inline h-4 w-4"

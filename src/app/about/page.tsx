@@ -56,7 +56,7 @@ export default function About() {
               <a
                 key={category.href}
                 href={category.href}
-                className="cursor-pointer whitespace-nowrap rounded-[40px] bg-gray-200/60 px-3 py-2 text-center text-xs font-semibold text-gray-700 transition-all duration-300 hover:scale-105 hover:bg-gray-300/80 hover:shadow-md sm:px-4 sm:text-sm md:text-base"
+                className="tap-press cursor-pointer whitespace-nowrap rounded-[40px] bg-gray-200/60 px-3 py-2 text-center text-xs font-semibold text-gray-700 transition-all duration-300 hover:scale-105 hover:bg-gray-300/80 hover:shadow-md sm:px-4 sm:text-sm md:text-base"
               >
                 {category.label}
               </a>

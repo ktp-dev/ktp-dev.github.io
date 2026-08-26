@@ -65,14 +65,14 @@ export default async function Rush() {
                       href={cycle.interestFormUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base"
+                      className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base tap-press"
                     >
                       Interest Form
                     </a>
                   ) : null}
                   <a
                     href="/apply"
-                    className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base"
+                    className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base tap-press"
                   >
                     Application
                   </a>

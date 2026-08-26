@@ -59,7 +59,7 @@ export default function Nationals() {
 
                 <a
                   href="mailto:ktp-board@umich.edu"
-                  className="contact-us font-inter relative z-10 mx-auto mt-12 flex h-16 w-full max-w-[620px] cursor-pointer flex-row items-center justify-center whitespace-nowrap px-6 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-blue-500/15 sm:px-12 sm:text-base lg:mx-0"
+                  className="contact-us tap-press font-inter relative z-10 mx-auto mt-12 flex h-16 w-full max-w-[620px] cursor-pointer flex-row items-center justify-center whitespace-nowrap px-6 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-blue-500/15 sm:px-12 sm:text-base lg:mx-0"
                   style={{ boxShadow: '0 4px 12px rgba(0,59,114,0.3)' }}
                 >
                   <div className="relative mr-4 flex items-center">
