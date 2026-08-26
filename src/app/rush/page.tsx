@@ -65,16 +65,21 @@ export default async function Rush() {
                       href={cycle.interestFormUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base tap-press"
+                      className="inline-flex min-h-11 items-center"
                     >
-                      Interest Form
+                      <span className="tap-press inline-flex min-h-11 cursor-pointer items-center rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base">
+                        Interest Form
+                      </span>
                     </a>
                   ) : null}
-                  <a
-                    href="/apply"
-                    className="cursor-pointer rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base tap-press"
-                  >
-                    Application
+                  {/*
+                    Outer <a> = stable hit box; inner .tap-press scales.
+                    Scaling the <a> itself under a finger cancels the tap on iOS.
+                  */}
+                  <a href="/apply" className="inline-flex min-h-11 items-center">
+                    <span className="tap-press inline-flex min-h-11 cursor-pointer items-center rounded-[40px] bg-[#315CA9] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base">
+                      Application
+                    </span>
                   </a>
                 </div>
                 {cycle?.calendarUrl ? (

@@ -758,9 +758,9 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     filter: none;
   }
 
-  /* visible — soft edges under the header; body overflow-x: clip still contains sideways spill */
+  /* Clip sideways spill; container is top-0 of the page so soft edges still sit under the header */
   .blob-c.apply-hero-blobs {
-    overflow: visible;
+    overflow: hidden;
   }
 
   .apply-hero-blobs .shape-blob.eight {
@@ -1245,7 +1245,8 @@ img.blue-shadow {
 /* Smooth color for nav/footer text links */
 .hover-text-custom {
   cursor: pointer;
-  transition: color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Desktop hover only — avoids sticky green after tap on phones */
@@ -1258,44 +1259,54 @@ img.blue-shadow {
 }
 
 /*
- * Tap press — NOT gated on pointer:coarse.
- * Chrome mobile emulation + mouse still reports pointer:fine, so coarse-only
- * rules never ran and taps felt like the snappy system default.
+ * Mobile tap press only — do not override desktop hover:scale transitions.
+ * (Desktop keeps Tailwind transition-all / hover:scale-105.)
  */
-.tap-press,
-.contact-us,
-.more-about-us a {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    transform 0.5s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
+@media (max-width: 1023px) {
+  .tap-press,
+  .contact-us,
+  .more-about-us a {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-.contact-us:active,
-a:active > .contact-us,
-.tap-press:active {
-  transition:
-    transform 0.35s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.4s cubic-bezier(0.33, 1, 0.68, 1) !important;
-  transform: scale(0.97);
-  opacity: 0.85;
-}
+  /* Kill sticky hover scale-up only while NOT pressed */
+  .tap-press:hover:not(.is-pressed),
+  .contact-us:hover:not(.is-pressed),
+  a:hover:not(:has(.is-pressed)) > .contact-us:not(.is-pressed) {
+    transform: none !important;
+  }
 
-.more-about-us a:active {
-  transition:
-    opacity 0.4s cubic-bezier(0.33, 1, 0.68, 1),
-    color 0.4s cubic-bezier(0.33, 1, 0.68, 1) !important;
-  opacity: 0.78;
-  color: #315CA9;
-}
+  .contact-us.is-pressed,
+  .tap-press.is-pressed {
+    transition:
+      transform 0.18s cubic-bezier(0.33, 1, 0.68, 1),
+      background-color 0.18s cubic-bezier(0.33, 1, 0.68, 1),
+      color 0.18s cubic-bezier(0.33, 1, 0.68, 1);
+    /* !important — otherwise iOS sticky :hover keeps transform:none */
+    transform: scale(0.94) !important;
+    /* Darker KTP blue — clearer than opacity wash */
+    background-color: #234c8b !important;
+    color: #ffffff !important;
+  }
 
-/* Green text flash on press for touch / no-hover devices (and always as :active) */
-.hover-text-custom:active {
-  color: #8ddd88;
-  transition-duration: 0.35s;
-  transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  /* Text link — no pill fill, just deepen the blue */
+  .more-about-us a.is-pressed {
+    background-color: transparent !important;
+    color: #234c8b !important;
+  }
+
+  .hover-text-custom.is-pressed {
+    color: #8ddd88;
+    transition-duration: 0.35s;
+    transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  }
 }
 
 button:hover .close-icon path {
