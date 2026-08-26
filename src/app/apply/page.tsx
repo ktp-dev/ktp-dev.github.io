@@ -24,7 +24,7 @@ export default async function ApplyWelcomePage({
           <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
           <Link
             href={applyPreviewHref('/apply/personal', ctx.cycle.id)}
-            className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+            className="tap-press inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
           >
             Continue application
           </Link>
@@ -43,7 +43,7 @@ export default async function ApplyWelcomePage({
           </p>
           <Link
             href="/portal"
-            className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+            className="tap-press inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
           >
             Go to brother portal
           </Link>
@@ -145,7 +145,7 @@ export default async function ApplyWelcomePage({
         ) : null}
         <Link
           href="/apply/personal"
-          className="inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+          className="tap-press inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
         >
           {continueLabel}
         </Link>

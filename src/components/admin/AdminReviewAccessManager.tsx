@@ -13,11 +13,13 @@ import {
   adminFieldClass,
   adminFieldEditStyle,
   adminHeadingClass,
+  adminIconDangerBtnClass,
   adminLabelClass,
   adminMutedClass,
   adminPrimaryBtnClass,
   adminTableRowClass,
   adminTableWrapClass,
+  adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 
 function entryName(entry: ClientReviewAccess) {
@@ -148,7 +150,7 @@ export function AdminReviewAccessManager({
 
       {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
-      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`}>
+      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`} style={adminTableWrapStyle}>
         {entries.length === 0 ? (
           <p className={`px-4 py-3 text-sm ${adminMutedClass}`}>
             No brothers on the reviewer list for this cycle yet.
@@ -190,10 +192,10 @@ export function AdminReviewAccessManager({
                       type="button"
                       onClick={() => void handleRemove(entry.id)}
                       disabled={Boolean(pendingKey)}
-                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                      className={`h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
                         pendingKey
-                          ? 'cursor-not-allowed text-slate-600'
-                          : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
+                          ? 'flex cursor-not-allowed text-slate-600'
+                          : `${adminIconDangerBtnClass} !h-7 !w-7`
                       }`}
                       title="Remove reviewer"
                       aria-label={`Remove ${name || entry.email}`}

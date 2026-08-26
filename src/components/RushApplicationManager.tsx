@@ -11,6 +11,8 @@ import {
   adminFieldClass,
   adminFieldStyleFor,
   adminHeadingClass,
+  adminIconBtnClass,
+  adminIconDangerBtnClass,
   adminInnerCardClass,
   adminInnerCardStyle,
   adminLabelClass,
@@ -318,7 +320,7 @@ const RushApplicationManager = forwardRef<
               href={applyPreviewHref('/apply', cycleId)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-white/15 text-slate-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
+              className={`${adminIconBtnClass} h-9 w-9 rounded-lg border border-white/15 text-slate-300`}
               title="Preview application"
               aria-label="Preview application"
             >
@@ -468,10 +470,10 @@ const RushApplicationManager = forwardRef<
                           type="button"
                           onClick={() => moveQuestion(index, -1)}
                           disabled={isFirst}
-                          className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
+                          className={`h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             isFirst
-                              ? 'cursor-not-allowed text-slate-600'
-                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
+                              ? 'flex cursor-not-allowed text-slate-600'
+                              : `${adminIconBtnClass} !h-5 !w-5`
                           }`}
                           title={isFirst ? 'Already at top' : 'Move up'}
                         >
@@ -483,10 +485,10 @@ const RushApplicationManager = forwardRef<
                           type="button"
                           onClick={() => moveQuestion(index, 1)}
                           disabled={isLast}
-                          className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
+                          className={`h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             isLast
-                              ? 'cursor-not-allowed text-slate-600'
-                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
+                              ? 'flex cursor-not-allowed text-slate-600'
+                              : `${adminIconBtnClass} !h-5 !w-5`
                           }`}
                           title={isLast ? 'Already at bottom' : 'Move down'}
                         >
@@ -498,10 +500,10 @@ const RushApplicationManager = forwardRef<
                           type="button"
                           onClick={() => removeQuestion(question.key)}
                           disabled={visibleQuestionCount <= 1}
-                          className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
+                          className={`h-5 w-5 items-center justify-center rounded-full transition-all duration-200 ${
                             visibleQuestionCount <= 1
-                              ? 'cursor-not-allowed text-slate-600'
-                              : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
+                              ? 'flex cursor-not-allowed text-slate-600'
+                              : `${adminIconDangerBtnClass} !h-5 !w-5`
                           }`}
                           title={visibleQuestionCount <= 1 ? 'Keep at least one question' : 'Remove question'}
                         >

@@ -12,6 +12,10 @@ interface RushEventProps {
   tone?: 'light' | 'dark'
 }
 
+function isSameSitePath(url: string) {
+  return url.startsWith('/')
+}
+
 export default function RushEvent({
   title,
   datetime,
@@ -34,10 +38,10 @@ export default function RushEvent({
     ? `mb-3 text-sm ${isDark ? 'text-white' : 'text-gray-600'}`
     : `mb-4 flex items-center ${isDark ? 'text-white' : 'text-gray-600'}`
   const buttonClass = compact
-    ? `mb-3 inline-block cursor-pointer rounded-[40px] px-3 py-1.5 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-md ${
+    ? `tap-press mb-3 inline-block cursor-pointer rounded-[40px] px-3 py-1.5 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-md ${
         isDark ? 'bg-[#163556] hover:bg-[#1a3d63]' : 'bg-[#315CA9]'
       }`
-    : `inline-block cursor-pointer rounded-[40px] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base ${
+    : `tap-press inline-block cursor-pointer rounded-[40px] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-md sm:text-base ${
         isDark ? 'bg-[#163556] hover:bg-[#1a3d63]' : 'bg-[#315CA9]'
       }`
 
@@ -56,9 +60,15 @@ export default function RushEvent({
       </div>
       {description ? <p className={descriptionClass}>{description}</p> : null}
       {buttonLabel && buttonUrl ? (
-        <a href={buttonUrl} target="_blank" rel="noopener noreferrer" className={buttonClass}>
-          {buttonLabel}
-        </a>
+        isSameSitePath(buttonUrl) ? (
+          <a href={buttonUrl} className={buttonClass}>
+            {buttonLabel}
+          </a>
+        ) : (
+          <a href={buttonUrl} target="_blank" rel="noopener noreferrer" className={buttonClass}>
+            {buttonLabel}
+          </a>
+        )
       ) : null}
     </>
   )

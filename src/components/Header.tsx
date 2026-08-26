@@ -14,7 +14,7 @@ export default function Header({ tone = 'light' }: { tone?: 'light' | 'dark' }) 
         };
 
         setIsScrolled(window.scrollY > 0);
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -26,7 +26,7 @@ export default function Header({ tone = 'light' }: { tone?: 'light' | 'dark' }) 
 
     return (
         <div
-            className={`sticky top-0 w-full z-[9999] transition-all duration-900 ${
+            className={`sticky top-0 z-[9999] w-full transition-all duration-900 ${
                 isScrolled ? scrolledClass : 'bg-transparent'
             } ${isDark ? 'text-slate-200' : ''}`}
         >

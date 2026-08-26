@@ -22,14 +22,14 @@ type QuickLink = {
 }
 
 function LinkRow({ link }: { link: QuickLink }) {
-  const className = `${portalDarkInnerCardClass} cursor-pointer`
+  const className = `${portalDarkInnerCardClass} tap-card cursor-pointer`
   const body = (
     <>
       <div className="min-w-0">
         <p className="text-sm font-medium text-white">{link.title}</p>
         <p className="text-xs text-slate-300">{link.subtitle}</p>
       </div>
-      <span className="shrink-0 text-sm font-semibold text-white">
+      <span className="tap-text-label shrink-0 text-sm font-semibold text-white">
         {link.external ? 'Open' : 'View'}
       </span>
     </>

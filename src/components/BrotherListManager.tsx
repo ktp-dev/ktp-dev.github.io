@@ -8,6 +8,8 @@ import {
   adminFieldClass,
   adminFieldEditStyle,
   adminHeadingClass,
+  adminIconBtnClass,
+  adminIconDangerBtnClass,
   adminInnerCardClass,
   adminInnerCardStyle,
   adminLabelClass,
@@ -18,6 +20,7 @@ import {
   adminSectionCardStyle,
   adminTableRowClass,
   adminTableWrapClass,
+  adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 import type { BrotherFormInput, ClientBrother } from '@/lib/brother-schema'
 
@@ -175,7 +178,7 @@ export default function BrotherListManager({
         </div>
       </div>
 
-      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`}>
+      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`} style={adminTableWrapStyle}>
         {people.length === 0 ? (
           <p className={`px-4 py-3 text-sm ${adminMutedClass}`}>No brothers yet.</p>
         ) : (
@@ -200,7 +203,7 @@ export default function BrotherListManager({
                     <button
                       type="button"
                       onClick={() => openEdit(person)}
-                      className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white"
+                      className={`${adminIconBtnClass} h-9 w-9`}
                       title="Edit brother"
                       aria-label={`Edit ${displayName(person)}`}
                     >
@@ -212,10 +215,10 @@ export default function BrotherListManager({
                       type="button"
                       onClick={() => void handleRemove(person.id)}
                       disabled={isSelf || Boolean(pendingId)}
-                      className={`flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 ${
+                      className={`h-9 w-9 items-center justify-center rounded-full transition-all duration-200 ${
                         isSelf
-                          ? 'cursor-not-allowed text-slate-600'
-                          : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
+                          ? 'flex cursor-not-allowed text-slate-600'
+                          : `${adminIconDangerBtnClass}`
                       }`}
                       title={isSelf ? 'You cannot remove yourself' : 'Remove brother'}
                       aria-label={`Remove ${displayName(person)}`}
@@ -262,7 +265,7 @@ export default function BrotherListManager({
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white"
+                  className={`${adminIconBtnClass} h-9 w-9`}
                   title="Close"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -296,7 +299,7 @@ export default function BrotherListManager({
                           setCsvFilename(null)
                           if (csvInputRef.current) csvInputRef.current.value = ''
                         }}
-                        className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-red-500/10 hover:text-red-300"
+                        className={`${adminIconDangerBtnClass} h-8 w-8`}
                         aria-label={`Remove ${csvFilename}`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -423,7 +426,7 @@ export default function BrotherListManager({
                             setForm((current) => ({ ...current, photo_filename: '' }))
                             if (photoInputRef.current) photoInputRef.current.value = ''
                           }}
-                          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-red-500/10 hover:text-red-300"
+                          className={`${adminIconDangerBtnClass} h-8 w-8`}
                           aria-label={`Remove ${form.photo_filename}`}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

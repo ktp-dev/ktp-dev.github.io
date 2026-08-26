@@ -12,6 +12,7 @@ import {
   adminTableHeadClass,
   adminTableRowClass,
   adminTableWrapClass,
+  adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 
 type SortKey = 'alpha' | 'reads_desc' | 'reads_asc' | 'remaining_desc'
@@ -80,7 +81,7 @@ export function AdminReviewerProgressTable({
         </select>
       </div>
 
-      <div className={`overflow-x-auto ${adminTableWrapClass}`}>
+      <div className={`overflow-x-auto ${adminTableWrapClass}`} style={adminTableWrapStyle}>
         <table className="min-w-full text-left text-sm">
           <thead className={adminTableHeadClass}>
             <tr>

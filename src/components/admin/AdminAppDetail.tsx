@@ -5,6 +5,7 @@ import { AdminFileDownloadLink } from '@/components/admin/AdminFileDownloadLink'
 import {
   adminBodyClass,
   adminHeadingClass,
+  adminIconBtnClass,
   adminInnerCardClass,
   adminInnerCardStyle,
   adminInsetCardClass,
@@ -52,8 +53,7 @@ function slotLabel(slot: string) {
   return slot.replace(/_/g, ' ')
 }
 
-const navIconClass =
-  'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white'
+const navIconClass = `${adminIconBtnClass} h-9 w-9`
 
 function ChevronLeftIcon() {
   return (

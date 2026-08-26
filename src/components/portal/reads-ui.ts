@@ -1,5 +1,5 @@
 export const readsPrimaryBtnClass =
-  'cursor-pointer rounded-[40px] bg-[#163556] px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#1a3d63] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100'
+  'tap-press tap-press-dark cursor-pointer rounded-[40px] bg-[#163556] px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#1a3d63] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100'
 
 export const readsFieldClass =
   'w-full rounded-md border px-3 py-2 text-sm text-slate-100 outline-none transition-[border-color,box-shadow] duration-200 ease-out placeholder:text-slate-400 focus:border-sky-300/60 focus:shadow-[0_0_0_3px_rgba(125,211,252,0.2)]'
@@ -11,8 +11,8 @@ export const readsFieldStyle = {
 
 export function readsScoreBtnClass(selected: boolean) {
   return selected
-    ? 'cursor-pointer flex h-9 w-9 items-center justify-center rounded-full bg-[#163556] text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#1a3d63] hover:shadow-md'
-    : 'cursor-pointer flex h-9 w-9 items-center justify-center rounded-full border text-sm font-semibold text-slate-200 transition-all duration-300 hover:scale-105 hover:shadow-sm'
+    ? 'tap-press tap-press-dark tap-selected cursor-pointer flex h-9 w-9 items-center justify-center rounded-full bg-[#163556] text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#1a3d63] hover:shadow-md'
+    : 'tap-press tap-press-dark cursor-pointer flex h-9 w-9 items-center justify-center rounded-full border text-sm font-semibold text-slate-200 transition-all duration-300 hover:scale-105 hover:shadow-sm'
 }
 
 export const readsScoreBtnIdleStyle = {
@@ -31,7 +31,7 @@ export const readsDarkPanelStyle = {
 } as const
 
 export const readsLinkClass =
-  'shrink-0 text-sm font-semibold text-white transition-opacity hover:opacity-80'
+  'tap-text shrink-0 cursor-pointer text-sm font-semibold text-white transition-colors hover:opacity-90'
 export const readsMutedClass = 'text-slate-400'
 export const readsBodyClass = 'text-slate-200'
 export const readsHeadingClass = 'text-white'

@@ -28,8 +28,17 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* clip (not hidden) — hidden on body breaks position:sticky headers */
+  overflow-x: clip;
   overflow-y: auto;
+}
+
+/* Mobile only: make page clip wrappers contain abspos blobs without shifting desktop CBs */
+@media (max-width: 1023px) {
+  .page-spill-clip {
+    position: relative;
+    overflow-x: clip;
+  }
 }
 
 /* Improve SVG rendering quality */
@@ -37,11 +46,12 @@ img[src*=".svg"] {
   image-rendering: crisp-edges;
 }
 
-/* Specific styling for phone frame images to improve quality */
+/* Phone frame PNGs — don't use crisp-edges (that was for the old SVGs) */
 img[src*="phone_frame"] {
-  image-rendering: crisp-edges;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto;
+  width: auto !important;
+  max-width: none;
+  object-fit: contain;
 }
 
 code {
@@ -63,6 +73,88 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"] {
   color-scheme: dark;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  /* Native controls have a large intrinsic min-width — without this they blow out grid cards */
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/*
+ * iOS Safari: the ::-webkit-datetime-edit internals keep a fixed preferred width
+ * even when the <input> is width:100%. Force those pieces to shrink/clip,
+ * and keep the value vertically centered in h-10 fields.
+ */
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit,
+input[type="datetime-local"]::-webkit-datetime-edit {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Wrapper used around date/time fields in admin forms */
+.admin-datetime-wrap {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 0.375rem; /* match rounded-md fields */
+  /* Keep a visible right edge/radius when WebKit content is clipped inside */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.admin-datetime-wrap:focus-within {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.admin-datetime-wrap input[type='date'],
+.admin-datetime-wrap input[type='time'],
+.admin-datetime-wrap input[type='datetime-local'] {
+  /* Wrapper draws the border — avoid a double line / clipped input stroke */
+  border-color: transparent !important;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+
+/* Phones: slightly tighter field padding so datetime chrome fits the card */
+@media (max-width: 430px) {
+  input[type='date'].admin-field,
+  input[type='time'].admin-field,
+  input[type='datetime-local'].admin-field,
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'] {
+    padding-left: 0.5rem;
+    padding-right: 0.35rem;
+    font-size: 0.8125rem;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='time']::-webkit-calendar-picker-indicator,
+  input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0;
+    background-size: 1rem 1rem;
+  }
 }
 
 /* Replace native (often black) picker glyphs with slate-500 SVGs */
@@ -169,6 +261,8 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   position: absolute;
   width: 100%;
   filter: blur(70px);
+  /* Decorative only — never block links/buttons underneath */
+  pointer-events: none;
 }
 
 .blob-rush-vid {
@@ -313,17 +407,22 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   /* animation: blob-movement-two 15s ease-in-out infinite both; */
 }
 
-/* Desktop blobs - largest size starting at md breakpoint */
+/*
+  Desktop blob sizes.
+  Keep one cascade (md → lg) with no competing !important on eight/nine.
+  Turbopack preserves source order; the old 280×200 !important block won in
+  `next dev` while prod CSS merged it away — so local About looked smaller
+  than Vercel/production for the same commit.
+*/
 @media (min-width: 768px) {
-
   .shape-blob.eight {
-    height: 200px !important;
-    width: 280px !important;
+    height: 250px;
+    width: 350px;
   }
 
   .shape-blob.nine {
-    height: 200px !important;
-    width: 280px !important;
+    height: 250px;
+    width: 350px;
   }
 
   .shape-blob.ten {
@@ -337,18 +436,6 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     width: 600px !important;
     left: 200px !important;
     top: 200px !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .shape-blob.eight {
-    height: 250px;
-    width: 350px;
-  }
-
-  .shape-blob.nine {
-    height: 250px;
-    width: 350px;
   }
 }
 
@@ -448,6 +535,609 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   50% {
     transform: translate(-50%, 20%);
   }
+}
+
+/* Home mobile blobs only — kill expensive blur; keep left/top/size from base rules */
+@media (max-width: 1023px) {
+  .blob-c.home-mobile-blobs {
+    filter: none;
+    /* Let the page wrapper clip sideways spill — don't box-clip soft edges here */
+    overflow: visible;
+  }
+
+  .home-mobile-blobs .shape-blob.twelve {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    /* Match keyframe rest; base rotate(-180deg) would snap in without this */
+    transform: none;
+    top: 16%;
+    /* Pair centered on the page (blue sits slightly right of mid) */
+    left: calc(50% - 140px);
+    height: 260px;
+    width: 400px;
+  }
+
+  .home-mobile-blobs .shape-blob.thirteen {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    top: 11%;
+    /* Green sits slightly left of mid so both colors read */
+    left: calc(50% - 260px);
+    height: 260px;
+    width: 400px;
+  }
+
+  /*
+   * About mobile only — drop blur + freeze motion.
+   * Hero keeps base left/top/size. Photo stacks re-anchor below so both
+   * colors stay visible without blur (page-math left% clips in a narrow column).
+   */
+  .blob-c.about-mobile-blobs {
+    filter: none;
+  }
+
+  /* Hero stacks — clip edge spill (visible was escaping after body overflow-x: clip) */
+  .blob-c.about-hero-blobs {
+    overflow: hidden;
+  }
+
+  .about-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .about-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /* Header pair — nudge from base; blue left a bit, green stays */
+  .about-hero-blobs .shape-blob.eight,
+  .rush-hero-blobs .shape-blob.eight,
+  .members-hero-blobs .shape-blob.eight,
+  .nationals-hero-blobs .shape-blob.eight {
+    left: calc(40% - 195px);
+    top: 4%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .about-hero-blobs .shape-blob.nine,
+  .rush-hero-blobs .shape-blob.nine,
+  .members-hero-blobs .shape-blob.nine,
+  .nationals-hero-blobs .shape-blob.nine {
+    left: calc(70% - 145px);
+    top: 4%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .blob-c.about-photo-blobs {
+    min-height: 0;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .about-photo-blobs .shape-blob.eight {
+    left: 50%;
+    top: 50%;
+    height: 220px;
+    width: 280px;
+    transform: translate(-80%, -50%);
+  }
+
+  .about-photo-blobs .shape-blob.nine {
+    left: 50%;
+    top: 50%;
+    height: 220px;
+    width: 280px;
+    transform: translate(-20%, -50%);
+  }
+
+  /*
+   * Rush mobile only — drop blur + freeze motion.
+   * Hero size/position shared with about-hero-blobs above.
+   * Video stack re-anchors around the embed.
+   */
+  .blob-c.rush-mobile-blobs {
+    filter: none;
+  }
+
+  /* Hero only — clip edge spill; video stack stays visible below */
+  .blob-c.rush-hero-blobs {
+    overflow: hidden;
+  }
+
+  .rush-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .rush-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-green,
+  .rush-mobile-blobs .shape-blob.rush-static-blue {
+    border-radius: 50%;
+    -webkit-animation: none !important;
+    animation: none !important;
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-green {
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+  }
+
+  .rush-mobile-blobs .shape-blob.rush-static-blue {
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+  }
+
+  .blob-c.rush-video-blobs {
+    min-height: 0;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-green {
+    left: 50%;
+    top: 50%;
+    height: 340px;
+    width: 380px;
+    transform: translate(5%, -35%);
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-blue {
+    left: 50%;
+    top: 50%;
+    height: 300px;
+    width: 280px;
+    transform: translate(-25%, -20%);
+  }
+
+  /*
+   * Members mobile only — drop blur + freeze motion.
+   * Own selectors (same numbers as about/rush hero) so Members tweaks
+   * cannot look like they edited About/Rush rules.
+   */
+  .blob-c.members-mobile-blobs {
+    filter: none;
+  }
+
+  .blob-c.members-hero-blobs {
+    overflow: hidden;
+  }
+
+  .members-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .members-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /*
+   * Nationals mobile only — drop blur + freeze motion.
+   * Desktop uses a separate blob stack (lg:block) outside these classes.
+   */
+  .blob-c.nationals-mobile-blobs {
+    filter: none;
+  }
+
+  .blob-c.nationals-hero-blobs {
+    overflow: hidden;
+  }
+
+  .nationals-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .nationals-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /*
+   * Apply mobile only — drop blur + freeze motion.
+   * Keep Apply’s own left/top (not the About/Rush header pair).
+   * Desktop uses a separate lg:block stack with inline positions.
+   */
+  .blob-c.apply-mobile-blobs {
+    filter: none;
+  }
+
+  /* Clip sideways spill; container is top-0 of the page so soft edges still sit under the header */
+  .blob-c.apply-hero-blobs {
+    overflow: hidden;
+  }
+
+  .apply-hero-blobs .shape-blob.eight {
+    /* Pair centered on the page (blue slightly right of mid) */
+    left: calc(50% - 120px);
+    top: 14%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .apply-hero-blobs .shape-blob.nine {
+    /* Green slightly left of mid so both colors read */
+    left: calc(50% - 220px);
+    top: 18%;
+    height: 240px;
+    width: 320px;
+  }
+
+  .apply-mobile-blobs .shape-blob.eight {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #a8d4ff 0%,
+      rgba(168, 212, 255, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  .apply-mobile-blobs .shape-blob.nine {
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      #9ceb9c 0%,
+      rgba(156, 235, 156, 0.55) 38%,
+      transparent 72%
+    );
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+  }
+
+  /*
+   * Login mobile — freeze/no-blur. Soft glow = radial with an explicit radius
+   * smaller than the box so the fade finishes inside (no hard box edge, no
+   * 0×0 box-shadow speck). overflow:hidden clips sideways spill only.
+   */
+  .blob-c.login-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .login-mobile-blobs .shape-blob.eight,
+  .login-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    border: none;
+    padding: 0;
+    height: 640px;
+    width: 640px;
+  }
+
+  .login-mobile-blobs .shape-blob.eight {
+    /* radius inside box — empty margin past the fade */
+    background: radial-gradient(
+      circle 260px at center,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.09) 38%,
+      rgba(255, 255, 255, 0.03) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 340px);
+    left: calc(50% - 420px);
+  }
+
+  .login-mobile-blobs .shape-blob.nine {
+    background: radial-gradient(
+      circle 280px at center,
+      rgba(168, 212, 255, 0.18) 0%,
+      rgba(168, 212, 255, 0.1) 38%,
+      rgba(168, 212, 255, 0.035) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 260px);
+    left: calc(50% - 160px);
+  }
+
+  /*
+   * Unauthorized mobile only — mid-viewport like login (50%/50vh).
+   * Desktop Unauthorized blobs are untouched.
+   */
+  .blob-c.unauthorized-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.eight,
+  .unauthorized-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    border: none;
+    padding: 0;
+    height: 820px;
+    width: 820px;
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.eight {
+    background: radial-gradient(
+      circle 360px at center,
+      rgba(168, 212, 255, 0.55) 0%,
+      rgba(168, 212, 255, 0.3) 38%,
+      rgba(168, 212, 255, 0.08) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 430px);
+    left: calc(50% - 520px);
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.nine {
+    background: radial-gradient(
+      circle 380px at center,
+      rgba(156, 235, 156, 0.5) 0%,
+      rgba(156, 235, 156, 0.28) 38%,
+      rgba(156, 235, 156, 0.08) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 340px);
+    left: calc(50% - 220px);
+  }
+
+  /*
+   * Portal + Admin mobile — same freeze/no-blur recipe as login.
+   * Inline left/top/right/bottom from PortalBlobShapes stay; only paint/motion change.
+   * Desktop blob-c (lg:block) is untouched.
+   */
+  .blob-c.portal-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+  }
+
+  .portal-mobile-blobs .shape-blob.eight,
+  .portal-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    height: 420px;
+    width: 420px;
+  }
+
+  .portal-mobile-blobs--dark .shape-blob.eight {
+    background: radial-gradient(
+      circle 160px at center,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.07) 38%,
+      rgba(255, 255, 255, 0.022) 68%,
+      transparent 100%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--dark .shape-blob.nine {
+    background: radial-gradient(
+      circle 170px at center,
+      rgba(168, 212, 255, 0.14) 0%,
+      rgba(168, 212, 255, 0.075) 38%,
+      rgba(168, 212, 255, 0.025) 68%,
+      transparent 100%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--light .shape-blob.eight {
+    background: radial-gradient(
+      circle 160px at center,
+      rgba(168, 212, 255, 0.85) 0%,
+      rgba(168, 212, 255, 0.42) 38%,
+      transparent 72%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--light .shape-blob.nine {
+    background: radial-gradient(
+      circle 170px at center,
+      rgba(156, 235, 156, 0.85) 0%,
+      rgba(156, 235, 156, 0.42) 38%,
+      transparent 72%
+    ) !important;
+  }
+
+  /* Nudge corners — !important beats inline desktop positions (mobile only) */
+  .portal-mobile-blobs .shape-blob:nth-child(1) {
+    left: calc(-22% - 40px) !important;
+    top: 2% !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(2) {
+    left: calc(-8% - 20px) !important;
+    top: 6% !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(3) {
+    left: auto !important;
+    right: -26% !important;
+    top: auto !important;
+    bottom: -12% !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(4) {
+    left: auto !important;
+    right: -8% !important;
+    top: auto !important;
+    bottom: -10% !important;
+  }
+}
+
+/*
+ * Mid screens (tablet / large phone landscape): bigger frozen blobs.
+ * Phone sizes stay above; desktop blur stacks (md/lg) are untouched.
+ */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .home-mobile-blobs .shape-blob.twelve {
+    height: 340px;
+    width: 520px;
+    left: calc(50% - 200px);
+  }
+
+  .home-mobile-blobs .shape-blob.thirteen {
+    height: 340px;
+    width: 520px;
+    left: calc(50% - 320px);
+  }
+
+  .about-hero-blobs .shape-blob.eight,
+  .rush-hero-blobs .shape-blob.eight,
+  .members-hero-blobs .shape-blob.eight,
+  .nationals-hero-blobs .shape-blob.eight,
+  .about-hero-blobs .shape-blob.nine,
+  .rush-hero-blobs .shape-blob.nine,
+  .members-hero-blobs .shape-blob.nine,
+  .nationals-hero-blobs .shape-blob.nine {
+    height: 320px;
+    width: 420px;
+  }
+
+  .about-photo-blobs .shape-blob.eight,
+  .about-photo-blobs .shape-blob.nine {
+    height: 300px;
+    width: 360px;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-green {
+    height: 440px;
+    width: 500px;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-blue {
+    height: 390px;
+    width: 360px;
+  }
+
+  .apply-hero-blobs .shape-blob.eight {
+    height: 320px;
+    width: 420px;
+    left: calc(50% - 170px);
+  }
+
+  .apply-hero-blobs .shape-blob.nine {
+    height: 320px;
+    width: 420px;
+    left: calc(50% - 270px);
+  }
+}
+
+/* Video stack — allow soft edges on desktop blur too (page html clips sideways spill) */
+.blob-c.rush-video-blobs {
+  overflow: visible;
 }
 
 .footer {
@@ -713,6 +1403,18 @@ img.blue-shadow {
   transform: translateY(-10px);
 }
 
+@media (max-width: 640px) {
+  .pledge-class {
+    bottom: 8px;
+    right: 8px;
+    font-size: 12px;
+  }
+
+  .active-member:hover .pledge-class {
+    transform: translateY(-10px);
+  }
+}
+
 .contact-us {
   width: 250px;
   height: 50px;
@@ -871,8 +1573,149 @@ img.blue-shadow {
   background-color: var(--light-blue);
 }
 
-.hover-text-custom:hover {
-  color: #8ddd88;
+/* Smooth color for nav/footer text links + admin/portal text actions */
+.hover-text-custom,
+.tap-text {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Desktop hover only — avoids sticky color after tap on phones */
+@media (hover: hover) and (pointer: fine) {
+  .hover-text-custom:hover {
+    color: #8ddd88;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Brother/admin text actions — soft blue, not nav green */
+  .tap-text:hover:not(:has(.tap-text-label)) {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tap-text:hover .tap-text-label {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tap-card:hover .tap-text-label {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/*
+ * Mobile tap press only — do not override desktop hover:scale transitions.
+ * (Desktop keeps Tailwind transition-all / hover:scale-105.)
+ */
+@media (max-width: 1023px) {
+  .tap-press,
+  .tap-card,
+  .contact-us,
+  .more-about-us a {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    /* Release spring — slight overshoot so it reads as bounce-back, not a stuck dip */
+    transition:
+      transform 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
+      background-color 0.28s cubic-bezier(0.33, 1, 0.68, 1),
+      color 0.28s cubic-bezier(0.33, 1, 0.68, 1),
+      box-shadow 0.28s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  /*
+   * Kill sticky hover:scale-105, but use scale(1) — not transform:none.
+   * transform:none !important snapped release and killed the bounce.
+   */
+  .tap-press:hover:not(.is-pressed):not(.is-pressed-scale),
+  .tap-card:hover:not(.is-pressed),
+  .contact-us:hover:not(.is-pressed),
+  a:hover:not(:has(.is-pressed)):not(:has(.is-pressed-scale)) > .contact-us:not(.is-pressed) {
+    transform: scale(1) !important;
+  }
+
+  .contact-us.is-pressed,
+  .tap-press.is-pressed {
+    transition:
+      transform 0.1s cubic-bezier(0.33, 1, 0.68, 1),
+      background-color 0.1s cubic-bezier(0.33, 1, 0.68, 1),
+      color 0.1s cubic-bezier(0.33, 1, 0.68, 1);
+    transform: scale(0.94) !important;
+    background-color: #234c8b !important;
+    color: #ffffff !important;
+  }
+
+  /*
+   * Brother/admin dark buttons (#163556) — dip darker, not to public #234c8b
+   * which reads as a lighter flash on those CTAs.
+   */
+  .tap-press.tap-press-dark.is-pressed {
+    background-color: #0f2840 !important;
+    color: #ffffff !important;
+  }
+
+  /* Selected pills: scale only — never apply navy (set via JS is-pressed-scale) */
+  .tap-press.is-pressed-scale {
+    transition: transform 0.1s cubic-bezier(0.33, 1, 0.68, 1);
+    transform: scale(0.94) !important;
+  }
+
+  /* Text link — no pill fill, just deepen the blue */
+  .more-about-us a.is-pressed {
+    background-color: transparent !important;
+    color: #234c8b !important;
+  }
+
+  .hover-text-custom.is-pressed {
+    background-color: transparent !important;
+    color: #8ddd88 !important;
+    transform: none !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /* Brother/admin text — soft blue flash (not nav green); no nav delay in JS */
+  .tap-text.is-pressed:not(:has(.tap-text-label)) {
+    background-color: transparent !important;
+    color: #a8d4ff !important;
+    transform: none !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /* Section cards: only the View/Open label flashes (not the whole card title) */
+  .tap-text.is-pressed {
+    background-color: transparent !important;
+    transform: none !important;
+  }
+
+  .tap-text.is-pressed .tap-text-label {
+    color: #a8d4ff !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /*
+   * Quick-link cards — pill-like press + spring bounce (no sticky color through nav).
+   * Slightly softer scale than pills since the hit target is larger.
+   */
+  .tap-card.is-pressed {
+    transition: transform 0.1s cubic-bezier(0.33, 1, 0.68, 1);
+    transform: scale(0.97) !important;
+    background-color: transparent !important;
+  }
+
+  .tap-card.is-pressed .tap-text-label {
+    color: #a8d4ff !important;
+    transition: color 0.1s cubic-bezier(0.33, 1, 0.68, 1);
+  }
 }
 
 button:hover .close-icon path {
@@ -881,6 +1724,7 @@ button:hover .close-icon path {
 
 /* Nationals page styles */
 .logo-container-2{
+    position: relative;
     width: 72px;
     /* Set the width */
     height: 72px;
@@ -894,6 +1738,7 @@ button:hover .close-icon path {
     justify-content: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Optional: add a shadow */
+    overflow: hidden;
 }
 
 .logo-container-2 .logo-image {
@@ -925,7 +1770,6 @@ button:hover .close-icon path {
 }
 
 .network-logo-simple {
-  animation: simple-fade-in 0.5s ease-out;
   transition: transform 0.2s ease;
   display: inline-block;
   object-fit: contain;
@@ -938,6 +1782,8 @@ button:hover .close-icon path {
   .network-logo-simple {
     min-width: 50px;
     max-width: 150px;
+    opacity: 0;
+    animation: simple-fade-in 0.5s ease-out forwards;
   }
 }
 

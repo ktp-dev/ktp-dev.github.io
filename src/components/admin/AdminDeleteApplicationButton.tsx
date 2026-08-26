@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { deleteApplicationAction } from '@/app/admin/apps/actions'
+import { adminIconDangerBtnClass } from '@/components/admin/admin-ui'
 
 export function AdminDeleteApplicationButton({
   cycleId,
@@ -45,7 +46,7 @@ export function AdminDeleteApplicationButton({
         type="button"
         onClick={onDelete}
         disabled={pending}
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+        className={`${adminIconDangerBtnClass} h-9 w-9`}
         title={pending ? 'Deleting…' : 'Delete application'}
         aria-label={pending ? 'Deleting application' : 'Delete application'}
       >

@@ -8,6 +8,8 @@ import {
   adminFieldClass,
   adminFieldEditStyle,
   adminHeadingClass,
+  adminIconBtnClass,
+  adminIconDangerBtnClass,
   adminInnerCardClass,
   adminInnerCardStyle,
   adminLabelClass,
@@ -477,10 +479,10 @@ export default function RushScheduleManager({
                   type="button"
                   onClick={() => handleMoveClick(event.id, -1)}
                   disabled={isFirst}
-                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                  className={`flex h-8 w-9 items-center justify-center rounded-full transition-all duration-200 ${
                     isFirst
                       ? 'cursor-not-allowed text-slate-600'
-                      : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
+                      : `${adminIconBtnClass} !h-8`
                   }`}
                   title={isFirst ? 'Already at top' : 'Move up'}
                 >
@@ -508,10 +510,10 @@ export default function RushScheduleManager({
                   type="button"
                   onClick={() => handleMoveClick(event.id, 1)}
                   disabled={isLast}
-                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                  className={`flex h-8 w-9 items-center justify-center rounded-full transition-all duration-200 ${
                     isLast
                       ? 'cursor-not-allowed text-slate-600'
-                      : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-white/10 hover:text-white'
+                      : `${adminIconBtnClass} !h-8`
                   }`}
                   title={isLast ? 'Already at bottom' : 'Move down'}
                 >
@@ -535,7 +537,7 @@ export default function RushScheduleManager({
               <div className="flex shrink-0 gap-0.5 -mt-1 -mr-1">
                 <button
                   onClick={() => handleEditEvent(event)}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white"
+                  className={`${adminIconBtnClass} h-9 w-9`}
                   title="Edit event"
                 >
                   <svg
@@ -550,7 +552,7 @@ export default function RushScheduleManager({
                 <button
                   onClick={() => handleDelete(event.id)}
                   disabled={isDeleting === event.id}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+                  className={`${adminIconDangerBtnClass} h-9 w-9`}
                   title="Delete event"
                 >
                   {isDeleting === event.id ? (
@@ -592,7 +594,7 @@ export default function RushScheduleManager({
               onClick={handleCloseModal}
             />
             <div
-              className={`relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-white/10 bg-[#0f172a] p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`relative z-10 mx-4 max-h-[90vh] w-full min-w-0 max-w-2xl overflow-x-clip overflow-y-auto rounded-xl border border-white/10 bg-[#0f172a] p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isModalVisible
                   ? 'translate-y-0 scale-100 opacity-100'
                   : 'translate-y-3 scale-95 opacity-0'
@@ -607,7 +609,7 @@ export default function RushScheduleManager({
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white"
+                className={`${adminIconBtnClass} h-9 w-9`}
                 title="Close"
               >
                 <svg
@@ -625,8 +627,8 @@ export default function RushScheduleManager({
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-              <div>
+            <form onSubmit={handleSubmit} className="min-w-0 max-w-full space-y-4" autoComplete="off">
+              <div className="min-w-0">
                 <label
                   htmlFor="title"
                   className={adminLabelClass}
@@ -647,65 +649,71 @@ export default function RushScheduleManager({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
+              <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-3">
+                <div className="min-w-0">
                   <label
                     htmlFor="eventDate"
                     className={adminLabelClass}
                   >
                     Date <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    type="date"
-                    id="eventDate"
-                    name="eventDate"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    required
-                    className={`${adminFieldClass} ${
-                      eventDate ? '' : 'datetime-empty'
-                    }`}
-                    style={adminFieldEditStyle}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="date"
+                      id="eventDate"
+                      name="eventDate"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      required
+                      className={`${adminFieldClass} ${
+                        eventDate ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="startTime"
                     className={adminLabelClass}
                   >
                     Start Time <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    type="time"
-                    id="startTime"
-                    name="startTime"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    required
-                    className={`${adminFieldClass} ${
-                      startTime ? '' : 'datetime-empty'
-                    }`}
-                    style={adminFieldEditStyle}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="time"
+                      id="startTime"
+                      name="startTime"
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                      required
+                      className={`${adminFieldClass} ${
+                        startTime ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="endTime"
                     className={adminLabelClass}
                   >
                     End Time <span className={`font-normal ${adminMutedClass}`}>(Optional)</span>
                   </label>
-                  <input
-                    type="time"
-                    id="endTime"
-                    name="endTime"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className={`${adminFieldClass} ${
-                      endTime ? '' : 'datetime-empty'
-                    }`}
-                    style={adminFieldEditStyle}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="time"
+                      id="endTime"
+                      name="endTime"
+                      value={endTime}
+                      onChange={(e) => setEndTime(e.target.value)}
+                      className={`${adminFieldClass} ${
+                        endTime ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
               </div>
 

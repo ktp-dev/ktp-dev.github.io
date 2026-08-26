@@ -25,7 +25,7 @@ export function UmichGoogleButton({
     <button
       type="button"
       onClick={() => void login()}
-      className="mx-auto flex w-full max-w-[280px] cursor-pointer items-center justify-center gap-3 rounded-[40px] bg-[#315CA9] px-6 py-3 text-base font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
+      className="tap-press mx-auto flex w-full max-w-[280px] cursor-pointer items-center justify-center gap-3 rounded-[40px] bg-[#315CA9] px-6 py-3 text-base font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
     >
       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
         <svg className="h-5 w-5" viewBox="0 0 24 24">

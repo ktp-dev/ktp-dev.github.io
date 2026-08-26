@@ -41,17 +41,17 @@ export default function WideHeader({ tone = 'light' }: { tone?: 'light' | 'dark'
                 </div>
 
                 <div className="flex justify-center space-x-8 sm:space-x-12 md:space-x-16 lg:space-x-20">
-                    <Link className="font-medium hover:text-[#315CA9]" href="/about">
-                        About Us
+                    <Link className="font-medium transition-colors duration-300 ease-out hover:text-[#315CA9]" href="/about">
+                      About Us
                     </Link>
-                    <Link className="font-medium hover:text-[#315CA9]" href="/rush">
-                        Rush
+                    <Link className="font-medium transition-colors duration-300 ease-out hover:text-[#315CA9]" href="/rush">
+                      Rush
                     </Link>
-                    <Link className="font-medium hover:text-[#315CA9]" href="/members">
-                        Members
+                    <Link className="font-medium transition-colors duration-300 ease-out hover:text-[#315CA9]" href="/members">
+                      Members
                     </Link>
-                    <Link className="font-medium hover:text-[#315CA9]" href="/nationals">
-                        Nationals
+                    <Link className="font-medium transition-colors duration-300 ease-out hover:text-[#315CA9]" href="/nationals">
+                      Nationals
                     </Link>
                     <Link className="font-bold text-[#315CA9]" href="/apply">
                         Apply

@@ -4,7 +4,6 @@ import {
   adminHeadingClass,
   adminInnerCardClass,
   adminInnerCardStyle,
-  adminLinkClass,
   adminMutedClass,
   adminSectionCardClass,
   adminSectionCardStyle,
@@ -54,14 +53,14 @@ export function AdminQuickLinks({
           <Link
             key={link.href}
             href={link.href}
-            className={`${adminSectionCardClass} flex h-full cursor-pointer flex-col justify-between gap-4`}
+            className={`${adminSectionCardClass} tap-card flex h-full cursor-pointer flex-col justify-between gap-4`}
             style={adminSectionCardStyle}
           >
             <div className="min-w-0">
               <p className={`text-lg font-semibold ${adminHeadingClass}`}>{link.title}</p>
               <p className={`mt-1 text-sm ${adminMutedClass}`}>{link.subtitle}</p>
             </div>
-            <span className={adminLinkClass}>View</span>
+            <span className="tap-text-label text-sm font-semibold text-white">View</span>
           </Link>
         ))}
       </div>
@@ -76,11 +75,11 @@ export function AdminQuickLinks({
           <Link
             key={link.href}
             href={link.href}
-            className={`${adminInnerCardClass} cursor-pointer${isCurrent ? ' ring-2 ring-white/20' : ''}`}
+            className={`${adminInnerCardClass} tap-card cursor-pointer${isCurrent ? ' ring-2 ring-white/20' : ''}`}
             style={adminInnerCardStyle}
           >
             <p className={`min-w-0 text-sm font-medium ${adminBodyClass}`}>{link.title}</p>
-            <span className={`shrink-0 ${adminLinkClass}`}>
+            <span className="tap-text-label shrink-0 text-sm font-semibold text-white">
               {isCurrent ? 'Current' : 'View'}
             </span>
           </Link>

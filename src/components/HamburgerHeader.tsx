@@ -28,6 +28,8 @@ export default function HamburgerHeader({ tone = 'light' }: { tone?: 'light' | '
     }, [isDark]);
 
     if (isDark) {
+        // Below lg the public site uses a hamburger; brother chrome has no menu —
+        // drop Life App here so the bar stays logo-only on small screens.
         return (
             <div className="relative flex w-full flex-row items-center justify-between px-8 py-4 pt-4">
                 <div className="flex">
@@ -39,12 +41,6 @@ export default function HamburgerHeader({ tone = 'light' }: { tone?: 'light' | '
                         />
                     </Link>
                 </div>
-                <Link href="/life/" className="flex flex-row items-center justify-center">
-                    <img src="/logos/ktp_life_app.svg" alt="Life App" className="mr-2 h-auto w-8" />
-                    <p className="font-inter text-sm font-medium text-white sm:text-base">
-                        KTP Life App
-                    </p>
-                </Link>
             </div>
         );
     }
