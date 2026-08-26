@@ -58,7 +58,7 @@ export default function MembersDirectory({
               type="button"
               className={`cursor-pointer whitespace-nowrap rounded-[40px] px-3 py-2 text-center text-xs font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md tap-press sm:px-4 sm:text-sm md:text-base ${
                 selectedCategory === category
-                  ? 'bg-[#315CA9] text-white'
+                  ? 'tap-selected bg-[#315CA9] text-white'
                   : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'
               }`}
               onClick={() => {
@@ -80,7 +80,7 @@ export default function MembersDirectory({
                 type="button"
                 className={`flex-shrink-0 cursor-pointer whitespace-nowrap rounded-[40px] px-3 py-2 text-center text-xs font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md tap-press sm:px-4 sm:text-sm md:text-base ${
                   selectedGreekLetter === null
-                    ? 'bg-[#315CA9] text-white'
+                    ? 'tap-selected bg-[#315CA9] text-white'
                     : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'
                 }`}
                 onClick={() => setSelectedGreekLetter(null)}
@@ -93,7 +93,7 @@ export default function MembersDirectory({
                   type="button"
                   className={`flex-shrink-0 cursor-pointer whitespace-nowrap rounded-[40px] px-3 py-2 text-center text-xs font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md tap-press sm:px-4 sm:text-sm md:text-base ${
                     selectedGreekLetter === letter
-                      ? 'bg-[#315CA9] text-white'
+                      ? 'tap-selected bg-[#315CA9] text-white'
                       : 'bg-gray-200/60 text-gray-700 hover:bg-gray-300/80'
                   }`}
                   onClick={() => setSelectedGreekLetter(letter)}

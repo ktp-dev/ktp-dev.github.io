@@ -4,15 +4,9 @@ import { MdOutlineWork } from 'react-icons/md'
 import { FaPeopleGroup } from 'react-icons/fa6'
 import { PiGlobeBold } from 'react-icons/pi'
 import { HiAcademicCap } from 'react-icons/hi2'
+import AboutSectionNav from '@/components/AboutSectionNav'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-
-const categories = [
-  { label: "President's Welcome", href: '#presidents-welcome-section' },
-  { label: 'Our Pillars', href: '#our-pillars-section' },
-  { label: 'History', href: '#history-section' },
-  { label: 'DEI Commitment', href: '#dei-commitment-section' },
-] as const
 
 export default function About() {
   return (
@@ -48,20 +42,7 @@ export default function About() {
         </div>
 
         <div className="relative mb-8 px-6 sm:mb-12 sm:mt-0 sm:px-8 md:px-16 lg:mb-16 lg:px-24 xl:px-32">
-          <nav
-            className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-4 md:gap-6 lg:gap-8"
-            aria-label="About sections"
-          >
-            {categories.map((category) => (
-              <a
-                key={category.href}
-                href={category.href}
-                className="tap-press cursor-pointer whitespace-nowrap rounded-[40px] bg-gray-200/60 px-3 py-2 text-center text-xs font-semibold text-gray-700 transition-all duration-300 hover:scale-105 hover:bg-gray-300/80 hover:shadow-md sm:px-4 sm:text-sm md:text-base"
-              >
-                {category.label}
-              </a>
-            ))}
-          </nav>
+          <AboutSectionNav />
         </div>
 
         <div className="flex flex-col space-y-12">

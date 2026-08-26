@@ -6,8 +6,8 @@ export default function ApplyLayout({ children }: { children: React.ReactNode })
     <div className="relative flex min-h-dvh flex-col">
       {/*
         Mobile blobs on the outer relative CB (not inside page-spill-clip) so soft
-        edges can sit under the sticky header instead of clipping at the nav.
-        top/left only — never inset-0.
+        edges can sit under the sticky header. Sideways spill is clipped via
+        .apply-hero-blobs { overflow: hidden }. top/left only — never inset-0.
       */}
       <div className="pointer-events-none absolute left-0 right-0 top-0 z-0 blob-c apply-mobile-blobs apply-hero-blobs lg:hidden">
         <div className="shape-blob eight" />

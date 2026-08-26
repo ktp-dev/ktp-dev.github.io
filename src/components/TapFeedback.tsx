@@ -4,16 +4,27 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 const PRESS_SELECTOR = '.tap-press, .contact-us, .hover-text-custom, .more-about-us a'
-/** Keep pressed look after finger lifts so scale is actually visible */
-const LINGER_MS = 560
+const PRESS_CLASSES = ['is-pressed', 'is-pressed-scale'] as const
+/** Almost none — spring back on lift (long linger made buttons feel sluggish) */
+const LINGER_MS = 40
+/** Nav text: brief beat so green can ease in before same-tab navigate */
+const NAV_TEXT_NAV_DELAY_MS = 160
+
+function isMobileTapViewport() {
+  return window.matchMedia('(max-width: 1023px)').matches
+}
 
 function clearPressedInstant(el: Element) {
   const node = el as HTMLElement
   const prev = node.style.transition
   node.style.transition = 'none'
-  el.classList.remove('is-pressed')
+  el.classList.remove(...PRESS_CLASSES)
   void node.offsetWidth
   node.style.transition = prev
+}
+
+function hasPressClass(el: Element) {
+  return PRESS_CLASSES.some((c) => el.classList.contains(c))
 }
 
 /**
@@ -52,14 +63,14 @@ function sameTabInAppLink(el: Element): HTMLAnchorElement | null {
 }
 
 /**
- * Press feedback on touchstart so scale is visible under the finger.
- * Same-tab in-app links: navigate on touchend (iOS cancels click after scale).
+ * Press feedback on touchstart (mobile viewport only).
+ * Selected pills use scale-only — no navy background dip on re-tap.
  */
 export default function TapFeedback() {
   const pathname = usePathname()
 
   useEffect(() => {
-    document.querySelectorAll('.is-pressed').forEach(clearPressedInstant)
+    document.querySelectorAll('.is-pressed, .is-pressed-scale').forEach(clearPressedInstant)
   }, [pathname])
 
   useEffect(() => {
@@ -73,13 +84,15 @@ export default function TapFeedback() {
       if (existing) clearTimeout(existing)
 
       const timer = setTimeout(() => {
-        el.classList.remove('is-pressed')
+        el.classList.remove(...PRESS_CLASSES)
         timers.delete(el)
       }, LINGER_MS)
       timers.set(el, timer)
     }
 
     const onStart = (event: TouchEvent) => {
+      if (!isMobileTapViewport()) return
+
       const target = event.target
       if (!(target instanceof Element)) return
       const el = target.closest(PRESS_SELECTOR)
@@ -95,13 +108,16 @@ export default function TapFeedback() {
       const touch = event.changedTouches[0]
       startX = touch?.clientX ?? 0
       startY = touch?.clientY ?? 0
-      el.classList.add('is-pressed')
+
+      el.classList.remove(...PRESS_CLASSES)
+      // Already-selected blue pills: scale only (navy dip feels broken on re-tap)
+      el.classList.add(el.classList.contains('tap-selected') ? 'is-pressed-scale' : 'is-pressed')
     }
 
     const onEnd = (event: TouchEvent) => {
       const el = active
       active = null
-      if (!el || !el.classList.contains('is-pressed')) return
+      if (!el || !hasPressClass(el)) return
 
       const touch = event.changedTouches[0]
       const dx = Math.abs((touch?.clientX ?? 0) - startX)
@@ -113,11 +129,22 @@ export default function TapFeedback() {
 
       scheduleClear(el)
 
+      if (!isMobileTapViewport()) return
+
       const anchor = sameTabInAppLink(el)
       if (!anchor) return
 
       // Stop the cancelled-click path; go ourselves (Interest Form never hits this).
       event.preventDefault()
+
+      const isNavText = el.classList.contains('hover-text-custom')
+      if (isNavText) {
+        window.setTimeout(() => {
+          window.location.assign(anchor.href)
+        }, NAV_TEXT_NAV_DELAY_MS)
+        return
+      }
+
       window.location.assign(anchor.href)
     }
 
@@ -128,11 +155,10 @@ export default function TapFeedback() {
 
     const onPageHide = () => {
       active = null
-      document.querySelectorAll('.is-pressed').forEach(clearPressedInstant)
+      document.querySelectorAll('.is-pressed, .is-pressed-scale').forEach(clearPressedInstant)
     }
 
     document.addEventListener('touchstart', onStart, { passive: true, capture: true })
-    // passive: false so we can preventDefault when forcing in-app navigation
     document.addEventListener('touchend', onEnd, { passive: false, capture: true })
     document.addEventListener('touchcancel', onCancel, { passive: true, capture: true })
     window.addEventListener('pagehide', onPageHide)
