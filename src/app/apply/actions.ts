@@ -320,7 +320,7 @@ export async function submitApply(input: {
 
     // Email failure must not roll back a successful submission.
     const emailResult = await sendApplicationConfirmation({
-      email: auth.user.email,
+      email: auth.application.email,
       preferredName: parsedFields.data.preferred_name,
       firstName: parsedFields.data.first_name,
       cycleName: auth.cycle.name,
