@@ -87,7 +87,7 @@ export function SignedInAccountBar({
         type="button"
         onClick={() => void handleSignOut()}
         disabled={pending}
-        className={`shrink-0 cursor-pointer font-semibold transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 ${
+        className={`tap-text shrink-0 cursor-pointer font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
           isDark ? 'text-white' : 'text-[#315CA9]'
         }`}
       >

@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+import { PortalBlobsDesktop, PortalBlobsMobile } from '@/components/PortalBlobs'
 import { PortalDarkChrome } from '@/components/PortalDarkChrome'
 import { SignedInAccountBar } from '@/components/SignedInAccountBar'
 
@@ -12,7 +13,7 @@ export const portalInnerCardClass =
   'flex items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white/80 px-4 py-3'
 export const portalInnerCardStyle = { boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)' }
 export const portalBtnClass =
-  'inline-flex px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+  'tap-press inline-flex px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
 
 /** Dark / frosty variants — same structure as light cards; do not edit the light exports above. */
 export const portalDarkSectionCardClass =
@@ -48,68 +49,17 @@ export function PortalShell({
   tone?: 'light' | 'dark'
 }) {
   const isDark = tone === 'dark'
+  const blobTone = isDark ? 'dark' : 'light'
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-[#0f172a]' : ''}`}>
+    <div className={`relative min-h-screen ${isDark ? 'bg-[#0f172a]' : ''}`}>
       {isDark ? <PortalDarkChrome /> : null}
+      {/* Mobile blobs on outer CB so long pages keep corner glows; desktop stays padded */}
+      <PortalBlobsMobile tone={blobTone} />
       <Header tone={isDark ? 'dark' : 'light'} />
 
       <div className="relative flex-1 px-6 sm:px-8 md:px-16 lg:px-20">
-        <div className="blob-c inset-0 z-0" style={{ overflow: 'visible' }}>
-          {isDark ? (
-            <>
-              <div
-                className="shape-blob eight"
-                style={{
-                  left: 'calc(8% - 40px)',
-                  top: '-1%',
-                  background: 'rgba(255, 255, 255, 0.12)',
-                }}
-              />
-              <div
-                className="shape-blob nine"
-                style={{
-                  left: 'calc(22% - 20px)',
-                  top: '3%',
-                  background: 'rgba(168, 212, 255, 0.16)',
-                }}
-              />
-              <div
-                className="shape-blob eight"
-                style={{
-                  left: 'auto',
-                  right: '-2%',
-                  top: 'auto',
-                  bottom: '-4%',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                }}
-              />
-              <div
-                className="shape-blob nine"
-                style={{
-                  left: 'auto',
-                  right: '6%',
-                  top: 'auto',
-                  bottom: '2%',
-                  background: 'rgba(168, 212, 255, 0.14)',
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <div className="shape-blob eight" style={{ left: 'calc(8% - 40px)', top: '-1%' }} />
-              <div className="shape-blob nine" style={{ left: 'calc(22% - 20px)', top: '3%' }} />
-              <div
-                className="shape-blob eight"
-                style={{ left: 'auto', right: '-2%', top: 'auto', bottom: '-4%' }}
-              />
-              <div
-                className="shape-blob nine"
-                style={{ left: 'auto', right: '6%', top: 'auto', bottom: '2%' }}
-              />
-            </>
-          )}
-        </div>
+        <PortalBlobsDesktop tone={blobTone} />
 
         <div className="relative z-10 w-full">
           <div className="pb-12 pt-12 sm:pt-16">

@@ -8,12 +8,14 @@ import {
   adminFieldClass,
   adminFieldEditStyle,
   adminHeadingClass,
+  adminIconDangerBtnClass,
   adminMutedClass,
   adminPrimaryBtnClass,
   adminSectionCardClass,
   adminSectionCardStyle,
   adminTableRowClass,
   adminTableWrapClass,
+  adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 import type { ClientAdmin } from '@/lib/admins'
 
@@ -88,7 +90,7 @@ export default function AdminListManager({
         </form>
       </div>
 
-      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`}>
+      <div className={`max-h-64 overflow-y-auto ${adminTableWrapClass}`} style={adminTableWrapStyle}>
         {admins.length === 0 ? (
           <p className={`px-4 py-3 text-sm ${adminMutedClass}`}>No admins yet.</p>
         ) : (
@@ -114,10 +116,10 @@ export default function AdminListManager({
                     type="button"
                     onClick={() => void handleRemove(admin.email)}
                     disabled={isSelf || isLast || Boolean(pendingEmail)}
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                    className={`h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
                       isSelf || isLast
-                        ? 'cursor-not-allowed text-slate-600'
-                        : 'cursor-pointer text-slate-400 hover:scale-110 hover:bg-red-500/10 hover:text-red-300'
+                        ? 'flex cursor-not-allowed text-slate-600'
+                        : `${adminIconDangerBtnClass} !h-7 !w-7`
                     }`}
                     title={
                       isSelf

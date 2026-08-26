@@ -245,7 +245,7 @@ export default function AdminRushDashboard({
 
   return (
     <div className="space-y-6">
-      <div className={adminSectionCardClass} style={adminSectionCardStyle}>
+      <div className={`${adminSectionCardClass} min-w-0`} style={adminSectionCardStyle}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
             <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Rush cycle</h2>
@@ -322,9 +322,12 @@ export default function AdminRushDashboard({
         {error ? <p className="mb-3 text-sm text-red-400">{error}</p> : null}
 
         <form id={CYCLE_FORM_ID} onSubmit={(event) => void handleSaveCycle(event)}>
-          <div className={`${adminInnerCardClass} flex-col items-stretch`} style={adminInnerCardStyle}>
-            <div className="w-full space-y-3">
-              <div>
+          <div
+            className={`${adminInnerCardClass} min-w-0 flex-col items-stretch overflow-x-clip rounded-xl`}
+            style={adminInnerCardStyle}
+          >
+            <div className="w-full min-w-0 max-w-full space-y-3">
+              <div className="min-w-0">
                 <label htmlFor="cycle-name" className={adminLabelClass}>
                   Cycle name <span className="text-red-400">*</span>
                 </label>
@@ -340,45 +343,49 @@ export default function AdminRushDashboard({
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
+              <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2">
+                <div className="min-w-0">
                   <label htmlFor="opens-at" className={adminLabelClass}>
                     Open Rush Opens <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    id="opens-at"
-                    type="datetime-local"
-                    className={`${adminFieldClass} ${fields.opensAt ? adminBodyClass : 'datetime-empty'}`}
-                    style={adminFieldStyleFor(fieldsEditable)}
-                    value={fields.opensAt}
-                    onChange={(event) =>
-                      setFields((current) => ({ ...current, opensAt: event.target.value }))
-                    }
-                    required
-                    disabled={!fieldsEditable}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      id="opens-at"
+                      type="datetime-local"
+                      className={`${adminFieldClass} ${fields.opensAt ? adminBodyClass : 'datetime-empty'}`}
+                      style={adminFieldStyleFor(fieldsEditable)}
+                      value={fields.opensAt}
+                      onChange={(event) =>
+                        setFields((current) => ({ ...current, opensAt: event.target.value }))
+                      }
+                      required
+                      disabled={!fieldsEditable}
+                    />
+                  </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="closes-at" className={adminLabelClass}>
                     Open Rush Closes <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    id="closes-at"
-                    type="datetime-local"
-                    className={`${adminFieldClass} ${fields.closesAt ? adminBodyClass : 'datetime-empty'}`}
-                    style={adminFieldStyleFor(fieldsEditable)}
-                    value={fields.closesAt}
-                    onChange={(event) =>
-                      setFields((current) => ({ ...current, closesAt: event.target.value }))
-                    }
-                    required
-                    disabled={!fieldsEditable}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      id="closes-at"
+                      type="datetime-local"
+                      className={`${adminFieldClass} ${fields.closesAt ? adminBodyClass : 'datetime-empty'}`}
+                      style={adminFieldStyleFor(fieldsEditable)}
+                      value={fields.closesAt}
+                      onChange={(event) =>
+                        setFields((current) => ({ ...current, closesAt: event.target.value }))
+                      }
+                      required
+                      disabled={!fieldsEditable}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div>
+              <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="min-w-0">
                   <label htmlFor="interest-form-url" className={adminLabelClass}>
                     Interest form URL <span className="text-red-400">*</span>
                   </label>
@@ -396,7 +403,7 @@ export default function AdminRushDashboard({
                     disabled={!fieldsEditable}
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="youtube-url" className={adminLabelClass}>
                     YouTube URL <span className="text-red-400">*</span>
                   </label>
@@ -414,7 +421,7 @@ export default function AdminRushDashboard({
                     disabled={!fieldsEditable}
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="calendar-url" className={adminLabelClass}>
                     Google Calendar URL <span className="text-red-400">*</span>
                   </label>

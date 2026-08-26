@@ -3,19 +3,26 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
-const PRESS_SELECTOR = '.tap-press, .contact-us, .hover-text-custom, .more-about-us a'
+const PRESS_SELECTOR =
+  '.tap-press, .tap-card, .contact-us, .hover-text-custom, .tap-text, .more-about-us a'
 const PRESS_CLASSES = ['is-pressed', 'is-pressed-scale'] as const
 /** Release press class immediately on lift so the bounce can play */
 const LINGER_MS = 0
-/** Nav text needs a slightly longer visible state than pill buttons */
-const NAV_TEXT_LINGER_MS = 130
-/** Nav text: brief beat so green can ease in before same-tab navigate */
-const NAV_TEXT_NAV_DELAY_MS = 130
-/** Same-tab CTAs: let bounce start before navigating away */
+/** Text links (nav + admin): brief flash for non-nav actions (e.g. Sign out) */
+const TEXT_PRESS_LINGER_MS = 35
+/** Same-tab CTAs + cards: let bounce start before navigating away */
 const BUTTON_NAV_DELAY_MS = 180
 
 function isMobileTapViewport() {
   return window.matchMedia('(max-width: 1023px)').matches
+}
+
+function isTextPressTarget(el: Element) {
+  return el.classList.contains('hover-text-custom') || el.classList.contains('tap-text')
+}
+
+function isCardPressTarget(el: Element) {
+  return el.classList.contains('tap-card')
 }
 
 function clearPressedInstant(el: Element) {
@@ -137,14 +144,23 @@ export default function TapFeedback() {
         return
       }
 
-      const isNavText = el.classList.contains('hover-text-custom')
-      if (isNavText) {
+      const isTextPress = isTextPressTarget(el)
+      const isCardPress = isCardPressTarget(el)
+      const willNavigate =
+        isMobileTapViewport() && Boolean(sameTabInAppLink(el))
+
+      if (isCardPress) {
+        // Pill-like: clear on lift so spring-back plays (don't stick through nav)
+        scheduleClear(el)
+      } else if (isTextPress && willNavigate) {
+        // Keep nav/admin text color until the next page loads
+      } else if (isTextPress) {
         const existing = timers.get(el)
         if (existing) clearTimeout(existing)
         const timer = setTimeout(() => {
-          el.classList.remove(...PRESS_CLASSES)
+          clearPressedInstant(el)
           timers.delete(el)
-        }, NAV_TEXT_LINGER_MS)
+        }, TEXT_PRESS_LINGER_MS)
         timers.set(el, timer)
       } else {
         scheduleClear(el)
@@ -158,14 +174,13 @@ export default function TapFeedback() {
       // Stop the cancelled-click path; go ourselves (Interest Form never hits this).
       event.preventDefault()
 
-      if (isNavText) {
-        window.setTimeout(() => {
-          window.location.assign(anchor.href)
-        }, NAV_TEXT_NAV_DELAY_MS)
+      if (isTextPress && !isCardPress) {
+        // Color already on from touchstart — navigate immediately; stays until unload
+        window.location.assign(anchor.href)
         return
       }
 
-      // Brief delay so the spring-back can start before the page unloads
+      // Pills + cards: brief delay so the spring-back can start before unload
       window.setTimeout(() => {
         window.location.assign(anchor.href)
       }, BUTTON_NAV_DELAY_MS)

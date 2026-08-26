@@ -61,24 +61,29 @@ export default function Home() {
       <Header />
       {/* Clip sideways spill below header — overflow on homepage-grid breaks sticky nav */}
       <div className="relative w-full max-w-full flex-1 overflow-x-hidden">
+      {/*
+        Mobile blobs: full page width (not inside the hero text column).
+        Sideways spill clipped only by this wrapper + html overflow-x.
+        Desktop ten/eleven stack stays in the hero row below.
+      */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 z-0 block blob-c home-mobile-blobs md:hidden">
+        <div className="shape-blob twelve"></div>
+        <div className="shape-blob thirteen"></div>
+      </div>
+
       {/* Main content */}
-      <div className='flex flex-row justify-center xl:justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
-        <div className="absolute inset-0 z-0 hidden blob-c md:block">
+      <div className='relative z-10 flex flex-row justify-center xl:justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
+        <div className="pointer-events-none absolute inset-0 z-0 hidden blob-c md:block">
             <div className="shape-blob ten"></div>
             <div className="shape-blob eleven"></div>
         </div>
-        <div className='flex-1 flex flex-col items-end'>
+        <div className='relative z-10 flex-1 flex flex-col items-end'>
           <img src={`/images/home/ae_lighthouse.jpg`} className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
           <img src={`/images/home/rock.JPEG`} className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
           <img src={`/images/home/agoats.jpeg`} className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
         </div>
 
-        <div className='flex flex-col flex-none'>
-          {/* top/left only — inset-0 was covering the page and blocking clicks below */}
-          <div className="absolute left-0 right-0 top-0 z-0 block overflow-hidden blob-c home-mobile-blobs md:hidden">
-              <div className="shape-blob twelve"></div>
-              <div className="shape-blob thirteen"></div>
-          </div>
+        <div className='relative z-10 flex flex-col flex-none'>
           <div className='relative z-10 flex flex-col items-center justify-center'>
             <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36 font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
             We&apos;re the University of Michigan&apos;s Premier Technology Fraternity
@@ -96,7 +101,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className='flex-1 flex flex-col items-start'>
+        <div className='relative z-10 flex-1 flex flex-col items-start'>
           <img src={`/images/home/alpha_delta_lq.jpeg`} className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
 
           <div className='flex flex-row'>
@@ -106,7 +111,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="z-20 flex flex-col px-6 sm:px-8 md:px-12 lg:px-20">
+      <div className="relative z-10 flex flex-col px-6 sm:px-8 md:px-12 lg:px-20">
         {/* Description */}
         <div className="mb-8 flex flex-col md:mb-12 2xl:flex-row">
           <div className="hidden flex-row justify-center gap-4 md:justify-start 2xl:flex">

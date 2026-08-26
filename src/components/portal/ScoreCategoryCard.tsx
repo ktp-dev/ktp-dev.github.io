@@ -17,7 +17,7 @@ import { resolveRatingLabels, ratingLabelsToList } from '@/lib/rubric-ui'
 const MODAL_ANIMATION_MS = 280
 
 const helpBtnClass =
-  'inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
+  'tap-press tap-press-dark inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
 
 function HelpIcon() {
   return (
@@ -39,7 +39,7 @@ function HelpIcon() {
 }
 
 const closeBtnClass =
-  'shrink-0 cursor-pointer text-xs font-semibold text-white transition-opacity hover:opacity-80'
+  'tap-text shrink-0 cursor-pointer text-xs font-semibold text-white'
 
 export function ScoreCategoryCard({
   category,

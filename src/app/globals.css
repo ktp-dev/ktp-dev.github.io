@@ -73,6 +73,88 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"] {
   color-scheme: dark;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  /* Native controls have a large intrinsic min-width — without this they blow out grid cards */
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/*
+ * iOS Safari: the ::-webkit-datetime-edit internals keep a fixed preferred width
+ * even when the <input> is width:100%. Force those pieces to shrink/clip,
+ * and keep the value vertically centered in h-10 fields.
+ */
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit,
+input[type="datetime-local"]::-webkit-datetime-edit {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Wrapper used around date/time fields in admin forms */
+.admin-datetime-wrap {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 0.375rem; /* match rounded-md fields */
+  /* Keep a visible right edge/radius when WebKit content is clipped inside */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.admin-datetime-wrap:focus-within {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.admin-datetime-wrap input[type='date'],
+.admin-datetime-wrap input[type='time'],
+.admin-datetime-wrap input[type='datetime-local'] {
+  /* Wrapper draws the border — avoid a double line / clipped input stroke */
+  border-color: transparent !important;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+
+/* Phones: slightly tighter field padding so datetime chrome fits the card */
+@media (max-width: 430px) {
+  input[type='date'].admin-field,
+  input[type='time'].admin-field,
+  input[type='datetime-local'].admin-field,
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'] {
+    padding-left: 0.5rem;
+    padding-right: 0.35rem;
+    font-size: 0.8125rem;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='time']::-webkit-calendar-picker-indicator,
+  input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0;
+    background-size: 1rem 1rem;
+  }
 }
 
 /* Replace native (often black) picker glyphs with slate-500 SVGs */
@@ -459,6 +541,8 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
 @media (max-width: 1023px) {
   .blob-c.home-mobile-blobs {
     filter: none;
+    /* Let the page wrapper clip sideways spill — don't box-clip soft edges here */
+    overflow: visible;
   }
 
   .home-mobile-blobs .shape-blob.twelve {
@@ -473,9 +557,9 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     animation: none !important;
     /* Match keyframe rest; base rotate(-180deg) would snap in without this */
     transform: none;
-    /* Nudge up from base 40% — still below green; +compensate for clip wrapper below header */
-    top: 6%;
-    left: 14%;
+    top: 16%;
+    /* Pair centered on the page (blue sits slightly right of mid) */
+    left: calc(50% - 140px);
     height: 260px;
     width: 400px;
   }
@@ -491,9 +575,9 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     -webkit-animation: none !important;
     animation: none !important;
     transform: none;
-    /* Nudge down from base 2% — still above blue; +compensate for clip wrapper below header */
-    top: 1%;
-    left: -6%;
+    top: 11%;
+    /* Green sits slightly left of mid so both colors read */
+    left: calc(50% - 260px);
     height: 260px;
     width: 400px;
   }
@@ -764,14 +848,16 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
   }
 
   .apply-hero-blobs .shape-blob.eight {
-    left: calc(2% - 40px);
+    /* Pair centered on the page (blue slightly right of mid) */
+    left: calc(50% - 120px);
     top: 14%;
     height: 240px;
     width: 320px;
   }
 
   .apply-hero-blobs .shape-blob.nine {
-    left: calc(42% - 20px);
+    /* Green slightly left of mid so both colors read */
+    left: calc(50% - 220px);
     top: 18%;
     height: 240px;
     width: 320px;
@@ -851,6 +937,201 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     ) !important;
     top: calc(50vh - 260px);
     left: calc(50% - 160px);
+  }
+
+  /*
+   * Unauthorized mobile only — mid-viewport like login (50%/50vh).
+   * Desktop Unauthorized blobs are untouched.
+   */
+  .blob-c.unauthorized-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.eight,
+  .unauthorized-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    border: none;
+    padding: 0;
+    height: 820px;
+    width: 820px;
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.eight {
+    background: radial-gradient(
+      circle 360px at center,
+      rgba(168, 212, 255, 0.55) 0%,
+      rgba(168, 212, 255, 0.3) 38%,
+      rgba(168, 212, 255, 0.08) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 430px);
+    left: calc(50% - 520px);
+  }
+
+  .unauthorized-mobile-blobs .shape-blob.nine {
+    background: radial-gradient(
+      circle 380px at center,
+      rgba(156, 235, 156, 0.5) 0%,
+      rgba(156, 235, 156, 0.28) 38%,
+      rgba(156, 235, 156, 0.08) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 340px);
+    left: calc(50% - 220px);
+  }
+
+  /*
+   * Portal + Admin mobile — same freeze/no-blur recipe as login.
+   * Inline left/top/right/bottom from PortalBlobShapes stay; only paint/motion change.
+   * Desktop blob-c (lg:block) is untouched.
+   */
+  .blob-c.portal-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+  }
+
+  .portal-mobile-blobs .shape-blob.eight,
+  .portal-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    height: 420px;
+    width: 420px;
+  }
+
+  .portal-mobile-blobs--dark .shape-blob.eight {
+    background: radial-gradient(
+      circle 160px at center,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.07) 38%,
+      rgba(255, 255, 255, 0.022) 68%,
+      transparent 100%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--dark .shape-blob.nine {
+    background: radial-gradient(
+      circle 170px at center,
+      rgba(168, 212, 255, 0.14) 0%,
+      rgba(168, 212, 255, 0.075) 38%,
+      rgba(168, 212, 255, 0.025) 68%,
+      transparent 100%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--light .shape-blob.eight {
+    background: radial-gradient(
+      circle 160px at center,
+      rgba(168, 212, 255, 0.85) 0%,
+      rgba(168, 212, 255, 0.42) 38%,
+      transparent 72%
+    ) !important;
+  }
+
+  .portal-mobile-blobs--light .shape-blob.nine {
+    background: radial-gradient(
+      circle 170px at center,
+      rgba(156, 235, 156, 0.85) 0%,
+      rgba(156, 235, 156, 0.42) 38%,
+      transparent 72%
+    ) !important;
+  }
+
+  /* Nudge corners — !important beats inline desktop positions (mobile only) */
+  .portal-mobile-blobs .shape-blob:nth-child(1) {
+    left: calc(-22% - 40px) !important;
+    top: 2% !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(2) {
+    left: calc(-8% - 20px) !important;
+    top: 6% !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(3) {
+    left: auto !important;
+    right: -26% !important;
+    top: auto !important;
+    bottom: -12% !important;
+  }
+
+  .portal-mobile-blobs .shape-blob:nth-child(4) {
+    left: auto !important;
+    right: -8% !important;
+    top: auto !important;
+    bottom: -10% !important;
+  }
+}
+
+/*
+ * Mid screens (tablet / large phone landscape): bigger frozen blobs.
+ * Phone sizes stay above; desktop blur stacks (md/lg) are untouched.
+ */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .home-mobile-blobs .shape-blob.twelve {
+    height: 340px;
+    width: 520px;
+    left: calc(50% - 200px);
+  }
+
+  .home-mobile-blobs .shape-blob.thirteen {
+    height: 340px;
+    width: 520px;
+    left: calc(50% - 320px);
+  }
+
+  .about-hero-blobs .shape-blob.eight,
+  .rush-hero-blobs .shape-blob.eight,
+  .members-hero-blobs .shape-blob.eight,
+  .nationals-hero-blobs .shape-blob.eight,
+  .about-hero-blobs .shape-blob.nine,
+  .rush-hero-blobs .shape-blob.nine,
+  .members-hero-blobs .shape-blob.nine,
+  .nationals-hero-blobs .shape-blob.nine {
+    height: 320px;
+    width: 420px;
+  }
+
+  .about-photo-blobs .shape-blob.eight,
+  .about-photo-blobs .shape-blob.nine {
+    height: 300px;
+    width: 360px;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-green {
+    height: 440px;
+    width: 500px;
+  }
+
+  .rush-video-blobs .shape-blob.rush-static-blue {
+    height: 390px;
+    width: 360px;
+  }
+
+  .apply-hero-blobs .shape-blob.eight {
+    height: 320px;
+    width: 420px;
+    left: calc(50% - 170px);
+  }
+
+  .apply-hero-blobs .shape-blob.nine {
+    height: 320px;
+    width: 420px;
+    left: calc(50% - 270px);
   }
 }
 
@@ -1292,19 +1573,39 @@ img.blue-shadow {
   background-color: var(--light-blue);
 }
 
-/* Smooth color for nav/footer text links */
-.hover-text-custom {
+/* Smooth color for nav/footer text links + admin/portal text actions */
+.hover-text-custom,
+.tap-text {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  transition: color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Desktop hover only — avoids sticky green after tap on phones */
+/* Desktop hover only — avoids sticky color after tap on phones */
 @media (hover: hover) and (pointer: fine) {
   .hover-text-custom:hover {
     color: #8ddd88;
-    transition-duration: 0.28s;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Brother/admin text actions — soft blue, not nav green */
+  .tap-text:hover:not(:has(.tap-text-label)) {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tap-text:hover .tap-text-label {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tap-card:hover .tap-text-label {
+    color: #a8d4ff;
+    transition-duration: 0.18s;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
@@ -1315,6 +1616,7 @@ img.blue-shadow {
  */
 @media (max-width: 1023px) {
   .tap-press,
+  .tap-card,
   .contact-us,
   .more-about-us a {
     cursor: pointer;
@@ -1333,6 +1635,7 @@ img.blue-shadow {
    * transform:none !important snapped release and killed the bounce.
    */
   .tap-press:hover:not(.is-pressed):not(.is-pressed-scale),
+  .tap-card:hover:not(.is-pressed),
   .contact-us:hover:not(.is-pressed),
   a:hover:not(:has(.is-pressed)):not(:has(.is-pressed-scale)) > .contact-us:not(.is-pressed) {
     transform: scale(1) !important;
@@ -1349,6 +1652,15 @@ img.blue-shadow {
     color: #ffffff !important;
   }
 
+  /*
+   * Brother/admin dark buttons (#163556) — dip darker, not to public #234c8b
+   * which reads as a lighter flash on those CTAs.
+   */
+  .tap-press.tap-press-dark.is-pressed {
+    background-color: #0f2840 !important;
+    color: #ffffff !important;
+  }
+
   /* Selected pills: scale only — never apply navy (set via JS is-pressed-scale) */
   .tap-press.is-pressed-scale {
     transition: transform 0.1s cubic-bezier(0.33, 1, 0.68, 1);
@@ -1362,10 +1674,47 @@ img.blue-shadow {
   }
 
   .hover-text-custom.is-pressed {
-    /* Faster green ramp so it reads before mobile nav navigation */
+    background-color: transparent !important;
     color: #8ddd88 !important;
-    transition-duration: 0.09s;
-    transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+    transform: none !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /* Brother/admin text — soft blue flash (not nav green); no nav delay in JS */
+  .tap-text.is-pressed:not(:has(.tap-text-label)) {
+    background-color: transparent !important;
+    color: #a8d4ff !important;
+    transform: none !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /* Section cards: only the View/Open label flashes (not the whole card title) */
+  .tap-text.is-pressed {
+    background-color: transparent !important;
+    transform: none !important;
+  }
+
+  .tap-text.is-pressed .tap-text-label {
+    color: #a8d4ff !important;
+    transition-duration: 0.04s;
+    transition-timing-function: linear;
+  }
+
+  /*
+   * Quick-link cards — pill-like press + spring bounce (no sticky color through nav).
+   * Slightly softer scale than pills since the hit target is larger.
+   */
+  .tap-card.is-pressed {
+    transition: transform 0.1s cubic-bezier(0.33, 1, 0.68, 1);
+    transform: scale(0.97) !important;
+    background-color: transparent !important;
+  }
+
+  .tap-card.is-pressed .tap-text-label {
+    color: #a8d4ff !important;
+    transition: color 0.1s cubic-bezier(0.33, 1, 0.68, 1);
   }
 }
 

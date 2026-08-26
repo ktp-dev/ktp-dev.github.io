@@ -21,6 +21,7 @@ import {
   adminTableHeadClass,
   adminTableRowClass,
   adminTableWrapClass,
+  adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 
 function formatScore(value: number | null | undefined) {
@@ -121,7 +122,10 @@ export function AdminAppsTable({
             : 'No applications match your search.'}
         </p>
       ) : (
-        <div className={`max-h-[min(36rem,70vh)] overflow-y-auto overflow-x-auto ${adminTableWrapClass}`}>
+        <div
+          className={`max-h-[min(36rem,70vh)] overflow-y-auto overflow-x-auto ${adminTableWrapClass}`}
+          style={adminTableWrapStyle}
+        >
           <table className="min-w-full text-left text-sm">
             <thead className={`sticky top-0 z-10 ${adminTableHeadClass}`}>
               <tr>

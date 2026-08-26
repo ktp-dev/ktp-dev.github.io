@@ -7,7 +7,7 @@ import { readsMutedClass } from '@/components/portal/reads-ui'
 const MODAL_ANIMATION_MS = 280
 
 const iconBtnClass =
-  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
+  'tap-press tap-press-dark flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-sky-200'
 
 function ExpandIcon() {
   return (
