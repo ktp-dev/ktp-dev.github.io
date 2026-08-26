@@ -802,6 +802,56 @@ input[type="datetime-local"].datetime-empty::-webkit-datetime-edit-ampm-field {
     animation: none !important;
     transform: none;
   }
+
+  /*
+   * Login mobile — freeze/no-blur. Soft glow = radial with an explicit radius
+   * smaller than the box so the fade finishes inside (no hard box edge, no
+   * 0×0 box-shadow speck). overflow:hidden clips sideways spill only.
+   */
+  .blob-c.login-mobile-blobs {
+    filter: none;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .login-mobile-blobs .shape-blob.eight,
+  .login-mobile-blobs .shape-blob.nine {
+    border-radius: 0;
+    opacity: 1;
+    -webkit-animation: none !important;
+    animation: none !important;
+    transform: none;
+    box-shadow: none !important;
+    border: none;
+    padding: 0;
+    height: 640px;
+    width: 640px;
+  }
+
+  .login-mobile-blobs .shape-blob.eight {
+    /* radius inside box — empty margin past the fade */
+    background: radial-gradient(
+      circle 260px at center,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.09) 38%,
+      rgba(255, 255, 255, 0.03) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 340px);
+    left: calc(50% - 420px);
+  }
+
+  .login-mobile-blobs .shape-blob.nine {
+    background: radial-gradient(
+      circle 280px at center,
+      rgba(168, 212, 255, 0.18) 0%,
+      rgba(168, 212, 255, 0.1) 38%,
+      rgba(168, 212, 255, 0.035) 68%,
+      transparent 100%
+    ) !important;
+    top: calc(50vh - 260px);
+    left: calc(50% - 160px);
+  }
 }
 
 /* Video stack — allow soft edges on desktop blur too (page html clips sideways spill) */
