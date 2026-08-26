@@ -20,6 +20,7 @@ import {
 import { parseApplicationAnswers, parseApplicationFields, parseSubmitPayload } from '@/lib/apply-schema'
 import { resolveUploadMime, validateApplyFile } from '@/lib/apply-files'
 import { buildApplicationFileKey, isApplicationFileKey, isDeletableS3ObjectKey } from '@/lib/apply-s3'
+import { sendApplicationConfirmation } from '@/lib/application-confirmation-email'
 import { createPresignedGetUrl, createPresignedPutUrl, deleteS3Object, headS3Object } from '@/lib/s3'
 import { FILE_SLOTS, type FileSlot } from '@/lib/apply-steps'
 
@@ -316,6 +317,18 @@ export async function submitApply(input: {
   if (auth.application.status === 'draft') {
     const submitted = await submitApplication(auth.application.id, auth.user.id)
     if (!submitted) return { error: 'Submit failed.' }
+
+    // Email failure must not roll back a successful submission.
+    const emailResult = await sendApplicationConfirmation({
+      email: auth.user.email,
+      preferredName: parsedFields.data.preferred_name,
+      firstName: parsedFields.data.first_name,
+      cycleName: auth.cycle.name,
+      closesAt: auth.cycle.closesAt,
+    })
+    if (emailResult.error) {
+      console.error('Application confirmation email failed:', emailResult.error)
+    }
   }
 
   revalidatePath('/apply')
