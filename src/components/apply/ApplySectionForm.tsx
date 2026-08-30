@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteApplyDummyFile, saveApplyDraft, submitApply } from '@/app/apply/actions'
 import { DummyFileField } from '@/components/apply/DummyFileField'
@@ -49,6 +49,7 @@ export function ApplySectionForm({
   isSubmitted?: boolean
 }) {
   const router = useRouter()
+  const [nextBusy, setNextBusy] = useState(false)
   const hydrated = useRef(false)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const saveGen = useRef(0)
@@ -126,6 +127,7 @@ export function ApplySectionForm({
   }
 
   async function goNext() {
+    if (nextBusy) return
     if (timer.current) clearTimeout(timer.current)
     setSaveStatus('idle')
     if (preview) {
@@ -146,8 +148,17 @@ export function ApplySectionForm({
       return
     }
     setToastErrors([])
-    const ok = preview || isSubmittedEdit ? true : await persist({ silent: true })
-    if (ok) router.push(href(nextStepPath(step)))
+    if (isSubmittedEdit) {
+      router.push(href(nextStepPath(step)))
+      return
+    }
+    setNextBusy(true)
+    const ok = await persist({ silent: true })
+    if (ok) {
+      router.push(href(nextStepPath(step)))
+      return
+    }
+    setNextBusy(false)
   }
 
   async function commitSubmittedEdits() {
@@ -237,6 +248,7 @@ export function ApplySectionForm({
   }
 
   const stepMeta = APPLY_STEPS.find((item) => item.slug === step)!
+  const navBusy = nextBusy || (step === 'review' && saveStatus === 'saving')
   const submitBusy = step === 'review' && saveStatus === 'saving'
   const statusLabel =
     preview
@@ -270,7 +282,6 @@ export function ApplySectionForm({
           <Field label="Last name *" value={fields.last_name} onChange={(v) => { setField('last_name', v); queueSave() }} />
           <Field
             label="Preferred first name"
-            hint="Optional. Use this if you go by a different first name than your legal name."
             value={fields.preferred_name}
             onChange={(v) => { setField('preferred_name', v); queueSave() }}
           />
@@ -472,7 +483,7 @@ export function ApplySectionForm({
         <button
           type="button"
           className={`${ghostBtnClass} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100`}
-          disabled={submitBusy}
+          disabled={navBusy}
           onClick={() => router.push(href(prevStepPath(step)))}
         >
           Back
@@ -495,8 +506,13 @@ export function ApplySectionForm({
                   : 'Submit application'}
           </button>
         ) : (
-          <button type="button" className={btnClass} onClick={() => void goNext()}>
-            Next
+          <button
+            type="button"
+            className={`${btnClass} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100`}
+            disabled={nextBusy}
+            onClick={() => void goNext()}
+          >
+            {nextBusy ? 'Saving…' : 'Next'}
           </button>
         )}
       </div>

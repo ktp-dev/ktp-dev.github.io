@@ -5,6 +5,7 @@ import { UmichGoogleButton } from '@/components/apply/UmichGoogleButton'
 import { loadApplyContext } from '@/lib/apply-load'
 import { applyPreviewHref, parseApplyPreview, type ApplyPreviewQuery } from '@/lib/apply-preview'
 import { applicationClosedMessage, applicationTitle } from '@/lib/apply-steps'
+import { formatRushDateTime } from '@/lib/rush-timezone'
 
 export default async function ApplyWelcomePage({
   searchParams,
@@ -65,7 +66,7 @@ export default async function ApplyWelcomePage({
   const title = applicationTitle(ctx.cycle.name)
   const windowClosed = ctx.window && !ctx.window.isOpen
   const closedCopy = ctx.window?.isBeforeOpen
-    ? `Applications open ${new Date(ctx.cycle.opensAt).toLocaleString()}.`
+    ? `Applications open ${formatRushDateTime(ctx.cycle.opensAt)}.`
     : applicationClosedMessage(ctx.cycle.name, ctx.cycle.closedMarkdown)
 
   if (!ctx.user) {

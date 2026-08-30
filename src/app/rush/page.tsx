@@ -7,26 +7,17 @@ import { getActiveCycle } from '@/lib/applications'
 import { getRushEventsForCycle } from '@/lib/rush-events'
 import { toYoutubeEmbedUrl } from '@/lib/youtube-embed'
 
+import { formatRushDateTime } from '@/lib/rush-timezone'
+
 function cycleDisplayName(cycleName: string) {
   return cycleName.replace(/\s*\(local\)\s*/gi, '').trim()
-}
-
-function formatDueDate(iso: string) {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return null
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
 }
 
 export default async function Rush() {
   const cycle = await getActiveCycle()
   const events = cycle ? await getRushEventsForCycle(cycle.id) : []
   const displayName = cycle ? cycleDisplayName(cycle.name) : null
-  const dueDate = cycle ? formatDueDate(cycle.closesAt) : null
+  const dueDate = cycle ? formatRushDateTime(cycle.closesAt) : null
   const blurb =
     cycle?.publicBlurb?.trim() ||
     (displayName

@@ -27,16 +27,14 @@ import {
   adminSectionCardStyle,
 } from '@/components/admin/admin-ui'
 import type { ClientCycleQuestion, ClientRushCycle, CycleBundle } from '@/lib/rush-cycles'
+import {
+  fromDatetimeLocalInRushTz,
+  RUSH_TIMEZONE_LABEL,
+  toDatetimeLocalInRushTz,
+} from '@/lib/rush-timezone'
 
 const CYCLE_FORM_ID = 'rush-cycle-form'
 const DRAFT_VALUE = '__draft__'
-
-function toDatetimeLocal(iso: string) {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return ''
-  const pad = (value: number) => String(value).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
-}
 
 function emptyCycleFields() {
   return {
@@ -52,8 +50,8 @@ function emptyCycleFields() {
 function fieldsFromCycle(cycle: ClientRushCycle) {
   return {
     name: cycle.name,
-    opensAt: toDatetimeLocal(cycle.opens_at),
-    closesAt: toDatetimeLocal(cycle.closes_at),
+    opensAt: toDatetimeLocalInRushTz(cycle.opens_at),
+    closesAt: toDatetimeLocalInRushTz(cycle.closes_at),
     interestFormUrl: cycle.interest_form_url ?? '',
     youtubeUrl: cycle.youtube_url ?? '',
     calendarUrl: cycle.calendar_url ?? '',
@@ -151,8 +149,8 @@ export default function AdminRushDashboard({
   function cyclePayload() {
     return {
       name: fields.name,
-      opens_at: fields.opensAt ? new Date(fields.opensAt).toISOString() : '',
-      closes_at: fields.closesAt ? new Date(fields.closesAt).toISOString() : '',
+      opens_at: fields.opensAt ? fromDatetimeLocalInRushTz(fields.opensAt) : '',
+      closes_at: fields.closesAt ? fromDatetimeLocalInRushTz(fields.closesAt) : '',
       interest_form_url: fields.interestFormUrl,
       youtube_url: fields.youtubeUrl,
       calendar_url: fields.calendarUrl,
@@ -348,6 +346,7 @@ export default function AdminRushDashboard({
                   <label htmlFor="opens-at" className={adminLabelClass}>
                     Open Rush Opens <span className="text-red-400">*</span>
                   </label>
+                  <p className="mb-1 text-xs text-gray-500">{RUSH_TIMEZONE_LABEL}</p>
                   <div className="admin-datetime-wrap">
                     <input
                       id="opens-at"
@@ -367,6 +366,7 @@ export default function AdminRushDashboard({
                   <label htmlFor="closes-at" className={adminLabelClass}>
                     Open Rush Closes <span className="text-red-400">*</span>
                   </label>
+                  <p className="mb-1 text-xs text-gray-500">{RUSH_TIMEZONE_LABEL}</p>
                   <div className="admin-datetime-wrap">
                     <input
                       id="closes-at"
