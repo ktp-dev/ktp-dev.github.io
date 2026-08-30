@@ -7,7 +7,13 @@ import { DummyFileField } from '@/components/apply/DummyFileField'
 import { ApplyRecapFileLink } from '@/components/apply/ApplyFileDownloadLink'
 import { applyCardClass, applyCardStyle } from '@/components/apply/ApplyShell'
 import { uploadPendingApplyFiles } from '@/lib/apply-client-upload'
-import { answerLimitError, validateApplyStep, wordCount, type ApplicationFields } from '@/lib/apply-schema'
+import {
+  answerLimitError,
+  normalizeStringArray,
+  validateApplyStep,
+  wordCount,
+  type ApplicationFields,
+} from '@/lib/apply-schema'
 import { applyPreviewHref } from '@/lib/apply-preview'
 import { APPLY_STEPS, nextStepPath, prevStepPath, type ApplyStepSlug } from '@/lib/apply-steps'
 import { useApplyStore } from '@/lib/apply-store'
@@ -50,6 +56,7 @@ export function ApplySectionForm({
 }) {
   const router = useRouter()
   const [nextBusy, setNextBusy] = useState(false)
+  const [activeSubmit, setActiveSubmit] = useState<'draft' | 'submitted' | null>(null)
   const hydrated = useRef(false)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const saveGen = useRef(0)
@@ -183,6 +190,8 @@ export function ApplySectionForm({
       return
     }
     if (timer.current) clearTimeout(timer.current)
+    const submitKind = isSubmittedEdit ? 'submitted' : 'draft'
+    setActiveSubmit(submitKind)
     setSaveStatus('saving')
     const state = useApplyStore.getState()
 
@@ -201,6 +210,7 @@ export function ApplySectionForm({
         )
       }
       if (allMissing.length) {
+        setActiveSubmit(null)
         setToastErrors(allMissing)
         setSaveStatus('unsaved')
         return
@@ -209,6 +219,7 @@ export function ApplySectionForm({
 
       const fileResult = await commitSubmittedEdits()
       if (fileResult.error) {
+        setActiveSubmit(null)
         setSaveStatus('error', fileResult.error)
         return
       }
@@ -218,6 +229,7 @@ export function ApplySectionForm({
         answers: state.answers,
       })
       if (result.error) {
+        setActiveSubmit(null)
         setSaveStatus('error', result.error)
         return
       }
@@ -231,6 +243,7 @@ export function ApplySectionForm({
 
     const ok = await persist({ silent: true })
     if (!ok) {
+      setActiveSubmit(null)
       setSaveStatus('error')
       return
     }
@@ -239,6 +252,7 @@ export function ApplySectionForm({
       answers: state.answers,
     })
     if (result.error) {
+      setActiveSubmit(null)
       setSaveStatus('error', result.error)
       return
     }
@@ -248,8 +262,9 @@ export function ApplySectionForm({
   }
 
   const stepMeta = APPLY_STEPS.find((item) => item.slug === step)!
-  const navBusy = nextBusy || (step === 'review' && saveStatus === 'saving')
-  const submitBusy = step === 'review' && saveStatus === 'saving'
+  const submitBusy = step === 'review' && activeSubmit !== null
+  const navBusy = nextBusy || submitBusy
+  const showSubmittedEditUi = isSubmittedEdit || activeSubmit === 'submitted'
   const statusLabel =
     preview
       ? ''
@@ -263,7 +278,7 @@ export function ApplySectionForm({
 
   return (
     <div className={`${applyCardClass} flex min-h-full flex-1 flex-col`} style={applyCardStyle}>
-      {isSubmittedEdit ? (
+      {showSubmittedEditUi ? (
         <div className="mb-5 rounded-lg border border-[#315CA9]/20 bg-[#315CA9]/5 px-4 py-3 text-sm text-gray-700">
           Changes are not saved until you submit again on the Review step. This includes file
           uploads.
@@ -408,7 +423,8 @@ export function ApplySectionForm({
             </p>
             <div className="space-y-2">
               {payload.hearAboutOptions.map((option) => {
-                const checked = (fields.hear_about ?? []).includes(option)
+                const hearAbout = normalizeStringArray(fields.hear_about)
+                const checked = hearAbout.includes(option)
                 return (
                   <label key={option} className="flex items-center gap-2 text-sm">
                     <input
@@ -416,7 +432,7 @@ export function ApplySectionForm({
                       className="accent-[#315CA9]"
                       checked={checked}
                       onChange={() => {
-                        const current = fields.hear_about ?? []
+                        const current = normalizeStringArray(fields.hear_about)
                         const next = checked
                           ? current.filter((item) => item !== option)
                           : [...current, option]
@@ -430,7 +446,7 @@ export function ApplySectionForm({
               })}
             </div>
           </fieldset>
-          {(fields.hear_about ?? []).some((item) => item.toLowerCase() === 'other') ? (
+          {normalizeStringArray(fields.hear_about).some((item) => item.toLowerCase() === 'other') ? (
             <Field
               label="Other (please describe) *"
               value={fields.hear_about_other}
@@ -498,7 +514,7 @@ export function ApplySectionForm({
             {preview
               ? 'Exit preview'
               : submitBusy
-                ? isSubmittedEdit
+                ? activeSubmit === 'submitted'
                   ? 'Saving…'
                   : 'Submitting…'
                 : isSubmittedEdit
@@ -668,7 +684,7 @@ export function ApplyRecap({
       <RecapBlock
         title="Additional"
         rows={[
-          ['How you heard', (fields.hear_about ?? []).join(', ')],
+          ['How you heard', normalizeStringArray(fields.hear_about).join(', ')],
           ['Other', fields.hear_about_other],
           ['Anything else', fields.anything_else],
           ['Rush feedback', fields.rush_feedback],

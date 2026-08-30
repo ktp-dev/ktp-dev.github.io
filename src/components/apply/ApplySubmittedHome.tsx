@@ -8,6 +8,7 @@ import { applyCardStyle } from '@/components/apply/ApplyShell'
 import type { ApplicationFields } from '@/lib/apply-schema'
 import { useApplyStore } from '@/lib/apply-store'
 import { formatApplyDeadline } from '@/lib/apply-steps'
+import { formatRushDateTime } from '@/lib/rush-timezone'
 import type { FileSlot } from '@/lib/apply-steps'
 
 type Question = {
@@ -40,10 +41,17 @@ export function ApplySubmittedHome({
   applicationId: string
 }) {
   const router = useRouter()
-  const hasPendingEdits = useApplyStore((state) => state.hasPendingEdits())
+  const hasPendingEdits = useApplyStore(
+    (state) =>
+      state.isSubmittedEdit &&
+      (state.saveStatus === 'unsaved' ||
+        Object.keys(state.pendingUploads).length > 0 ||
+        state.pendingRemovals.length > 0)
+  )
   const discardSubmittedEdits = useApplyStore((state) => state.discardSubmittedEdits)
   const hydrate = useApplyStore((state) => state.hydrate)
   const deadline = formatApplyDeadline(closesAt)
+  const submittedLabel = submittedAt ? formatRushDateTime(submittedAt) : null
 
   useEffect(() => {
     hydrate({
@@ -95,16 +103,14 @@ export function ApplySubmittedHome({
             <p className="text-sm text-gray-600">
               Changes do not take effect until you review and submit again on the Review step.
             </p>
-            {submittedAt ? (
-              <p className="text-sm text-gray-500">
-                Originally submitted {new Date(submittedAt).toLocaleString()}.
-              </p>
+            {submittedLabel ? (
+              <p className="text-sm text-gray-500">Originally submitted {submittedLabel}.</p>
             ) : null}
           </div>
         ) : (
           <p className="text-base leading-relaxed sm:text-lg">
             Your application has been submitted
-            {submittedAt ? ` (${new Date(submittedAt).toLocaleString()})` : ''}. Responses below are
+            {submittedLabel ? ` (${submittedLabel})` : ''}. Responses below are
             locked.
           </p>
         )}

@@ -8,7 +8,7 @@ import {
   cycleQuestions,
   rushCycles,
 } from '@/db/schema'
-import type { ApplicationFields } from '@/lib/apply-schema'
+import { normalizeStringArray, type ApplicationFields } from '@/lib/apply-schema'
 import type { FileSlot } from '@/lib/apply-steps'
 
 export const ACTIVE_CYCLE_CACHE_TAG = 'active-cycle'
@@ -121,7 +121,7 @@ export function fieldsFromRow(row: typeof applications.$inferSelect): Applicatio
     semesters_remaining: row.semestersRemaining,
     other_professional_fraternity: row.otherProfessionalFraternity,
     campus_activities: row.campusActivities,
-    hear_about: row.hearAbout ?? [],
+    hear_about: normalizeStringArray(row.hearAbout),
     hear_about_other: row.hearAboutOther,
     anything_else: row.anythingElse,
     rush_feedback: row.rushFeedback,

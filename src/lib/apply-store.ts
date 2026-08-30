@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import type { ApplicationFields } from '@/lib/apply-schema'
+import { normalizeStringArray, type ApplicationFields } from '@/lib/apply-schema'
 import type { FileSlot } from '@/lib/apply-steps'
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'unsaved' | 'error'
@@ -67,7 +67,7 @@ type ApplyStore = {
 }
 
 function fieldsFromPayload(fields: ApplicationFields): ApplicationFields {
-  return { ...emptyFields, ...fields, hear_about: fields.hear_about ?? [] }
+  return { ...emptyFields, ...fields, hear_about: normalizeStringArray(fields.hear_about) }
 }
 
 export const useApplyStore = create<ApplyStore>((set, get) => ({

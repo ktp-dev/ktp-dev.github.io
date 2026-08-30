@@ -42,13 +42,24 @@ export const applicationFieldsSchema = z.object({
   hear_about: z
     .array(z.string())
     .nullish()
-    .transform((value) => value ?? []),
+    .transform((value) => normalizeStringArray(value)),
   hear_about_other: optionalText(500),
   anything_else: optionalText(4000),
   rush_feedback: optionalText(4000),
 })
 
 export type ApplicationFields = z.infer<typeof applicationFieldsSchema>
+
+/** hear_about must stay a string[] in the client store and recap UI. */
+export function normalizeStringArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+  }
+  if (typeof value === 'string' && value.trim()) {
+    return [value.trim()]
+  }
+  return []
+}
 
 export function wordCount(text: string) {
   return text.trim() === '' ? 0 : text.trim().split(/\s+/).length
