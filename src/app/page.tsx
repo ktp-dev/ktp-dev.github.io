@@ -59,8 +59,8 @@ export default function Home() {
   return (
     <div className='homepage-grid'>
       <Header />
-      {/* Clip sideways spill below header — overflow on homepage-grid breaks sticky nav */}
-      <div className="relative w-full max-w-full flex-1 overflow-x-hidden">
+      {/* Mobile blob spill: page-spill-clip (overflow-x: clip). Avoid overflow-x-hidden — it clips rotated hero photos vertically. */}
+      <div className="page-spill-clip relative w-full max-w-full flex-1">
       {/*
         Mobile blobs: full page width (not inside the hero text column).
         Sideways spill clipped only by this wrapper + html overflow-x.
