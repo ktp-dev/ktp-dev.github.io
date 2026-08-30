@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
+import { ACTIVE_CYCLE_CACHE_TAG } from '@/lib/applications'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import {
   parseRushEvent,
@@ -10,12 +11,37 @@ import {
 } from '@/lib/rush-event-schema'
 import {
   createRushEvent,
-  getRushEvents,
+  getRushEventsForCycle,
   patchRushEvent,
   removeRushEvent,
   reorderRushEvents,
   toClientRushEvent,
 } from '@/lib/rush-events'
+import { parseAdminEmail } from '@/lib/admin-schema'
+import { parseBrotherId, parseBrotherWrite, type BrotherFormInput } from '@/lib/brother-schema'
+import { addAdminEmail, removeAdminEmail } from '@/lib/admins'
+import { parseBrothersCsv } from '@/lib/brother-csv-import'
+import {
+  addBrotherRow,
+  importBrotherRows,
+  listBrothers,
+  removeBrotherRow,
+  searchBrothers,
+  updateBrotherRow,
+} from '@/lib/brothers'
+import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
+import {
+  activateRushCycle,
+  closeRushCycleNow,
+  createRushCycle,
+  getCycleBundle,
+  listRushCycles,
+  openRushCycleNow,
+  saveRushCycle,
+  saveRushCycleMeta,
+} from '@/lib/rush-cycles'
+import { saveRushRubric } from '@/lib/rubric-admin'
+import { parseRushRubricSave } from '@/lib/rubric-schema'
 
 export type RushEventInput = RushEventWrite
 
@@ -27,20 +53,215 @@ async function requireAdmin() {
   return { user, error: null }
 }
 
-export async function listRushEvents() {
+function revalidateRush() {
+  updateTag(ACTIVE_CYCLE_CACHE_TAG)
+  revalidatePath('/admin')
+  revalidatePath('/admin/rush')
+  revalidatePath('/admin/apps')
+  revalidatePath('/rush')
+  revalidatePath('/apply')
+  revalidatePath('/portal/reads')
+}
+
+function revalidateMembers() {
+  revalidatePath('/admin')
+  revalidatePath('/admin/members')
+  revalidatePath('/portal')
+}
+
+export async function addBrother(input: BrotherFormInput) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
   }
 
-  const events = await getRushEvents()
-  return { data: events.map(toClientRushEvent), error: null }
+  const parsed = parseBrotherWrite(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await addBrotherRow(parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidateMembers()
+    return { data: result.brother, error: null }
+  } catch (error) {
+    console.error('Error adding brother:', error)
+    return { data: null, error: 'Failed to add brother' }
+  }
 }
 
-export async function insertRushEvent(event: RushEventInput) {
+export async function updateBrother(id: string, input: BrotherFormInput) {
   const auth = await requireAdmin()
   if (auth.error) {
     return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseBrotherId(id)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseBrotherWrite(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await updateBrotherRow(parsedId.data, parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidateMembers()
+    return { data: result.brother, error: null }
+  } catch (error) {
+    console.error('Error updating brother:', error)
+    return { data: null, error: 'Failed to update brother' }
+  }
+}
+
+export async function removeBrother(id: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseBrotherId(id)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await removeBrotherRow(parsed.data, auth.user.email ?? '')
+    if (result.error) return { data: null, error: result.error }
+    revalidateMembers()
+    return { data: null, error: null }
+  } catch (error) {
+    console.error('Error removing brother:', error)
+    return { data: null, error: 'Failed to remove brother' }
+  }
+}
+
+export async function importBrothersCsv(csvText: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseBrothersCsv(csvText)
+  if (parsed.errors) {
+    return { data: null, error: parsed.errors.join('\n') }
+  }
+
+  try {
+    const result = await importBrotherRows(parsed.data)
+    if (result.errors.length > 0 && result.brothers.length === 0) {
+      return { data: null, error: result.errors.join('\n') }
+    }
+
+    revalidateMembers()
+    const brothers = await listBrothers()
+    const summary = `Imported ${parsed.data.length} row(s): ${result.created} added, ${result.updated} updated.`
+    const error =
+      result.errors.length > 0 ? `${summary}\n\n${result.errors.join('\n')}` : null
+
+    return {
+      data: {
+        brothers,
+        created: result.created,
+        updated: result.updated,
+        total: parsed.data.length,
+        summary,
+      },
+      error,
+    }
+  } catch (error) {
+    console.error('Error importing brothers CSV:', error)
+    return { data: null, error: 'Failed to import brothers' }
+  }
+}
+
+export async function searchBrothersAction(query: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  try {
+    const data = await searchBrothers(query, 8)
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error searching brothers:', error)
+    return { data: null, error: 'Failed to search brothers' }
+  }
+}
+
+export async function addAdmin(email: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseAdminEmail(email)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await addAdminEmail(parsed.data)
+    if (result.error) return { data: null, error: result.error }
+    revalidateMembers()
+    return { data: result.admin, error: null }
+  } catch (error) {
+    console.error('Error adding admin:', error)
+    return { data: null, error: 'Failed to add admin' }
+  }
+}
+
+export async function removeAdmin(email: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseAdminEmail(email)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const result = await removeAdminEmail(parsed.data, auth.user.email ?? '')
+    if (result.error) return { data: null, error: result.error }
+    revalidateMembers()
+    return { data: null, error: null }
+  } catch (error) {
+    console.error('Error removing admin:', error)
+    return { data: null, error: 'Failed to remove admin' }
+  }
+}
+
+export async function listRushEvents(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const events = await getRushEventsForCycle(parsedId.data)
+  return { data: events.map(toClientRushEvent), error: null }
+}
+
+export async function insertRushEvent(cycleId: string, event: RushEventInput) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
   }
 
   const parsed = parseRushEvent(event)
@@ -49,9 +270,8 @@ export async function insertRushEvent(event: RushEventInput) {
   }
 
   try {
-    const created = await createRushEvent(parsed.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    const created = await createRushEvent(parsedId.data, parsed.data)
+    revalidateRush()
     return { data: toClientRushEvent(created), error: null }
   } catch (error) {
     console.error('Error inserting rush event:', error)
@@ -72,8 +292,7 @@ export async function deleteRushEvent(eventId: string) {
 
   try {
     await removeRushEvent(parsedId.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error deleting rush event:', error)
@@ -103,8 +322,7 @@ export async function updateRushEvent(eventId: string, event: RushEventInput) {
     if (!updated) {
       return { data: null, error: 'Event not found' }
     }
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: toClientRushEvent(updated), error: null }
   } catch (error) {
     console.error('Error updating rush event:', error)
@@ -127,11 +345,212 @@ export async function updateRushEventOrder(
 
   try {
     await reorderRushEvents(parsed.data)
-    revalidatePath('/rush')
-    revalidatePath('/admin')
+    revalidateRush()
     return { data: null, error: null }
   } catch (error) {
     console.error('Error updating order_index:', error)
     return { data: null, error: 'Failed to update event order' }
+  }
+}
+
+export async function getRushCycleBundle(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const data = await getCycleBundle(parsedId.data)
+  if (!data) return { data: null, error: 'Cycle not found' }
+  return { data, error: null }
+}
+
+export async function createRushCycleRecord(input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseRushCycleCreate(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const bundle = await createRushCycle(parsed.data)
+    if (!bundle) return { data: null, error: 'Failed to create cycle' }
+    const cycles = await listRushCycles()
+    revalidateRush()
+    return { data: { ...bundle, cycles }, error: null }
+  } catch (error) {
+    console.error('Error creating rush cycle:', error)
+    return { data: null, error: 'Failed to create cycle' }
+  }
+}
+
+export async function saveRushApplicationCycle(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushCycleApplication(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    await saveRushCycle(parsedId.data, parsed.data)
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error saving rush cycle:', error)
+    const message = error instanceof Error ? error.message : 'Failed to save rush application'
+    return { data: null, error: message }
+  }
+}
+
+export async function saveRushCycleDetails(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushCycleMeta(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const updated = await saveRushCycleMeta(parsedId.data, parsed.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error saving rush cycle:', error)
+    return { data: null, error: 'Failed to save rush cycle' }
+  }
+}
+
+export async function showRushCycleOnSite(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  try {
+    const updated = await activateRushCycle(parsedId.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const [data, cycles] = await Promise.all([
+      getCycleBundle(parsedId.data),
+      listRushCycles(),
+    ])
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data: { ...data, cycles }, error: null }
+  } catch (error) {
+    console.error('Error activating rush cycle:', error)
+    return { data: null, error: 'Failed to show cycle on site' }
+  }
+}
+
+export async function closeRushApplicationNow(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  try {
+    const updated = await closeRushCycleNow(parsedId.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const data = await getCycleBundle(parsedId.data)
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error closing rush cycle:', error)
+    return { data: null, error: 'Failed to close applications' }
+  }
+}
+
+export async function openRushApplicationNow(cycleId: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  try {
+    const updated = await openRushCycleNow(parsedId.data)
+    if (!updated) return { data: null, error: 'Cycle not found' }
+    revalidateRush()
+    const [data, cycles] = await Promise.all([
+      getCycleBundle(parsedId.data),
+      listRushCycles(),
+    ])
+    if (!data) return { data: null, error: 'Cycle not found' }
+    return { data: { ...data, cycles }, error: null }
+  } catch (error) {
+    console.error('Error opening rush cycle:', error)
+    return { data: null, error: 'Failed to open applications' }
+  }
+}
+
+export async function saveRushRubricCategories(cycleId: string, input: unknown) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsedId = parseCycleId(cycleId)
+  if (parsedId.error || !parsedId.data) {
+    return { data: null, error: parsedId.error }
+  }
+
+  const parsed = parseRushRubricSave(input)
+  if (parsed.error || !parsed.data) {
+    return { data: null, error: parsed.error }
+  }
+
+  try {
+    const categories = await saveRushRubric(parsedId.data, parsed.data)
+    revalidateRush()
+    return { data: { categories }, error: null }
+  } catch (error) {
+    console.error('Error saving rush rubric:', error)
+    const message = error instanceof Error ? error.message : 'Failed to save rubric'
+    return { data: null, error: message }
   }
 }

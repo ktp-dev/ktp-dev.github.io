@@ -1,33 +1,31 @@
+import { cache } from 'react'
+import type { User } from '@supabase/supabase-js'
 import { createClient } from './server'
 
 /**
- * Check if the current user is an admin
- * Returns the user if they are an admin, null otherwise
+ * Get the current authenticated user (deduped per request).
  */
-export async function checkIsAdmin() {
+export const getCurrentUser = cache(async () => {
   const supabase = await createClient()
-  
-  // Get the current user
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser()
+  return user
+})
 
-  if (userError) {
-    console.error('Error getting user:', userError)
-    return null
-  }
+/**
+ * Check if the current user is an admin.
+ * Pass `user` when already loaded to avoid a redundant auth lookup.
+ */
+export async function checkIsAdmin(existingUser?: User | null) {
+  const supabase = await createClient()
+  const user = existingUser ?? (await getCurrentUser())
 
   if (!user) {
-    console.log('No user found')
     return null
   }
 
-  console.log('User found:', user.email, 'User ID:', user.id)
-
-  // Check if email ends with @umich.edu
   if (!user.email?.endsWith('@umich.edu')) {
-    console.log('Email does not end with @umich.edu:', user.email)
     return null
   }
 
@@ -38,8 +36,6 @@ export async function checkIsAdmin() {
     .single()
 
   if (adminError) {
-    // If it's a "not found" error (PGRST116), that's expected for non-admins
-    // Only log unexpected errors
     if (adminError.code !== 'PGRST116') {
       console.error('Unexpected error checking admin status:', adminError)
     }
@@ -47,22 +43,19 @@ export async function checkIsAdmin() {
   }
 
   if (!admin) {
-    console.log('User is not in admins table')
     return null
   }
 
-  console.log('User is admin!')
   return user
 }
 
 /**
- * Get the current authenticated user
+ * Logged-in @umich.edu user (applicant or admin).
  */
-export async function getCurrentUser() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+export async function requireUser() {
+  const user = await getCurrentUser()
+  if (!user?.email?.toLowerCase().endsWith('@umich.edu')) {
+    return null
+  }
   return user
 }
-

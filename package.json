@@ -11,11 +11,15 @@
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "db:seed-admins": "node scripts/seed-local-admins.mjs",
+    "db:seed-apps": "node scripts/seed-fake-applications.mjs",
     "images:optimize:home": "node scripts/optimize-images.mjs --preset home",
     "images:optimize:about": "node scripts/optimize-images.mjs --preset about",
     "images:optimize:members": "node scripts/optimize-images.mjs --preset member"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1116.0",
+    "@aws-sdk/client-ses": "^3.1118.0",
+    "@aws-sdk/s3-request-presigner": "^3.1116.0",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^0.2.3",
@@ -34,7 +38,8 @@
     "react-scroll": "^1.9.3",
     "react-typed": "^2.0.12",
     "server-only": "^0.0.1",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -42,6 +47,7 @@
     "@types/aos": "^3.0.7",
     "@types/leaflet": "^1.9.20",
     "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-scroll": "^1.8.10",

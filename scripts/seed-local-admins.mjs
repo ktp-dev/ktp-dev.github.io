@@ -24,12 +24,17 @@ const sql = postgres(process.env.DATABASE_URL, { prepare: false })
 try {
   for (const email of emails) {
     await sql`
+      insert into public.brothers (umich_email, status)
+      values (${email}, 'active')
+      on conflict (umich_email) where umich_email is not null do nothing
+    `
+    await sql`
       insert into public.admins (email)
       values (${email})
       on conflict (email) do nothing
     `
   }
-  console.log(`Seeded ${emails.length} local admin email(s).`)
+  console.log(`Seeded ${emails.length} local admin email(s) as admins and brothers.`)
 } finally {
   await sql.end()
 }

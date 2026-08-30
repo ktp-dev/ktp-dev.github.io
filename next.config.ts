@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      { source: '/life', destination: '/life/index.html', permanent: true },
+      { source: '/life/', destination: '/life/index.html', permanent: true },
+    ];
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.csv$/,

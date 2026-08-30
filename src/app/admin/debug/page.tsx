@@ -1,29 +1,26 @@
-import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import Unauthorized from '@/components/Unauthorized'
+import { getS3ConfigStatus } from '@/lib/s3'
+import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
+import { createClient } from '@/lib/supabase/server'
+import { S3UploadSpike } from '@/app/admin/debug/S3UploadSpike'
 
 export default async function DebugPage() {
-  const supabase = await createClient()
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
-
-  let adminCheck = null
-  let adminError = null
-  if (user?.email) {
-    const result = await supabase
-      .from('admins')
-      .select('*')
-      .eq('email', user.email.toLowerCase())
-      .single()
-
-    adminCheck = result.data
-    adminError = result.error
+  const currentUser = await getCurrentUser()
+  if (!currentUser) {
+    redirect('/login')
   }
 
+  const adminUser = await checkIsAdmin()
+  if (!adminUser) {
+    return <Unauthorized />
+  }
+
+  const supabase = await createClient()
   const { data: allAdmins } = await supabase.from('admins').select('*')
+  const s3Status = getS3ConfigStatus()
 
   const sectionCardClass =
     'rounded-xl border border-gray-100 p-6 transform transition-all duration-300 ease-in-out hover:shadow-[0_12px_36px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]'
@@ -54,46 +51,24 @@ export default async function DebugPage() {
               </h1>
 
               <div className={`${sectionCardClass} mb-6`} style={sectionCardStyle}>
-                <h2 className="text-xl font-bold mb-4 font-inter">User Info</h2>
-                {userError && (
-                  <p className="text-red-600 text-sm mb-3">Error: {userError.message}</p>
-                )}
-                {user ? (
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <p>
-                      <span className="font-semibold text-gray-800">Email:</span> {user.email}
-                    </p>
-                    <p>
-                      <span className="font-semibold text-gray-800">User ID:</span> {user.id}
-                    </p>
-                    <p>
-                      <span className="font-semibold text-gray-800">Email ends with @umich.edu:</span>{' '}
-                      {user.email?.endsWith('@umich.edu') ? 'Yes' : 'No'}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-red-600 text-sm">No user found. Please log in.</p>
-                )}
+                <h2 className="text-xl font-bold mb-4 font-inter">S3 Upload Test</h2>
+                <S3UploadSpike
+                  s3Configured={s3Status.configured}
+                  bucket={s3Status.bucket}
+                  region={s3Status.region}
+                />
               </div>
 
               <div className={`${sectionCardClass} mb-6`} style={sectionCardStyle}>
-                <h2 className="text-xl font-bold mb-4 font-inter">Admin Check</h2>
-                {adminError && (
-                  <p className="text-red-600 text-sm mb-3">
-                    Error: {adminError.message} (Code: {adminError.code})
+                <h2 className="text-xl font-bold mb-4 font-inter">User Info</h2>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>
+                    <span className="font-semibold text-gray-800">Email:</span> {adminUser.email}
                   </p>
-                )}
-                {adminCheck ? (
-                  <p className="text-green-600 text-sm font-medium">
-                    You are in the admins table.
+                  <p>
+                    <span className="font-semibold text-gray-800">User ID:</span> {adminUser.id}
                   </p>
-                ) : user ? (
-                  <p className="text-red-600 text-sm">
-                    You are not in the admins table. Your email is: {user.email}
-                  </p>
-                ) : (
-                  <p className="text-gray-600 text-sm">Cannot check — no user logged in.</p>
-                )}
+                </div>
               </div>
 
               <div className={sectionCardClass} style={sectionCardStyle}>
@@ -101,16 +76,11 @@ export default async function DebugPage() {
                 {allAdmins && allAdmins.length > 0 ? (
                   <ul className="space-y-2 text-sm text-gray-600">
                     {allAdmins.map((admin) => {
-                      const isCurrentUser =
-                        user?.email?.toLowerCase() === admin.email
+                      const isCurrentUser = adminUser.email?.toLowerCase() === admin.email
                       return (
                         <li
                           key={admin.email}
-                          className={
-                            isCurrentUser
-                              ? 'font-semibold text-green-600'
-                              : ''
-                          }
+                          className={isCurrentUser ? 'font-semibold text-green-600' : ''}
                         >
                           {admin.email}
                           {isCurrentUser && ' (this is you)'}

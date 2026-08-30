@@ -4,11 +4,26 @@ import React, { useState, useEffect, useRef } from 'react'
 import { createPortal, flushSync } from 'react-dom'
 import { insertRushEvent, deleteRushEvent, updateRushEvent, updateRushEventOrder, listRushEvents, type RushEventInput } from '@/app/admin/actions'
 import RushEvent from './RushEvent'
+import {
+  adminFieldClass,
+  adminFieldEditStyle,
+  adminHeadingClass,
+  adminIconBtnClass,
+  adminIconDangerBtnClass,
+  adminInnerCardClass,
+  adminInnerCardStyle,
+  adminLabelClass,
+  adminMutedClass,
+  adminPrimaryBtnClass,
+  adminSecondaryBtnClass,
+} from '@/components/admin/admin-ui'
 import type { ClientRushEvent } from '@/lib/rush-events'
 
 export default function RushScheduleManager({
+  cycleId,
   initialEvents,
 }: {
+  cycleId: string
   initialEvents: ClientRushEvent[]
 }) {
   const [rushEvents, setRushEvents] = useState<ClientRushEvent[]>(initialEvents)
@@ -160,7 +175,7 @@ export default function RushScheduleManager({
   }
 
   const refreshRushEvents = async () => {
-    const { data, error: loadError } = await listRushEvents()
+    const { data, error: loadError } = await listRushEvents(cycleId)
     if (loadError) {
       setError(loadError)
       return
@@ -200,7 +215,7 @@ export default function RushScheduleManager({
     if (isEditMode && editingEventId) {
       result = await updateRushEvent(editingEventId, eventData)
     } else {
-      result = await insertRushEvent(eventData)
+      result = await insertRushEvent(cycleId, eventData)
     }
 
     if (result.error) {
@@ -428,20 +443,17 @@ export default function RushScheduleManager({
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold font-inter">Rush Schedule</h2>
-        <button
-          onClick={handleOpenModal}
-          className="px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
-        >
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Rush Schedule</h2>
+        <button type="button" onClick={handleOpenModal} className={adminPrimaryBtnClass}>
           Add Rush Event
         </button>
       </div>
 
       {error && !isModalOpen ? (
-        <p className="text-red-600 text-sm">{error}</p>
+        <p className="text-sm text-red-400">{error}</p>
       ) : rushEvents.length === 0 ? (
-        <p className="text-gray-600 text-sm">No rush events scheduled yet.</p>
+        <p className={`text-sm ${adminMutedClass}`}>No rush events scheduled yet.</p>
       ) : (
         <div className="space-y-3">
           {rushEvents.map((event, index) => {
@@ -452,11 +464,12 @@ export default function RushScheduleManager({
             <div
               key={event.id}
               ref={(el) => setCardRef(event.id, el)}
-              className={`flex items-start gap-3 bg-white/80 rounded-xl p-4 border border-gray-100 transition-opacity duration-200 ${
+              className={`${adminInnerCardClass} items-start transition-opacity duration-200 ${
                 draggedEventId === event.id ? 'opacity-0' : ''
               }`}
               style={{
-                boxShadow: draggedEventId === event.id ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.04)',
+                ...adminInnerCardStyle,
+                boxShadow: draggedEventId === event.id ? 'none' : adminInnerCardStyle.boxShadow,
               }}
               onDragOver={(e) => handleDragOver(event.id, e)}
               onDrop={handleDrop}
@@ -466,10 +479,10 @@ export default function RushScheduleManager({
                   type="button"
                   onClick={() => handleMoveClick(event.id, -1)}
                   disabled={isFirst}
-                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                  className={`flex h-8 w-9 items-center justify-center rounded-full transition-all duration-200 ${
                     isFirst
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 cursor-pointer'
+                      ? 'cursor-not-allowed text-slate-600'
+                      : `${adminIconBtnClass} !h-8`
                   }`}
                   title={isFirst ? 'Already at top' : 'Move up'}
                 >
@@ -481,7 +494,7 @@ export default function RushScheduleManager({
                   draggable
                   onDragStart={(e) => handleDragStart(event.id, e)}
                   onDragEnd={handleDragEnd}
-                  className="flex items-center justify-center w-9 h-8 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 cursor-grab active:cursor-grabbing"
+                  className="flex h-8 w-9 cursor-grab items-center justify-center rounded-full text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white active:cursor-grabbing"
                   title="Drag to reorder"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -497,10 +510,10 @@ export default function RushScheduleManager({
                   type="button"
                   onClick={() => handleMoveClick(event.id, 1)}
                   disabled={isLast}
-                  className={`flex items-center justify-center w-9 h-8 rounded-full transition-all duration-200 ${
+                  className={`flex h-8 w-9 items-center justify-center rounded-full transition-all duration-200 ${
                     isLast
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 cursor-pointer'
+                      ? 'cursor-not-allowed text-slate-600'
+                      : `${adminIconBtnClass} !h-8`
                   }`}
                   title={isLast ? 'Already at bottom' : 'Move down'}
                 >
@@ -509,7 +522,7 @@ export default function RushScheduleManager({
                   </svg>
                 </button>
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <RushEvent
                   title={event.title}
                   datetime={event.datetime}
@@ -518,12 +531,13 @@ export default function RushScheduleManager({
                   buttonLabel={event.button_label}
                   buttonUrl={event.button_url}
                   compact
+                  tone="dark"
                 />
               </div>
               <div className="flex shrink-0 gap-0.5 -mt-1 -mr-1">
                 <button
                   onClick={() => handleEditEvent(event)}
-                  className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-[#315CA9] hover:bg-blue-50 hover:scale-110 transition-all duration-200 cursor-pointer"
+                  className={`${adminIconBtnClass} h-9 w-9`}
                   title="Edit event"
                 >
                   <svg
@@ -538,7 +552,7 @@ export default function RushScheduleManager({
                 <button
                   onClick={() => handleDelete(event.id)}
                   disabled={isDeleting === event.id}
-                  className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 hover:scale-110 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-gray-400"
+                  className={`${adminIconDangerBtnClass} h-9 w-9`}
                   title="Delete event"
                 >
                   {isDeleting === event.id ? (
@@ -574,28 +588,28 @@ export default function RushScheduleManager({
             style={{ zIndex: 99999 }}
           >
             <div
-              className={`absolute inset-0 bg-black/15 backdrop-blur-md transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`absolute inset-0 bg-[#0f172a]/80 backdrop-blur-sm transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isModalVisible ? 'opacity-100' : 'opacity-0'
               }`}
               onClick={handleCloseModal}
             />
             <div
-              className={`relative z-10 bg-white/95 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-gray-100 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`relative z-10 mx-4 max-h-[90vh] w-full min-w-0 max-w-2xl overflow-x-clip overflow-y-auto rounded-xl border border-white/10 bg-[#0f172a] p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isModalVisible
-                  ? 'opacity-100 scale-100 translate-y-0'
-                  : 'opacity-0 scale-95 translate-y-3'
+                  ? 'translate-y-0 scale-100 opacity-100'
+                  : 'translate-y-3 scale-95 opacity-0'
               }`}
-              style={{ boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)' }}
+              style={{ boxShadow: '0 12px 40px rgba(0, 0, 0, 0.45)' }}
               onClick={(e) => e.stopPropagation()}
             >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold font-inter">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className={`text-2xl font-bold font-inter ${adminHeadingClass}`}>
                 {isEditMode ? 'Edit Rush Event' : 'Add Rush Event'}
               </h3>
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 cursor-pointer"
+                className={`${adminIconBtnClass} h-9 w-9`}
                 title="Close"
               >
                 <svg
@@ -613,13 +627,13 @@ export default function RushScheduleManager({
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-              <div>
+            <form onSubmit={handleSubmit} className="min-w-0 max-w-full space-y-4" autoComplete="off">
+              <div className="min-w-0">
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className={adminLabelClass}
                 >
-                  Title <span className="text-red-500">*</span>
+                  Title <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -630,75 +644,85 @@ export default function RushScheduleManager({
                   placeholder="e.g., Open House #1"
                   autoComplete="off"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                  className={adminFieldClass}
+                  style={adminFieldEditStyle}
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
+              <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-3">
+                <div className="min-w-0">
                   <label
                     htmlFor="eventDate"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className={adminLabelClass}
                   >
-                    Date <span className="text-red-500">*</span>
+                    Date <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    type="date"
-                    id="eventDate"
-                    name="eventDate"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    required
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
-                      eventDate ? '' : 'datetime-empty'
-                    }`}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="date"
+                      id="eventDate"
+                      name="eventDate"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      required
+                      className={`${adminFieldClass} ${
+                        eventDate ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="startTime"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className={adminLabelClass}
                   >
-                    Start Time <span className="text-red-500">*</span>
+                    Start Time <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    type="time"
-                    id="startTime"
-                    name="startTime"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    required
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
-                      startTime ? '' : 'datetime-empty'
-                    }`}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="time"
+                      id="startTime"
+                      name="startTime"
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                      required
+                      className={`${adminFieldClass} ${
+                        startTime ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="endTime"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className={adminLabelClass}
                   >
-                    End Time <span className="text-gray-400 font-normal">(Optional)</span>
+                    End Time <span className={`font-normal ${adminMutedClass}`}>(Optional)</span>
                   </label>
-                  <input
-                    type="time"
-                    id="endTime"
-                    name="endTime"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow,color] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)] ${
-                      endTime ? '' : 'datetime-empty'
-                    }`}
-                  />
+                  <div className="admin-datetime-wrap">
+                    <input
+                      type="time"
+                      id="endTime"
+                      name="endTime"
+                      value={endTime}
+                      onChange={(e) => setEndTime(e.target.value)}
+                      className={`${adminFieldClass} ${
+                        endTime ? '' : 'datetime-empty'
+                      }`}
+                      style={adminFieldEditStyle}
+                    />
+                  </div>
                 </div>
               </div>
 
               <div>
                 <label
                   htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className={adminLabelClass}
                 >
-                  Location <span className="text-red-500">*</span>
+                  Location <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -709,14 +733,15 @@ export default function RushScheduleManager({
                   placeholder="e.g., Michigan Union"
                   autoComplete="off"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                  className={adminFieldClass}
+                  style={adminFieldEditStyle}
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className={adminLabelClass}
                 >
                   Description
                 </label>
@@ -727,14 +752,15 @@ export default function RushScheduleManager({
                   onChange={handleInputChange}
                   rows={4}
                   placeholder="e.g., Stop by our table to meet brothers and learn about rush."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                  className={`${adminFieldClass} h-auto`}
+                  style={adminFieldEditStyle}
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="button_label"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className={adminLabelClass}
                 >
                   Button Label
                 </label>
@@ -745,14 +771,15 @@ export default function RushScheduleManager({
                   value={formData.button_label || ''}
                   onChange={handleInputChange}
                   placeholder="e.g., Join Zoom Meeting"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                  className={adminFieldClass}
+                  style={adminFieldEditStyle}
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="button_url"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className={adminLabelClass}
                 >
                   Button URL
                 </label>
@@ -763,12 +790,13 @@ export default function RushScheduleManager({
                   value={formData.button_url || ''}
                   onChange={handleInputChange}
                   placeholder="https://example.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none transition-[border-color,box-shadow] duration-200 ease-out focus:border-[#315CA9] focus:shadow-[0_0_0_3px_rgba(49,92,169,0.18)]"
+                  className={adminFieldClass}
+                  style={adminFieldEditStyle}
                 />
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <div className="rounded border border-red-400/30 bg-red-500/10 px-4 py-3 text-red-300">
                   {error}
                 </div>
               )}
@@ -777,7 +805,7 @@ export default function RushScheduleManager({
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-gray-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className={adminSecondaryBtnClass}
                   disabled={isSubmitting}
                 >
                   Cancel
@@ -785,7 +813,7 @@ export default function RushScheduleManager({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#315CA9] text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className={adminPrimaryBtnClass}
                 >
                   {isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : 'Confirm'}
                 </button>
