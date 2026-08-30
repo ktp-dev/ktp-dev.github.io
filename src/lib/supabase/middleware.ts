@@ -1,6 +1,32 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const PUBLIC_PATHS = [
+  '/login',
+  '/auth',
+  '/apply',
+  '/',
+  '/about',
+  '/members',
+  '/rush',
+  '/nationals',
+  '/life',
+  '/hackathon',
+  '/privacy',
+]
+
+function isPublicPath(pathname: string) {
+  return PUBLIC_PATHS.some(
+    (path) => pathname === path || (path !== '/' && pathname.startsWith(path))
+  )
+}
+
+function copyResponseCookies(from: NextResponse, to: NextResponse) {
+  for (const cookie of from.cookies.getAll()) {
+    to.cookies.set(cookie)
+  }
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -35,20 +61,14 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Allow public pages and auth routes
-  const publicPaths = ['/login', '/auth', '/', '/about', '/members', '/rush', '/nationals', '/life', '/privacy']
-  const isPublicPath = publicPaths.some(path => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path))
-  
   // Allow /admin through - it will handle its own auth/admin checks
-  if (
-    !user &&
-    !isPublicPath &&
-    !request.nextUrl.pathname.startsWith('/admin')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  if (!user && !isPublicPath(request.nextUrl.pathname) && !request.nextUrl.pathname.startsWith('/admin')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    return NextResponse.redirect(url)
+    const redirect = NextResponse.redirect(url)
+    // When creating a new response, copy session cookies from supabaseResponse (see below).
+    copyResponseCookies(supabaseResponse, redirect)
+    return redirect
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
@@ -66,4 +86,3 @@ export async function updateSession(request: NextRequest) {
 
   return supabaseResponse
 }
-
