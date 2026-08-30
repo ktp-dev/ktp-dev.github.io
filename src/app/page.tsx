@@ -1,98 +1,90 @@
-'use client';
-
-import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
-// Hello
-// Images - using public folder paths
+const networkCompanies = [
+    { src: '/network/google.svg', alt: 'Google' },
+    { src: '/network/microsoft.svg', alt: 'Microsoft' },
+    { src: '/network/deloitte.svg', alt: 'Deloitte' },
+    { src: '/network/jpmc.svg', alt: 'JP Morgan' },
+    { src: '/network/meta.svg', alt: 'Meta' },
+    { src: '/network/citadel.svg', alt: 'Citadel' },
+    { src: '/network/capitalone.svg', alt: 'Capital One' },
+    { src: '/network/spotify.svg', alt: 'Spotify' },
+    { src: '/network/bloomberg.svg', alt: 'Bloomberg' },
+    { src: '/network/doordash.svg', alt: 'Doordash' },
+    { src: '/network/hrt.svg', alt: 'Hudson River Trading' },
+    { src: '/network/huntington.svg', alt: 'Huntington' },
+    { src: '/network/amazon.svg', alt: 'Amazon' },
+    { src: '/network/apple.svg', alt: 'Apple' },
+    { src: '/network/tiktok.svg', alt: 'Tiktok' },
+    { src: '/network/nvidia.svg', alt: 'Nvidia' },
+    { src: '/network/duolingo.svg', alt: 'Duolingo' },
+    { src: '/network/janestreet.svg', alt: 'Jane Street' },
+    { src: '/network/pwc.svg', alt: 'PWC' },
+    { src: '/network/ey.svg', alt: 'EY' },
+    { src: '/network/accenture.svg', alt: 'Accenture' },
+    { src: '/network/linkedin.svg', alt: 'LinkedIn' },
+    { src: '/network/tesla.svg', alt: 'Tesla' },
+    { src: '/network/ibm.svg', alt: 'IBM' },
+    { src: '/network/cisco.svg', alt: 'Cisco' },
+    { src: '/network/asana.svg', alt: 'Asana' },
+    { src: '/network/atlassian.svg', alt: 'Atlassian' },
+    { src: '/network/slack.svg', alt: 'Slack' },
+    { src: '/network/figma.svg', alt: 'Figma' },
+    { src: '/network/bleacherreport.svg', alt: 'Bleacher Report' },
+    { src: '/network/stripe.svg', alt: 'Stripe' },
+    { src: '/network/pnc.svg', alt: 'PNC' },
+    { src: '/network/boeing.svg', alt: 'Boeing' },
+    { src: '/network/salesforce.svg', alt: 'Salesforce' },
+    { src: '/network/mongodb.svg', alt: 'MongoDB' },
+    { src: '/network/vmware.svg', alt: 'VMware' },
+    { src: '/network/nike.svg', alt: 'Nike' },
+    { src: '/network/uber.svg', alt: 'Uber' },
+    { src: '/network/netskope.svg', alt: 'Netskope' },
+    { src: '/network/att.svg', alt: 'AT&T' },
+    { src: '/network/ford.svg', alt: 'Ford' },
+    { src: '/network/moderntreasury.svg', alt: 'Modern Treasury' },
+    { src: '/network/indeed.svg', alt: 'Indeed' },
+    { src: '/network/bofa.svg', alt: 'Bank of America' },
+    { src: '/network/workday.svg', alt: 'Workday' },
+    { src: '/network/caterpillar.svg', alt: 'Caterpillar' },
+    { src: '/network/p_and_g.svg', alt: 'P&G' },
+  { src: '/network/viget.svg', alt: 'Viget' },
+  { src: '/network/united.svg', alt: 'United' },
+]
 
 export default function Home() {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: 'ease-out-cubic',
-    });
-  }, []);
-
-  // Network company data
-  const networkCompanies = [
-    { src: '/network/google.png', alt: 'Google' },
-    { src: '/network/microsoft.png', alt: 'Microsoft' },
-    { src: '/network/deloitte.png', alt: 'Deloitte' },
-    { src: '/network/jpmorgan.png', alt: 'JP Morgan' },
-    { src: '/network/meta.png', alt: 'Meta' },
-    { src: '/network/citadel.png', alt: 'Citadel' },
-    { src: '/network/capital_one.png', alt: 'Capital One' },
-    { src: '/network/spotify.png', alt: 'Spotify' },
-    { src: '/network/bloomberg.png', alt: 'Bloomberg' },
-    { src: '/network/doordash.png', alt: 'Doordash' },
-    { src: '/network/hudson_river_trading.png', alt: 'Hudson River Trading' },
-    { src: '/network/amazon.png', alt: 'Amazon' },
-    { src: '/network/apple.png', alt: 'Apple' },
-    { src: '/network/tiktok.png', alt: 'Tiktok' },
-    { src: '/network/nvidia.png', alt: 'Nvidia' },
-    { src: '/network/duolingo.png', alt: 'Duolingo' },
-    { src: '/network/jane_street.png', alt: 'Jane Street' },
-    { src: '/network/pwc.png', alt: 'PWC' },
-    { src: '/network/ey.png', alt: 'EY' },
-    { src: '/network/accenture.png', alt: 'Accenture' },
-    { src: '/network/linkedin.png', alt: 'LinkedIn' },
-    { src: '/network/tesla.png', alt: 'Tesla' },
-    { src: '/network/ibm.png', alt: 'IBM' },
-    { src: '/network/cisco.png', alt: 'Cisco' },
-    { src: '/network/asana.png', alt: 'Asana' },
-    { src: '/network/slack.png', alt: 'Slack' },
-    { src: '/network/figma.png', alt: 'Figma' },
-    { src: '/network/bleacher_report.png', alt: 'Bleacher Report' },
-    { src: '/network/stripe.png', alt: 'Stripe' },
-    { src: '/network/pnc.png', alt: 'PNC' },
-    { src: '/network/boeing.png', alt: 'Boeing' },
-    { src: '/network/salesforce.png', alt: 'Salesforce' },
-    { src: '/network/mongo_db.png', alt: 'MongoDB' },
-    { src: '/network/vmware.png', alt: 'VMware' },
-    { src: '/network/nike.png', alt: 'Nike' },
-    { src: '/network/uber.png', alt: 'Uber' },
-    { src: '/network/netskope.png', alt: 'Netskope' },
-    { src: '/network/att.png', alt: 'AT&T' },
-    { src: '/network/ford.png', alt: 'Ford' },
-    { src: '/network/modern_treasury.png', alt: 'Modern Treasury' },
-    { src: '/network/indeed.png', alt: 'Indeed' },
-    { src: '/network/bank_of_america.png', alt: 'Bank of America' },
-    { src: '/network/workday.png', alt: 'Workday' },
-    { src: '/network/caterpillar.png', alt: 'Caterpillar' },
-    { src: '/network/p&g.png', alt: 'P&G' },
-    { src: '/network/viget.png', alt: 'Viget' },
-    { src: '/network/united.png', alt: 'United' },
-  ];
-
   return (
     <div className='homepage-grid'>
       <Header />
-      
+      {/* Mobile blob spill: page-spill-clip (overflow-x: clip). Avoid overflow-x-hidden — it clips rotated hero photos vertically. */}
+      <div className="page-spill-clip relative w-full max-w-full flex-1">
+      {/*
+        Mobile blobs: full page width (not inside the hero text column).
+        Sideways spill clipped only by this wrapper + html overflow-x.
+        Desktop ten/eleven stack stays in the hero row below.
+      */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 z-0 block blob-c home-mobile-blobs md:hidden">
+        <div className="shape-blob twelve"></div>
+        <div className="shape-blob thirteen"></div>
+      </div>
+
       {/* Main content */}
-      <div className='flex flex-row justify-center xl:justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
-        <div className="absolute inset-0 blob-c z-0 hidden md:block">
+      <div className='relative z-10 flex flex-row justify-center xl:justify-between mb-12 md:mb-20 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
+        <div className="pointer-events-none absolute inset-0 z-0 hidden blob-c md:block">
             <div className="shape-blob ten"></div>
             <div className="shape-blob eleven"></div>
         </div>
-        <div className='flex-1 flex flex-col items-end'>
-          <img src="/images/home/ae_lighthouse.jpg" className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
-          <img src="/images/home/rock.JPEG" className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
-          <img src="/images/home/agoats.jpeg" className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
+        <div className='relative z-10 flex-1 flex flex-col items-end'>
+          <img src={`/images/home/ae_lighthouse.jpg`} className='hidden xl:block' style={{ width: '250px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '60px', marginTop: '20px'}} />
+          <img src={`/images/home/rock.JPEG`} className='hidden xl:block' style={{ width: '200px', transform: 'rotate(-19deg)', borderRadius: '25px', marginRight: '20px' }} />
+          <img src={`/images/home/agoats.jpeg`} className='hidden xl:block' style={{ width: '300px', transform: 'rotate(10deg)', borderRadius: '25px', marginRight: '120px', marginTop: '-40px' }} />
         </div>
 
-        <div className='flex flex-col flex-none'>
-          <div className="absolute inset-0 blob-c z-0 block md:hidden overflow-hidden">
-              <div className="shape-blob twelve"></div>
-              <div className="shape-blob thirteen"></div>
-          </div>
-          <div className='flex flex-col items-center justify-center z-10'>
+        <div className='relative z-10 flex flex-col flex-none'>
+          <div className='relative z-10 flex flex-col items-center justify-center'>
             <div className="font-black text-center w-[375px] sm:w-[450px] md:w-[550px] lg:w-[750px] text-3xl sm:text-3xl md:text-4xl lg:text-5xl mt-24 md:mt-36 font-inter" style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
             We&apos;re the University of Michigan&apos;s Premier Technology Fraternity
             </div>
@@ -102,60 +94,108 @@ export default function Home() {
             </div>
 
             <Link href="/rush">
-              <div className='contact-us text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 cursor-pointer'>
+              <div className='contact-us tap-press text-white font-semibold text-lg mt-8 flex flex-row items-center justify-center font-inter transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 cursor-pointer'>
                 Rush
               </div>
             </Link>
           </div>
         </div>
 
-        <div className='flex-1 flex flex-col items-start'>
-          <img src="/images/home/alpha_delta_lq.jpeg" className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
+        <div className='relative z-10 flex-1 flex flex-col items-start'>
+          <img src={`/images/home/alpha_delta_lq.jpeg`} className='hidden xl:block' style={{ width: '300px', position: 'relative', left: '50px', transform: 'rotate(347deg)', borderRadius: '25px', marginTop: '20px' }} />
 
           <div className='flex flex-row'>
-            <img src="/images/home/ae_crossover.jpg" className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
-            <img src="/images/home/omega_dp.jpeg" className='hidden xl:block' style={{ width: '350px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px', marginTop: '20px' }} />
+            <img src={`/images/home/ae_crossover.jpg`} className='hidden xl:block' style={{ width: '250px', position: 'relative', transform: 'rotate(13deg)', borderRadius: '25px' }} />
+            <img src={`/images/home/omega_dp.jpeg`} className='hidden xl:block' style={{ width: '350px', position: 'relative', left: '25px', top: '100px', transform: 'rotate(13deg)', borderRadius: '25px', marginTop: '20px' }} />
           </div>
         </div>
       </div>
 
-      <div className='flex flex-col z-20 mb-12 md:mb-12 lg:mb-32 px-6 sm:px-8 md:px-12 lg:px-20'>
+      <div className="relative z-10 flex flex-col px-6 sm:px-8 md:px-12 lg:px-20">
         {/* Description */}
-        <div className='flex flex-col 2xl:flex-row mb-8 md:mb-12'>
-          {/* <div className='hidden md:flex flex-row justify-center md:justify-start gap-4'>
-            <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/images/home/chi2.jpeg" alt="Crossover" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-            <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 2xl:hidden' style={{ borderRadius: '10px' }} />
-          </div> */}
+        <div className="mb-8 flex flex-col md:mb-12 2xl:flex-row">
+          <div className="hidden flex-row justify-center gap-4 md:justify-start 2xl:flex">
+            {/* <img src="/images/home/agnescaro.jpg" alt="Agnes" className='h-48 md:h-64' style={{ borderRadius: '10px' }} /> */}
+            <img
+              src={`/images/home/chi2.jpeg`}
+              alt="Crossover"
+              className="h-48 md:h-64"
+              style={{ borderRadius: '10px' }}
+            />
+            {/* <img src="/images/home/lucas.jpg" alt="Lucas" className='h-48 md:h-64 2xl:hidden' style={{ borderRadius: '10px' }} /> */}
+          </div>
 
-          <div className='flex flex-col justify-center items-center 2xl:ml-16'>
+          <div className="flex flex-col items-center justify-center 2xl:ml-16">
             <div>
-              <p className='text-[#888888] text-sm md:text-base mb-4 mt-8 2xl:mt-0 font-inter' style={{ letterSpacing: '-0.02em' }}>
+              <p
+                className="mb-4 mt-8 font-inter text-sm text-[#888888] md:text-base 2xl:mt-0"
+                style={{ letterSpacing: '-0.02em' }}
+              >
                 Established in 2012, we are
               </p>
-              <p className='font-bold text-xl sm:text-2xl md:text-3xl 2xl:text-4xl 2xl:w-[400px] mb-4 md:mb-8 font-inter' style={{ fontWeight: '900', letterSpacing: '-0.02em' }}>
+              <p
+                className="mb-4 font-inter text-xl font-bold sm:text-2xl md:mb-8 md:text-3xl 2xl:w-[400px] 2xl:text-4xl"
+                style={{ fontWeight: '900', letterSpacing: '-0.02em' }}
+              >
                 The first technology fraternity in the nation.
               </p>
               {/* More about us button */}
-              <div className='more-about-us text-sm flex flex-row items-center justify-center font-inter'>
-                <Link className="hover:text-[#315CA9] font-bold" href="/about">
+              <div className="more-about-us relative z-20 flex flex-row items-center justify-center font-inter text-sm">
+                <Link className="tap-press font-bold hover:text-[#315CA9]" href="/about">
                   More About Us
-                  <svg className="ml-1 w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                  <svg
+                    className="ml-1 inline h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
                   </svg>
                 </Link>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className='hidden md:flex flex-row gap-4 justify-center px-6 sm:px-8 md:px-12 lg:px-20'>
-          <img src="/images/home/ab.jpg" alt="Alpha Beta" className='hidden lg:h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/pledge_projects.jpeg" alt="Pledge Projects" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/tailgater.jpg" alt="In and Chris" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/alumni.jpg" alt="Alumni" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-          <img src="/images/home/tailgate.jpg" alt="Tailgate" className='h-48 md:h-64' style={{ borderRadius: '10px' }} />
-        </div>
+      {/* Full-bleed photo strip — same size as before, clipped at viewport edges */}
+      <div className="mb-12 hidden w-full flex-row justify-center gap-4 overflow-hidden md:flex lg:mb-32">
+        <img
+          src={`/images/home/ab.jpg`}
+          alt="Alpha Beta"
+          className="hidden md:h-64 lg:h-48"
+          style={{ borderRadius: '10px' }}
+        />
+        <img
+          src={`/images/home/pledge_projects.jpeg`}
+          alt="Pledge Projects"
+          className="h-48 md:h-64"
+          style={{ borderRadius: '10px' }}
+        />
+        <img
+          src={`/images/home/tailgater.jpg`}
+          alt="In and Chris"
+          className="h-48 md:h-64"
+          style={{ borderRadius: '10px' }}
+        />
+        <img
+          src={`/images/home/alumni.jpg`}
+          alt="Alumni"
+          className="h-48 md:h-64"
+          style={{ borderRadius: '10px' }}
+        />
+        <img
+          src={`/images/home/tailgate.jpg`}
+          alt="Tailgate"
+          className="h-48 md:h-64"
+          style={{ borderRadius: '10px' }}
+        />
       </div>
 
       {/* Network */}
@@ -172,11 +212,8 @@ export default function Home() {
               key={company.alt}
               src={company.src}
               alt={company.alt}
-              className='h-6 lg:h-8 network-logo-simple opacity-0'
-              style={{
-                animationDelay: `${index * 50}ms`,
-                animationFillMode: 'forwards'
-              }}
+              className="h-6 lg:h-8 network-logo-simple"
+              style={{ animationDelay: `${index * 50}ms` }}
             />
           ))}
         </div>
@@ -229,27 +266,27 @@ export default function Home() {
           </div>
 
           {/* Phones */}
-          <div className='flex flex-row justify-center lg:justify-end'>
-            <div className='relative mr-2 sm:mr-4 mt-12 sm:mt-24 md:mt-24 lg:mt-24'>
-              <Image 
-                src="/images/home/phone_frame_3.svg" 
-                alt="Phone Frame 1" 
+          <div className="flex shrink-0 flex-row justify-center lg:justify-end">
+            <div className="relative mr-2 mt-12 shrink-0 sm:mr-4 sm:mt-24 md:mt-24 lg:mt-24">
+              <Image
+                src="/images/home/phone_frame_3.png"
+                alt="Phone Frame 1"
                 width={277}
                 height={572}
-                className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] w-auto'
-                priority
-                unoptimized
+                className="h-64 w-auto max-w-none shrink-0 object-contain sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem]"
+                sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 277px"
+                style={{ width: 'auto' }}
               />
             </div>
-            <div className='relative mt-6 sm:mt-12 md:mt-12 lg:mt-12'>
-              <Image 
-                src="/images/home/phone_frame_4.svg" 
-                alt="Phone Frame 2" 
+            <div className="relative mt-6 shrink-0 sm:mt-12 md:mt-12 lg:mt-12">
+              <Image
+                src="/images/home/phone_frame_4.png"
+                alt="Phone Frame 2"
                 width={277}
                 height={572}
-                className='h-64 sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem] w-auto'
-                priority
-                unoptimized
+                className="h-64 w-auto max-w-none shrink-0 object-contain sm:h-72 md:h-80 lg:h-80 xl:h-96 2xl:h-[28rem]"
+                sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 277px"
+                style={{ width: 'auto' }}
               />
             </div>
           </div>
@@ -257,6 +294,7 @@ export default function Home() {
       </div>
 
       <Footer />
+      </div>
     </div>
   );
 }
