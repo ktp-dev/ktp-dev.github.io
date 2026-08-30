@@ -80,13 +80,21 @@ export function ApplyShell({
       {current ? (
         <ol className="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 lg:gap-4">
           {APPLY_STEPS.map((step, index) => {
-            const reached = index <= currentIndex
+            const isCurrent = step.slug === current
+            const isReached = index <= currentIndex
+            const isFuture = index > currentIndex
             return (
               <li
                 key={step.slug}
-                aria-current={step.slug === current ? 'step' : undefined}
-                className={`cursor-default select-none rounded-[40px] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold ${
-                  reached ? 'bg-[#315CA9] text-white' : 'bg-gray-200/60 text-gray-700'
+                aria-current={isCurrent ? 'step' : undefined}
+                aria-disabled={isFuture ? true : undefined}
+                title={isFuture ? 'Complete earlier steps first' : undefined}
+                className={`cursor-default select-none rounded-[40px] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-colors ${
+                  isCurrent
+                    ? 'bg-[#315CA9] text-white'
+                    : isReached
+                      ? 'bg-[#315CA9]/75 text-white'
+                      : 'bg-gray-200/60 text-gray-500 opacity-60 hover:bg-gray-200/60 hover:text-gray-500 hover:opacity-60'
                 }`}
               >
                 {index + 1}. {step.label}
