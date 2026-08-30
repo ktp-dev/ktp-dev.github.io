@@ -97,9 +97,11 @@ export default async function PortalPage() {
       }
       headerRight={
         <img
-          src="/images/beep-bop.svg"
+          src="/images/beep-bop.png"
           alt=""
-          className="h-24 w-24 shrink-0 brightness-0 invert sm:h-28 sm:w-28 md:h-32 md:w-32"
+          width={128}
+          height={128}
+          className="h-24 w-24 shrink-0 sm:h-28 sm:w-28 md:h-32 md:w-32"
         />
       }
     >
