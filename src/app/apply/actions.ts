@@ -28,7 +28,7 @@ async function requireDraftOwner() {
   const user = await requireUser()
   if (!user?.email) return { error: 'Please log in with your UMich Google account.' as const }
 
-  const isAdmin = await checkIsAdmin()
+  const isAdmin = await checkIsAdmin(user)
   if (!isAdmin && (await getBrotherByUmichEmail(user.email))) {
     return { error: 'Brothers cannot submit a rush application.' as const }
   }
@@ -54,7 +54,7 @@ async function requireApplicationOwner() {
   const user = await requireUser()
   if (!user?.email) return { error: 'Please log in with your UMich Google account.' as const }
 
-  const isAdmin = await checkIsAdmin()
+  const isAdmin = await checkIsAdmin(user)
   if (!isAdmin && (await getBrotherByUmichEmail(user.email))) {
     return { error: 'Brothers cannot access rush applications.' as const }
   }
@@ -216,7 +216,6 @@ export async function saveApplyDraft(input: {
 
   await saveApplicationAnswers(auth.application.id, parsedAnswers.data)
 
-  revalidatePath('/apply')
   return { error: null }
 }
 

@@ -122,7 +122,7 @@ export function ApplySectionForm({
     if (timer.current) clearTimeout(timer.current)
     timer.current = setTimeout(() => {
       void persist()
-    }, 1500)
+    }, 2000)
   }
 
   async function goNext() {
