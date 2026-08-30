@@ -8,6 +8,10 @@ export function toUmichEmail(input: string) {
   return `${trimmed}@umich.edu`
 }
 
+export function uniqnameFromEmail(email: string) {
+  return email.replace(/@umich\.edu$/i, '')
+}
+
 export const umichEmailSchema = z
   .string()
   .trim()

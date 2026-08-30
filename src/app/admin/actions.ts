@@ -20,7 +20,15 @@ import {
 import { parseAdminEmail } from '@/lib/admin-schema'
 import { parseBrotherId, parseBrotherWrite, type BrotherFormInput } from '@/lib/brother-schema'
 import { addAdminEmail, removeAdminEmail } from '@/lib/admins'
-import { addBrotherRow, removeBrotherRow, searchBrothers, updateBrotherRow } from '@/lib/brothers'
+import { parseBrothersCsv } from '@/lib/brother-csv-import'
+import {
+  addBrotherRow,
+  importBrotherRows,
+  listBrothers,
+  removeBrotherRow,
+  searchBrothers,
+  updateBrotherRow,
+} from '@/lib/brothers'
 import { parseCycleId, parseRushCycleApplication, parseRushCycleCreate, parseRushCycleMeta } from '@/lib/rush-cycle-schema'
 import {
   activateRushCycle,
@@ -129,6 +137,45 @@ export async function removeBrother(id: string) {
   } catch (error) {
     console.error('Error removing brother:', error)
     return { data: null, error: 'Failed to remove brother' }
+  }
+}
+
+export async function importBrothersCsv(csvText: string) {
+  const auth = await requireAdmin()
+  if (auth.error) {
+    return { data: null, error: auth.error }
+  }
+
+  const parsed = parseBrothersCsv(csvText)
+  if (parsed.errors) {
+    return { data: null, error: parsed.errors.join('\n') }
+  }
+
+  try {
+    const result = await importBrotherRows(parsed.data)
+    if (result.errors.length > 0 && result.brothers.length === 0) {
+      return { data: null, error: result.errors.join('\n') }
+    }
+
+    revalidateMembers()
+    const brothers = await listBrothers()
+    const summary = `Imported ${parsed.data.length} row(s): ${result.created} added, ${result.updated} updated.`
+    const error =
+      result.errors.length > 0 ? `${summary}\n\n${result.errors.join('\n')}` : null
+
+    return {
+      data: {
+        brothers,
+        created: result.created,
+        updated: result.updated,
+        total: parsed.data.length,
+        summary,
+      },
+      error,
+    }
+  } catch (error) {
+    console.error('Error importing brothers CSV:', error)
+    return { data: null, error: 'Failed to import brothers' }
   }
 }
 

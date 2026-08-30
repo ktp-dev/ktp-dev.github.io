@@ -4,6 +4,7 @@ import { and, asc, eq, ilike, ne, or, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import { admins, brothers } from '@/db/schema'
 import type { BrotherWrite, ClientBrother, BrotherSearchHit } from '@/lib/brother-schema'
+import { uniqnameFromEmail } from '@/lib/umich-email'
 
 export type { ClientBrother, BrotherSearchHit }
 
@@ -24,10 +25,6 @@ export function toClientBrother(row: typeof brothers.$inferSelect): ClientBrothe
 export function brotherDisplayName(brother: ClientBrother, fallbackEmail: string) {
   const name = [brother.first_name, brother.last_name].filter(Boolean).join(' ').trim()
   return name || fallbackEmail
-}
-
-function uniqnameFromEmail(email: string) {
-  return email.replace(/@umich\.edu$/i, '')
 }
 
 export async function searchBrothers(query: string, limit = 8): Promise<BrotherSearchHit[]> {
@@ -155,6 +152,38 @@ export async function updateBrotherRow(id: string, input: BrotherWrite) {
     .returning()
 
   return { brother: updated ? toClientBrother(updated) : null, error: null }
+}
+
+export async function importBrotherRows(inputs: BrotherWrite[]) {
+  const brothers: ClientBrother[] = []
+  let created = 0
+  let updated = 0
+  const errors: string[] = []
+
+  for (let index = 0; index < inputs.length; index++) {
+    const input = inputs[index]!
+    const line = index + 2
+    const existing = await getBrotherByUmichEmail(input.umich_email)
+    const payload =
+      existing && !input.photo_filename && existing.photo_filename
+        ? { ...input, photo_filename: existing.photo_filename }
+        : input
+
+    const result = existing
+      ? await updateBrotherRow(existing.id, payload)
+      : await addBrotherRow(payload)
+
+    if (result.error || !result.brother) {
+      errors.push(`Row ${line}: ${result.error ?? 'Import failed'}`)
+      continue
+    }
+
+    brothers.push(result.brother)
+    if (existing) updated++
+    else created++
+  }
+
+  return { brothers, created, updated, errors }
 }
 
 export async function removeBrotherRow(id: string, actorEmail: string) {

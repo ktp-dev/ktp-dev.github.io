@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { addBrother, removeBrother, updateBrother } from '@/app/admin/actions'
+import { addBrother, importBrothersCsv, removeBrother, updateBrother } from '@/app/admin/actions'
 import {
   adminBodyClass,
   adminFieldClass,
@@ -23,6 +23,7 @@ import {
   adminTableWrapStyle,
 } from '@/components/admin/admin-ui'
 import type { BrotherFormInput, ClientBrother } from '@/lib/brother-schema'
+import { uniqnameFromEmail } from '@/lib/umich-email'
 
 const MODAL_ANIMATION_MS = 280
 
@@ -35,6 +36,16 @@ const emptyForm: BrotherFormInput = {
   photo_filename: '',
 }
 
+function sortPeople(people: ClientBrother[]) {
+  return [...people].sort((a, b) => {
+    const first = (a.first_name ?? '').localeCompare(b.first_name ?? '', undefined, { sensitivity: 'base' })
+    if (first !== 0) return first
+    const last = (a.last_name ?? '').localeCompare(b.last_name ?? '', undefined, { sensitivity: 'base' })
+    if (last !== 0) return last
+    return (a.umich_email ?? '').localeCompare(b.umich_email ?? '')
+  })
+}
+
 function displayName(brother: ClientBrother) {
   const name = [brother.first_name, brother.last_name].filter(Boolean).join(' ').trim()
   return name || brother.umich_email || 'Unnamed'
@@ -44,7 +55,7 @@ function formFromBrother(brother: ClientBrother): BrotherFormInput {
   return {
     first_name: brother.first_name ?? '',
     last_name: brother.last_name ?? '',
-    umich_email: brother.umich_email ?? '',
+    umich_email: brother.umich_email ? uniqnameFromEmail(brother.umich_email) : '',
     pledge_class: brother.pledge_class ?? '',
     linkedin_url: brother.linkedin_url ?? '',
     photo_filename: brother.photo_filename ?? '',
@@ -66,7 +77,8 @@ export default function BrotherListManager({
   const [modal, setModal] = useState<'form' | 'csv' | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [csvFilename, setCsvFilename] = useState<string | null>(null)
+  const [csvFile, setCsvFile] = useState<File | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const csvInputRef = useRef<HTMLInputElement>(null)
   const photoInputRef = useRef<HTMLInputElement>(null)
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -90,7 +102,7 @@ export default function BrotherListManager({
   function resetTransientState() {
     setForm(emptyForm)
     setEditingId(null)
-    setCsvFilename(null)
+    setCsvFile(null)
     setError(null)
     if (csvInputRef.current) csvInputRef.current.value = ''
     if (photoInputRef.current) photoInputRef.current.value = ''
@@ -141,14 +153,28 @@ export default function BrotherListManager({
       const next = editingId
         ? current.map((person) => (person.id === editingId ? result.data! : person))
         : [...current, result.data!]
-      return next.sort((a, b) => {
-        const first = (a.first_name ?? '').localeCompare(b.first_name ?? '', undefined, { sensitivity: 'base' })
-        if (first !== 0) return first
-        const last = (a.last_name ?? '').localeCompare(b.last_name ?? '', undefined, { sensitivity: 'base' })
-        if (last !== 0) return last
-        return (a.umich_email ?? '').localeCompare(b.umich_email ?? '')
-      })
+      return sortPeople(next)
     })
+    closeModal()
+  }
+
+  async function handleCsvImport() {
+    if (!csvFile) return
+    setError(null)
+    setSuccessMessage(null)
+    setIsSubmitting(true)
+    const result = await importBrothersCsv(await csvFile.text())
+    setIsSubmitting(false)
+    if (!result.data) {
+      setError(result.error)
+      return
+    }
+    setPeople(sortPeople(result.data.brothers))
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    setSuccessMessage(result.data.summary)
     closeModal()
   }
 
@@ -196,7 +222,9 @@ export default function BrotherListManager({
                       {isSelf ? <span className={`ml-2 text-xs font-normal ${adminMutedClass}`}>You</span> : null}
                     </p>
                     <p className={`truncate text-xs ${adminMutedClass}`}>
-                      {[person.pledge_class, person.umich_email].filter(Boolean).join(' · ')}
+                      {[person.pledge_class, person.umich_email ? uniqnameFromEmail(person.umich_email) : null]
+                        .filter(Boolean)
+                        .join(' · ')}
                     </p>
                   </div>
                   <div className="flex shrink-0">
@@ -239,6 +267,7 @@ export default function BrotherListManager({
         )}
       </div>
 
+      {successMessage ? <p className="mt-3 text-sm text-emerald-300">{successMessage}</p> : null}
       {error && !modal ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
       {modal &&
@@ -281,26 +310,31 @@ export default function BrotherListManager({
               {modal === 'csv' ? (
                 <div>
                   <p className={`mb-4 text-sm ${adminMutedClass}`}>
-                    Upload a CSV of brothers. Import isn’t wired up yet — this only picks a file.
+                    Upload a CSV with columns:{' '}
+                    <span className={adminBodyClass}>
+                      first_name, last_name, uniqname, pledge_class
+                    </span>
+                    . Optional: linkedin_url, photo_filename. Existing brothers are updated by
+                    email.
                   </p>
                   <input
                     ref={csvInputRef}
                     type="file"
                     accept=".csv,text/csv"
                     className="sr-only"
-                    onChange={(event) => setCsvFilename(event.target.files?.[0]?.name ?? null)}
+                    onChange={(event) => setCsvFile(event.target.files?.[0] ?? null)}
                   />
-                  {csvFilename ? (
+                  {csvFile ? (
                     <div className={adminInnerCardClass} style={adminInnerCardStyle}>
-                      <span className={`min-w-0 flex-1 truncate text-sm ${adminBodyClass}`}>{csvFilename}</span>
+                      <span className={`min-w-0 flex-1 truncate text-sm ${adminBodyClass}`}>{csvFile.name}</span>
                       <button
                         type="button"
                         onClick={() => {
-                          setCsvFilename(null)
+                          setCsvFile(null)
                           if (csvInputRef.current) csvInputRef.current.value = ''
                         }}
                         className={`${adminIconDangerBtnClass} h-8 w-8`}
-                        aria-label={`Remove ${csvFilename}`}
+                        aria-label={`Remove ${csvFile.name}`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                           <path
@@ -317,13 +351,19 @@ export default function BrotherListManager({
                     </button>
                   )}
                   <div className="flex justify-end space-x-3 pt-6">
-                    <button type="button" className={adminSecondaryBtnClass} onClick={closeModal}>
+                    <button type="button" className={adminSecondaryBtnClass} onClick={closeModal} disabled={isSubmitting}>
                       Cancel
                     </button>
-                    <button type="button" className={adminPrimaryBtnClass} disabled>
-                      Import
+                    <button
+                      type="button"
+                      className={adminPrimaryBtnClass}
+                      disabled={!csvFile || isSubmitting}
+                      onClick={() => void handleCsvImport()}
+                    >
+                      {isSubmitting ? 'Importing…' : 'Import'}
                     </button>
                   </div>
+                  {error ? <p className="pt-3 text-sm text-red-300 whitespace-pre-line">{error}</p> : null}
                 </div>
               ) : (
                 <form onSubmit={(event) => void handleSubmit(event)} className="space-y-4" autoComplete="off">
@@ -357,11 +397,11 @@ export default function BrotherListManager({
                   </div>
 
                   <div>
-                    <label htmlFor="brother-umich-email" className={adminLabelClass}>
+                    <label htmlFor="brother-uniqname" className={adminLabelClass}>
                       Uniqname <span className="text-red-400">*</span>
                     </label>
                     <input
-                      id="brother-umich-email"
+                      id="brother-uniqname"
                       type="text"
                       autoComplete="username"
                       className={adminFieldClass}
