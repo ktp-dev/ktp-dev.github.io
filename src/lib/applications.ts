@@ -1,4 +1,5 @@
 import { and, asc, eq, inArray, sql } from 'drizzle-orm'
+import { unstable_cache } from 'next/cache'
 import { db } from '@/db'
 import {
   applicationAnswers,
@@ -10,13 +11,23 @@ import {
 import type { ApplicationFields } from '@/lib/apply-schema'
 import type { FileSlot } from '@/lib/apply-steps'
 
+export const ACTIVE_CYCLE_CACHE_TAG = 'active-cycle'
+
+const getActiveCycleCached = unstable_cache(
+  async () => {
+    const [cycle] = await db
+      .select()
+      .from(rushCycles)
+      .where(eq(rushCycles.isActive, true))
+      .limit(1)
+    return cycle ?? null
+  },
+  ['active-rush-cycle'],
+  { revalidate: 60, tags: [ACTIVE_CYCLE_CACHE_TAG] }
+)
+
 export async function getActiveCycle() {
-  const [cycle] = await db
-    .select()
-    .from(rushCycles)
-    .where(eq(rushCycles.isActive, true))
-    .limit(1)
-  return cycle ?? null
+  return getActiveCycleCached()
 }
 
 export async function getCycleById(id: string) {

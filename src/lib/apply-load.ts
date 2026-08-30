@@ -45,15 +45,17 @@ const previewApplication = {
 export async function loadApplyContext(options?: { preview?: boolean; cycleId?: string }) {
   const user = await requireUser()
   const wantPreview = Boolean(options?.preview)
-  const isAdmin = user ? await checkIsAdmin() : null
+  const isAdmin = user ? await checkIsAdmin(user) : null
   const isPreview = Boolean(wantPreview && isAdmin)
 
-  const cycle = isPreview
-    ? options?.cycleId
-      ? await getCycleById(options.cycleId)
-      : await getActiveCycle()
-    : await getActiveCycle()
-  const isBrother = Boolean(user?.email && (await getBrotherByUmichEmail(user.email)))
+  const cyclePromise =
+    isPreview && options?.cycleId ? getCycleById(options.cycleId) : getActiveCycle()
+
+  const [cycle, brother] = await Promise.all([
+    cyclePromise,
+    user?.email ? getBrotherByUmichEmail(user.email) : Promise.resolve(null),
+  ])
+  const isBrother = Boolean(brother)
   const blockedAsBrother = isBrother && !isAdmin
 
   if (!user) {
@@ -111,14 +113,18 @@ export async function loadApplyContext(options?: { preview?: boolean; cycleId?: 
     }
   }
 
-  const application = await getOrCreateApplication({
-    cycleId: cycle.id,
-    userId: user.id,
-    email: user.email!,
-  })
-  const questions = await getCycleQuestions(cycle.id)
-  const answerRows = await getApplicationAnswers(application.id)
-  const fileRows = await getApplicationFiles(application.id)
+  const [application, questions] = await Promise.all([
+    getOrCreateApplication({
+      cycleId: cycle.id,
+      userId: user.id,
+      email: user.email!,
+    }),
+    getCycleQuestions(cycle.id),
+  ])
+  const [answerRows, fileRows] = await Promise.all([
+    getApplicationAnswers(application.id),
+    getApplicationFiles(application.id),
+  ])
 
   return {
     user: signedIn,

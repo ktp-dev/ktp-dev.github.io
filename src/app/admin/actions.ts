@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
+import { ACTIVE_CYCLE_CACHE_TAG } from '@/lib/applications'
 import { checkIsAdmin } from '@/lib/supabase/auth-helpers'
 import {
   parseRushEvent,
@@ -45,6 +46,7 @@ async function requireAdmin() {
 }
 
 function revalidateRush() {
+  updateTag(ACTIVE_CYCLE_CACHE_TAG)
   revalidatePath('/admin')
   revalidatePath('/admin/rush')
   revalidatePath('/admin/apps')
