@@ -272,9 +272,7 @@ export function ApplySectionForm({
         ? 'Saving…'
         : saveStatus === 'saved'
           ? 'Saved'
-          : saveStatus === 'unsaved'
-            ? 'Unsaved changes'
-            : ''
+          : ''
 
   return (
     <div className={`${applyCardClass} flex min-h-full flex-1 flex-col`} style={applyCardStyle}>
