@@ -41,6 +41,7 @@ function emptyCycleFields() {
     name: '',
     opensAt: '',
     closesAt: '',
+    applyCloseGraceMinutes: '2',
     interestFormUrl: '',
     youtubeUrl: '',
     calendarUrl: '',
@@ -52,6 +53,7 @@ function fieldsFromCycle(cycle: ClientRushCycle) {
     name: cycle.name,
     opensAt: toDatetimeLocalInRushTz(cycle.opens_at),
     closesAt: toDatetimeLocalInRushTz(cycle.closes_at),
+    applyCloseGraceMinutes: String(cycle.apply_close_grace_minutes ?? 2),
     interestFormUrl: cycle.interest_form_url ?? '',
     youtubeUrl: cycle.youtube_url ?? '',
     calendarUrl: cycle.calendar_url ?? '',
@@ -151,6 +153,7 @@ export default function AdminRushDashboard({
       name: fields.name,
       opens_at: fields.opensAt ? fromDatetimeLocalInRushTz(fields.opensAt) : '',
       closes_at: fields.closesAt ? fromDatetimeLocalInRushTz(fields.closesAt) : '',
+      apply_close_grace_minutes: fields.applyCloseGraceMinutes,
       interest_form_url: fields.interestFormUrl,
       youtube_url: fields.youtubeUrl,
       calendar_url: fields.calendarUrl,
@@ -341,7 +344,7 @@ export default function AdminRushDashboard({
                 />
               </div>
 
-              <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2">
+              <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-3">
                 <div className="min-w-0">
                   <label htmlFor="opens-at" className={adminLabelClass}>
                     Open Rush Opens <span className="text-red-400">*</span>
@@ -381,6 +384,29 @@ export default function AdminRushDashboard({
                       disabled={!fieldsEditable}
                     />
                   </div>
+                </div>
+                <div className="min-w-0">
+                  <label htmlFor="apply-close-grace" className={adminLabelClass}>
+                    Grace Period (minutes) <span className="text-red-400">*</span>
+                  </label>
+                  <p className="mb-1 text-xs text-gray-500">Extra minutes after close</p>
+                  <input
+                    id="apply-close-grace"
+                    type="number"
+                    min={0}
+                    step={1}
+                    className={adminFieldClass}
+                    style={adminFieldStyleFor(fieldsEditable)}
+                    value={fields.applyCloseGraceMinutes}
+                    onChange={(event) =>
+                      setFields((current) => ({
+                        ...current,
+                        applyCloseGraceMinutes: event.target.value,
+                      }))
+                    }
+                    required
+                    disabled={!fieldsEditable}
+                  />
                 </div>
               </div>
 
