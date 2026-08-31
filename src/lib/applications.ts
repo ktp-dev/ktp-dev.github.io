@@ -35,14 +35,12 @@ export async function getCycleById(id: string) {
   return cycle ?? null
 }
 
-/** Extra time after closesAt before edits lock (not shown to rushees). */
-export const APPLY_CLOSE_GRACE_MS = 2 * 60 * 1000
-
 export function cycleWindow(cycle: typeof rushCycles.$inferSelect) {
   const now = Date.now()
   const opens = new Date(cycle.opensAt).getTime()
   const closes = new Date(cycle.closesAt).getTime()
-  const effectiveClose = closes + APPLY_CLOSE_GRACE_MS
+  const graceMinutes = Math.max(0, cycle.applyCloseGraceMinutes ?? 2)
+  const effectiveClose = closes + graceMinutes * 60 * 1000
   return {
     isOpen: now >= opens && now <= effectiveClose,
     isBeforeOpen: now < opens,
@@ -86,10 +84,16 @@ export async function getOrCreateApplication(input: {
       })
       .returning()
     return created
-  } catch {
+  } catch (error) {
     const raced = await getApplicationForUser(input.cycleId, input.userId)
-    if (!raced) throw new Error('Failed to create application')
-    return raced
+    if (raced) return raced
+    console.error('Failed to create application', {
+      cycleId: input.cycleId,
+      userId: input.userId,
+      email: input.email,
+      error,
+    })
+    throw error instanceof Error ? error : new Error('Failed to create application')
   }
 }
 

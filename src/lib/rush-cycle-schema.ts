@@ -51,6 +51,10 @@ export const rushCycleMetaSchema = z
     name: z.string().trim().min(1, 'Cycle name is required').max(120),
     opens_at: z.string().min(1, 'Open date is required'),
     closes_at: z.string().min(1, 'Close date is required'),
+    apply_close_grace_minutes: z.coerce
+      .number()
+      .int('Grace period must be a whole number')
+      .min(0, 'Grace period must be 0 or more'),
     interest_form_url: requiredUrl,
     youtube_url: requiredUrl,
     calendar_url: requiredUrl,
