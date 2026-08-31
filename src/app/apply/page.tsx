@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ApplyCopyText } from '@/components/apply/ApplyCopyText'
 import { ApplySubmittedHome } from '@/components/apply/ApplySubmittedHome'
 import { applyCardStyle, ApplyShell } from '@/components/apply/ApplyShell'
 import { UmichGoogleButton } from '@/components/apply/UmichGoogleButton'
@@ -22,7 +23,7 @@ export default async function ApplyWelcomePage({
     return (
       <ApplyShell title={title} preview>
         <WelcomeCard>
-          <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
+          <ApplyCopyText text={ctx.cycle.introMarkdown ?? ''} />
           <Link
             href={applyPreviewHref('/apply/personal', ctx.cycle.id)}
             className="tap-press inline-flex cursor-pointer self-center rounded-[40px] bg-[#315CA9] px-6 py-3 font-semibold text-white font-inter transition-all duration-300 hover:scale-105 hover:shadow-md"
@@ -74,7 +75,7 @@ export default async function ApplyWelcomePage({
       return (
         <ApplyShell title={title}>
           <WelcomeCard>
-            <p>{closedCopy}</p>
+            <ApplyCopyText text={closedCopy} />
           </WelcomeCard>
         </ApplyShell>
       )
@@ -82,7 +83,7 @@ export default async function ApplyWelcomePage({
     return (
       <ApplyShell title={title}>
         <WelcomeCard>
-          <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
+          <ApplyCopyText text={ctx.cycle.introMarkdown ?? ''} />
           <UmichGoogleButton next="/apply" />
         </WelcomeCard>
       </ApplyShell>
@@ -113,7 +114,7 @@ export default async function ApplyWelcomePage({
     return (
       <ApplyShell title={title}>
         <WelcomeCard>
-          <p>{closedCopy}</p>
+          <ApplyCopyText text={closedCopy} />
         </WelcomeCard>
       </ApplyShell>
     )
@@ -136,7 +137,7 @@ export default async function ApplyWelcomePage({
   return (
     <ApplyShell title={title} accountEmail={ctx.user.email}>
       <WelcomeCard>
-        <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed">{ctx.cycle.introMarkdown}</p>
+        <ApplyCopyText text={ctx.cycle.introMarkdown ?? ''} />
         {ctx.isAdmin ? (
           <p className="self-center text-center text-sm leading-relaxed text-[#315CA9]">
             You are testing as an administrator. Your responses are saved to a live draft for this
