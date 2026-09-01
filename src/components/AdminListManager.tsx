@@ -73,7 +73,7 @@ export default function AdminListManager({
     <div className={`${adminSectionCardClass} flex h-full flex-col`} style={adminSectionCardStyle}>
       <div className="mb-4 flex min-h-10 flex-wrap items-center justify-between gap-3">
         <h2 className={`text-xl font-bold font-inter ${adminHeadingClass}`}>Admins</h2>
-        <form onSubmit={(event) => void handleAdd(event)} className="flex min-w-0 items-center gap-2">
+        <form onSubmit={(event) => void handleAdd(event)} className="relative z-20 flex min-w-0 items-center gap-2">
           <div className="w-40 sm:w-56">
             <BrotherTypeahead
               className={adminFieldClass}

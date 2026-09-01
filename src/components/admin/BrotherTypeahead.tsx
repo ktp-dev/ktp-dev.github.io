@@ -79,7 +79,7 @@ export function BrotherTypeahead({
   const showList = open && value.trim().length >= MIN_CHARS && (loading || results.length > 0)
 
   return (
-    <div ref={rootRef} className="relative w-full min-w-0">
+    <div ref={rootRef} className="relative z-30 w-full min-w-0">
       <input
         id={id}
         type="text"
@@ -109,7 +109,7 @@ export function BrotherTypeahead({
         <ul
           id={listId}
           role="listbox"
-          className="absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-y-auto rounded-md border border-white/10 bg-[#0f172a] py-1 shadow-lg shadow-black/40"
+          className="absolute left-0 right-0 z-50 mt-1 max-h-56 overflow-y-auto rounded-md border border-white/10 bg-[#0f172a] py-1 shadow-lg shadow-black/40"
         >
           {loading && results.length === 0 ? (
             <li className="px-3 py-2 text-sm text-slate-400">Searching…</li>

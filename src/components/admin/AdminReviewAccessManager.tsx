@@ -111,7 +111,7 @@ export function AdminReviewAccessManager({
     <div className="space-y-4">
       <form
         onSubmit={(event) => void handleAdd(event)}
-        className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
+        className="relative z-20 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
