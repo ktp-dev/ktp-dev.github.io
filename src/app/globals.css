@@ -73,8 +73,7 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"] {
   color-scheme: dark;
-  display: flex;
-  align-items: center;
+  display: block;
   box-sizing: border-box;
   /* Native controls have a large intrinsic min-width — without this they blow out grid cards */
   min-width: 0 !important;
@@ -83,21 +82,16 @@ input[type="datetime-local"] {
 }
 
 /*
- * iOS Safari: the ::-webkit-datetime-edit internals keep a fixed preferred width
- * even when the <input> is width:100%. Force those pieces to shrink/clip,
- * and keep the value vertically centered in h-10 fields.
+ * iOS Safari: datetime-edit internals keep a large preferred width. Clip/shrink
+ * the value; the picker icon is absolutely pinned to the right (below).
  */
 input[type="date"]::-webkit-datetime-edit,
 input[type="time"]::-webkit-datetime-edit,
 input[type="datetime-local"]::-webkit-datetime-edit {
   min-width: 0;
   max-width: 100%;
-  width: 100%;
-  height: 100%;
   padding: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
 }
 
 input[type="date"]::-webkit-datetime-edit-fields-wrapper,
@@ -105,12 +99,11 @@ input[type="time"]::-webkit-datetime-edit-fields-wrapper,
 input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
   min-width: 0;
   max-width: 100%;
-  display: flex;
-  align-items: center;
 }
 
 /* Wrapper used around date/time fields in admin forms */
 .admin-datetime-wrap {
+  position: relative;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -128,10 +121,25 @@ input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
 .admin-datetime-wrap input[type='date'],
 .admin-datetime-wrap input[type='time'],
 .admin-datetime-wrap input[type='datetime-local'] {
+  position: relative;
   /* Wrapper draws the border — avoid a double line / clipped input stroke */
   border-color: transparent !important;
   border-radius: 0;
   box-shadow: none !important;
+  /* Room for absolutely positioned picker icon on the right */
+  padding-right: 2.25rem !important;
+}
+
+/* Pin calendar/clock icon to the right edge — flex/margin does not work in WebKit */
+.admin-datetime-wrap input[type='date']::-webkit-calendar-picker-indicator,
+.admin-datetime-wrap input[type='time']::-webkit-calendar-picker-indicator,
+.admin-datetime-wrap input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  z-index: 1;
 }
 
 /* Phones: slightly tighter field padding so datetime chrome fits the card */
@@ -152,7 +160,6 @@ input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
   input[type='datetime-local']::-webkit-calendar-picker-indicator {
     width: 1rem;
     height: 1rem;
-    margin-left: 0;
     background-size: 1rem 1rem;
   }
 }
@@ -165,7 +172,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   width: 1.1rem;
   height: 1.1rem;
   padding: 0;
-  margin-left: 0.25rem;
   border: none;
   color: transparent;
   background-color: transparent;
@@ -184,7 +190,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: 1.1rem;
   height: 1.1rem;
   padding: 0;
-  margin-left: 0.25rem;
   border: none;
   color: transparent;
   background-color: transparent;

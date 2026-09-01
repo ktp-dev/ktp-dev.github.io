@@ -63,6 +63,7 @@ export const rushCycles = pgTable(
     name: text('name').notNull(),
     opensAt: timestamp('opens_at', { withTimezone: true, mode: 'string' }).notNull(),
     closesAt: timestamp('closes_at', { withTimezone: true, mode: 'string' }).notNull(),
+    applyCloseGraceMinutes: integer('apply_close_grace_minutes').default(2).notNull(),
     introMarkdown: text('intro_markdown'),
     closedMarkdown: text('closed_markdown'),
     publicBlurb: text('public_blurb'),

@@ -159,7 +159,7 @@ export default async function AdminAppsPage() {
         />
       </div>
 
-      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
+      <div className={`${adminSectionCardClass} relative z-10 mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
           <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>Reviewer access</h2>
           <p className={`mt-1 text-sm ${adminMutedClass}`}>
@@ -170,7 +170,7 @@ export default async function AdminAppsPage() {
         <AdminReviewAccessManager cycleId={cycle.id} initialEntries={reviewAccess} />
       </div>
 
-      <div className={`${adminSectionCardClass} mb-8`} style={adminSectionCardStyle}>
+      <div className={`${adminSectionCardClass} relative z-0 mb-8`} style={adminSectionCardStyle}>
         <div className="mb-4">
           <h2 className={`font-inter text-xl font-bold ${adminHeadingClass}`}>Reviewer progress</h2>
           <p className={`mt-1 text-sm ${adminMutedClass}`}>
