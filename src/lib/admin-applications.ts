@@ -12,6 +12,7 @@ import {
   rubricCategories,
 } from '@/db/schema'
 import { deleteS3Object } from '@/lib/s3'
+import { formatRushDateTimeCompact } from '@/lib/rush-timezone'
 import {
   filterAdminApplications,
   sortAdminApplications,
@@ -545,7 +546,7 @@ export async function buildApplicationsExportCsv(
     item.email,
     item.majors ?? '',
     item.graduationYear ?? '',
-    item.submittedAt ?? '',
+    item.submittedAt ? (formatRushDateTimeCompact(item.submittedAt) ?? item.submittedAt) : '',
     item.readCount,
     item.avgScore != null ? item.avgScore.toFixed(2) : '',
     item.normalizedAvgScore != null ? item.normalizedAvgScore.toFixed(2) : '',

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { AdminApplicationDetail } from '@/lib/admin-applications'
 import { AdminDeleteApplicationButton } from '@/components/admin/AdminDeleteApplicationButton'
 import { AdminFileDownloadLink } from '@/components/admin/AdminFileDownloadLink'
+import { formatRushDateTimeCompact, formatRushDateTimeLocale } from '@/lib/rush-timezone'
 import {
   adminBodyClass,
   adminHeadingClass,
@@ -31,22 +32,12 @@ function formatDuration(ms: number | null) {
 
 function formatDateTime(iso: string | null | undefined) {
   if (!iso) return '—'
-  const parsed = Date.parse(iso)
-  if (Number.isNaN(parsed)) return iso
-  return new Date(parsed).toLocaleString()
+  return formatRushDateTimeLocale(iso) ?? iso
 }
 
 function formatDateTimeCompact(iso: string | null | undefined) {
   if (!iso) return '—'
-  const parsed = Date.parse(iso)
-  if (Number.isNaN(parsed)) return iso
-  return new Date(parsed).toLocaleString(undefined, {
-    month: 'numeric',
-    day: 'numeric',
-    year: '2-digit',
-    hour: 'numeric',
-    minute: '2-digit',
-  })
+  return formatRushDateTimeCompact(iso) ?? iso
 }
 
 function slotLabel(slot: string) {

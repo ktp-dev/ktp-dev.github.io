@@ -29,6 +29,19 @@ const rushDatetimeLocalFormatter = new Intl.DateTimeFormat('en-US', {
   hour12: false,
 })
 
+const rushDateTimeCompactFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: RUSH_TIMEZONE,
+  month: 'numeric',
+  day: 'numeric',
+  year: '2-digit',
+  hour: 'numeric',
+  minute: '2-digit',
+})
+
+const rushDateTimeLocaleFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: RUSH_TIMEZONE,
+})
+
 function parseIso(iso: string) {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return null
@@ -64,6 +77,20 @@ export function formatRushDate(iso: string) {
   const date = parseIso(iso)
   if (!date) return null
   return rushDateFormatter.format(date)
+}
+
+/** e.g. 9/1/26, 5:38 AM (always Eastern) */
+export function formatRushDateTimeCompact(iso: string) {
+  const date = parseIso(iso)
+  if (!date) return null
+  return rushDateTimeCompactFormatter.format(date)
+}
+
+/** Locale-style datetime in Eastern (for admin tables, review timestamps). */
+export function formatRushDateTimeLocale(iso: string) {
+  const date = parseIso(iso)
+  if (!date) return null
+  return rushDateTimeLocaleFormatter.format(date)
 }
 
 export function formatApplyDeadline(iso: string) {
