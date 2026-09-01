@@ -271,27 +271,31 @@ export function AdminAppDetail({
           <h3 className={`text-sm font-bold uppercase tracking-wide ${adminMutedClass}`}>
             Essays & extras
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {essays.map((essay) => (
-              <div key={essay.questionId}>
+              <div
+                key={essay.questionId}
+                className={`${adminInsetCardClass} p-4`}
+                style={adminInsetCardStyle}
+              >
                 <p className={`text-sm font-medium ${adminHeadingClass}`}>{essay.prompt}</p>
-                <p className={`mt-1 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
+                <p className={`mt-2 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
                   {essay.answer || '—'}
                 </p>
               </div>
             ))}
             {application.anythingElse ? (
-              <div>
+              <div className={`${adminInsetCardClass} p-4`} style={adminInsetCardStyle}>
                 <p className={`text-sm font-medium ${adminHeadingClass}`}>Anything else</p>
-                <p className={`mt-1 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
+                <p className={`mt-2 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
                   {application.anythingElse}
                 </p>
               </div>
             ) : null}
             {application.rushFeedback ? (
-              <div>
+              <div className={`${adminInsetCardClass} p-4`} style={adminInsetCardStyle}>
                 <p className={`text-sm font-medium ${adminHeadingClass}`}>Rush feedback</p>
-                <p className={`mt-1 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
+                <p className={`mt-2 whitespace-pre-wrap text-sm ${adminBodyClass}`}>
                   {application.rushFeedback}
                 </p>
               </div>
