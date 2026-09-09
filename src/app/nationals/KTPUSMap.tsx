@@ -82,6 +82,11 @@ export default function KTPUSMap() {
     );
   }
 
+  const cartoKey = process.env.NEXT_PUBLIC_CARTO_API_KEY?.trim()
+  const tileUrl = cartoKey
+    ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`
+    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+
   return (
     <div className="w-full h-full rounded-2xl border border-neutral-200 overflow-hidden">
       <MapContainer
@@ -95,8 +100,10 @@ export default function KTPUSMap() {
         zoomControl={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url={tileUrl}
+          subdomains="abcd"
+          maxZoom={20}
         />
         
         {chapters.map((chapter) => (
