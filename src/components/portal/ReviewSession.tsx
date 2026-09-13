@@ -15,7 +15,6 @@ import {
   readsBodyClass,
   readsFieldClass,
   readsFieldStyle,
-  readsHeadingClass,
   readsLinkClass,
   readsMutedClass,
   readsPrimaryBtnClass,
@@ -175,11 +174,11 @@ export function ReviewSession({ initial }: { initial: AnonymizedReviewApplicatio
 
         <section>
           <h3 className={sectionHeadingClass}>Essays</h3>
-          <div className="mt-3 space-y-4">
+          <div className="mt-3 divide-y divide-white/15">
             {app.essays.map((essay) => (
-              <div key={essay.questionId}>
+              <div key={essay.questionId} className="py-6 first:pt-0 last:pb-0">
                 <p className={`text-sm font-medium ${readsMutedClass}`}>{essay.prompt}</p>
-                <p className={`mt-1 whitespace-pre-wrap text-sm ${readsBodyClass}`}>
+                <p className={`mt-2 whitespace-pre-wrap text-sm ${readsBodyClass}`}>
                   {essay.answer || '—'}
                 </p>
               </div>

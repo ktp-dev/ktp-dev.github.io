@@ -3,7 +3,7 @@ import 'server-only'
 import { and, asc, eq, sql } from 'drizzle-orm'
 import { db } from '@/db'
 import { brothers, reviewAccess } from '@/db/schema'
-import { MIN_REQUIRED_REVIEWS } from '@/lib/reviews'
+import { MIN_REQUIRED_REVIEWS } from '@/lib/review-constants'
 import { normalizeReviewEmail } from '@/lib/review-access'
 import { umichEmailSchema } from '@/lib/umich-email'
 
