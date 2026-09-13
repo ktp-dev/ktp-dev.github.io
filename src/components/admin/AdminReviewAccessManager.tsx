@@ -8,6 +8,7 @@ import {
 } from '@/app/admin/apps/actions'
 import { BrotherTypeahead } from '@/components/admin/BrotherTypeahead'
 import type { ClientReviewAccess } from '@/lib/review-access-admin'
+import { MIN_REQUIRED_REVIEWS } from '@/lib/review-constants'
 import {
   adminBodyClass,
   adminFieldClass,
@@ -49,7 +50,7 @@ export function AdminReviewAccessManager({
 }) {
   const [entries, setEntries] = useState(initialEntries)
   const [email, setEmail] = useState('')
-  const [minRequired, setMinRequired] = useState('12')
+  const [minRequired, setMinRequired] = useState(String(MIN_REQUIRED_REVIEWS))
   const [error, setError] = useState<string | null>(null)
   const [pendingKey, setPendingKey] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
@@ -71,7 +72,7 @@ export function AdminReviewAccessManager({
     }
     setEntries((current) => sortEntries([...current, result.entry!]))
     setEmail('')
-    setMinRequired('12')
+    setMinRequired(String(MIN_REQUIRED_REVIEWS))
   }
 
   async function handleRemove(id: string) {

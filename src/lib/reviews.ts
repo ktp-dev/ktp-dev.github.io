@@ -15,11 +15,13 @@ import {
 } from '@/db/schema'
 import { getActiveCycle } from '@/lib/applications'
 import { normalizeReviewEmail } from '@/lib/review-access'
+import { MIN_REQUIRED_REVIEWS } from '@/lib/review-constants'
 import { resolveRatingLabels } from '@/lib/rubric-ui'
 import { checkIsAdmin, getCurrentUser } from '@/lib/supabase/auth-helpers'
 
+export { MIN_REQUIRED_REVIEWS } from '@/lib/review-constants'
+
 export const ASSIGNMENT_DURATION_MS = 20 * 60 * 1000
-export const MIN_REQUIRED_REVIEWS = 12
 export const NOTES_MAX_LENGTH = 1000
 
 export const ASSIGNMENT_RELEASED_MESSAGE =
@@ -373,14 +375,25 @@ export async function renewAssignment(
 
   const nowMs = Date.now()
   const expiresAtIso = assignmentExpiryIso(nowMs)
-  await db
+  // Include assignee in WHERE so a late renew can't overwrite a newer claim (TOCTOU).
+  const updated = await db
     .update(applications)
     .set({
       assignedReviewerId: reviewerUserId,
       assignedAt: app.assignedAt ?? new Date(nowMs).toISOString(),
       assignmentExpiresAt: expiresAtIso,
     })
-    .where(eq(applications.id, applicationId))
+    .where(
+      and(
+        eq(applications.id, applicationId),
+        eq(applications.assignedReviewerId, reviewerUserId)
+      )
+    )
+    .returning({ id: applications.id })
+
+  if (updated.length === 0) {
+    return { renewed: false as const, reason: 'not_owner' as const }
+  }
 
   return { renewed: true as const, expiresAtIso }
 }
