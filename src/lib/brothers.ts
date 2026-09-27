@@ -1,0 +1,207 @@
+import 'server-only'
+
+import { and, asc, eq, ilike, ne, or, sql } from 'drizzle-orm'
+import { db } from '@/db'
+import { admins, brothers } from '@/db/schema'
+import type { BrotherWrite, ClientBrother, BrotherSearchHit } from '@/lib/brother-schema'
+import { uniqnameFromEmail } from '@/lib/umich-email'
+
+export type { ClientBrother, BrotherSearchHit }
+
+export function toClientBrother(row: typeof brothers.$inferSelect): ClientBrother {
+  return {
+    id: row.id,
+    first_name: row.firstName,
+    last_name: row.lastName,
+    umich_email: row.umichEmail,
+    contact_email: row.contactEmail,
+    linkedin_url: row.linkedinUrl,
+    photo_filename: row.photoFilename,
+    status: row.status,
+    pledge_class: row.pledgeClass,
+  }
+}
+
+export function brotherDisplayName(brother: ClientBrother, fallbackEmail: string) {
+  const name = [brother.first_name, brother.last_name].filter(Boolean).join(' ').trim()
+  return name || fallbackEmail
+}
+
+export async function searchBrothers(query: string, limit = 8): Promise<BrotherSearchHit[]> {
+  const trimmed = query.trim().toLowerCase()
+  if (trimmed.length < 2) return []
+
+  const safe = trimmed.replace(/[%_\\]/g, '')
+  if (safe.length < 2) return []
+  const pattern = `%${safe}%`
+
+  const rows = await db
+    .select({
+      id: brothers.id,
+      firstName: brothers.firstName,
+      lastName: brothers.lastName,
+      umichEmail: brothers.umichEmail,
+      pledgeClass: brothers.pledgeClass,
+    })
+    .from(brothers)
+    .where(
+      and(
+        sql`${brothers.umichEmail} is not null`,
+        or(
+          ilike(brothers.firstName, pattern),
+          ilike(brothers.lastName, pattern),
+          ilike(brothers.umichEmail, pattern),
+          sql`concat_ws(' ', ${brothers.firstName}, ${brothers.lastName}) ilike ${pattern}`
+        )
+      )
+    )
+    .orderBy(
+      sql`lower(coalesce(${brothers.firstName}, ''))`,
+      sql`lower(coalesce(${brothers.lastName}, ''))`,
+      asc(brothers.umichEmail)
+    )
+    .limit(limit)
+
+  return rows
+    .filter((row): row is typeof row & { umichEmail: string } => Boolean(row.umichEmail))
+    .map((row) => ({
+      id: row.id,
+      first_name: row.firstName,
+      last_name: row.lastName,
+      umich_email: row.umichEmail,
+      uniqname: uniqnameFromEmail(row.umichEmail),
+      pledge_class: row.pledgeClass,
+    }))
+}
+
+export async function getBrotherByUmichEmail(email: string) {
+  const normalized = email.trim().toLowerCase()
+  if (!normalized) return null
+  const [row] = await db
+    .select()
+    .from(brothers)
+    .where(eq(brothers.umichEmail, normalized))
+    .limit(1)
+  return row ? toClientBrother(row) : null
+}
+
+export async function listBrothers() {
+  const rows = await db
+    .select()
+    .from(brothers)
+    .orderBy(
+      sql`lower(coalesce(${brothers.firstName}, ''))`,
+      sql`lower(coalesce(${brothers.lastName}, ''))`,
+      asc(brothers.umichEmail)
+    )
+  return rows.map(toClientBrother)
+}
+
+function writeValues(input: BrotherWrite) {
+  return {
+    firstName: input.first_name,
+    lastName: input.last_name,
+    umichEmail: input.umich_email,
+    pledgeClass: input.pledge_class,
+    linkedinUrl: input.linkedin_url,
+    photoFilename: input.photo_filename,
+  }
+}
+
+async function umichEmailTaken(email: string, exceptId?: string) {
+  const [existing] = await db
+    .select({ id: brothers.id })
+    .from(brothers)
+    .where(
+      exceptId
+        ? and(eq(brothers.umichEmail, email), ne(brothers.id, exceptId))
+        : eq(brothers.umichEmail, email)
+    )
+    .limit(1)
+  return Boolean(existing)
+}
+
+export async function addBrotherRow(input: BrotherWrite) {
+  if (await umichEmailTaken(input.umich_email)) {
+    return { brother: null, error: 'That UMich email is already a brother' as const }
+  }
+
+  const [created] = await db
+    .insert(brothers)
+    .values({
+      ...writeValues(input),
+      status: 'active',
+    })
+    .returning()
+
+  return { brother: created ? toClientBrother(created) : null, error: null }
+}
+
+export async function updateBrotherRow(id: string, input: BrotherWrite) {
+  const [row] = await db.select({ id: brothers.id }).from(brothers).where(eq(brothers.id, id)).limit(1)
+  if (!row) return { brother: null, error: 'Brother not found' as const }
+
+  if (await umichEmailTaken(input.umich_email, id)) {
+    return { brother: null, error: 'That UMich email is already a brother' as const }
+  }
+
+  const [updated] = await db
+    .update(brothers)
+    .set(writeValues(input))
+    .where(eq(brothers.id, id))
+    .returning()
+
+  return { brother: updated ? toClientBrother(updated) : null, error: null }
+}
+
+export async function importBrotherRows(inputs: BrotherWrite[]) {
+  const brothers: ClientBrother[] = []
+  let created = 0
+  let updated = 0
+  const errors: string[] = []
+
+  for (let index = 0; index < inputs.length; index++) {
+    const input = inputs[index]!
+    const line = index + 2
+    const existing = await getBrotherByUmichEmail(input.umich_email)
+    const payload =
+      existing && !input.photo_filename && existing.photo_filename
+        ? { ...input, photo_filename: existing.photo_filename }
+        : input
+
+    const result = existing
+      ? await updateBrotherRow(existing.id, payload)
+      : await addBrotherRow(payload)
+
+    if (result.error || !result.brother) {
+      errors.push(`Row ${line}: ${result.error ?? 'Import failed'}`)
+      continue
+    }
+
+    brothers.push(result.brother)
+    if (existing) updated++
+    else created++
+  }
+
+  return { brothers, created, updated, errors }
+}
+
+export async function removeBrotherRow(id: string, actorEmail: string) {
+  const [row] = await db.select().from(brothers).where(eq(brothers.id, id)).limit(1)
+  if (!row) return { error: 'Brother not found' as const }
+  if (row.umichEmail && row.umichEmail === actorEmail.toLowerCase()) {
+    return { error: 'You cannot remove yourself' as const }
+  }
+  if (row.umichEmail) {
+    const [admin] = await db
+      .select({ email: admins.email })
+      .from(admins)
+      .where(eq(admins.email, row.umichEmail))
+      .limit(1)
+    if (admin) return { error: 'Remove their admin access first' as const }
+  }
+
+  const deleted = await db.delete(brothers).where(eq(brothers.id, id)).returning()
+  if (!deleted.length) return { error: 'Brother not found' as const }
+  return { error: null }
+}

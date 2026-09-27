@@ -5,7 +5,19 @@
 DELETE FROM rush_events;
 
 -- Insert all original rush events
-INSERT INTO rush_events (title, datetime, location, description, button_label, button_url, order_index) VALUES
+INSERT INTO rush_events (title, datetime, location, description, button_label, button_url, order_index, cycle_id)
+SELECT
+  v.title,
+  v.datetime,
+  v.location,
+  v.description,
+  v.button_label,
+  v.button_url,
+  v.order_index,
+  c.id
+FROM rush_cycles AS c
+CROSS JOIN (
+  VALUES
 (
   'Festifall',
   'Wednesday, August 27, 4:30-6:00 PM',
@@ -68,5 +80,7 @@ INSERT INTO rush_events (title, datetime, location, description, button_label, b
   NULL,
   NULL,
   6
-);
+)
+) AS v(title, datetime, location, description, button_label, button_url, order_index)
+WHERE c.is_active;
 

@@ -14,6 +14,7 @@ export default function Footer() {
                         <p><Link className="hover-text-custom font-medium" href="/rush">Rush</Link></p>
                         <p><Link className="hover-text-custom font-medium" href="/members">Members</Link></p>
                         <p><Link className="hover-text-custom font-medium" href="/nationals">Nationals</Link></p>
+                        <p><Link className="hover-text-custom font-medium" href="/privacy">Privacy Policy</Link></p>
                     </div>
 
                     {/* Contact Us */}
@@ -91,7 +92,7 @@ export default function Footer() {
             </div>
 
             <div className='flex justify-center items-center mt-6 font-inter'>
-                © Kappa Theta Pi 2025. All rights reserved.
+                © Kappa Theta Pi 2026. All rights reserved.
             </div>
         </div>
     );

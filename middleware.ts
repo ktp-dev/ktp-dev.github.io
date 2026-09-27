@@ -8,13 +8,10 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
+     * Run session refresh only on real app routes — not static files from /public.
+     * Skips _next assets plus common binary/text extensions (Life app JS/WASM, fonts, etc.).
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|SVG|png|PNG|jpe?g|JPE?G|gif|GIF|webp|WEBP|ico|ICO|js|JS|css|CSS|wasm|WASM|json|JSON|xml|XML|txt|TXT|map|MAP|woff2?|WOFF2?|ttf|TTF|otf|OTF|html|HTML|csv|CSV)$).*)',
   ],
 }
 
